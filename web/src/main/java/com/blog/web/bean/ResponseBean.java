@@ -1,9 +1,6 @@
 package com.blog.web.bean;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
@@ -16,13 +13,18 @@ import java.util.List;
 @Setter
 @ToString
 @EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ResponseBean {
-
+    //字符串结果集
     private String srcData;
-
+    //对象结果集
     private Object objData;
-
+    //对象结果集数组
     private Object[] objDatas;
-
+    //对象结果集集合
     private List<Object> listData;
+    //响应参数
+    private Integer code;
 }

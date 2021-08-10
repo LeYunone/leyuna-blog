@@ -1,5 +1,7 @@
 package com.blog.web.control;
 
+import com.blog.web.bean.ResponseBean;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -11,4 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserControl extends SysBaseControl{
 
+    @RequestMapping("/login")
+    public ResponseBean login(String userName,String passWord){
+
+        return successResponseBean();
+    }
 }
