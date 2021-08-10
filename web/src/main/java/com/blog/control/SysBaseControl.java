@@ -1,7 +1,7 @@
-package com.blog.web.control;
+package com.blog.control;
 
-import com.blog.web.bean.ResponseBean;
-import com.blog.web.bean.ResponseCode;
+import com.blog.bean.ResponseBean;
+import com.blog.bean.ResponseCode;
 
 /**
  * @author pengli

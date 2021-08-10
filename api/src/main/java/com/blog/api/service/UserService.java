@@ -6,5 +6,5 @@ package com.blog.api.service;
  *
  * 用户相关服务类
  */
-public class UserService {
+public interface UserService {
 }

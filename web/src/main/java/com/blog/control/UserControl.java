@@ -1,6 +1,8 @@
-package com.blog.web.control;
+package com.blog.control;
 
-import com.blog.web.bean.ResponseBean;
+import com.blog.api.domain.UserDomain;
+import com.blog.bean.ResponseBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,9 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserControl extends SysBaseControl{
 
+    @Autowired
+    private UserDomain userDomain;
+
     @RequestMapping("/login")
     public ResponseBean login(String userName,String passWord){
-
+        userDomain.login(userName,passWord);
         return successResponseBean();
     }
 }

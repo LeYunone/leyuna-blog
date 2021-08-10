@@ -1,4 +1,4 @@
-package com.blog.web.bean;
+package com.blog.bean;
 
 import lombok.*;
 

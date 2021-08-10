@@ -15,7 +15,7 @@
     <bytecodeTargetLevel>
       <module name="api" target="1.5" />
       <module name="blog" target="1.8" />
-      <module name="daoservice" target="1.5" />
+      <module name="daoservice" target="8" />
       <module name="web" target="1.5" />
     </bytecodeTargetLevel>
   </component>

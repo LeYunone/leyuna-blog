@@ -1,4 +1,4 @@
-package com.blog.web.control;
+package com.blog.control;
 
 import org.springframework.stereotype.Controller;
 
