@@ -5,6 +5,9 @@ import com.blog.daoservice.dao.UserDao;
 import com.blog.daoservice.entry.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import util.CollectionUtil;
+import util.TransformationUtil;
 
 import java.util.List;
 
@@ -32,10 +35,11 @@ public class UserDomain {
         if(users.size()==0){
             return null;
         }else{
-            List<User> BypassWord =
+            List<User> byPassWord =
                     userDao.queryByCon(User.builder().userName(userName).passWord(passWord).build());
-            if(BypassWord.size()!=0){
-                return u;
+            if(byPassWord.size()!=0){
+                User first = CollectionUtil.getFirst(byPassWord);
+                UserDTO userDTO = TransformationUtil.copyToDTO(byPassWord, UserDTO.class);
             }
         }
     }
