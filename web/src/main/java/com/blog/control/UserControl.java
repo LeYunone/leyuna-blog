@@ -1,7 +1,10 @@
 package com.blog.control;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.blog.api.domain.UserDomain;
+import com.blog.api.dto.UserDTO;
 import com.blog.bean.ResponseBean;
+import com.blog.error.UserAsserts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +23,13 @@ public class UserControl extends SysBaseControl{
 
     @RequestMapping("/login")
     public ResponseBean login(String userName,String passWord){
-        userDomain.login(userName,passWord);
-        return successResponseBean();
+        UserDTO login = userDomain.login(userName, passWord);
+        if(login!=null){
+            //绑定令牌
+            StpUtil.login(login.getId());
+            return successResponseBean(null);
+        }else{
+            return failResponseBean(UserAsserts.LOGINT_FAIL);
+        }
     }
 }

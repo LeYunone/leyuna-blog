@@ -52,7 +52,7 @@ public class TransformationUtil {
      * @param toClass    出参对象
      * @return
      */
-    public static <D>Object copyToDTO(Object copyClass, Class<D> toClass){
+    public static <D>D copyToDTO(Object copyClass, Class<D> toClass){
         return null;
     }
 }
