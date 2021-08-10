@@ -1,5 +1,6 @@
 package com.blog.daoservice.entry;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
@@ -17,6 +18,9 @@ import lombok.*;
 @Builder
 @TableName("user")
 public class User {
+
+    @TableId(value = "id",type = IdType.AUTO)
+    private Integer id;
 
     @TableId(value = "user_name")
     private String userName;
