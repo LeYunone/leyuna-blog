@@ -39,7 +39,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.2.12.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.26" level="project" />
     <orderEntry type="module" module-name="api" />
-    <orderEntry type="module" module-name="daoservice" />
     <orderEntry type="library" name="Maven: com.baomidou:mybatis-plus-boot-starter:3.4.2" level="project" />
     <orderEntry type="library" name="Maven: com.baomidou:mybatis-plus:3.4.2" level="project" />
     <orderEntry type="library" name="Maven: com.baomidou:mybatis-plus-extension:3.4.2" level="project" />
