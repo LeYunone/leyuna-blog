@@ -6,7 +6,7 @@ package com.blog.api.service;
  */
 public interface TokenService {
 
-    boolean loginToken(String userName,String passWord);
+    void loginToken(Integer id);
 
     boolean logoutToken();
 }

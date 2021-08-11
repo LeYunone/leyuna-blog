@@ -1,6 +1,7 @@
 package com.blog.api.domain;
 
 import com.blog.api.dto.UserDTO;
+import com.blog.api.service.TokenService;
 import com.blog.api.service.UserService;
 import com.blog.api.serviceimpl.UserServiceimpl;
 import com.blog.daoservice.dao.UserDao;
@@ -24,6 +25,9 @@ public class UserDomain {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TokenService tokenService;
+
     /**
      * 用户在领域内登录操作
      * @param userName
@@ -42,5 +46,12 @@ public class UserDomain {
             //如果登录成功，则取得用户的id
             return result;
         }
+    }
+
+    /**
+     * 用户token上锁操作
+     */
+    public void userLock(Integer id){
+        tokenService.loginToken(id);
     }
 }

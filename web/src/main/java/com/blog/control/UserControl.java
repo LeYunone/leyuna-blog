@@ -26,7 +26,7 @@ public class UserControl extends SysBaseControl{
         UserDTO login = userDomain.login(userName, passWord);
         if(login!=null){
             //绑定令牌
-            StpUtil.login(login.getId());
+            userDomain.userLock(login.getId());
             return successResponseBean(null);
         }else{
             return failResponseBean(UserAsserts.LOGINT_FAIL);

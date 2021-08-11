@@ -1,7 +1,6 @@
 package util;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.blog.api.dto.UserDTO;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
