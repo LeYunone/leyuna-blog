@@ -15,10 +15,25 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class BlogBean {
-
     /**
      * 内容
      */
     private String content;
+    /**
+     * 图片
+     */
+    private String base64Str;
+    /**
+     * 类型
+     */
+    private Integer type;
+    /**
+     * 标签
+     */
+    private Integer [] tags;
 
+    /**
+     * 图片 二进制
+     */
+    private byte[] base64Bytes;
 }
