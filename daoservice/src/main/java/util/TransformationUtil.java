@@ -17,7 +17,7 @@ public class TransformationUtil {
      * 将DTO对象转换成Map ->  属性名 - 值   allEq查询
      */
     public static Map<String,Object> transDTOColumnMap(Object object){
-        Map<String,Object> resultMap=new HashMap<>();
+        Map<String,Object> resultMap=new HashMap<String,Object>();
         Class<?> aClass = object.getClass();
         Field[] fields = aClass.getDeclaredFields();
         for(Field field : fields){
@@ -38,7 +38,7 @@ public class TransformationUtil {
             // 恢复访问控制权限
             field.setAccessible(accessFlag);
 
-            if (null != value && StringUtils.isNotBlank(value.toString())) {
+            if (null != value && StringUtil.isNotBanks(value.toString())) {
                 resultMap.put(name, value);
             }
         }

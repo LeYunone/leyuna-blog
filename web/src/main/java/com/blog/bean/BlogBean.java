@@ -1,7 +1,6 @@
 package com.blog.bean;
 
 import lombok.*;
-import org.apache.tomcat.util.codec.binary.Base64;
 
 /**
  * @author pengli
@@ -22,5 +21,4 @@ public class BlogBean {
      */
     private String content;
 
-    private Base64 base64;
 }

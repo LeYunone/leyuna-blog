@@ -1,6 +1,5 @@
 package com.blog.control;
 
-import cn.dev33.satoken.stp.StpUtil;
 import com.blog.api.domain.UserDomain;
 import com.blog.api.dto.UserDTO;
 import com.blog.bean.ResponseBean;

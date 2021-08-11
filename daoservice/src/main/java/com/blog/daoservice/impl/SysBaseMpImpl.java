@@ -17,6 +17,7 @@ import java.util.Map;
 public class SysBaseMpImpl<E,M extends BaseMapper<E>> implements SysBaseDao<E>{
     @Autowired
     protected M baseMapper;
+
     @Override
     public List<E> queryByCon(E e) {
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(e);

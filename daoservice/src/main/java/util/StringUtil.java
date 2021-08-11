@@ -8,5 +8,15 @@ package util;
  */
 public class StringUtil {
 
-
+    public static boolean isNotBanks(String str){
+        if(null==str){
+            return false;
+        }else{
+            if(str.length() == 0 ){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
 }

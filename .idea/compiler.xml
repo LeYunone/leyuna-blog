@@ -15,9 +15,14 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="api" target="1.5" />
-      <module name="blog" target="1.8" />
-      <module name="daoservice" target="8" />
+      <module name="blog" target="1.5" />
+      <module name="daoservice" target="1.5" />
       <module name="web" target="1.5" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="daoservice" options="" />
+    </option>
   </component>
 </project>
