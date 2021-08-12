@@ -1,7 +1,6 @@
-package com.blog.api.serviceimpl;
+package com.blog.api.command;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.blog.api.service.TokenService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Service;
  * 控制令牌的服务
  */
 @Service
-public class TokenServiceimpl implements TokenService {
+public class TokenExe {
 
     public void loginToken(Integer id) {
         StpUtil.login(id);

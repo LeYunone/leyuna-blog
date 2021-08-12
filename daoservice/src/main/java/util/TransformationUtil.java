@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,6 +53,16 @@ public class TransformationUtil {
      * @return
      */
     public static <D>D copyToDTO(Object copyClass, Class<D> toClass){
+        return null;
+    }
+
+    /**
+     *
+     * @param copyClass  复制源
+     * @param toClass    出参对象
+     * @return
+     */
+    public static <D>List<D> copyToLists(List<?> copyClass, Class<D> toClass){
         return null;
     }
 }

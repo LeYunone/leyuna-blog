@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * 用户控制器- 控制用户行为
  */
-@RestController
+@RestController("/user")
 public class UserControl extends SysBaseControl {
 
     @Autowired

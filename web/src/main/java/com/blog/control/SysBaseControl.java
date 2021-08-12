@@ -3,6 +3,8 @@ package com.blog.control;
 import com.blog.bean.ResponseBean;
 import com.blog.bean.ResponseCode;
 
+import java.util.List;
+
 /**
  * @author pengli
  * @create 2021-08-10 15:04
@@ -39,6 +41,8 @@ public class SysBaseControl {
     public ResponseBean HandleInput(Object o,ResponseBean res){
         if(o instanceof String){
             res.setSrcData(String.valueOf(o));
+        }else if(o instanceof List){
+            res.setListData((List)o);
         }
         return res;
     }
