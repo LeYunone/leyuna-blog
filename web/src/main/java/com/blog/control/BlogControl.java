@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
     博客控制器- 控制博客行为
  */
 @Controller
-public class BlogControl extends SysBaseControl{
+public class BlogControl extends SysBaseControl {
 
 
 }
