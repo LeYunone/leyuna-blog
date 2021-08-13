@@ -5,18 +5,6 @@
     <groupId>com.blog.daoservice</groupId>
     <artifactId>daoservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>6</source>
-                    <target>6</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
     <name>daoservice</name>
     <description>Demo project for Spring Boot</description>
     <properties>

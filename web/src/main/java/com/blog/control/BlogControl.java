@@ -1,5 +1,7 @@
 package com.blog.control;
 
+import com.blog.api.dto.ResultDTO;
+import com.blog.bean.BlogBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,5 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/blog")
 public class BlogControl extends SysBaseControl {
 
+    /**
+     * 发布博客
+     * @param blogBean
+     * @return
+     */
+    @RequestMapping("/addBlog")
+    public ResultDTO addBlog(BlogBean blogBean){
 
+    }
 }

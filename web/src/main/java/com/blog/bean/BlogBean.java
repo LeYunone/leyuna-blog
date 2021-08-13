@@ -2,6 +2,8 @@ package com.blog.bean;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 /**
  * @author pengli
  * @date 2021-08-10
@@ -18,7 +20,7 @@ public class BlogBean {
     /**
      * 内容
      */
-    private String content;
+    private String blogContent;
     /**
      * 图片
      */
@@ -36,4 +38,6 @@ public class BlogBean {
      * 图片 二进制
      */
     private byte[] base64Bytes;
+
+    private String title;
 }
