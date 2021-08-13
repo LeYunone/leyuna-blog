@@ -23,7 +23,7 @@ public class UserExe{
     @Autowired
     private UserDao userDao;
 
-    public UserDTO selectUserByConselectUser(UserDTO userDTO) {
+    public UserDTO selectUserByCon(UserDTO userDTO) {
         User user = TransformationUtil.copyToDTO(userDTO, User.class);
         List<User> users =
                 userDao.queryByCon(user);

@@ -29,13 +29,13 @@ public class UserDomain {
      */
     public UserDTO login(String userName, String passWord){
         UserDTO userDTO=UserDTO.builder().userName(userName).build();
-        UserDTO user = userExe.selectUserByConselectUser(userDTO);
+        UserDTO user = userExe.selectUserByCon(userDTO);
         if(null==user){
             //返回空对象
             return null;
         }else{
             UserDTO build = UserDTO.builder().userName(userName).passWord(passWord).build();
-            UserDTO result = userExe.selectUserByConselectUser(build);
+            UserDTO result = userExe.selectUserByCon(build);
             //如果登录成功，则取得用户的id
             return result;
         }

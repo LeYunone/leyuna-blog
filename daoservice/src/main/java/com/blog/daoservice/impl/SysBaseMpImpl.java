@@ -23,7 +23,6 @@ public class SysBaseMpImpl<M extends BaseMapper<E>,E>{
     public List<E> queryByCon(E e) {
         AssertUtil.isTrue(ObjectUtil.isNotNull (e), ErrorMeassage.OBJECT_NULL);
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(e);
-
         List<E> es = this.baseMapper.selectList(new QueryWrapper<E>().allEq(stringObjectMap));
         return es;
     }

@@ -41,7 +41,9 @@ public class TransformationUtil {
             field.setAccessible(accessFlag);
 
             if (null != value && StringUtil.isNotBanks(value.toString())) {
-                resultMap.put(name, value);
+                //将名字转换成大小写下划线
+                String s = StringUtil.underscoreName(name);
+                resultMap.put(s, value);
             }
         }
         return resultMap;
