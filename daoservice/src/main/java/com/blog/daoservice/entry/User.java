@@ -22,9 +22,7 @@ public class User {
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
 
-    @TableId(value = "user_name")
     private String userName;
 
-    @TableId(value = "pass_word")
     private String passWord;
 }

@@ -22,7 +22,6 @@ public class Type {
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
 
-    @TableId(value = "tag_name")
     private String tagName;
 
 }

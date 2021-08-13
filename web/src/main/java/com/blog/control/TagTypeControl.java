@@ -17,7 +17,8 @@ import java.util.List;
  *
  * 标签以及分类 操作控制器
  */
-@RestController("/tagType")
+@RestController()
+@RequestMapping("/tagType")
 public class TagTypeControl extends SysBaseControl{
 
     @Autowired

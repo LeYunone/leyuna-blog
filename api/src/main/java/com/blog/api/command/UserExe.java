@@ -3,6 +3,7 @@ package com.blog.api.command;
 import com.blog.api.dto.UserDTO;
 import com.blog.daoservice.dao.UserDao;
 import com.blog.daoservice.entry.User;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import util.CollectionUtil;

@@ -1,6 +1,7 @@
 package util;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -53,7 +54,18 @@ public class TransformationUtil {
      * @return
      */
     public static <D>D copyToDTO(Object copyClass, Class<D> toClass){
-        return null;
+        D d = null;
+        try {
+            d = toClass.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        if(ObjectUtil.isNotNull(copyClass)){
+            BeanUtils.copyProperties(copyClass, d);
+        }
+        return d;
     }
 
     /**

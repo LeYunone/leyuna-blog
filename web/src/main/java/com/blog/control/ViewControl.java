@@ -1,6 +1,7 @@
 package com.blog.control;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @author pengli
@@ -8,7 +9,8 @@ import org.springframework.stereotype.Controller;
  *
  * 页面跳转控制器
  */
-@Controller("/view")
+@Controller()
+@RequestMapping("/view")
 public class ViewControl {
 
 }

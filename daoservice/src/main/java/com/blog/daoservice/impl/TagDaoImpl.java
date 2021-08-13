@@ -13,7 +13,7 @@ import java.util.List;
  *  user表原子对象
  */
 @Service
-public class TagDaoImpl extends SysBaseMpImpl<Tag,TagMapper> implements TagDao {
+public class TagDaoImpl extends SysBaseMpImpl<TagMapper,Tag> implements TagDao {
 
     @Override
     public List<Tag> selectByIds(List<Integer> ids) {

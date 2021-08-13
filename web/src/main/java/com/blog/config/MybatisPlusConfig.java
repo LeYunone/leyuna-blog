@@ -1,8 +1,8 @@
-package com.blog.daoservice.config;
+package com.blog.config;
 
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -10,10 +10,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * @author pengli
  * @date   mybatis-plus 配置类
+ *  配置扫描包注释 只需要一个，在application里
  */
 @Configuration
 @EnableTransactionManagement  //开启事务支持
-@MapperScan({"com.blog.daoservice.mapper"})
 public class MybatisPlusConfig {
 
     /**
@@ -25,4 +25,13 @@ public class MybatisPlusConfig {
         PaginationInterceptor paginationInterceptor=new PaginationInterceptor();
         return paginationInterceptor;
     }
+
+    @Bean
+    public MapperScannerConfigurer mapperScannerConfigurer(){
+        MapperScannerConfigurer scannerConfigurer = new MapperScannerConfigurer();
+        //可以通过环境变量获取你的mapper路径,这样mapper扫描可以通过配置文件配置了
+        scannerConfigurer.setBasePackage("com.blog.daoservice.mapper");
+        return scannerConfigurer;
+    }
+
 }

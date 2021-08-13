@@ -14,7 +14,7 @@ import java.util.List;
  *  user表原子对象
  */
 @Service
-public class TypeDaoImpl extends SysBaseMpImpl<Type, TypeMapper> implements TypeDao {
+public class TypeDaoImpl extends SysBaseMpImpl<TypeMapper,Type> implements TypeDao {
 
     @Override
     public List<Type> selectByIds(List<Integer> ids) {
