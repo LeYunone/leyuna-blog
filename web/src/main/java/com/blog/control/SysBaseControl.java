@@ -17,6 +17,15 @@ public class SysBaseControl {
      * 返回成功参数的响应结果
      * @return
      */
+    public ResponseBean successResponseBean(){
+        ResponseBean code = ResponseBean.builder().code(ResponseCode.SUCCESS_CODE).build();
+        return code;
+    }
+
+    /**
+     * 返回成功参数的响应结果 并且加参数
+     * @return
+     */
     public ResponseBean successResponseBean(Object o){
         ResponseBean code = ResponseBean.builder().code(ResponseCode.SUCCESS_CODE).build();
         if(o!=null){
@@ -25,6 +34,14 @@ public class SysBaseControl {
         return code;
     }
 
+    /**
+     * 返回成功参数的响应结果 并且加参数
+     * @return
+     */
+    public ResponseBean failResponseBean(){
+        ResponseBean code = ResponseBean.builder().code(ResponseCode.ERROR_CODE).build();
+        return code;
+    }
 
     /**
      * 返回成功参数的响应结果
@@ -43,6 +60,8 @@ public class SysBaseControl {
             res.setSrcData(String.valueOf(o));
         }else if(o instanceof List){
             res.setListData((List)o);
+        }else if(o instanceof StringBuilder){
+            res.setSrcData(o.toString());
         }
         return res;
     }

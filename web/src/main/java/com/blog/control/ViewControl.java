@@ -13,4 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/view")
 public class ViewControl {
 
+    @RequestMapping("/table")
+    public String toTableView(){
+        return "/templates/tables-basic.html";
+    }
 }

@@ -4,6 +4,7 @@ import com.blog.daoservice.dao.TagDao;
 import com.blog.daoservice.entry.Tag;
 import com.blog.daoservice.mapper.TagMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,5 +20,12 @@ public class TagDaoImpl extends SysBaseMpImpl<TagMapper,Tag> implements TagDao {
     public List<Tag> selectByIds(List<Integer> ids) {
         List<Tag> tags = this.baseMapper.selectBatchIds(ids);
         return tags;
+    }
+
+    @Transactional
+    @Override
+    public int deleteTagsByIds(List<Integer> ids) {
+        int i = this.baseMapper.deleteBatchIds(ids);
+        return i;
     }
 }

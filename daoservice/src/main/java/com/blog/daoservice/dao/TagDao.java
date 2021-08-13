@@ -11,4 +11,7 @@ import java.util.List;
 public interface TagDao extends SysBaseDao<Tag>{
 
     List<Tag> selectByIds(List<Integer> ids);
+
+    int deleteTagsByIds(List<Integer> ids);
+
 }

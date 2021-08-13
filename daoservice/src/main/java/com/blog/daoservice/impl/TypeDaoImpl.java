@@ -5,6 +5,7 @@ import com.blog.daoservice.entry.Tag;
 import com.blog.daoservice.entry.Type;
 import com.blog.daoservice.mapper.TypeMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,5 +21,12 @@ public class TypeDaoImpl extends SysBaseMpImpl<TypeMapper,Type> implements TypeD
     public List<Type> selectByIds(List<Integer> ids) {
         List<Type> types = this.baseMapper.selectBatchIds(ids);
         return types;
+    }
+
+    @Transactional
+    @Override
+    public int deleteTypesByIds(List<Integer> ids) {
+        int i = this.baseMapper.deleteBatchIds(ids);
+        return i;
     }
 }

@@ -25,3 +25,4 @@ server:
   servlet:
     context-path: '/leyuna'
   address: 127.0.0.1
+

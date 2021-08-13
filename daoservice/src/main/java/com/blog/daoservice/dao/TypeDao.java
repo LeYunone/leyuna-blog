@@ -11,4 +11,6 @@ import java.util.List;
 public interface TypeDao extends SysBaseDao<Type>{
 
     List<Type> selectByIds(List<Integer> ids);
+
+    int deleteTypesByIds(List<Integer> ids);
 }
