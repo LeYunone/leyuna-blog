@@ -2,7 +2,6 @@ package com.blog.control;
 
 import com.blog.api.dto.ResultDTO;
 import com.blog.bean.BlogBean;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,5 +22,6 @@ public class BlogControl extends SysBaseControl {
     @RequestMapping("/addBlog")
     public ResultDTO addBlog(BlogBean blogBean){
 
+        return null;
     }
 }

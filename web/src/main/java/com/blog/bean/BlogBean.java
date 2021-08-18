@@ -26,11 +26,11 @@ public class BlogBean {
      */
     private String base64Str;
     /**
-     * 类型
+     * 类型 S
      */
-    private Integer type;
+    private Integer [] type;
     /**
-     * 标签
+     * 标签 S
      */
     private Integer [] tags;
 
