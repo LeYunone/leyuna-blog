@@ -165,15 +165,15 @@ public class TagTypeDomain {
      * @return
      */
     @Transactional
-    public ResultDTO updateTypesOrTags(List<TagDTO> tags,List<TypeDTO> types){
+    public ResultDTO updateTypesOrTags(TagDTO tags,TypeDTO types){
         ResultDTO resultDTO=new ResultDTO();
-        if(!CollectionUtils.isEmpty(types)){
+        if(null!=types){
             boolean b = tagAndTypeExe.updateTypes(types);
             if(!b){
                 resultDTO.addMessage(ErrorMessage.UPDATE_TYPE_FALE);
             }
         }
-        if(!CollectionUtils.isEmpty(tags)){
+        if(null!=tags){
             boolean b = tagAndTypeExe.updateTags(tags);
             if(!b){
                 resultDTO.addMessage(ErrorMessage.UPDATE_TAG_FALE);

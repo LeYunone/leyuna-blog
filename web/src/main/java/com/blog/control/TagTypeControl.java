@@ -8,10 +8,7 @@ import com.blog.api.dto.TypeDTO;
 import com.blog.bean.ResponseBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import util.CollectionUtil;
 
 import java.util.List;
@@ -109,8 +106,9 @@ public class TagTypeControl extends SysBaseControl{
      * @param types
      * @return
      */
-    @RequestMapping("/updateTagsAndTypes")
-    public ResponseBean updateTagsAndTypes(List<TagDTO> tags,List<TypeDTO> types){
+    @GetMapping("/updateTagsAndTypes")
+    public ResponseBean updateTagsAndTypes(@RequestBody(required = false) TagDTO tags,
+                                           @RequestBody(required = false) TypeDTO types){
         ResultDTO resultDTO = tagTypeDomain.updateTypesOrTags(tags, types);
         if(resultDTO.getMessages()==null){
             return successResponseBean();

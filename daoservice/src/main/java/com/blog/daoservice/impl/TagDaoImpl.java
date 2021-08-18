@@ -49,7 +49,7 @@ public class TagDaoImpl extends SysBaseMpImpl<TagMapper,Tag> implements TagDao {
     public IPage<Tag> selectByLikeNamePage(Tag tag, Page<Tag> page,String conditionName) {
         AssertUtil.isTrue(ObjectUtil.isNotNull (tag), ErrorMeassage.OBJECT_NULL);
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(tag);
-        IPage<Tag> iPage = this.page(page, new QueryWrapper<Tag>()
+        IPage<Tag> iPage = this.baseMapper.selectPage(page, new QueryWrapper<Tag>()
                 .allEq(stringObjectMap).like("tag_Name",conditionName));
         return iPage;
     }

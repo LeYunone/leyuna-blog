@@ -148,9 +148,9 @@ public class TagAndTypeExe {
      * 更新分类
      * @param types
      */
-    public boolean updateTypes(List<TypeDTO> types){
-        List<Type> copyList = TransformationUtil.copyToLists(types, Type.class);
-        boolean b = typeDao.updateBatchById(copyList);
+    public boolean updateTypes(TypeDTO types){
+        Type type = TransformationUtil.copyToDTO(types, Type.class);
+        boolean b = typeDao.updateById(type);
         return b;
     }
 
@@ -158,9 +158,9 @@ public class TagAndTypeExe {
      * 更新标签
      * @param tags
      */
-    public boolean updateTags(List<TagDTO> tags){
-        List<Tag> copyList = TransformationUtil.copyToLists(tags, Tag.class);
-        boolean b = tagDao.updateBatchById(copyList);
+    public boolean updateTags(TagDTO tags){
+        Tag tag = TransformationUtil.copyToDTO(tags, Tag.class);
+        boolean b = tagDao.updateById(tag);
         return b;
     }
 }
