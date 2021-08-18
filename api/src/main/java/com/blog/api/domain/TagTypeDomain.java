@@ -1,10 +1,13 @@
 package com.blog.api.domain;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.Error.ErrorMessage;
 import com.blog.api.command.TagAndTypeExe;
 import com.blog.api.dto.ResultDTO;
 import com.blog.api.dto.TagDTO;
 import com.blog.api.dto.TypeDTO;
+import com.blog.daoservice.entry.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,17 +29,14 @@ public class TagTypeDomain {
     private TagAndTypeExe tagAndTypeExe;
 
     /**
-     * 查询所有的标签
-     * @param ids  根据业务需求如果需要根据id查询则返回正常查询值
+     * 根据id查询标签
+     * @param ids
      * @return
      */
-    public List<TagDTO> getALlTags(Integer ... ids){
+    public List<TagDTO> getTagsByIds(Integer ... ids){
         List<TagDTO> allTag=null;
-        if(null==ids || ids.length==0){
-            allTag = tagAndTypeExe.getAllTags();
-        }else{
-            allTag=tagAndTypeExe.getTagByIds(Arrays.asList(ids));
-        }
+        //独立查询
+        allTag=tagAndTypeExe.getTagByIds(Arrays.asList(ids));
         allTag.stream().forEach(tag->{
             LocalDateTime lastTime=tag.getLastUserTime();
             //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
@@ -50,17 +50,14 @@ public class TagTypeDomain {
     }
 
     /**
-     * 查询所有的分类
-     * @param ids  根据业务需求如果需要根据id查询则返回正常查询值
+     * 根据id查询分类
+     * @param ids
      * @return
      */
-    public List<TypeDTO> getALlTypes(Integer ... ids){
+    public List<TypeDTO> getTypesByIds(Integer ... ids){
         List<TypeDTO> allType=null;
-        if(null==ids || ids.length==0){
-            allType = tagAndTypeExe.getAllTypes();
-        }else{
-            allType=tagAndTypeExe.getTypeByIds(Arrays.asList(ids));
-        }
+        //独立查询
+        allType=tagAndTypeExe.getTypeByIds(Arrays.asList(ids));
         allType.stream().forEach(type->{
             LocalDateTime lastTime=type.getLastUserTime();
             //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
@@ -71,6 +68,44 @@ public class TagTypeDomain {
             }
         });
         return allType;
+    }
+
+    /**
+     * 查询所有的标签  分页 加上 模糊查询
+     * @param
+     * @return
+     */
+    public Page<TagDTO> getALlTags(Integer pageIndex,Integer pageSize,String conditionName){
+        Page<TagDTO> iPage = tagAndTypeExe.getAllTags(pageIndex,pageSize,conditionName);
+        iPage.getRecords().stream().forEach(tag->{
+            LocalDateTime lastTime=tag.getLastUserTime();
+            //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
+            if(LocalDateTime.now().isBefore(lastTime.plusMonths(1))){
+                tag.setUserStatus("hot");
+            }else{
+                tag.setUserStatus("cold");
+            }
+        });
+        return iPage;
+    }
+
+    /**
+     * 查询所有的分类  分页 加上 模糊查询
+     * @param
+     * @return
+     */
+    public Page<TypeDTO> getALlTypes(Integer pageIndex,Integer pageSize,String conditionName){
+        Page<TypeDTO> iPage = tagAndTypeExe.getAllTypes(pageIndex,pageSize,conditionName);
+        iPage.getRecords().stream().forEach(tag->{
+            LocalDateTime lastTime=tag.getLastUserTime();
+            //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
+            if(LocalDateTime.now().isBefore(lastTime.plusMonths(1))){
+                tag.setUserStatus("hot");
+            }else{
+                tag.setUserStatus("cold");
+            }
+        });
+        return iPage;
     }
 
     /**

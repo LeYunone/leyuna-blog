@@ -1,5 +1,8 @@
 package com.blog.api.command;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.dto.TagDTO;
 import com.blog.api.dto.TypeDTO;
 import com.blog.daoservice.dao.TagDao;
@@ -29,13 +32,23 @@ public class TagAndTypeExe {
     private TypeDao typeDao;
 
     /**
-     * 获取所有标签
+     * 获取所有标签  功能属于 分页 模糊
      * @return
      */
-    public List<TagDTO> getAllTags(){
-        List<Tag> list = tagDao.queryByCon(new Tag());
-        List<TagDTO> copyList = TransformationUtil.copyToLists(list, TagDTO.class);
-        return copyList;
+    public Page<TagDTO> getAllTags(Integer pageIndex,Integer pageSize,String conditionName){
+        IPage<Tag> tagIPage=null;
+        Page<Tag> page=new Page(pageIndex,pageSize);
+        //如果有模糊查询条件则走模糊查询
+        if(StringUtils.isEmpty(conditionName)){
+            tagIPage = tagDao.queryByConPage(new Tag(), page);
+        }else{
+            tagIPage = tagDao.selectByLikeNamePage(new Tag(),page,conditionName);
+        }
+        //转换结果集
+        Page<TagDTO> result=new Page<>(pageIndex,pageSize);
+        result.setTotal(tagIPage.getTotal());
+        result.setRecords( TransformationUtil.copyToLists(tagIPage.getRecords(),TagDTO.class));
+        return result;
     }
 
     /**
@@ -50,13 +63,26 @@ public class TagAndTypeExe {
     }
 
     /**
-     * 获取所有分类
+     * 获取所有分类  有分页和模糊
      * @return
      */
-    public List<TypeDTO> getAllTypes(){
-        List<Type> list = typeDao.queryByCon(new Type());
-        List<TypeDTO> copyList = TransformationUtil.copyToLists(list, TypeDTO.class);
-        return copyList;
+    public Page<TypeDTO> getAllTypes(Integer pageIndex,Integer pageSize,String conditionName){
+        IPage<Type> typeIPage=null;
+        Page<Type> page=new Page(pageIndex,pageSize);
+        int tagsCount=0;
+        //如果有模糊查询条件则走模糊查询
+        if(StringUtils.isEmpty(conditionName)){
+            typeIPage = typeDao.queryByConPage(new Type(), page);
+            tagsCount = typeDao.getTagsCount();
+        }else{
+            typeIPage = typeDao.selectByLikeNamePage(new Type(),page,conditionName);
+            tagsCount = typeDao.getTagsCountByLikeName(conditionName);
+        }
+        //转换结果集
+        Page<TypeDTO> result=new Page<>(pageIndex,pageSize);
+        result.setTotal(tagsCount);
+        result.setRecords( TransformationUtil.copyToLists(typeIPage.getRecords(),TypeDTO.class));
+        return result;
     }
 
     /**

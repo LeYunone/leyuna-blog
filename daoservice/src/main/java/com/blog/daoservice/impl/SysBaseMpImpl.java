@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.daoservice.dao.SysBaseDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import util.AssertUtil;
@@ -26,11 +27,20 @@ public class SysBaseMpImpl<M extends BaseMapper<E>,E> implements SysBaseDao<E> {
     @Autowired(required = false)
     protected M baseMapper;
 
+    @Override
     public List<E> queryByCon(E e) {
         AssertUtil.isTrue(ObjectUtil.isNotNull (e), ErrorMeassage.OBJECT_NULL);
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(e);
         List<E> es = this.baseMapper.selectList(new QueryWrapper<E>().allEq(stringObjectMap));
         return es;
+    }
+
+    @Override
+    public IPage<E> queryByConPage(E e, Page<E> page) {
+        AssertUtil.isTrue(ObjectUtil.isNotNull (e), ErrorMeassage.OBJECT_NULL);
+        Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(e);
+        IPage<E> iPage = this.baseMapper.selectPage(page, new QueryWrapper<E>().allEq(stringObjectMap));
+        return iPage;
     }
 
     @Override

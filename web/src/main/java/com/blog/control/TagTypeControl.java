@@ -1,5 +1,6 @@
 package com.blog.control;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.domain.TagTypeDomain;
 import com.blog.api.dto.ResultDTO;
 import com.blog.api.dto.TagDTO;
@@ -7,6 +8,7 @@ import com.blog.api.dto.TypeDTO;
 import com.blog.bean.ResponseBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,26 +31,44 @@ public class TagTypeControl extends SysBaseControl{
 
     /**
      * 取标签  【二级分类】
-     * @param ids
+     * @param
      * @return
      */
     @RequestMapping("/tags")
-    public ResponseBean getTags(@RequestParam(required = false) Integer...ids){
-        List<TagDTO> aLlTags = tagTypeDomain.getALlTags(ids);
-        ResponseBean responseBean = successResponseBean(aLlTags);
-        return  packPage(responseBean);
+    public ResponseBean getTags(@RequestParam(required = false)Integer pageIndex,
+                                @RequestParam(required = false)Integer pageSize,
+                                @RequestParam(required = false)String conditionName){
+        Page<TagDTO> aLlTags = tagTypeDomain.getALlTags(pageIndex,pageSize,conditionName);
+        ResponseBean responseBean = successResponseBean(aLlTags.getRecords());
+        responseBean.setPage(aLlTags);
+        return  responseBean;
+    }
+
+    @GetMapping("/tagsId")
+    public ResponseBean getTagsById(Integer...ids){
+        List<TagDTO> tagsByIds = tagTypeDomain.getTagsByIds(ids);
+        return successResponseBean(tagsByIds);
     }
 
     /**
      * 取一级分类
-     * @param ids
+     * @param
      * @return
      */
     @RequestMapping("/types")
-    public ResponseBean getTypes(@RequestParam(required = false) Integer...ids){
-        List<TypeDTO> aLlTags = tagTypeDomain.getALlTypes(ids);
-        ResponseBean responseBean = successResponseBean(aLlTags);
-        return packPage(responseBean);
+    public ResponseBean getTypes(@RequestParam(required = false)Integer pageIndex,
+                                 @RequestParam(required = false)Integer pageSize,
+                                 @RequestParam(required = false)String conditionName){
+        Page<TypeDTO> aLlTags = tagTypeDomain.getALlTypes(pageIndex,pageSize,conditionName);
+        ResponseBean responseBean = successResponseBean(aLlTags.getRecords());
+        responseBean.setPage(aLlTags);
+        return  responseBean;
+    }
+
+    @GetMapping("/typesId")
+    public ResponseBean getTypesById(Integer...ids){
+        List<TypeDTO> tagsByIds = tagTypeDomain.getTypesByIds(ids);
+        return successResponseBean(tagsByIds);
     }
 
     /**
