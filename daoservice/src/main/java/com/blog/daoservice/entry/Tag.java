@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 /**
  * @author pengli
  * @create 2021-08-10 14:43
@@ -24,4 +26,9 @@ public class Tag {
 
     private String tagName;
 
+    private LocalDateTime createTime;
+
+    private Integer useCount;
+
+    private LocalDateTime lastUserTime;
 }

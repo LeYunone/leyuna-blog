@@ -1,7 +1,7 @@
 package com.blog.daoservice.dao;
 
-import com.blog.daoservice.entry.
 
+import com.blog.daoservice.entry.Blog;
 
 /**
  * (Blog)dao

@@ -35,7 +35,8 @@ public class TagTypeControl extends SysBaseControl{
     @RequestMapping("/tags")
     public ResponseBean getTags(@RequestParam(required = false) Integer...ids){
         List<TagDTO> aLlTags = tagTypeDomain.getALlTags(ids);
-        return successResponseBean(aLlTags);
+        ResponseBean responseBean = successResponseBean(aLlTags);
+        return  packPage(responseBean);
     }
 
     /**
@@ -46,7 +47,8 @@ public class TagTypeControl extends SysBaseControl{
     @RequestMapping("/types")
     public ResponseBean getTypes(@RequestParam(required = false) Integer...ids){
         List<TypeDTO> aLlTags = tagTypeDomain.getALlTypes(ids);
-        return successResponseBean(aLlTags);
+        ResponseBean responseBean = successResponseBean(aLlTags);
+        return packPage(responseBean);
     }
 
     /**

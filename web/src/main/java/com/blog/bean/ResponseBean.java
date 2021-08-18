@@ -1,5 +1,6 @@
 package com.blog.bean;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.*;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public class ResponseBean {
     private List<Object> listData;
     //响应参数
     private Integer code;
+    //分页对象
+    private Page page;
 }

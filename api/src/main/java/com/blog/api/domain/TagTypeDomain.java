@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,11 +32,20 @@ public class TagTypeDomain {
      */
     public List<TagDTO> getALlTags(Integer ... ids){
         List<TagDTO> allTag=null;
-        if(ids.length==0){
+        if(null==ids || ids.length==0){
             allTag = tagAndTypeExe.getAllTags();
         }else{
             allTag=tagAndTypeExe.getTagByIds(Arrays.asList(ids));
         }
+        allTag.stream().forEach(tag->{
+            LocalDateTime lastTime=tag.getLastUserTime();
+            //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
+            if(LocalDateTime.now().isBefore(lastTime.plusMonths(1))){
+                tag.setUserStatus("hot");
+            }else{
+                tag.setUserStatus("cold");
+            }
+        });
         return allTag;
     }
 
@@ -45,13 +55,22 @@ public class TagTypeDomain {
      * @return
      */
     public List<TypeDTO> getALlTypes(Integer ... ids){
-        List<TypeDTO> allTag=null;
-        if(ids.length==0){
-            allTag = tagAndTypeExe.getAllTypes();
+        List<TypeDTO> allType=null;
+        if(null==ids || ids.length==0){
+            allType = tagAndTypeExe.getAllTypes();
         }else{
-            allTag=tagAndTypeExe.getTypeByIds(Arrays.asList(ids));
+            allType=tagAndTypeExe.getTypeByIds(Arrays.asList(ids));
         }
-        return allTag;
+        allType.stream().forEach(type->{
+            LocalDateTime lastTime=type.getLastUserTime();
+            //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
+            if(LocalDateTime.now().isBefore(lastTime.plusMonths(1))){
+                type.setUserStatus("hot");
+            }else{
+                type.setUserStatus("cold");
+            }
+        });
+        return allType;
     }
 
     /**

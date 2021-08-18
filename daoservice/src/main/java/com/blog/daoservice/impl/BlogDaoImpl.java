@@ -13,6 +13,6 @@ import org.springframework.stereotype.Service;
  * @since 2021-08-13 15:38:37
  */
 @Service
-public class BlogDaoImpl extends SysBaseMpImpl<Blog, BlogMapper> implements BlogDao {
+public class BlogDaoImpl extends SysBaseMpImpl<BlogMapper,Blog> implements BlogDao {
 }
 
