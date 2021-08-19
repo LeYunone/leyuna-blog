@@ -63,6 +63,8 @@ public class SysBaseControl {
             res.setListData((List)o);
         }else if(o instanceof StringBuilder){
             res.setSrcData(o.toString());
+        }else if(o instanceof Page){
+            res.setPage((Page)o);
         }
         return res;
     }

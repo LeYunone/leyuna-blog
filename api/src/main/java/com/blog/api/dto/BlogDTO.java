@@ -46,5 +46,10 @@ public class BlogDTO {
      * 内容
      */
     private String blogContent;
+
+    private Integer type;
+
+    private Integer tag;
+
 }
 

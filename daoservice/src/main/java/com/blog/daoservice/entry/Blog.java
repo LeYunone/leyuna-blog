@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * (Blog)实体对象
  *
  * @author pengli
- * @since 2021-08-13 15:56:44
+ * @since 2021-08-19 17:57:08
  */
 @Getter
 @Setter
@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 @TableName("blog")
 public class Blog {
 
-    private static final long serialVersionUID = -70312171175383184L;
+    private static final long serialVersionUID = -29752677651221342L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
@@ -40,26 +40,32 @@ public class Blog {
     /**
      * 发布时间
      */
-    @TableField(value = "createTime")
+    @TableField(value = "create_time")
     private LocalDateTime createTime;
 
     /**
      * 点击量
      */
-    @TableField(value = "clickCount")
+    @TableField(value = "click_count")
     private Integer clickCount;
 
     /**
      * 评论数
      */
-    @TableField(value = "commentCount")
+    @TableField(value = "comment_count")
     private Integer commentCount;
 
     /**
      * 内容
      */
-    @TableField(value = "blogContent")
+    @TableField(value = "blog_content")
     private String blogContent;
+
+    @TableField(value = "type")
+    private Integer type;
+
+    @TableField(value = "tag")
+    private Integer tag;
 
 }
 
