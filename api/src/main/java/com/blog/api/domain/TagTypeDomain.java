@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -114,16 +115,30 @@ public class TagTypeDomain {
      * @param types
      * @return
      */
-    public ResultDTO addTypesOrTags(List<TagDTO> tags,List<TypeDTO> types){
+    public ResultDTO addTypesOrTags(List<String> tags,List<String> types){
         ResultDTO resultDTO=new ResultDTO();
         if(!CollectionUtils.isEmpty(types)){
-            boolean b = tagAndTypeExe.addTypes(types);
+            List<TypeDTO> listTypes=new ArrayList<>();
+            //将名字封装成类
+            types.stream().forEach(type->{
+                TypeDTO typeDTOBuilder = TypeDTO.builder().typeName(type).createTime(LocalDateTime.now()).
+                        lastUserTime(LocalDateTime.now()).useCount(0).build();
+                listTypes.add(typeDTOBuilder);
+            });
+            boolean b = tagAndTypeExe.addTypes(listTypes);
             if(!b){
                 resultDTO.addMessage(ErrorMessage.ADD_TYPE_FALE);
             }
         }
         if(!CollectionUtils.isEmpty(tags)){
-            boolean b = tagAndTypeExe.addTags(tags);
+            List<TagDTO> listTags=new ArrayList<>();
+            //将名字封装成类
+            tags.stream().forEach(tag->{
+                TagDTO tagDTO = TagDTO.builder().tagName(tag).createTime(LocalDateTime.now()).
+                        lastUserTime(LocalDateTime.now()).useCount(0).build();
+                listTags.add(tagDTO);
+            });
+            boolean b = tagAndTypeExe.addTags(listTags);
             if(!b){
                 resultDTO.addMessage(ErrorMessage.ADD_TAG_FALE);
             }

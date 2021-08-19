@@ -10,6 +10,7 @@ import com.blog.daoservice.dao.TypeDao;
 import com.blog.daoservice.entry.Tag;
 import com.blog.daoservice.entry.Type;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import util.TransformationUtil;
@@ -69,18 +70,15 @@ public class TagAndTypeExe {
     public Page<TypeDTO> getAllTypes(Integer pageIndex,Integer pageSize,String conditionName){
         IPage<Type> typeIPage=null;
         Page<Type> page=new Page(pageIndex,pageSize);
-        int tagsCount=0;
         //如果有模糊查询条件则走模糊查询
         if(StringUtils.isEmpty(conditionName)){
             typeIPage = typeDao.queryByConPage(new Type(), page);
-            tagsCount = typeDao.getTagsCount();
         }else{
             typeIPage = typeDao.selectByLikeNamePage(new Type(),page,conditionName);
-            tagsCount = typeDao.getTagsCountByLikeName(conditionName);
         }
         //转换结果集
         Page<TypeDTO> result=new Page<>(pageIndex,pageSize);
-        result.setTotal(tagsCount);
+        result.setTotal(typeIPage.getTotal());
         result.setRecords( TransformationUtil.copyToLists(typeIPage.getRecords(),TypeDTO.class));
         return result;
     }
@@ -150,7 +148,7 @@ public class TagAndTypeExe {
      */
     public boolean updateTypes(TypeDTO types){
         Type type = TransformationUtil.copyToDTO(types, Type.class);
-        boolean b = typeDao.updateById(type);
+        boolean b = typeDao.updateNameById(type);
         return b;
     }
 
@@ -160,7 +158,7 @@ public class TagAndTypeExe {
      */
     public boolean updateTags(TagDTO tags){
         Tag tag = TransformationUtil.copyToDTO(tags, Tag.class);
-        boolean b = tagDao.updateById(tag);
+        boolean b = tagDao.updateNameById(tag);
         return b;
     }
 }

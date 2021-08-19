@@ -21,4 +21,6 @@ public interface TagDao extends SysBaseDao<Tag>{
     int getTagsCount();
 
     int getTagsCountByLikeName(String conditionName);
+
+    boolean updateNameById(Tag tag);
 }

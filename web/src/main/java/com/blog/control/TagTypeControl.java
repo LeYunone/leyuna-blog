@@ -69,13 +69,13 @@ public class TagTypeControl extends SysBaseControl{
     }
 
     /**
-     * 添加分类或标签
+     * 添加分类或标签  只要添加名字就好了
      * @param tags
      * @param types
      * @return
      */
     @RequestMapping("/addTagsAndTypes")
-    public ResponseBean addTagsAndTypes(List<TagDTO> tags,List<TypeDTO> types){
+    public ResponseBean addTagsAndTypes(@RequestParam(required = false) List<String> tags,@RequestParam(required = false) List<String> types){
         ResultDTO resultDTO = tagTypeDomain.addTypesOrTags(tags, types);
         if(resultDTO.getMessages()==null){
             return successResponseBean();
@@ -90,8 +90,8 @@ public class TagTypeControl extends SysBaseControl{
      * @param types
      * @return
      */
-    @RequestMapping("/deleteTagsAndTypes")
-    public ResponseBean deleteTagsAndTypes(List<Integer> tags,List<Integer> types){
+    @GetMapping("/deleteTagsAndTypes")
+    public ResponseBean deleteTagsAndTypes(@RequestParam(required = false,value = "tags") List<Integer> tags,@RequestParam(required = false)List<Integer> types){
         ResultDTO resultDTO = tagTypeDomain.deleteTypesOrTags(tags, types);
         if(resultDTO.getMessages()==null){
             return successResponseBean();
@@ -101,15 +101,28 @@ public class TagTypeControl extends SysBaseControl{
     }
 
     /**
-     * 更新分类或标签
-     * @param tags
-     * @param types
+     * 更新标签
      * @return
      */
-    @GetMapping("/updateTagsAndTypes")
-    public ResponseBean updateTagsAndTypes(@RequestBody(required = false) TagDTO tags,
-                                           @RequestBody(required = false) TypeDTO types){
-        ResultDTO resultDTO = tagTypeDomain.updateTypesOrTags(tags, types);
+    @PostMapping("/updateTag")
+    public ResponseBean updateTag(Integer id,String tagName){
+        TagDTO build = TagDTO.builder().id(id).tagName(tagName).build();
+        ResultDTO resultDTO = tagTypeDomain.updateTypesOrTags(build, null);
+        if(resultDTO.getMessages()==null){
+            return successResponseBean();
+        }else{
+            return failResponseBean(resultDTO.getMessages());
+        }
+    }
+
+    /**
+     * 更新分类
+     * @return
+     */
+    @PostMapping("/updateType")
+    public ResponseBean updateTypes(Integer id,String typeName){
+        TypeDTO build = TypeDTO.builder().id(id).typeName(typeName).build();
+        ResultDTO resultDTO = tagTypeDomain.updateTypesOrTags(null, build);
         if(resultDTO.getMessages()==null){
             return successResponseBean();
         }else{

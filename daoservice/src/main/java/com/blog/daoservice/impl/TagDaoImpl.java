@@ -1,6 +1,7 @@
 package com.blog.daoservice.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.daoservice.dao.TagDao;
@@ -63,5 +64,11 @@ public class TagDaoImpl extends SysBaseMpImpl<TagMapper,Tag> implements TagDao {
     @Override
     public int getTagsCountByLikeName(String conditionName) {
         return this.count(new QueryWrapper<Tag>().lambda().like(Tag::getTagName,conditionName));
+    }
+
+    @Override
+    public boolean updateNameById(Tag tag){
+        boolean update = this.update(new UpdateWrapper<Tag>().lambda().eq(Tag::getId, tag.getId()).set(Tag::getTagName, tag.getTagName()));
+        return update;
     }
 }
