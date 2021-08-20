@@ -1,6 +1,7 @@
 package com.blog.api.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,7 @@ public class BlogDTO {
     /**
      * 发布时间
      */
+    @JsonFormat( pattern = "yyyy-MM-dd")
     private LocalDateTime createTime;
 
     /**
@@ -49,7 +51,8 @@ public class BlogDTO {
 
     private Integer type;
 
-    private Integer tag;
+    //存储的是用逗号分隔的标签名
+    private String tag;
 
 }
 

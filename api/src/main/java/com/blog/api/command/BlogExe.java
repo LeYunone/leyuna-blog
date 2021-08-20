@@ -23,7 +23,9 @@ public class BlogExe {
     private BlogDao blogDao;
 
     public boolean addBlog(BlogDTO blogDTO){
-        return true;
+        Blog blog = TransformationUtil.copyToDTO(blogDTO, Blog.class);
+        boolean save = blogDao.save(blog);
+        return save;
     }
 
     public Page<BlogDTO> getAllBlogByPage(Integer index,Integer size){
@@ -35,7 +37,7 @@ public class BlogExe {
         return blogDTOPage;
     }
 
-    public Page<BlogDTO> getBlogByPage(Integer index,Integer size,Integer tag,Integer type){
+    public Page<BlogDTO> getBlogByPage(Integer index,Integer size,Integer type,String tag){
         Page<Blog> page=new Page(index,size);
         IPage<Blog> blogIPage = blogDao.queryByConPage(Blog.builder().tag(tag).type(type).build(), page);
         //转换结果集

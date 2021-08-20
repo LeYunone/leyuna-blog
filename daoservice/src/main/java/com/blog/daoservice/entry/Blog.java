@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableField;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -65,7 +66,7 @@ public class Blog {
     private Integer type;
 
     @TableField(value = "tag")
-    private Integer tag;
+    private String tag;
 
 }
 

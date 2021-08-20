@@ -15,9 +15,9 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="api" target="8" />
-      <module name="blog" target="8" />
+      <module name="blog" target="1.5" />
       <module name="daoservice" target="8" />
-      <module name="web" target="8" />
+      <module name="web" target="1.5" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

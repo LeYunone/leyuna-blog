@@ -1,6 +1,7 @@
 package com.blog.api.command;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.dto.TagDTO;
@@ -69,7 +70,14 @@ public class TagAndTypeExe {
      */
     public Page<TypeDTO> getAllTypes(Integer pageIndex,Integer pageSize,String conditionName){
         IPage<Type> typeIPage=null;
-        Page<Type> page=new Page(pageIndex,pageSize);
+        Page<Type> page=null;
+        if(pageIndex==null&&pageIndex==null){
+            pageIndex=1;
+            pageSize=50;
+            page=new Page(pageIndex,pageSize);
+        }else{
+            page=new Page(pageIndex,pageSize);
+        }
         //如果有模糊查询条件则走模糊查询
         if(StringUtils.isEmpty(conditionName)){
             typeIPage = typeDao.queryByConPage(new Type(), page);
@@ -160,5 +168,18 @@ public class TagAndTypeExe {
         Tag tag = TransformationUtil.copyToDTO(tags, Tag.class);
         boolean b = tagDao.updateNameById(tag);
         return b;
+    }
+
+    /**
+     * 判断是否可以根据名字查到标签
+     * @return
+     */
+    public boolean getTagByName(String name){
+        List<Tag> tags = tagDao.queryByCon(Tag.builder().tagName(name).build());
+        if(CollectionUtils.isNotEmpty(tags)){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

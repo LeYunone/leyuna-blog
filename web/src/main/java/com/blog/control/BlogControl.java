@@ -6,10 +6,13 @@ import com.blog.api.dto.BlogDTO;
 import com.blog.api.dto.ResultDTO;
 import com.blog.bean.BlogBean;
 import com.blog.bean.ResponseBean;
+import com.blog.error.SystemAsserts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import util.TransformationUtil;
 
 /**
  * @author pengli
@@ -28,9 +31,23 @@ public class BlogControl extends SysBaseControl {
      * @return
      */
     @RequestMapping("/addBlog")
-    public ResponseBean addBlog(BlogBean blogBean){
-
-        return null;
+    public ResponseBean addBlog(@RequestBody BlogBean blogBean){
+        System.out.println(blogBean);
+        String[] tags = blogBean.getTags();
+        if(tags.length!=0){
+            StringBuilder stringBuilder=new StringBuilder();
+            for(String tag:tags){
+                stringBuilder.append(tag+",");
+            }
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+            blogBean.setTag(stringBuilder.toString());
+        }
+        boolean b = blogDomain.addBlog(TransformationUtil.copyToDTO(blogBean, BlogDTO.class));
+        if(b){
+            return successResponseBean();
+        }else{
+            return failResponseBean(SystemAsserts.ADD_BLOG_FAIL);
+        }
     }
 
     /**

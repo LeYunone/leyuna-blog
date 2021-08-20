@@ -22,22 +22,18 @@ public class BlogBean {
      */
     private String blogContent;
     /**
-     * 图片
-     */
-    private String base64Str;
-    /**
      * 类型 S
      */
-    private Integer [] type;
+    private Integer  type;
     /**
-     * 标签 S
+     * 标签 S 数组形式
      */
-    private Integer [] tags;
-
-    /**
-     * 图片 二进制
-     */
-    private byte[] base64Bytes;
+    private String [] tags;
 
     private String title;
+
+    /**
+     * 标签  逗号分隔形式
+     */
+    private String tag;
 }
