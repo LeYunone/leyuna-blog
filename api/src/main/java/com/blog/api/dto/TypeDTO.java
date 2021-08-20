@@ -2,6 +2,8 @@ package com.blog.api.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 /**
  * @author pengli
  * @create 2021-08-12 13:25
@@ -16,5 +18,14 @@ public class TypeDTO {
 
     private Integer id;
 
-    private String tagName;
+    private String typeName;
+
+    private LocalDateTime createTime;
+
+    private Integer useCount;
+
+    private LocalDateTime lastUserTime;
+
+    private String userStatus;
+
 }

@@ -33,7 +33,7 @@ public class ResultDTO {
 
     public void addMessage(String str){
         if(this.messages==null){
-            this.messages=new StringBuilder();
+            this.messages=new StringBuilder(str);
         }else{
             this.messages.append(str);
         }

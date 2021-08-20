@@ -1,5 +1,9 @@
 package com.blog.api.command;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.dto.TagDTO;
 import com.blog.api.dto.TypeDTO;
 import com.blog.daoservice.dao.TagDao;
@@ -7,6 +11,7 @@ import com.blog.daoservice.dao.TypeDao;
 import com.blog.daoservice.entry.Tag;
 import com.blog.daoservice.entry.Type;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import util.TransformationUtil;
@@ -29,13 +34,23 @@ public class TagAndTypeExe {
     private TypeDao typeDao;
 
     /**
-     * 获取所有标签
+     * 获取所有标签  功能属于 分页 模糊
      * @return
      */
-    public List<TagDTO> getAllTags(){
-        List<Tag> list = tagDao.queryByCon(new Tag());
-        List<TagDTO> copyList = TransformationUtil.copyToLists(list, TagDTO.class);
-        return copyList;
+    public Page<TagDTO> getAllTags(Integer pageIndex,Integer pageSize,String conditionName){
+        IPage<Tag> tagIPage=null;
+        Page<Tag> page=new Page(pageIndex,pageSize);
+        //如果有模糊查询条件则走模糊查询
+        if(StringUtils.isEmpty(conditionName)){
+            tagIPage = tagDao.queryByConPage(new Tag(), page);
+        }else{
+            tagIPage = tagDao.selectByLikeNamePage(new Tag(),page,conditionName);
+        }
+        //转换结果集
+        Page<TagDTO> result=new Page<>(pageIndex,pageSize);
+        result.setTotal(tagIPage.getTotal());
+        result.setRecords( TransformationUtil.copyToLists(tagIPage.getRecords(),TagDTO.class));
+        return result;
     }
 
     /**
@@ -50,13 +65,30 @@ public class TagAndTypeExe {
     }
 
     /**
-     * 获取所有分类
+     * 获取所有分类  有分页和模糊
      * @return
      */
-    public List<TypeDTO> getAllTypes(){
-        List<Type> list = typeDao.queryByCon(new Type());
-        List<TypeDTO> copyList = TransformationUtil.copyToLists(list, TypeDTO.class);
-        return copyList;
+    public Page<TypeDTO> getAllTypes(Integer pageIndex,Integer pageSize,String conditionName){
+        IPage<Type> typeIPage=null;
+        Page<Type> page=null;
+        if(pageIndex==null&&pageIndex==null){
+            pageIndex=1;
+            pageSize=50;
+            page=new Page(pageIndex,pageSize);
+        }else{
+            page=new Page(pageIndex,pageSize);
+        }
+        //如果有模糊查询条件则走模糊查询
+        if(StringUtils.isEmpty(conditionName)){
+            typeIPage = typeDao.queryByConPage(new Type(), page);
+        }else{
+            typeIPage = typeDao.selectByLikeNamePage(new Type(),page,conditionName);
+        }
+        //转换结果集
+        Page<TypeDTO> result=new Page<>(pageIndex,pageSize);
+        result.setTotal(typeIPage.getTotal());
+        result.setRecords( TransformationUtil.copyToLists(typeIPage.getRecords(),TypeDTO.class));
+        return result;
     }
 
     /**
@@ -122,9 +154,9 @@ public class TagAndTypeExe {
      * 更新分类
      * @param types
      */
-    public boolean updateTypes(List<TypeDTO> types){
-        List<Type> copyList = TransformationUtil.copyToLists(types, Type.class);
-        boolean b = typeDao.updateBatchById(copyList);
+    public boolean updateTypes(TypeDTO types){
+        Type type = TransformationUtil.copyToDTO(types, Type.class);
+        boolean b = typeDao.updateNameById(type);
         return b;
     }
 
@@ -132,9 +164,22 @@ public class TagAndTypeExe {
      * 更新标签
      * @param tags
      */
-    public boolean updateTags(List<TagDTO> tags){
-        List<Tag> copyList = TransformationUtil.copyToLists(tags, Tag.class);
-        boolean b = tagDao.updateBatchById(copyList);
+    public boolean updateTags(TagDTO tags){
+        Tag tag = TransformationUtil.copyToDTO(tags, Tag.class);
+        boolean b = tagDao.updateNameById(tag);
         return b;
+    }
+
+    /**
+     * 判断是否可以根据名字查到标签
+     * @return
+     */
+    public boolean getTagByName(String name){
+        List<Tag> tags = tagDao.queryByCon(Tag.builder().tagName(name).build());
+        if(CollectionUtils.isNotEmpty(tags)){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

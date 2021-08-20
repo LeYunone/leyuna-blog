@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,6 +78,18 @@ public class TransformationUtil {
      * @return
      */
     public static <D>List<D> copyToLists(List<?> copyClass, Class<D> toClass){
-        return null;
+        List<D> result=new ArrayList<>();
+        copyClass.stream().forEach(list->{
+            try {
+                Object tarObject = toClass.newInstance();
+                BeanUtils.copyProperties(list, tarObject);
+                result.add((D)tarObject);
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        });
+        return result;
     }
 }

@@ -1,5 +1,6 @@
 package com.blog.control;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.bean.ResponseBean;
 import com.blog.bean.ResponseCode;
 
@@ -62,7 +63,26 @@ public class SysBaseControl {
             res.setListData((List)o);
         }else if(o instanceof StringBuilder){
             res.setSrcData(o.toString());
+        }else if(o instanceof Page){
+            res.setPage((Page)o);
         }
+        return res;
+    }
+
+    /**
+     * 封装分页对象  ， 默认取res里面的listdata
+     * @param res
+     * @return
+     */
+    public ResponseBean packPage(ResponseBean res){
+        if(null==res){
+            return null;
+        }
+        List<Object> listData = res.getListData();
+        Page pageBean=new Page();
+        pageBean.setTotal(listData.size());
+        pageBean.setRecords(listData);
+        res.setPage(pageBean);
         return res;
     }
 }
