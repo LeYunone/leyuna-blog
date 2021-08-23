@@ -40,14 +40,17 @@ public class BlogDomain {
     public Page<BlogDTO> getBlogsByPage(Integer index,Integer size,Integer type,String tags){
         Page<BlogDTO> result=null;
         //查询所有
-        if(type==null && tags==null){
+        if(type==null && StringUtils.isEmpty(tags)){
             result = blogExe.getAllBlogByPage(index, size);
         }else{
             result = blogExe.getBlogByPage(index, size, type, tags);
         }
         return result;
     }
-
+    public int getBlogsByTypeCount(Integer type){
+        int blogByTypeCount = blogExe.getBlogByTypeCount(type);
+        return blogByTypeCount;
+    }
     /**
      * 发布博客
      * @return
@@ -84,7 +87,22 @@ public class BlogDomain {
         boolean b = blogExe.addBlog(blogDTO);
         if(!b){
             throw new RuntimeException();
+        }else{
+            //更新分类 和标签的最后使用次数
+            String tagUpdates = blogDTO.getTag();
+            Integer type = blogDTO.getType();
+            tagAndTypeExe.updateTagsAndTypes(tagUpdates,type);
         }
         return b;
+    }
+
+    /**
+     * 根据id查询博客 百分百能查到的前提
+     * @param id
+     * @return
+     */
+    public BlogDTO getBlogById(Integer id){
+        BlogDTO blogById = blogExe.getBlogById(id);
+        return blogById;
     }
 }

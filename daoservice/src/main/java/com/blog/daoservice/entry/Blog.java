@@ -68,5 +68,9 @@ public class Blog {
     @TableField(value = "tag")
     private String tag;
 
+    @TableField(value = "update_time")
+    private LocalDateTime updateTime;
+
+    private String remarks;
 }
 

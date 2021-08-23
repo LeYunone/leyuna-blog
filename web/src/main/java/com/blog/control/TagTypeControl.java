@@ -5,13 +5,16 @@ import com.blog.api.domain.TagTypeDomain;
 import com.blog.api.dto.ResultDTO;
 import com.blog.api.dto.TagDTO;
 import com.blog.api.dto.TypeDTO;
+import com.blog.api.dto.TypeNavDTO;
 import com.blog.bean.ResponseBean;
+import com.blog.bean.TreeTypeBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
-import util.CollectionUtil;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author pengli
@@ -38,6 +41,7 @@ public class TagTypeControl extends SysBaseControl{
         Page<TagDTO> aLlTags = tagTypeDomain.getALlTags(pageIndex,pageSize,conditionName);
         ResponseBean responseBean = successResponseBean(aLlTags.getRecords());
         responseBean.setPage(aLlTags);
+        responseBean.setObjData(aLlTags.getRecords().size());
         return  responseBean;
     }
 
@@ -75,8 +79,9 @@ public class TagTypeControl extends SysBaseControl{
      * @return
      */
     @RequestMapping("/addTagsAndTypes")
-    public ResponseBean addTagsAndTypes(@RequestParam(required = false) List<String> tags,@RequestParam(required = false) List<String> types){
-        ResultDTO resultDTO = tagTypeDomain.addTypesOrTags(tags, types);
+    public ResponseBean addTagsAndTypes(@RequestParam(required = false) List<String>
+                                                    tags,@RequestParam(required = false) List<String> types,@RequestParam(required = false)Integer typeNav){
+        ResultDTO resultDTO = tagTypeDomain.addTypesOrTags(tags, types,typeNav);
         if(resultDTO.getMessages()==null){
             return successResponseBean();
         }else{
@@ -128,6 +133,77 @@ public class TagTypeControl extends SysBaseControl{
         }else{
             return failResponseBean(resultDTO.getMessages());
         }
+    }
+
+    /**
+     * 查询所有的分类导航
+     * @return
+     */
+    @GetMapping("/getTypeNav")
+    public ResponseBean getTypeNav(){
+        List<TypeNavDTO> typeNavList = tagTypeDomain.getTypeNavList();
+        return successResponseBean(typeNavList);
+    }
+    /**
+     * 获得树形分类
+     * @return
+     */
+    @GetMapping("/treeType")
+    public ResponseBean getTreeType(){
+        //得到分类导航  id - dto
+        Map<Integer, TypeNavDTO> typeNav = tagTypeDomain.getTypeNavMap();
+        //得到所有分类
+        Page<TypeDTO> aLlTypes = tagTypeDomain.getALlTypes(null, null, null);
+        List<TypeDTO> records = aLlTypes.getRecords();
+        List<TreeTypeBean> treeResult = getTreeResult(typeNav, records);
+        ResponseBean responseBean = successResponseBean(treeResult);
+        responseBean.setObjData(records.size());
+        return responseBean;
+    }
+
+    /**
+     * 得到最终结果的树形结构
+     * 拼装树形结构数据
+     * @return
+     */
+    public List<TreeTypeBean> getTreeResult(Map<Integer,TypeNavDTO> typeNav,List<TypeDTO> types){
+        List<TreeTypeBean> result=new ArrayList<>();
+
+        //结果集
+        Map<Integer,TreeTypeBean> mapTreeType=new HashMap<>();
+        types.stream().forEach(t->{
+            Integer navId=t.getFatherType();
+            TreeTypeBean thisTreeType = mapTreeType.get(navId);
+            TypeNavDTO typeNavDTO = typeNav.get(navId);
+            //如果当前结果集里没有这个分类导航
+            if(null==thisTreeType){
+                TreeTypeBean treeTypeBean=new TreeTypeBean();
+
+                //创建子集合
+                List<TreeTypeBean> childrenTree=new ArrayList<>();
+                //拼接子集合信息
+                TreeTypeBean type=new TreeTypeBean();
+                type.setId(t.getId());
+                type.setLabel(t.getTypeName());
+                childrenTree.add(type);
+
+                treeTypeBean.setId(typeNavDTO.getId());
+                treeTypeBean.setLabel(typeNavDTO.getTypeNavName());
+                treeTypeBean.setChildren(childrenTree);
+                //将这次父导航塞入结果集中
+                mapTreeType.put(navId,treeTypeBean);
+            }else{
+                TreeTypeBean type=new TreeTypeBean();
+                type.setId(t.getId());
+                type.setLabel(t.getTypeName());
+                thisTreeType.getChildren().add(type);
+            }
+
+        });
+        mapTreeType.forEach((key,value)->{
+            result.add(value);
+        });
+        return result;
     }
 
 }

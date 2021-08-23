@@ -15,6 +15,7 @@ import util.ErrorMeassage;
 import util.ObjectUtil;
 import util.TransformationUtil;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -70,5 +71,18 @@ public class TagDaoImpl extends SysBaseMpImpl<TagMapper,Tag> implements TagDao {
     public boolean updateNameById(Tag tag){
         boolean update = this.update(new UpdateWrapper<Tag>().lambda().eq(Tag::getId, tag.getId()).set(Tag::getTagName, tag.getTagName()));
         return update;
+    }
+
+    @Override
+    public boolean updateLastUseTimeByName(String[] names) {
+        boolean is=true;
+        for(String name:names){
+            boolean update = this.update(new UpdateWrapper<Tag>().lambda().eq(Tag::getTagName, name).set(Tag::getLastUserTime, LocalDateTime.now()));
+            is=update;
+            if(!is){
+                break;
+            }
+        }
+        return is;
     }
 }
