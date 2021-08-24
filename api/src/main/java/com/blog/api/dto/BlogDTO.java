@@ -54,5 +54,9 @@ public class BlogDTO {
     //存储的是用逗号分隔的标签名
     private String tag;
 
+    @JsonFormat( pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updateTime;
+
+    private String remarks;
 }
 

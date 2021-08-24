@@ -6,10 +6,13 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.dto.TagDTO;
 import com.blog.api.dto.TypeDTO;
+import com.blog.api.dto.TypeNavDTO;
 import com.blog.daoservice.dao.TagDao;
 import com.blog.daoservice.dao.TypeDao;
+import com.blog.daoservice.dao.TypeNavDao;
 import com.blog.daoservice.entry.Tag;
 import com.blog.daoservice.entry.Type;
+import com.blog.daoservice.entry.TypeNav;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,9 @@ public class TagAndTypeExe {
 
     @Autowired
     private TypeDao typeDao;
+
+    @Autowired
+    private TypeNavDao typeNavDao;
 
     /**
      * 获取所有标签  功能属于 分页 模糊
@@ -73,7 +79,8 @@ public class TagAndTypeExe {
         Page<Type> page=null;
         if(pageIndex==null&&pageIndex==null){
             pageIndex=1;
-            pageSize=50;
+            //暂时限定数据库中只会存在100条分类
+            pageSize=100;
             page=new Page(pageIndex,pageSize);
         }else{
             page=new Page(pageIndex,pageSize);
@@ -171,6 +178,22 @@ public class TagAndTypeExe {
     }
 
     /**
+     * 更新标签最后使用时间 根据名称批量
+     */
+    public boolean updateTags(String [] names){
+        boolean b = tagDao.updateLastUseTimeByName(names);
+        return b;
+    }
+
+    /**
+     * 更新分类最后使用时间 根据id
+     */
+    public boolean updateTypes(Integer id){
+        boolean b = typeDao.updateLastUseTimeById(id);
+        return b;
+    }
+
+    /**
      * 判断是否可以根据名字查到标签
      * @return
      */
@@ -181,5 +204,29 @@ public class TagAndTypeExe {
         }else{
             return false;
         }
+    }
+
+    public boolean updateTagsAndTypes(String tagNames,Integer typeId){
+        boolean tagTupdate=true;
+        if(StringUtils.isNotEmpty(tagNames)){
+            String[] names=tagNames.split(",");
+            tagTupdate= tagDao.updateLastUseTimeByName(names);
+        }
+        boolean typeUpdate= typeDao.updateLastUseTimeById(typeId);
+        if(tagTupdate && typeUpdate){
+            return true;
+        }else{
+            //事务回滚
+            throw new RuntimeException();
+        }
+    }
+
+    /**
+     * 得到分类导航
+     * @return
+     */
+    public List<TypeNavDTO> getTypeNav(){
+        List<TypeNav> typeNavs = typeNavDao.queryByCon(new TypeNav());
+        return TransformationUtil.copyToLists(typeNavs,TypeNavDTO.class);
     }
 }

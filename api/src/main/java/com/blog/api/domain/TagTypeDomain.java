@@ -7,6 +7,7 @@ import com.blog.api.command.TagAndTypeExe;
 import com.blog.api.dto.ResultDTO;
 import com.blog.api.dto.TagDTO;
 import com.blog.api.dto.TypeDTO;
+import com.blog.api.dto.TypeNavDTO;
 import com.blog.daoservice.entry.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author pengli
@@ -77,16 +76,22 @@ public class TagTypeDomain {
      * @return
      */
     public Page<TagDTO> getALlTags(Integer pageIndex,Integer pageSize,String conditionName){
-        Page<TagDTO> iPage = tagAndTypeExe.getAllTags(pageIndex,pageSize,conditionName);
-        iPage.getRecords().stream().forEach(tag->{
-            LocalDateTime lastTime=tag.getLastUserTime();
-            //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
-            if(LocalDateTime.now().isBefore(lastTime.plusMonths(1))){
-                tag.setUserStatus("hot");
-            }else{
-                tag.setUserStatus("cold");
-            }
-        });
+        Page<TagDTO> iPage=null;
+        if(pageIndex!=null){
+            iPage = tagAndTypeExe.getAllTags(pageIndex,pageSize,conditionName);
+            iPage.getRecords().stream().forEach(tag->{
+                LocalDateTime lastTime=tag.getLastUserTime();
+                //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
+                if(LocalDateTime.now().isBefore(lastTime.plusMonths(1))){
+                    tag.setUserStatus("hot");
+                }else{
+                    tag.setUserStatus("cold");
+                }
+            });
+        }else{
+            iPage = tagAndTypeExe.getAllTags(1,100,conditionName);
+        }
+
         return iPage;
     }
 
@@ -115,14 +120,15 @@ public class TagTypeDomain {
      * @param types
      * @return
      */
-    public ResultDTO addTypesOrTags(List<String> tags,List<String> types){
+    public ResultDTO addTypesOrTags(List<String> tags,List<String> types,Integer typeNav){
         ResultDTO resultDTO=new ResultDTO();
+        //添加分类
         if(!CollectionUtils.isEmpty(types)){
             List<TypeDTO> listTypes=new ArrayList<>();
             //将名字封装成类
             types.stream().forEach(type->{
                 TypeDTO typeDTOBuilder = TypeDTO.builder().typeName(type).createTime(LocalDateTime.now()).
-                        lastUserTime(LocalDateTime.now()).useCount(0).build();
+                        lastUserTime(LocalDateTime.now()).useCount(0).fatherType(typeNav).build();
                 listTypes.add(typeDTOBuilder);
             });
             boolean b = tagAndTypeExe.addTypes(listTypes);
@@ -130,6 +136,7 @@ public class TagTypeDomain {
                 resultDTO.addMessage(ErrorMessage.ADD_TYPE_FALE);
             }
         }
+        //添加标签
         if(!CollectionUtils.isEmpty(tags)){
             List<TagDTO> listTags=new ArrayList<>();
             //将名字封装成类
@@ -195,5 +202,28 @@ public class TagTypeDomain {
             }
         }
         return resultDTO;
+    }
+
+    /**
+     * 得到所有分类导航
+     * @return
+     */
+    public Map<Integer,TypeNavDTO> getTypeNavMap(){
+        List<TypeNavDTO> typeNav = tagAndTypeExe.getTypeNav();
+        Map<Integer,TypeNavDTO> resultMap=new HashMap<>();
+        typeNav.stream().forEach(t->{
+            resultMap.put(t.getId(),t);
+        });
+        return resultMap;
+    }
+
+
+    /**
+     * 得到所有分类导航
+     * @return
+     */
+    public List<TypeNavDTO> getTypeNavList(){
+        List<TypeNavDTO> typeNav = tagAndTypeExe.getTypeNav();
+        return typeNav;
     }
 }

@@ -23,4 +23,6 @@ public interface TypeDao extends SysBaseDao<Type>{
     int getTagsCountByLikeName(String conditionName);
 
     boolean updateNameById(Type type);
+
+    boolean updateLastUseTimeById(Integer id);
 }

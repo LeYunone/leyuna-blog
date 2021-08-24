@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.daoservice.dao.TypeDao;
-import com.blog.daoservice.entry.Tag;
 import com.blog.daoservice.entry.Type;
 import com.blog.daoservice.mapper.TypeMapper;
 import org.springframework.cache.annotation.Cacheable;
@@ -16,6 +15,7 @@ import util.ErrorMeassage;
 import util.ObjectUtil;
 import util.TransformationUtil;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -69,6 +69,12 @@ public class TypeDaoImpl extends SysBaseMpImpl<TypeMapper,Type> implements TypeD
     @Override
     public boolean updateNameById(Type type){
         boolean update = this.update(new UpdateWrapper<Type>().lambda().eq(Type::getId, type.getId()).set(Type::getTypeName, type.getTypeName()));
+        return update;
+    }
+
+    @Override
+    public boolean updateLastUseTimeById(Integer id) {
+        boolean update = this.update(new UpdateWrapper<Type>().lambda().eq(Type::getId, id).set(Type::getLastUserTime, LocalDateTime.now()));
         return update;
     }
 }

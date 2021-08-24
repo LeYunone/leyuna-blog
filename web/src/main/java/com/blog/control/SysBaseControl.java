@@ -65,6 +65,8 @@ public class SysBaseControl {
             res.setSrcData(o.toString());
         }else if(o instanceof Page){
             res.setPage((Page)o);
+        }else{
+            res.setObjData(o);
         }
         return res;
     }

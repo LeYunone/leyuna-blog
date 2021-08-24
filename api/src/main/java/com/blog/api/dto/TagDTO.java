@@ -1,5 +1,6 @@
 package com.blog.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ public class TagDTO {
     /**
      * 创建时间
      */
+    @JsonFormat( pattern = "yyyy-MM-dd")
     private LocalDateTime createTime;
 
     /**
