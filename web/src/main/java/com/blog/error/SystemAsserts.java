@@ -11,7 +11,9 @@ public enum  SystemAsserts {
     ADD_BLOG_FAIL("发布失败:"),
     ADD_TYPENAV_FAIL("添加分类导航失败"),
 
-    UPDATE_TYPENAV_FAIL("更新分类导航失败");
+    UPDATE_TYPENAV_FAIL("更新分类导航失败"),
+
+    DELETE_TYPENAV_FAIL("删除分类导航失败");
     private final String msg;
 
     SystemAsserts(String msg){

@@ -6,6 +6,7 @@ import com.blog.api.dto.ResultDTO;
 import com.blog.api.dto.TagDTO;
 import com.blog.api.dto.TypeDTO;
 import com.blog.api.dto.TypeNavDTO;
+import com.blog.bean.CascaderTypeBean;
 import com.blog.bean.ResponseBean;
 import com.blog.bean.TreeTypeBean;
 import com.blog.error.SystemAsserts;
@@ -65,6 +66,56 @@ public class TagTypeControl extends SysBaseControl{
         ResponseBean responseBean = successResponseBean(aLlTags.getRecords());
         responseBean.setPage(aLlTags);
         return  responseBean;
+    }
+
+    /**
+     * 取得分类导航和分类的父子集， 提供给前台级联操作
+     * @return
+     */
+    @RequestMapping("/getTypeInNav")
+    public ResponseBean getTypeInNav(){
+        //暂定默认最多只会有100个分类
+        Page<TypeDTO> aLlTypes = tagTypeDomain.getALlTypes(null, null, null);
+        List<TypeDTO> records = aLlTypes.getRecords();
+        Map<Integer, TypeNavDTO> typeNavMap = tagTypeDomain.getTypeNavMap();
+        List<CascaderTypeBean> cascaderTypeResult = getCascaderTypeResult(records, typeNavMap);
+        return successResponseBean(cascaderTypeResult);
+    }
+
+    public List<CascaderTypeBean> getCascaderTypeResult(List<TypeDTO> types,Map<Integer, TypeNavDTO> typeNavMap){
+        List<CascaderTypeBean> lists=new ArrayList<>();
+        Map<Integer,CascaderTypeBean> map=new HashMap<>();
+        types.stream().forEach(t->{
+            Integer fatherType = t.getFatherType();
+            CascaderTypeBean cascaderTypeBean = map.get(fatherType);
+            if(null==cascaderTypeBean){
+                CascaderTypeBean reslutFul=new CascaderTypeBean();
+                //拿导航名
+                TypeNavDTO typeNavDTO = typeNavMap.get(fatherType);
+                reslutFul.setLabel(typeNavDTO.getTypeNavName());
+                reslutFul.setValue(t.getFatherType());
+
+                //创建子集合
+                List<CascaderTypeBean> chiden=new ArrayList<>();
+                CascaderTypeBean chidenBean=new CascaderTypeBean();
+                chidenBean.setValue(t.getId());
+                chidenBean.setLabel(t.getTypeName());
+                chiden.add(chidenBean);
+
+                //填到结果集里
+                reslutFul.setChildren(chiden);
+                map.put(fatherType,reslutFul);
+            }else{
+                CascaderTypeBean chiden=new CascaderTypeBean();
+                chiden.setValue(t.getId());
+                chiden.setLabel(t.getTypeName());
+                cascaderTypeBean.getChildren().add(chiden);
+            }
+        });
+        map.forEach((key,value) ->{
+            lists.add(value);
+        });
+        return lists;
     }
 
     @GetMapping("/typesId")
@@ -229,6 +280,16 @@ public class TagTypeControl extends SysBaseControl{
             return successResponseBean();
         }else{
             return failResponseBean(SystemAsserts.UPDATE_TYPENAV_FAIL);
+        }
+    }
+
+    @PostMapping("/deleteTypeNav")
+    public ResponseBean deleteTypeNav(Integer typeNavId){
+        boolean b = tagTypeDomain.deleteTypeNav(typeNavId);
+        if(b){
+            return successResponseBean();
+        }else{
+            return failResponseBean(SystemAsserts.DELETE_TYPENAV_FAIL);
         }
     }
 }

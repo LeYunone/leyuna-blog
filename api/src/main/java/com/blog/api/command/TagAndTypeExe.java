@@ -245,4 +245,9 @@ public class TagAndTypeExe {
         }
         return TransformationUtil.copyToLists(typeNavs,TypeNavDTO.class);
     }
+
+    public boolean deleteTypeNav(Integer typeNavId){
+        boolean b = typeNavDao.removeById(typeNavId);
+        return b;
+    }
 }

@@ -241,4 +241,9 @@ public class TagTypeDomain {
         boolean b = tagAndTypeExe.addTypeNavs(navName);
         return b;
     }
+
+    public boolean deleteTypeNav(Integer typeNavId){
+        boolean b = tagAndTypeExe.deleteTypeNav(typeNavId);
+        return b;
+    }
 }

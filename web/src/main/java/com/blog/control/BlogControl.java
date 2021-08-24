@@ -27,7 +27,7 @@ public class BlogControl extends SysBaseControl {
      * @param blogBean
      * @return
      */
-    @RequestMapping("/addBlog")
+    @PostMapping("/addBlog")
     public ResponseBean addBlog(@RequestBody BlogBean blogBean){
         System.out.println(blogBean);
         String[] tags = blogBean.getTags();
