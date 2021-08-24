@@ -131,6 +131,11 @@ public class TagAndTypeExe {
         return b;
     }
 
+    public boolean addTypeNavs(String navName){
+        boolean b = typeNavDao.save(TypeNav.builder().typeNavName(navName).build());
+        return b;
+    }
+
     /**
      * 删除分类
      * @param types
@@ -174,6 +179,12 @@ public class TagAndTypeExe {
     public boolean updateTags(TagDTO tags){
         Tag tag = TransformationUtil.copyToDTO(tags, Tag.class);
         boolean b = tagDao.updateNameById(tag);
+        return b;
+    }
+
+    public boolean updateTypeNav(TypeNavDTO typeNavDTO){
+        TypeNav typeNav = TransformationUtil.copyToDTO(typeNavDTO, TypeNav.class);
+        boolean b = typeNavDao.updateById(typeNav);
         return b;
     }
 
@@ -225,8 +236,13 @@ public class TagAndTypeExe {
      * 得到分类导航
      * @return
      */
-    public List<TypeNavDTO> getTypeNav(){
-        List<TypeNav> typeNavs = typeNavDao.queryByCon(new TypeNav());
+    public List<TypeNavDTO> getTypeNav(String conditionName){
+        List<TypeNav> typeNavs =null;
+        if(StringUtils.isNotEmpty(conditionName)){
+            typeNavs=typeNavDao.queryAllTypeNavConditionName(conditionName);
+        }else{
+            typeNavs=typeNavDao.queryByCon(new TypeNav());
+        }
         return TransformationUtil.copyToLists(typeNavs,TypeNavDTO.class);
     }
 }

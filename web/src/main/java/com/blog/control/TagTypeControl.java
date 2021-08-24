@@ -8,6 +8,7 @@ import com.blog.api.dto.TypeDTO;
 import com.blog.api.dto.TypeNavDTO;
 import com.blog.bean.ResponseBean;
 import com.blog.bean.TreeTypeBean;
+import com.blog.error.SystemAsserts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -140,8 +141,8 @@ public class TagTypeControl extends SysBaseControl{
      * @return
      */
     @GetMapping("/getTypeNav")
-    public ResponseBean getTypeNav(){
-        List<TypeNavDTO> typeNavList = tagTypeDomain.getTypeNavList();
+    public ResponseBean getTypeNav(@RequestParam(required = false)String conditionName){
+        List<TypeNavDTO> typeNavList = tagTypeDomain.getTypeNavList(conditionName);
         return successResponseBean(typeNavList);
     }
     /**
@@ -206,4 +207,28 @@ public class TagTypeControl extends SysBaseControl{
         return result;
     }
 
+    @PostMapping("/addTypeNav")
+    public ResponseBean addTypeNav(String typeNavName){
+        boolean b = tagTypeDomain.addTypeNav(typeNavName);
+        if(b){
+            return successResponseBean();
+        }else{
+            return failResponseBean(SystemAsserts.ADD_TYPENAV_FAIL);
+        }
+    }
+
+    /**
+     * 修改分类导航名
+     * @param typeNavName
+     * @return
+     */
+    @PostMapping("/updateTypeNav")
+    public ResponseBean editTypeNav(String typeNavName,Integer typeNavId){
+        boolean b = tagTypeDomain.updateTypeNav(typeNavName, typeNavId);
+        if(b){
+            return successResponseBean();
+        }else{
+            return failResponseBean(SystemAsserts.UPDATE_TYPENAV_FAIL);
+        }
+    }
 }

@@ -205,11 +205,21 @@ public class TagTypeDomain {
     }
 
     /**
+     * 修改分类导航名
+     * @param navName
+     * @return
+     */
+    public boolean updateTypeNav(String navName,Integer typeNavId){
+        boolean b = tagAndTypeExe.updateTypeNav(TypeNavDTO.builder().typeNavName(navName).id(typeNavId).build());
+        return b;
+    }
+
+    /**
      * 得到所有分类导航
      * @return
      */
     public Map<Integer,TypeNavDTO> getTypeNavMap(){
-        List<TypeNavDTO> typeNav = tagAndTypeExe.getTypeNav();
+        List<TypeNavDTO> typeNav = tagAndTypeExe.getTypeNav(null);
         Map<Integer,TypeNavDTO> resultMap=new HashMap<>();
         typeNav.stream().forEach(t->{
             resultMap.put(t.getId(),t);
@@ -222,8 +232,13 @@ public class TagTypeDomain {
      * 得到所有分类导航
      * @return
      */
-    public List<TypeNavDTO> getTypeNavList(){
-        List<TypeNavDTO> typeNav = tagAndTypeExe.getTypeNav();
+    public List<TypeNavDTO> getTypeNavList(String conditionName){
+        List<TypeNavDTO> typeNav = tagAndTypeExe.getTypeNav(conditionName);
         return typeNav;
+    }
+
+    public boolean addTypeNav(String navName){
+        boolean b = tagAndTypeExe.addTypeNavs(navName);
+        return b;
     }
 }

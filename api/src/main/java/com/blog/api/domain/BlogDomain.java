@@ -84,6 +84,7 @@ public class BlogDomain {
         blogDTO.setClickCount(0);
         blogDTO.setCommentCount(0);
         blogDTO.setCreateTime(LocalDateTime.now());
+        blogDTO.setUpdateTime(LocalDateTime.now());
         boolean b = blogExe.addBlog(blogDTO);
         if(!b){
             throw new RuntimeException();
