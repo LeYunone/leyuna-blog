@@ -28,16 +28,22 @@ public class BlogExe {
         return save;
     }
 
-    public Page<BlogDTO> getAllBlogByPage(Integer index,Integer size){
+    public boolean addBlogClickCount(Integer blogId,Integer clickCount){
+        boolean save = blogDao.updateClickCount(blogId,clickCount);
+        return save;
+    }
+
+    public Page<BlogDTO> getAllBlogByPage(Integer index,Integer size,String conditionName){
         Page<Blog> page=new Page(index,size);
         IPage<Blog> blogIPage = blogDao.queryByConPage(new Blog(), page);
         //转换结果集
         Page<BlogDTO> blogDTOPage=new Page<>(index,size);
         blogDTOPage.setRecords(TransformationUtil.copyToLists(blogIPage.getRecords(), BlogDTO.class));
+        blogDTOPage.setTotal(page.getTotal());
         return blogDTOPage;
     }
 
-    public Page<BlogDTO> getBlogByPage(Integer index,Integer size,Integer type,String tag){
+    public Page<BlogDTO> getBlogByPage(Integer index,Integer size,Integer type,String tag,String conditionName){
         Page<Blog> page=new Page(index,size);
         IPage<Blog> blogIPage =null;
         if(null==type){
@@ -50,6 +56,7 @@ public class BlogExe {
         //转换结果集
         Page<BlogDTO> blogDTOPage=new Page<>(index,size);
         blogDTOPage.setRecords(TransformationUtil.copyToLists(blogIPage.getRecords(), BlogDTO.class));
+        blogDTOPage.setTotal(page.getTotal());
         return blogDTOPage;
     }
 
@@ -68,5 +75,10 @@ public class BlogExe {
     public int getBlogByTypeCount(Integer type){
         int i = blogDao.queryCountByType(type);
         return i;
+    }
+
+    public boolean updateBlog(BlogDTO blogDTO){
+        boolean b = blogDao.updateById(TransformationUtil.copyToDTO(blogDTO, Blog.class));
+        return b;
     }
 }

@@ -29,7 +29,6 @@ public class BlogControl extends SysBaseControl {
      */
     @PostMapping("/addBlog")
     public ResponseBean addBlog(@RequestBody BlogBean blogBean){
-        System.out.println(blogBean);
         String[] tags = blogBean.getTags();
         if(tags.length!=0){
             StringBuilder stringBuilder=new StringBuilder();
@@ -52,8 +51,12 @@ public class BlogControl extends SysBaseControl {
      * @return
      */
     @GetMapping("/blogs")
-    public ResponseBean getAllBlogs(Integer index,Integer size){
-        Page<BlogDTO> blogsByPage = blogDomain.getBlogsByPage(index, size, null, null);
+    public ResponseBean getAllBlogs(@RequestParam(required = false) Integer index,
+                                    @RequestParam(required = false) Integer size,
+                                    @RequestParam(required = false) Integer typeId,
+                                    @RequestParam(required = false) String  tags,
+                                    @RequestParam(required = false) String conditionName){
+        Page<BlogDTO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tags,conditionName);
         return successResponseBean(blogsByPage);
     }
 
@@ -65,7 +68,7 @@ public class BlogControl extends SysBaseControl {
     public ResponseBean getAllBlogsByTypeId(Integer index,Integer size,
                                             @RequestParam(required = false) Integer typeId,
                                             @RequestParam(required = false)String tagName){
-        Page<BlogDTO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tagName);
+        Page<BlogDTO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tagName,null);
         ResponseBean responseBean = successResponseBean(blogsByPage);
         //包装有多少条博客
         int blogsByTypeCount = blogDomain.getBlogsByTypeCount(typeId);
@@ -75,7 +78,17 @@ public class BlogControl extends SysBaseControl {
 
     @GetMapping("/blog/{id}")
     public ResponseBean getBlogById(@PathVariable(value = "id")Integer blogId){
-        BlogDTO blogById = blogDomain.getBlogById(blogId);
+        BlogDTO blogById = blogDomain.openBlogById(blogId);
         return successResponseBean(blogById);
+    }
+
+    @PostMapping("/edit")
+    public ResponseBean editBlog(@RequestBody BlogBean blogBean){
+        boolean b = blogDomain.updateBlog(TransformationUtil.copyToDTO(blogBean, BlogDTO.class));
+        if(b){
+            return successResponseBean();
+        }else{
+            return failResponseBean(SystemAsserts.UPDATE_BLOG_FAIL);
+        }
     }
 }

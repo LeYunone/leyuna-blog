@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 public class BlogBean {
     /**
-     * 内容
+     * 内容  2021/8/25 版本  暂时只想存储markdown形式原文本
      */
     private String blogContent;
     /**
@@ -31,6 +31,8 @@ public class BlogBean {
     private String [] tags;
 
     private String title;
+
+    private String remark;
 
     /**
      * 标签  逗号分隔形式

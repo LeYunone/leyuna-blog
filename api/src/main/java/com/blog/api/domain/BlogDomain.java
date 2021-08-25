@@ -37,13 +37,13 @@ public class BlogDomain {
      * @param tags
      * @return
      */
-    public Page<BlogDTO> getBlogsByPage(Integer index,Integer size,Integer type,String tags){
+    public Page<BlogDTO> getBlogsByPage(Integer index,Integer size,Integer type,String tags,String conditionName){
         Page<BlogDTO> result=null;
         //查询所有
         if(type==null && StringUtils.isEmpty(tags)){
-            result = blogExe.getAllBlogByPage(index, size);
+            result = blogExe.getAllBlogByPage(index, size,conditionName);
         }else{
-            result = blogExe.getBlogByPage(index, size, type, tags);
+            result = blogExe.getBlogByPage(index, size, type, tags,conditionName);
         }
         return result;
     }
@@ -98,12 +98,27 @@ public class BlogDomain {
     }
 
     /**
-     * 根据id查询博客 百分百能查到的前提
+     * 打开文章
      * @param id
      * @return
      */
-    public BlogDTO getBlogById(Integer id){
+    @Transactional
+    public BlogDTO openBlogById(Integer id){
+        //找到博客
         BlogDTO blogById = blogExe.getBlogById(id);
+
+        //博客增加一点击量
+        boolean b = blogExe.addBlogClickCount(id, blogById.getClickCount() + 1);
+        if(!b){
+            //回滚事务
+            throw new RuntimeException();
+        }
         return blogById;
+    }
+
+    public boolean updateBlog(BlogDTO blogDTO){
+        blogDTO.setUpdateTime(LocalDateTime.now());
+        boolean b = blogExe.updateBlog(blogDTO);
+        return b;
     }
 }

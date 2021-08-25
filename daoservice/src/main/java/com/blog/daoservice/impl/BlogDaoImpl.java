@@ -2,6 +2,7 @@ package com.blog.daoservice.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.daoservice.dao.BlogDao;
@@ -40,6 +41,10 @@ public class BlogDaoImpl extends SysBaseMpImpl<BlogMapper,Blog> implements BlogD
 
     public Blog queryByid(Integer blogId){
         return this.baseMapper.selectById(blogId);
+    }
+
+    public boolean updateClickCount(Integer blogId,Integer clickCount){
+        return this.update(new UpdateWrapper<Blog>().lambda().eq(Blog::getId,blogId).set(Blog::getClickCount,clickCount));
     }
 
 }
