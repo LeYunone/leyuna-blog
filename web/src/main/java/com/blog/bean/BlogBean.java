@@ -32,10 +32,12 @@ public class BlogBean {
 
     private String title;
 
-    private String remark;
+    private String remarks;
 
     /**
      * 标签  逗号分隔形式
      */
     private String tag;
+
+    private Integer id;
 }
