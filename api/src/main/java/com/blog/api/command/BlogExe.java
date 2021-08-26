@@ -4,11 +4,16 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.dto.BlogDTO;
 import com.blog.api.dto.TypeDTO;
+import com.blog.api.dto.WebHistoryDTO;
 import com.blog.daoservice.dao.BlogDao;
+import com.blog.daoservice.dao.WebHistoryDao;
 import com.blog.daoservice.entry.Blog;
+import com.blog.daoservice.entry.WebHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import util.TransformationUtil;
+
+import java.time.LocalDateTime;
 
 /**
  * @author pengli
@@ -22,20 +27,36 @@ public class BlogExe {
     @Autowired
     private BlogDao blogDao;
 
+    @Autowired
+    private WebHistoryDao historyDao;
+
     public boolean addBlog(BlogDTO blogDTO){
         Blog blog = TransformationUtil.copyToDTO(blogDTO, Blog.class);
         boolean save = blogDao.save(blog);
         return save;
     }
 
+    /**
+     * 添加点击量
+     * @param blogId
+     * @param clickCount
+     * @return
+     */
     public boolean addBlogClickCount(Integer blogId,Integer clickCount){
         boolean save = blogDao.updateClickCount(blogId,clickCount);
         return save;
     }
 
+    /**
+     * 支持模糊查询 分页  获得所有博客
+     * @param index
+     * @param size
+     * @param conditionName
+     * @return
+     */
     public Page<BlogDTO> getAllBlogByPage(Integer index,Integer size,String conditionName){
         Page<Blog> page=new Page(index,size);
-        IPage<Blog> blogIPage = blogDao.queryByConPage(new Blog(), page);
+        IPage<Blog> blogIPage = blogDao.queryByConPageOrderCreateTime(new Blog(), page,0);
         //转换结果集
         Page<BlogDTO> blogDTOPage=new Page<>(index,size);
         blogDTOPage.setRecords(TransformationUtil.copyToLists(blogIPage.getRecords(), BlogDTO.class));
@@ -51,7 +72,7 @@ public class BlogExe {
             blogIPage = blogDao.queryByTagName(Blog.builder().tag(tag).build(), page);
         }else{
             //根据分类查询
-            blogIPage = blogDao.queryByConPage(Blog.builder().type(type).build(), page);
+            blogIPage = blogDao.queryByConPageOrderCreateTime(Blog.builder().type(type).build(), page,0);
         }
         //转换结果集
         Page<BlogDTO> blogDTOPage=new Page<>(index,size);
@@ -80,5 +101,27 @@ public class BlogExe {
     public boolean updateBlog(BlogDTO blogDTO){
         boolean b = blogDao.updateById(TransformationUtil.copyToDTO(blogDTO, Blog.class));
         return b;
+    }
+
+    /**
+     * 分页查询网站更新历史
+     * @param index
+     * @param size
+     * @return
+     */
+    public Page<WebHistoryDTO> getWebHistory(Integer index, Integer size){
+        Page<WebHistory> page=new Page<>(index,size);
+        IPage<WebHistory> webHistoryIPage = historyDao.queryByConPageOrderCreateTime(new WebHistory(), page,0);
+
+        //封装结果集
+        Page<WebHistoryDTO> historyDTOS=new Page<>(index,size,page.getTotal());
+        historyDTOS.setRecords(TransformationUtil.copyToLists(webHistoryIPage.getRecords(),WebHistoryDTO.class));
+        return historyDTOS;
+    }
+
+    public boolean addHistory(WebHistoryDTO webHistoryDTO){
+        webHistoryDTO.setCreateTime(LocalDateTime.now());
+        boolean save = historyDao.save(TransformationUtil.copyToDTO(webHistoryDTO, WebHistory.class));
+        return save;
     }
 }

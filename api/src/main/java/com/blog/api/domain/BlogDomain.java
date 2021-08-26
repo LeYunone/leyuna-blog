@@ -6,11 +6,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.command.BlogExe;
 import com.blog.api.command.TagAndTypeExe;
 import com.blog.api.dto.BlogDTO;
+import com.blog.api.dto.NoticeDTO;
 import com.blog.api.dto.TagDTO;
+import com.blog.api.dto.WebHistoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import util.StringUtil;
+import util.TransformationUtil;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -120,5 +123,27 @@ public class BlogDomain {
         blogDTO.setUpdateTime(LocalDateTime.now());
         boolean b = blogExe.updateBlog(blogDTO);
         return b;
+    }
+
+    public Page<WebHistoryDTO> getWebHistory(Integer index,Integer size){
+        Page<WebHistoryDTO> webHistory = blogExe.getWebHistory(index, size);
+        return  webHistory;
+    }
+
+    /**
+     * 添加各类版本的公示 方法
+     * @param noticeDTO
+     * @return
+     */
+    public boolean addNotice(NoticeDTO noticeDTO){
+        Integer type = noticeDTO.getType();
+        switch (type){
+            case 0:
+                //0 网站更新公告
+                boolean b = blogExe.addHistory(TransformationUtil.copyToDTO(noticeDTO, WebHistoryDTO.class));
+                return b;
+            default:
+                return false;
+        }
     }
 }

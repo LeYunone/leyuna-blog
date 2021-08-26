@@ -30,7 +30,7 @@ public class BlogDaoImpl extends SysBaseMpImpl<BlogMapper,Blog> implements BlogD
     @Override
     @Cacheable
     public IPage<Blog> queryByTagName(Blog e, Page<Blog> page) {
-        IPage<Blog> iPage = this.baseMapper.selectPage(page, new QueryWrapper<Blog>().lambda().like(Blog::getTag,e.getTag()));
+        IPage<Blog> iPage = this.baseMapper.selectPage(page, new QueryWrapper<Blog>().lambda().like(Blog::getTag,e.getTag()).orderByDesc(Blog::getCreateTime));
         return iPage;
     }
 

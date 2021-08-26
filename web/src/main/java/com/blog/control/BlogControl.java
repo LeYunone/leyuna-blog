@@ -3,7 +3,10 @@ package com.blog.control;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.domain.BlogDomain;
 import com.blog.api.dto.BlogDTO;
+import com.blog.api.dto.NoticeDTO;
+import com.blog.api.dto.WebHistoryDTO;
 import com.blog.bean.BlogBean;
+import com.blog.bean.NoticeBean;
 import com.blog.bean.ResponseBean;
 import com.blog.error.SystemAsserts;
 import org.apache.ibatis.annotations.Param;
@@ -14,7 +17,7 @@ import util.TransformationUtil;
 /**
  * @author pengli
  * @create 2021-08-10 15:04
-    博客控制器- 控制博客行为
+    博客控制器- 控制博客行为 网站公告行为 以及各种公示行为
  */
 @RestController()
 @RequestMapping("/blog")
@@ -64,15 +67,14 @@ public class BlogControl extends SysBaseControl {
      * 十条十条取当前所有的博客  每触发一次前端分页自动翻一页
      * @return
      */
-    @GetMapping("/blogToType")
-    public ResponseBean getAllBlogsByTypeId(Integer index,Integer size,
+    @GetMapping("/blogIndex")
+    public ResponseBean getAllBlogsByTypeOrTag(Integer index,Integer size,
                                             @RequestParam(required = false) Integer typeId,
                                             @RequestParam(required = false)String tagName){
         Page<BlogDTO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tagName,null);
         ResponseBean responseBean = successResponseBean(blogsByPage);
         //包装有多少条博客
-        int blogsByTypeCount = blogDomain.getBlogsByTypeCount(typeId);
-        responseBean.setObjData(blogsByTypeCount);
+        responseBean.setObjData(blogsByPage.getTotal());
         return responseBean;
     }
 
@@ -89,6 +91,32 @@ public class BlogControl extends SysBaseControl {
             return successResponseBean();
         }else{
             return failResponseBean(SystemAsserts.UPDATE_BLOG_FAIL);
+        }
+    }
+
+    /**
+     * 查询网站更新历史之类的
+     * @param index
+     * @param size
+     * @return
+     */
+    @RequestMapping("/history")
+    public ResponseBean getWebHistory(Integer index,Integer size){
+        Page<WebHistoryDTO> webHistory = blogDomain.getWebHistory(index, size);
+        return successResponseBean(webHistory);
+    }
+
+    /**
+     *  发布网站更新历史
+     * @return
+     */
+    @PostMapping("/addWebNotice")
+    public ResponseBean addWebNotice(@RequestBody NoticeBean noticeBean){
+        boolean b = blogDomain.addNotice(TransformationUtil.copyToDTO(noticeBean, NoticeDTO.class));
+        if(b){
+            return successResponseBean();
+        }else{
+            return failResponseBean(SystemAsserts.ADD_BLOG_FAIL);
         }
     }
 }

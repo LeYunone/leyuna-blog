@@ -46,4 +46,25 @@ public class SysBaseMpImpl<M extends BaseMapper<E>,E> extends ServiceImpl<M,E> i
         IPage<E> iPage = this.baseMapper.selectPage(page, new QueryWrapper<E>().allEq(stringObjectMap));
         return iPage;
     }
+
+    /**
+     * 分页查询 日期排序
+     * @param e
+     * @param page
+     * @param type 排序类型   0为查询最近的日期排序   1为查最早的日期排序
+     * @return
+     */
+    @Cacheable
+    @Override
+    public IPage<E> queryByConPageOrderCreateTime(E e, Page<E> page,Integer type) {
+        AssertUtil.isTrue(ObjectUtil.isNotNull (e), ErrorMeassage.OBJECT_NULL);
+        Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(e);
+        IPage<E> iPage =null;
+        if(type==0){
+             iPage=this.baseMapper.selectPage(page, new QueryWrapper<E>().allEq(stringObjectMap).orderByDesc("create_time"));
+        }else{
+            iPage=this.baseMapper.selectPage(page, new QueryWrapper<E>().allEq(stringObjectMap).orderByAsc("create_time"));
+        }
+        return iPage;
+    }
 }

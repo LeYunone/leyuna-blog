@@ -18,4 +18,6 @@ public interface SysBaseDao<T> extends IService<T>{
     List<T> queryByCon(T m);
 
     IPage<T> queryByConPage(T e, Page<T> page);
+
+    IPage<T> queryByConPageOrderCreateTime(T e, Page<T> page,Integer type);
 }
