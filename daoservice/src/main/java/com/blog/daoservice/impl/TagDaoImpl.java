@@ -85,4 +85,10 @@ public class TagDaoImpl extends SysBaseMpImpl<TagMapper,Tag> implements TagDao {
         }
         return is;
     }
+
+    @Override
+    public boolean updateUseCountByName(String name,int userCount){
+        boolean update = this.update(new UpdateWrapper<Tag>().lambda().eq(Tag::getTagName, name).set(Tag::getUseCount, userCount));
+        return update;
+    }
 }

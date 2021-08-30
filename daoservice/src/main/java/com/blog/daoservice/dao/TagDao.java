@@ -25,4 +25,6 @@ public interface TagDao extends SysBaseDao<Tag>{
     boolean updateNameById(Tag tag);
 
     boolean updateLastUseTimeByName(String [] names);
+
+    boolean updateUseCountByName(String name,int userCount);
 }

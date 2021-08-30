@@ -32,6 +32,7 @@
             <groupId>com.blog.daoservice</groupId>
             <artifactId>daoservice</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+            <scope>import</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

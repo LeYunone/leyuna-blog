@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import util.CollectionUtil;
 import util.TransformationUtil;
 
 import java.util.List;
@@ -215,6 +216,18 @@ public class TagAndTypeExe {
         }else{
             return false;
         }
+    }
+
+    /**
+     * 判断是否可以根据名字查到标签
+     * @return
+     */
+    public boolean addTagUseCountByName(String name){
+        List<Tag> tags = tagDao.queryByCon(Tag.builder().tagName(name).build());
+        Tag first = CollectionUtil.getFirst(tags);
+        Integer useCount = first.getUseCount();
+        boolean b = tagDao.updateUseCountByName(name, useCount);
+        return b;
     }
 
     public boolean updateTagsAndTypes(String tagNames,Integer typeId){

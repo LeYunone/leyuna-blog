@@ -91,7 +91,7 @@ public class TagTypeDomain {
         }else{
             iPage = tagAndTypeExe.getAllTags(1,100,conditionName);
         }
-
+        Collections.sort(iPage.getRecords());
         return iPage;
     }
 

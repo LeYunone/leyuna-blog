@@ -12,6 +12,8 @@ public class ErrorMessage {
 
     public static final String ADD_TYPE_FALE = "添加分类错误";
 
+    public static final String ADD_BLOG_FALE = "添加博客错误";
+
     public static final String DELETE_TAG_FALE = " 删除标签错误";
 
     public static final String DELETE_TYPE_FALE = "删除分类错误";

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TagDTO {
+public class TagDTO implements Comparable<TagDTO> {
 
     /**
      * 标签id
@@ -41,4 +41,15 @@ public class TagDTO {
     private LocalDateTime lastUserTime;
 
     private String userStatus;
+
+    @Override
+    public int compareTo(TagDTO o) {
+        if(o.getTagName().length()>this.getTagName().length()){
+            return -1;
+        }else if(o.getTagName().length()<this.getTagName().length()){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
 }

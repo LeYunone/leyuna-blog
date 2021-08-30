@@ -3,6 +3,7 @@ package com.blog.api.domain;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.blog.api.Error.ErrorMessage;
 import com.blog.api.command.BlogExe;
 import com.blog.api.command.TagAndTypeExe;
 import com.blog.api.dto.BlogDTO;
@@ -12,6 +13,7 @@ import com.blog.api.dto.WebHistoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import util.AssertUtil;
 import util.StringUtil;
 import util.TransformationUtil;
 
@@ -71,15 +73,21 @@ public class BlogDomain {
                 //如果查不到则创建这个标签
                 if(!tagByName){
                     TagDTO build = TagDTO.builder().tagName(name).createTime(LocalDateTime.now())
-                            .lastUserTime(LocalDateTime.now()).useCount(0).build();
+                            .lastUserTime(LocalDateTime.now()).useCount(1).build();
                     addList.add(build);
+                }else{
+                    //如果查到了，则说明这个标签使用次数需要添加一
+                    boolean b = tagAndTypeExe.addTagUseCountByName(name);
+                    if(!b){
+                        AssertUtil.isTrue(ErrorMessage.UPDATE_TAG_FALE) ;
+                    }
                 }
             }
             //如果addlist有值，则说明需要添加标签到数据库中
             if(CollectionUtils.isNotEmpty(addList)){
                 boolean b = tagAndTypeExe.addTags(addList);
                 if(!b){
-                    throw new RuntimeException();
+                    AssertUtil.isTrue(ErrorMessage.ADD_TAG_FALE);
                 }
             }
         }
@@ -90,7 +98,7 @@ public class BlogDomain {
         blogDTO.setUpdateTime(LocalDateTime.now());
         boolean b = blogExe.addBlog(blogDTO);
         if(!b){
-            throw new RuntimeException();
+            AssertUtil.isTrue(ErrorMessage.ADD_BLOG_FALE);
         }else{
             //更新分类 和标签的最后使用次数
             String tagUpdates = blogDTO.getTag();

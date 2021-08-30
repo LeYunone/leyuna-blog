@@ -13,4 +13,8 @@ public class AssertUtil {
             throw new RuntimeException(message);
         }
     }
+
+    public static void isTrue(String message) {
+        throw new RuntimeException(message);
+    }
 }
