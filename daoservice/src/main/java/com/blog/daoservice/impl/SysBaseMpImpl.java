@@ -31,7 +31,6 @@ public class SysBaseMpImpl<M extends BaseMapper<E>,E> extends ServiceImpl<M,E> i
     @Autowired(required = false)
     protected M baseMapper;
 
-    @Cacheable
     @Override
     public List<E> queryByCon(E e) {
         AssertUtil.isTrue(ObjectUtil.isNotNull (e), ErrorMeassage.OBJECT_NULL);
@@ -40,7 +39,6 @@ public class SysBaseMpImpl<M extends BaseMapper<E>,E> extends ServiceImpl<M,E> i
         return es;
     }
 
-    @Cacheable
     @Override
     public IPage<E> queryByConPage(E e, Page<E> page) {
         AssertUtil.isTrue(ObjectUtil.isNotNull (e), ErrorMeassage.OBJECT_NULL);
@@ -56,7 +54,6 @@ public class SysBaseMpImpl<M extends BaseMapper<E>,E> extends ServiceImpl<M,E> i
      * @param type 排序类型   0为查询最近的日期排序   1为查最早的日期排序
      * @return
      */
-    @Cacheable
     @Override
     public IPage<E> queryByConPageOrderCreateTime(E e, Page<E> page,Integer type) {
         AssertUtil.isTrue(ObjectUtil.isNotNull (e), ErrorMeassage.OBJECT_NULL);

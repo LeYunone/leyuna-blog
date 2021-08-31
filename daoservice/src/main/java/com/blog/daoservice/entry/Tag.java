@@ -1,15 +1,21 @@
 package com.blog.daoservice.entry;
 
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.*;
+import com.baomidou.mybatisplus.annotation.TableField;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import lombok.*;
+
 /**
+ * (Tag)实体对象
+ *
  * @author pengli
- * @create 2021-08-10 14:43
+ * @since 2021-08-31 17:09:12
  */
 @Getter
 @Setter
@@ -19,16 +25,24 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @Builder
 @TableName("tag")
-public class Tag {
+public class Tag implements Serializable {
 
-    @TableId(value = "id",type = IdType.AUTO)
+    private static final long serialVersionUID = 158921696052289705L;
+
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    @TableField(value = "tag_name")
     private String tagName;
 
+    @TableField(value = "create_time")
     private LocalDateTime createTime;
 
+    @TableField(value = "use_count")
     private Integer useCount;
 
+    @TableField(value = "last_user_time")
     private LocalDateTime lastUserTime;
+
 }
+

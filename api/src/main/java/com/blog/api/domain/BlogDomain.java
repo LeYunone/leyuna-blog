@@ -46,7 +46,11 @@ public class BlogDomain {
         Page<BlogDTO> result=null;
         //查询所有
         if(type==null && StringUtils.isEmpty(tags)){
-            result = blogExe.getAllBlogByPage(index, size,conditionName);
+            try {
+                result = blogExe.getAllBlogByPage(index, size,conditionName);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }else{
             result = blogExe.getBlogByPage(index, size, type, tags,conditionName);
         }
@@ -128,6 +132,7 @@ public class BlogDomain {
     }
 
     public boolean updateBlog(BlogDTO blogDTO){
+        //设置最新更新时间
         blogDTO.setUpdateTime(LocalDateTime.now());
         boolean b = blogExe.updateBlog(blogDTO);
         return b;

@@ -6,15 +6,16 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableField;
 
-import lombok.*;
-
+import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import lombok.*;
 
 /**
  * (WebHistory)实体对象
  *
  * @author pengli
- * @since 2021-08-26 15:41:38
+ * @since 2021-08-31 17:09:40
  */
 @Getter
 @Setter
@@ -24,9 +25,9 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @Builder
 @TableName("web_history")
-public class WebHistory {
+public class WebHistory implements Serializable {
 
-    private static final long serialVersionUID = -39496037788655269L;
+    private static final long serialVersionUID = 556322757071096126L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;

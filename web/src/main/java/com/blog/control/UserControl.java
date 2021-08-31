@@ -3,8 +3,11 @@ package com.blog.control;
 import com.blog.api.domain.UserDomain;
 import com.blog.api.dto.UserDTO;
 import com.blog.bean.ResponseBean;
+import com.blog.bean.UserBean;
 import com.blog.error.UserAsserts;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,13 +24,13 @@ public class UserControl extends SysBaseControl {
     @Autowired
     private UserDomain userDomain;
 
-    @RequestMapping("/login")
-    public ResponseBean login(String userName,String passWord){
-        UserDTO login = userDomain.login(userName, passWord);
+    @PostMapping("/login")
+    public ResponseBean login(@RequestBody UserBean user){
+        UserDTO login = userDomain.login(user.getUserName(),user.getPassWord());
         if(login!=null){
             //绑定令牌
             userDomain.userLock(login.getId());
-            return successResponseBean(null);
+            return successResponseBean();
         }else{
             return failResponseBean(UserAsserts.LOGINT_FAIL);
         }

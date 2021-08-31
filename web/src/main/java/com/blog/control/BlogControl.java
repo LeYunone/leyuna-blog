@@ -2,6 +2,7 @@ package com.blog.control;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.domain.BlogDomain;
+import com.blog.api.domain.UserDomain;
 import com.blog.api.dto.BlogDTO;
 import com.blog.api.dto.NoticeDTO;
 import com.blog.api.dto.WebHistoryDTO;
@@ -25,6 +26,8 @@ public class BlogControl extends SysBaseControl {
 
     @Autowired
     private BlogDomain blogDomain;
+    @Autowired
+    private UserDomain userDomain;
     /**
      * 发布博客
      * @param blogBean
@@ -32,6 +35,7 @@ public class BlogControl extends SysBaseControl {
      */
     @PostMapping("/addBlog")
     public ResponseBean addBlog(@RequestBody BlogBean blogBean){
+        userDomain.checkLock();
         String[] tags = blogBean.getTags();
         if(tags.length!=0){
             StringBuilder stringBuilder=new StringBuilder();
@@ -86,6 +90,7 @@ public class BlogControl extends SysBaseControl {
 
     @PostMapping("/edit")
     public ResponseBean editBlog(@RequestBody BlogBean blogBean){
+        userDomain.checkLock();
         boolean b = blogDomain.updateBlog(TransformationUtil.copyToDTO(blogBean, BlogDTO.class));
         if(b){
             return successResponseBean();
@@ -112,6 +117,7 @@ public class BlogControl extends SysBaseControl {
      */
     @PostMapping("/addWebNotice")
     public ResponseBean addWebNotice(@RequestBody NoticeBean noticeBean){
+        userDomain.checkLock();
         boolean b = blogDomain.addNotice(TransformationUtil.copyToDTO(noticeBean, NoticeDTO.class));
         if(b){
             return successResponseBean();

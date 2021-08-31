@@ -1,10 +1,12 @@
 package com.blog.api.domain;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.blog.api.command.TokenExe;
 import com.blog.api.command.UserExe;
 import com.blog.api.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import util.AssertUtil;
 
 /**
  * @author pengli
@@ -46,5 +48,16 @@ public class UserDomain {
      */
     public void userLock(Integer id){
         tokenExe.loginToken(id);
+    }
+
+    /**
+     * 检测当前环境用户是否有锁
+     */
+    public void checkLock(){
+        try {
+            StpUtil.checkLogin();
+        }catch (Exception e){
+            AssertUtil.isTrue(e.getMessage());
+        }
     }
 }

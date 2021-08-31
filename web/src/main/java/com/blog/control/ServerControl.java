@@ -1,8 +1,13 @@
 package com.blog.control;
 
+import com.blog.api.domain.UserDomain;
 import com.blog.bean.FileBean;
 import com.blog.bean.ResponseBean;
+import com.blog.error.SystemAsserts;
+import com.blog.util.EncodeUtil;
+import com.blog.util.UpLoadUtil;
 import com.mysql.cj.jdbc.Blob;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author pengli
@@ -21,12 +29,19 @@ import java.io.File;
 @RequestMapping("/server")
 public class ServerControl extends SysBaseControl {
 
+    @Autowired
+    private UserDomain userDomain;
     @PostMapping("/updownimg")
-    public ResponseBean upDownImgToServer(@RequestBody FileBean file){
-        String path="D/";
-        File img=new File(path+file.getName());
+    public ResponseBean upDownImgToServer( MultipartFile file) {
+        userDomain.checkLock();
         //上传服务器
+        String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        return null;
+        boolean b = UpLoadUtil.imgUpLoadFromClient(file,format);
+        if(b){
+            return successResponseBean(format+"/"+file.getOriginalFilename());
+        }else{
+            return failResponseBean(SystemAsserts.UPLOCAD_IMG_FAIL);
+        }
     }
 }

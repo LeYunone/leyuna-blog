@@ -3,13 +3,13 @@ package com.blog.api.command;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.dto.BlogDTO;
-import com.blog.api.dto.TypeDTO;
 import com.blog.api.dto.WebHistoryDTO;
 import com.blog.daoservice.dao.BlogDao;
 import com.blog.daoservice.dao.WebHistoryDao;
 import com.blog.daoservice.entry.Blog;
 import com.blog.daoservice.entry.WebHistory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import util.TransformationUtil;
 
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
  * @author pengli
  * @create 2021-08-16 13:33
  *
- * 博客 操作指令
+ * 博客 操作指令  缓存方法存储区
  */
 @Service
 public class BlogExe {

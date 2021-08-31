@@ -2,6 +2,7 @@ package com.blog.control;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.domain.TagTypeDomain;
+import com.blog.api.domain.UserDomain;
 import com.blog.api.dto.ResultDTO;
 import com.blog.api.dto.TagDTO;
 import com.blog.api.dto.TypeDTO;
@@ -31,6 +32,8 @@ public class TagTypeControl extends SysBaseControl{
     @Autowired
     private TagTypeDomain tagTypeDomain;
 
+    @Autowired
+    private UserDomain userDomain;
     /**
      * 取标签  【二级分类】
      * @param
@@ -133,6 +136,7 @@ public class TagTypeControl extends SysBaseControl{
     @RequestMapping("/addTagsAndTypes")
     public ResponseBean addTagsAndTypes(@RequestParam(required = false) List<String>
                                                     tags,@RequestParam(required = false) List<String> types,@RequestParam(required = false)Integer typeNav){
+        userDomain.checkLock();
         ResultDTO resultDTO = tagTypeDomain.addTypesOrTags(tags, types,typeNav);
         if(resultDTO.getMessages()==null){
             return successResponseBean();
@@ -149,6 +153,7 @@ public class TagTypeControl extends SysBaseControl{
      */
     @GetMapping("/deleteTagsAndTypes")
     public ResponseBean deleteTagsAndTypes(@RequestParam(required = false,value = "tags") List<Integer> tags,@RequestParam(required = false)List<Integer> types){
+        userDomain.checkLock();
         ResultDTO resultDTO = tagTypeDomain.deleteTypesOrTags(tags, types);
         if(resultDTO.getMessages()==null){
             return successResponseBean();
@@ -163,6 +168,7 @@ public class TagTypeControl extends SysBaseControl{
      */
     @PostMapping("/updateTag")
     public ResponseBean updateTag(Integer id,String tagName){
+        userDomain.checkLock();
         TagDTO build = TagDTO.builder().id(id).tagName(tagName).build();
         ResultDTO resultDTO = tagTypeDomain.updateTypesOrTags(build, null);
         if(resultDTO.getMessages()==null){
@@ -260,6 +266,7 @@ public class TagTypeControl extends SysBaseControl{
 
     @PostMapping("/addTypeNav")
     public ResponseBean addTypeNav(String typeNavName){
+        userDomain.checkLock();
         boolean b = tagTypeDomain.addTypeNav(typeNavName);
         if(b){
             return successResponseBean();
@@ -275,6 +282,7 @@ public class TagTypeControl extends SysBaseControl{
      */
     @PostMapping("/updateTypeNav")
     public ResponseBean editTypeNav(String typeNavName,Integer typeNavId){
+        userDomain.checkLock();
         boolean b = tagTypeDomain.updateTypeNav(typeNavName, typeNavId);
         if(b){
             return successResponseBean();
@@ -285,6 +293,7 @@ public class TagTypeControl extends SysBaseControl{
 
     @PostMapping("/deleteTypeNav")
     public ResponseBean deleteTypeNav(Integer typeNavId){
+        userDomain.checkLock();
         boolean b = tagTypeDomain.deleteTypeNav(typeNavId);
         if(b){
             return successResponseBean();

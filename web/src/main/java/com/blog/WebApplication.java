@@ -2,8 +2,10 @@ package com.blog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication()
+@EnableCaching //开启缓存
 //@ComponentScan({"com.blog.control","com.blog.api","com.blog.daoservice"})
 public class WebApplication {
 

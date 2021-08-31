@@ -6,15 +6,16 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableField;
 
-import lombok.*;
-
+import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import lombok.*;
 
 /**
  * (Type)实体对象
  *
  * @author pengli
- * @since 2021-08-23 13:54:35
+ * @since 2021-08-31 17:09:20
  */
 @Getter
 @Setter
@@ -24,9 +25,9 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @Builder
 @TableName("type")
-public class Type {
+public class Type implements Serializable {
 
-    private static final long serialVersionUID = 382747161178443803L;
+    private static final long serialVersionUID = 157022049453539841L;
 
     /**
      * 标签id
