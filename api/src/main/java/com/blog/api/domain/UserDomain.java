@@ -1,6 +1,7 @@
 package com.blog.api.domain;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.blog.api.command.TokenExe;
 import com.blog.api.command.UserExe;
 import com.blog.api.dto.UserDTO;
@@ -30,6 +31,9 @@ public class UserDomain {
      * @return
      */
     public UserDTO login(String userName, String passWord){
+        if(StringUtils.isEmpty(userName) || StringUtils.isEmpty(passWord)){
+            return null;
+        }
         UserDTO userDTO=UserDTO.builder().userName(userName).build();
         UserDTO user = userExe.selectUserByCon(userDTO);
         if(null==user){
