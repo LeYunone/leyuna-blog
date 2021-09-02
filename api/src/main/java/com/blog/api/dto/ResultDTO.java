@@ -2,6 +2,8 @@ package com.blog.api.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 /**
  * @author pengli
  * @create 2021-08-13 14:38
@@ -14,7 +16,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ResultDTO {
+public class ResultDTO implements Serializable {
 
     /**
      * 返回编码

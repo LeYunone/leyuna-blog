@@ -44,6 +44,7 @@ public class TagAndTypeExe {
      * 获取所有标签  功能属于 分页 模糊
      * @return
      */
+    @Cacheable(cacheNames = "getAllTags")
     public Page<TagDTO> getAllTags(Integer pageIndex,Integer pageSize,String conditionName){
         IPage<Tag> tagIPage=null;
         Page<Tag> page=new Page(pageIndex,pageSize);
@@ -65,6 +66,7 @@ public class TagAndTypeExe {
      * @param ids
      * @return
      */
+    @Cacheable(cacheNames = "getTagByIds")
     public List<TagDTO> getTagByIds(List<Integer> ids){
         List<Tag> tags = tagDao.selectByIds(ids);
         List<TagDTO> copyList = TransformationUtil.copyToLists(tags, TagDTO.class);
@@ -75,6 +77,7 @@ public class TagAndTypeExe {
      * 获取所有分类  有分页和模糊
      * @return
      */
+    @Cacheable(cacheNames = "getAllTypes")
     public Page<TypeDTO> getAllTypes(Integer pageIndex,Integer pageSize,String conditionName){
         IPage<Type> typeIPage=null;
         Page<Type> page=null;
@@ -104,6 +107,7 @@ public class TagAndTypeExe {
      * @param ids
      * @return
      */
+    @Cacheable(cacheNames = "getTypeByIds")
     public List<TypeDTO> getTypeByIds(List<Integer> ids){
         List<Type> tags = typeDao.selectByIds(ids);
         List<TypeDTO> copyList = TransformationUtil.copyToLists(tags, TypeDTO.class);
@@ -209,6 +213,7 @@ public class TagAndTypeExe {
      * 判断是否可以根据名字查到标签
      * @return
      */
+    @Cacheable(cacheNames = "getTagByName")
     public boolean getTagByName(String name){
         List<Tag> tags = tagDao.queryByCon(Tag.builder().tagName(name).build());
         if(CollectionUtils.isNotEmpty(tags)){
@@ -249,6 +254,7 @@ public class TagAndTypeExe {
      * 得到分类导航
      * @return
      */
+    @Cacheable(cacheNames = "getTypeNav")
     public List<TypeNavDTO> getTypeNav(String conditionName){
         List<TypeNav> typeNavs =null;
         if(StringUtils.isNotEmpty(conditionName)){

@@ -2,6 +2,8 @@ package com.blog.api.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 /**
  * @author pengli
  * @create 2021-08-10 16:09
@@ -14,7 +16,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDTO {
+public class UserDTO implements Serializable {
 
     private Integer id;
 

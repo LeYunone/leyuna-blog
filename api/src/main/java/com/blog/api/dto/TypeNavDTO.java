@@ -3,6 +3,8 @@ package com.blog.api.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 /**
  * (TypeNav)出参
  *
@@ -15,7 +17,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TypeNavDTO {
+public class TypeNavDTO implements Serializable {
 
 
     private Integer id;

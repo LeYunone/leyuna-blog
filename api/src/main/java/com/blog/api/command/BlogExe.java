@@ -10,6 +10,7 @@ import com.blog.daoservice.entry.Blog;
 import com.blog.daoservice.entry.WebHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import util.TransformationUtil;
 
@@ -29,6 +30,10 @@ public class BlogExe {
 
     @Autowired
     private WebHistoryDao historyDao;
+
+    // redis緩存
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     public boolean addBlog(BlogDTO blogDTO){
         Blog blog = TransformationUtil.copyToDTO(blogDTO, Blog.class);
@@ -54,6 +59,7 @@ public class BlogExe {
      * @param conditionName
      * @return
      */
+    @Cacheable(cacheNames = "getAllBlogByPage")
     public Page<BlogDTO> getAllBlogByPage(Integer index,Integer size,String conditionName){
         Page<Blog> page=new Page(index,size);
         IPage<Blog> blogIPage = blogDao.queryByConPageOrderCreateTime(new Blog(), page,0);
@@ -64,6 +70,7 @@ public class BlogExe {
         return blogDTOPage;
     }
 
+    @Cacheable(cacheNames = "getBlogByPage")
     public Page<BlogDTO> getBlogByPage(Integer index,Integer size,Integer type,String tag,String conditionName){
         Page<Blog> page=new Page(index,size);
         IPage<Blog> blogIPage =null;
@@ -86,6 +93,7 @@ public class BlogExe {
      * @param id
      * @return
      */
+    @Cacheable(cacheNames = "getBlogById")
     public BlogDTO getBlogById(Integer id){
         Blog blog = blogDao.queryByid(id);
         BlogDTO blogDTO = TransformationUtil.copyToDTO(blog, BlogDTO.class);
@@ -109,6 +117,7 @@ public class BlogExe {
      * @param size
      * @return
      */
+    @Cacheable(cacheNames = "getWebHistory")
     public Page<WebHistoryDTO> getWebHistory(Integer index, Integer size){
         Page<WebHistory> page=new Page<>(index,size);
         IPage<WebHistory> webHistoryIPage = historyDao.queryByConPageOrderCreateTime(new WebHistory(), page,0);

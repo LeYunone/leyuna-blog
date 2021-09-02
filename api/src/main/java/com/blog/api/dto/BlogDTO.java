@@ -4,6 +4,7 @@ package com.blog.api.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BlogDTO {
+public class BlogDTO implements Serializable {
 
 
     private Integer id;
