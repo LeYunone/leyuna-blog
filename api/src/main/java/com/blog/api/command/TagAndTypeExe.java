@@ -194,26 +194,9 @@ public class TagAndTypeExe {
     }
 
     /**
-     * 更新标签最后使用时间 根据名称批量
-     */
-    public boolean updateTags(String [] names){
-        boolean b = tagDao.updateLastUseTimeByName(names);
-        return b;
-    }
-
-    /**
-     * 更新分类最后使用时间 根据id
-     */
-    public boolean updateTypes(Integer id){
-        boolean b = typeDao.updateLastUseTimeById(id);
-        return b;
-    }
-
-    /**
      * 判断是否可以根据名字查到标签
      * @return
      */
-    @Cacheable(cacheNames = "getTagByName")
     public boolean getTagByName(String name){
         List<Tag> tags = tagDao.queryByCon(Tag.builder().tagName(name).build());
         if(CollectionUtils.isNotEmpty(tags)){
@@ -224,14 +207,14 @@ public class TagAndTypeExe {
     }
 
     /**
-     * 判断是否可以根据名字查到标签
+     * 添加标签使用次数
      * @return
      */
     public boolean addTagUseCountByName(String name){
         List<Tag> tags = tagDao.queryByCon(Tag.builder().tagName(name).build());
         Tag first = CollectionUtil.getFirst(tags);
         Integer useCount = first.getUseCount();
-        boolean b = tagDao.updateUseCountByName(name, useCount);
+        boolean b = tagDao.updateUseCountByName(name, useCount+1);
         return b;
     }
 

@@ -3,6 +3,7 @@ package com.blog.api.domain;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.Error.ErrorMessage;
+import com.blog.api.command.ClearCacheExe;
 import com.blog.api.command.TagAndTypeExe;
 import com.blog.api.dto.ResultDTO;
 import com.blog.api.dto.TagDTO;
@@ -28,6 +29,8 @@ public class TagTypeDomain {
     @Autowired
     private TagAndTypeExe tagAndTypeExe;
 
+    @Autowired
+    private ClearCacheExe clearCacheExe;
     /**
      * 根据id查询标签
      * @param ids
@@ -134,6 +137,8 @@ public class TagTypeDomain {
             boolean b = tagAndTypeExe.addTypes(listTypes);
             if(!b){
                 resultDTO.addMessage(ErrorMessage.ADD_TYPE_FALE);
+            }else{
+                clearCacheExe.clearTypeQueryCache();
             }
         }
         //添加标签
@@ -148,6 +153,8 @@ public class TagTypeDomain {
             boolean b = tagAndTypeExe.addTags(listTags);
             if(!b){
                 resultDTO.addMessage(ErrorMessage.ADD_TAG_FALE);
+            }else{
+                clearCacheExe.clearTagQueryCache();
             }
         }
         return resultDTO;
@@ -165,6 +172,7 @@ public class TagTypeDomain {
         try {
             if(!CollectionUtils.isEmpty(types)){
                 tagAndTypeExe.deleteTypes(types);
+                clearCacheExe.clearTypeQueryCache();
             }
         }catch (Exception e){
             resultDTO.addMessage(ErrorMessage.DELETE_TYPE_FALE);
@@ -172,6 +180,7 @@ public class TagTypeDomain {
         try {
             if(!CollectionUtils.isEmpty(tags)){
                 tagAndTypeExe.deleteTags(tags);
+                clearCacheExe.clearTagQueryCache();
             }
         }catch (Exception e) {
             resultDTO.addMessage(ErrorMessage.DELETE_TAG_FALE);
@@ -193,12 +202,16 @@ public class TagTypeDomain {
             boolean b = tagAndTypeExe.updateTypes(types);
             if(!b){
                 resultDTO.addMessage(ErrorMessage.UPDATE_TYPE_FALE);
+            }else{
+                clearCacheExe.clearTypeQueryCache();
             }
         }
         if(null!=tags){
             boolean b = tagAndTypeExe.updateTags(tags);
             if(!b){
                 resultDTO.addMessage(ErrorMessage.UPDATE_TAG_FALE);
+            }else{
+                clearCacheExe.clearTagQueryCache();
             }
         }
         return resultDTO;
@@ -211,6 +224,9 @@ public class TagTypeDomain {
      */
     public boolean updateTypeNav(String navName,Integer typeNavId){
         boolean b = tagAndTypeExe.updateTypeNav(TypeNavDTO.builder().typeNavName(navName).id(typeNavId).build());
+        if(b){
+            clearCacheExe.clearTypeNavQueryCache();
+        }
         return b;
     }
 
@@ -239,6 +255,9 @@ public class TagTypeDomain {
 
     public boolean addTypeNav(String navName){
         boolean b = tagAndTypeExe.addTypeNavs(navName);
+        if(b){
+            clearCacheExe.clearTypeNavQueryCache();
+        }
         return b;
     }
 

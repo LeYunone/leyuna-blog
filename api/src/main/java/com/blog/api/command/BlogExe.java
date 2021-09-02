@@ -1,6 +1,7 @@
 package com.blog.api.command;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.dto.BlogDTO;
 import com.blog.api.dto.WebHistoryDTO;
@@ -59,10 +60,15 @@ public class BlogExe {
      * @param conditionName
      * @return
      */
-    @Cacheable(cacheNames = "getAllBlogByPage")
+    @Cacheable(value = "getAllBlogByPage")
     public Page<BlogDTO> getAllBlogByPage(Integer index,Integer size,String conditionName){
         Page<Blog> page=new Page(index,size);
-        IPage<Blog> blogIPage = blogDao.queryByConPageOrderCreateTime(new Blog(), page,0);
+        IPage<Blog> blogIPage =null;
+        if(StringUtils.isNotEmpty(conditionName)){
+            blogIPage=blogDao.queryByBlogName(conditionName, page);
+        }else{
+            blogIPage=blogDao.queryByConPageOrderCreateTime(new Blog(), page,0);
+        }
         //转换结果集
         Page<BlogDTO> blogDTOPage=new Page<>(index,size);
         blogDTOPage.setRecords(TransformationUtil.copyToLists(blogIPage.getRecords(), BlogDTO.class));

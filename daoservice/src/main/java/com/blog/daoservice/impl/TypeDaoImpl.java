@@ -46,7 +46,6 @@ public class TypeDaoImpl extends SysBaseMpImpl<TypeMapper,Type> implements TypeD
      * @param page
      * @return
      */
-    @Cacheable
     @Override
     public IPage<Type> selectByLikeNamePage(Type type, Page<Type> page, String conditionName) {
         AssertUtil.isTrue(ObjectUtil.isNotNull (type), ErrorMeassage.OBJECT_NULL);

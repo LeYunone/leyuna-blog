@@ -71,7 +71,7 @@ public class RedisConfig {
 
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 // 设置超时时间
-                .entryTtl(Optional.ofNullable(redisProperties.getTimeout()).orElse(Duration.ofMinutes(43200L)))
+//                .entryTtl(Optional.ofNullable(redisProperties.getTimeout()).orElse(Duration.ofMinutes(43200L)))
                 // 禁止缓存null值
                 .disableCachingNullValues();
 

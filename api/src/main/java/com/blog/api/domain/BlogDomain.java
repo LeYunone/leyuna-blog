@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.Error.ErrorMessage;
 import com.blog.api.command.BlogExe;
+import com.blog.api.command.ClearCacheExe;
 import com.blog.api.command.TagAndTypeExe;
 import com.blog.api.dto.BlogDTO;
 import com.blog.api.dto.NoticeDTO;
@@ -34,6 +35,8 @@ public class BlogDomain {
     private BlogExe blogExe;
     @Autowired
     private TagAndTypeExe tagAndTypeExe;
+    @Autowired
+    private ClearCacheExe clearCacheExe;
     /**
      * 分页取得博客   根据分类或者标签或者查所有
      * @param index
@@ -45,12 +48,9 @@ public class BlogDomain {
     public Page<BlogDTO> getBlogsByPage(Integer index,Integer size,Integer type,String tags,String conditionName){
         Page<BlogDTO> result=null;
         //查询所有
+        clearCacheExe.clearBlogQueryCache();
         if(type==null && StringUtils.isEmpty(tags)){
-            try {
-                result = blogExe.getAllBlogByPage(index, size,conditionName);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+            result = blogExe.getAllBlogByPage(index, size,conditionName);
         }else{
             result = blogExe.getBlogByPage(index, size, type, tags,conditionName);
         }
@@ -104,10 +104,19 @@ public class BlogDomain {
         if(!b){
             AssertUtil.isTrue(ErrorMessage.ADD_BLOG_FALE);
         }else{
-            //更新分类 和标签的最后使用次数
+            //更新分类 和标签的最后使用时间
             String tagUpdates = blogDTO.getTag();
             Integer type = blogDTO.getType();
             tagAndTypeExe.updateTagsAndTypes(tagUpdates,type);
+
+            //更新博客缓存
+            clearCacheExe.clearBlogQueryCache();
+            //更新标签缓存
+            clearCacheExe.clearTagQueryCache();
+            //更新分类缓存
+            clearCacheExe.clearTypeQueryCache();
+            //更新分类导航缓存
+            clearCacheExe.clearTypeNavQueryCache();
         }
         return b;
     }
@@ -121,13 +130,13 @@ public class BlogDomain {
     public BlogDTO openBlogById(Integer id){
         //找到博客
         BlogDTO blogById = blogExe.getBlogById(id);
-
         //博客增加一点击量
         boolean b = blogExe.addBlogClickCount(id, blogById.getClickCount() + 1);
         if(!b){
             //回滚事务
             throw new RuntimeException();
         }
+        clearCacheExe.clearBlogQueryByIdCache(id);
         return blogById;
     }
 
@@ -135,6 +144,9 @@ public class BlogDomain {
         //设置最新更新时间
         blogDTO.setUpdateTime(LocalDateTime.now());
         boolean b = blogExe.updateBlog(blogDTO);
+        if(b){
+            clearCacheExe.clearBlogQueryByIdCache(blogDTO.getId());
+        }
         return b;
     }
 
@@ -154,6 +166,9 @@ public class BlogDomain {
             case 0:
                 //0 网站更新公告
                 boolean b = blogExe.addHistory(TransformationUtil.copyToDTO(noticeDTO, WebHistoryDTO.class));
+                if(b){
+                    clearCacheExe.clearWebHistoryCache();
+                }
                 return b;
             default:
                 return false;

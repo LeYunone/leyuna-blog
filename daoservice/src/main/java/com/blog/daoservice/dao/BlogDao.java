@@ -20,5 +20,7 @@ public interface BlogDao extends SysBaseDao<Blog> {
     Blog queryByid(Integer blogId);
 
     boolean updateClickCount(Integer blogId,Integer clickCount);
+
+    IPage<Blog> queryByBlogName(String title, Page<Blog> page);
 }
 
