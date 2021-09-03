@@ -26,10 +26,10 @@ server:
     context-path: '/leyuna'
   address: 127.0.0.1
 
-## mp日志
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
+### mp日志
+#mybatis-plus:
+#  configuration:Dom4j
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
 
 ## 打印日志级别
 logging:
