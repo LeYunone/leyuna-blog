@@ -3,7 +3,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.blog.api</groupId>
-    <packaging>war</packaging>
     <artifactId>api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>api</name>
@@ -17,6 +16,7 @@
                     <source>8</source>
                     <target>8</target>
                 </configuration>
+
             </plugin>
         </plugins>
     </build>
@@ -27,6 +27,11 @@
         <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.blog.daoservice</groupId>
             <artifactId>daoservice</artifactId>
