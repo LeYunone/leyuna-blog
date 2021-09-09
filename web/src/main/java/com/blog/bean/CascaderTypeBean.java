@@ -9,7 +9,7 @@ import java.util.List;
  * @author pengli
  * @create 2021-08-24 17:29
  *
- * 分类导航和弗雷的级联选择
+ * 分类导航和分类的级联选择
  */
 @Getter
 @Setter

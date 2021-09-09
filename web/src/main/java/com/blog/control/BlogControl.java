@@ -1,7 +1,9 @@
 package com.blog.control;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.domain.BlogDomain;
+import com.blog.api.domain.SearchDomain;
 import com.blog.api.domain.UserDomain;
 import com.blog.api.dto.BlogDTO;
 import com.blog.api.dto.NoticeDTO;
@@ -14,6 +16,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import util.TransformationUtil;
+
+import java.util.List;
 
 /**
  * @author pengli
@@ -28,6 +32,8 @@ public class BlogControl extends SysBaseControl {
     private BlogDomain blogDomain;
     @Autowired
     private UserDomain userDomain;
+    @Autowired
+    private SearchDomain searchDomain;
     /**
      * 发布博客
      * @param blogBean
@@ -123,6 +129,33 @@ public class BlogControl extends SysBaseControl {
             return successResponseBean();
         }else{
             return failResponseBean(SystemAsserts.ADD_BLOG_FAIL);
+        }
+    }
+
+    /**
+     * 站内搜索博客
+     * @param key
+     * @param index
+     * @param size
+     * @return
+     */
+    @GetMapping("/search")
+    public ResponseBean blogSearch(String key,Integer index,Integer size){
+        List<BlogDTO> blogFromSearch = searchDomain.getBlogFromSearch(key, index, size);
+        if(CollectionUtils.isNotEmpty(blogFromSearch)){
+            return successResponseBean(blogFromSearch);
+        }else{
+            return failResponseBean(blogFromSearch);
+        }
+    }
+
+    @PostMapping("/createDocument")
+    public ResponseBean createAllBlogDocument(){
+        boolean blogSearch = searchDomain.createBlogSearch();
+        if(blogSearch){
+            return successResponseBean();
+        }else{
+            return failResponseBean();
         }
     }
 }

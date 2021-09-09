@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.Error.ErrorMessage;
 import com.blog.api.command.BlogExe;
 import com.blog.api.command.ClearCacheExe;
+import com.blog.api.command.LuceneExe;
 import com.blog.api.command.TagAndTypeExe;
 import com.blog.api.dto.BlogDTO;
 import com.blog.api.dto.NoticeDTO;
@@ -18,6 +19,7 @@ import util.AssertUtil;
 import util.StringUtil;
 import util.TransformationUtil;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,8 @@ public class BlogDomain {
     private TagAndTypeExe tagAndTypeExe;
     @Autowired
     private ClearCacheExe clearCacheExe;
+    @Autowired
+    private LuceneExe luceneExe;
     /**
      * 分页取得博客   根据分类或者标签或者查所有
      * @param index
@@ -67,58 +71,65 @@ public class BlogDomain {
     @Transactional
     public boolean addBlog(BlogDTO blogDTO){
         String tag = blogDTO.getTag();
-        //先处理新增标签
-        if(StringUtils.isNotEmpty(tag)){
-            String[] split = tag.split(",");
-            List<TagDTO> addList=new ArrayList<>();
-            for(String name:split){
-                //判断有没有这个名字的标签，如果没有的话则需要创建这个标签.
-                boolean tagByName = tagAndTypeExe.getTagByName(name);
-                //如果查不到则创建这个标签
-                if(!tagByName){
-                    TagDTO build = TagDTO.builder().tagName(name).createTime(LocalDateTime.now())
-                            .lastUserTime(LocalDateTime.now()).useCount(1).build();
-                    addList.add(build);
-                }else{
-                    //如果查到了，则说明这个标签使用次数需要添加一
-                    boolean b = tagAndTypeExe.addTagUseCountByName(name);
-                    if(!b){
-                        AssertUtil.isTrue(ErrorMessage.UPDATE_TAG_FALE) ;
-                    }
-                }
-            }
-            //如果addlist有值，则说明需要添加标签到数据库中
-            if(CollectionUtils.isNotEmpty(addList)){
-                boolean b = tagAndTypeExe.addTags(addList);
-                if(!b){
-                    AssertUtil.isTrue(ErrorMessage.ADD_TAG_FALE);
-                }
-            }
-        }
-
         blogDTO.setClickCount(0);
         blogDTO.setCommentCount(0);
         blogDTO.setCreateTime(LocalDateTime.now());
         blogDTO.setUpdateTime(LocalDateTime.now());
         boolean b = blogExe.addBlog(blogDTO);
-        if(!b){
-            AssertUtil.isTrue(ErrorMessage.ADD_BLOG_FALE);
-        }else{
-            //更新分类 和标签的最后使用时间
-            String tagUpdates = blogDTO.getTag();
-            Integer type = blogDTO.getType();
-            tagAndTypeExe.updateTagsAndTypes(tagUpdates,type);
+        if(b){
+            //先处理新增标签
+            if(StringUtils.isNotEmpty(tag)){
+                String[] split = tag.split(",");
+                List<TagDTO> addList=new ArrayList<>();
+                for(String name:split){
+                    //判断有没有这个名字的标签，如果没有的话则需要创建这个标签.
+                    boolean tagByName = tagAndTypeExe.getTagByName(name);
+                    //如果查不到则创建这个标签
+                    if(!tagByName){
+                        TagDTO build = TagDTO.builder().tagName(name).createTime(LocalDateTime.now())
+                                .lastUserTime(LocalDateTime.now()).useCount(1).build();
+                        addList.add(build);
+                    }else{
+                        //如果查到了，则说明这个标签使用次数需要添加一
+                        boolean is = tagAndTypeExe.addTagUseCountByName(name);
+                        if(!is){
+                            AssertUtil.isTrue(ErrorMessage.UPDATE_TAG_FALE) ;
+                        }
+                    }
+                }
+                //如果addlist有值，则说明需要添加标签到数据库中
+                if(CollectionUtils.isNotEmpty(addList)){
+                    boolean is = tagAndTypeExe.addTags(addList);
+                    if(!is){
+                        AssertUtil.isTrue(ErrorMessage.ADD_TAG_FALE);
+                    }
+                }
+            }
 
-            //更新博客缓存
+
+            //更新分类 和标签的最后使用时间
+            Integer type = blogDTO.getType();
+            tagAndTypeExe.addTypeUseCount(type);
+            tagAndTypeExe.updateTagsAndTypes(tag,type);
+
+            //添加改博客的索引库文档
+            List<BlogDTO> list=new ArrayList<>();
+            list.add(blogDTO);
+            try {
+                luceneExe.addBlogDir(list);
+            } catch (IOException e) {
+                AssertUtil.isTrue(ErrorMessage.CREATE_DOCUMENT_FALE);
+            }
+
+            //更新博客\标签\分类\分类缓存
             clearCacheExe.clearBlogQueryCache();
-            //更新标签缓存
             clearCacheExe.clearTagQueryCache();
-            //更新分类缓存
             clearCacheExe.clearTypeQueryCache();
-            //更新分类导航缓存
             clearCacheExe.clearTypeNavQueryCache();
+            return b;
         }
-        return b;
+        AssertUtil.isTrue(ErrorMessage.ADD_BLOG_FALE);
+        return false;
     }
 
     /**

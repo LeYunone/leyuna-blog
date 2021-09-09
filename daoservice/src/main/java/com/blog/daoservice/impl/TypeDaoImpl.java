@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.daoservice.dao.TypeDao;
 import com.blog.daoservice.entry.Type;
 import com.blog.daoservice.mapper.TypeMapper;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import util.AssertUtil;
@@ -31,6 +30,12 @@ public class TypeDaoImpl extends SysBaseMpImpl<TypeMapper,Type> implements TypeD
     public List<Type> selectByIds(List<Integer> ids) {
         List<Type> types = this.baseMapper.selectBatchIds(ids);
         return types;
+    }
+
+    @Override
+    public Type selectById(Integer id) {
+        Type type = this.baseMapper.selectById(id);
+        return type;
     }
 
     @Transactional
@@ -61,11 +66,6 @@ public class TypeDaoImpl extends SysBaseMpImpl<TypeMapper,Type> implements TypeD
     }
 
     @Override
-    public int getTagsCountByLikeName(String conditionName) {
-        return this.count(new QueryWrapper<Type>().lambda().like(Type::getTypeName,conditionName));
-    }
-
-    @Override
     public boolean updateNameById(Type type){
         boolean update = this.update(new UpdateWrapper<Type>().lambda().eq(Type::getId, type.getId()).set(Type::getTypeName, type.getTypeName()));
         return update;
@@ -74,6 +74,13 @@ public class TypeDaoImpl extends SysBaseMpImpl<TypeMapper,Type> implements TypeD
     @Override
     public boolean updateLastUseTimeById(Integer id) {
         boolean update = this.update(new UpdateWrapper<Type>().lambda().eq(Type::getId, id).set(Type::getLastUserTime, LocalDateTime.now()));
+        return update;
+    }
+
+    @Override
+    public boolean updateUseCountByName(Integer id,int userCount){
+        boolean update = this.update(new UpdateWrapper<Type>().lambda().eq(Type::getId,id).
+                set(Type::getUseCount, userCount));
         return update;
     }
 }

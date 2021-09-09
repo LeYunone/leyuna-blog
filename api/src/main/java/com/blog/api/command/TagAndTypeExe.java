@@ -218,6 +218,17 @@ public class TagAndTypeExe {
         return b;
     }
 
+    /**
+     * 添加分类使用次数
+     * @return
+     */
+    public boolean addTypeUseCount(Integer id){
+        Type type = typeDao.selectById(id);
+        Integer useCount=type.getUseCount();
+        boolean b = typeDao.updateUseCountByName(id, useCount + 1);
+        return b;
+    }
+
     public boolean updateTagsAndTypes(String tagNames,Integer typeId){
         boolean tagTupdate=true;
         if(StringUtils.isNotEmpty(tagNames)){

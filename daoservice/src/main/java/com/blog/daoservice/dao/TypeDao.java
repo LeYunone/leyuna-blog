@@ -14,15 +14,17 @@ public interface TypeDao extends SysBaseDao<Type>{
 
     List<Type> selectByIds(List<Integer> ids);
 
+    Type selectById(Integer id);
+
     int deleteTypesByIds(List<Integer> ids);
 
     IPage<Type> selectByLikeNamePage(Type type, Page<Type> page, String conditionName);
 
     int getTagsCount();
 
-    int getTagsCountByLikeName(String conditionName);
-
     boolean updateNameById(Type type);
 
     boolean updateLastUseTimeById(Integer id);
+
+    boolean updateUseCountByName(Integer id,int userCount);
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import util.TransformationUtil;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author pengli
@@ -36,6 +37,11 @@ public class BlogExe {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    /**
+     * 添加博客
+     * @param blogDTO
+     * @return
+     */
     public boolean addBlog(BlogDTO blogDTO){
         Blog blog = TransformationUtil.copyToDTO(blogDTO, Blog.class);
         boolean save = blogDao.save(blog);
@@ -51,6 +57,16 @@ public class BlogExe {
     public boolean addBlogClickCount(Integer blogId,Integer clickCount){
         boolean save = blogDao.updateClickCount(blogId,clickCount);
         return save;
+    }
+
+    /**
+     * 查询所有博客
+     * @return
+     */
+    public List<BlogDTO> getAllBlog(){
+        List<Blog> blogs = blogDao.queryByCon(new Blog());
+        List<BlogDTO> blogDTOS = TransformationUtil.copyToLists(blogs, BlogDTO.class);
+        return blogDTOS;
     }
 
     /**
@@ -76,6 +92,15 @@ public class BlogExe {
         return blogDTOPage;
     }
 
+    /**
+     * 根据 分类或标签 分页查询博客  支持模糊查询
+     * @param index
+     * @param size
+     * @param type
+     * @param tag
+     * @param conditionName
+     * @return
+     */
     @Cacheable(cacheNames = "getBlogByPage")
     public Page<BlogDTO> getBlogByPage(Integer index,Integer size,Integer type,String tag,String conditionName){
         Page<Blog> page=new Page(index,size);
@@ -106,7 +131,6 @@ public class BlogExe {
         return blogDTO;
     }
 
-
     public int getBlogByTypeCount(Integer type){
         int i = blogDao.queryCountByType(type);
         return i;
@@ -134,6 +158,11 @@ public class BlogExe {
         return historyDTOS;
     }
 
+    /**
+     * 添加网站历史
+     * @param webHistoryDTO
+     * @return
+     */
     public boolean addHistory(WebHistoryDTO webHistoryDTO){
         webHistoryDTO.setCreateTime(LocalDateTime.now());
         boolean save = historyDao.save(TransformationUtil.copyToDTO(webHistoryDTO, WebHistory.class));
