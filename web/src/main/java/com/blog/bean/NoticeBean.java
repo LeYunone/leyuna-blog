@@ -13,6 +13,8 @@ import lombok.Setter;
 @Setter
 public class NoticeBean {
 
+    private Integer id;
+
     private String title;
 
     private String content;

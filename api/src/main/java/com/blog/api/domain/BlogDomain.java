@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.Error.ErrorMessage;
-import com.blog.api.command.BlogExe;
-import com.blog.api.command.ClearCacheExe;
-import com.blog.api.command.LuceneExe;
-import com.blog.api.command.TagAndTypeExe;
+import com.blog.api.command.*;
 import com.blog.api.dto.BlogDTO;
 import com.blog.api.dto.NoticeDTO;
 import com.blog.api.dto.TagDTO;
@@ -36,6 +33,8 @@ public class BlogDomain {
     @Autowired
     private BlogExe blogExe;
     @Autowired
+    private NoticeExe noticeExe;
+    @Autowired
     private TagAndTypeExe tagAndTypeExe;
     @Autowired
     private ClearCacheExe clearCacheExe;
@@ -59,10 +58,6 @@ public class BlogDomain {
             result = blogExe.getBlogByPage(index, size, type, tags,conditionName);
         }
         return result;
-    }
-    public int getBlogsByTypeCount(Integer type){
-        int blogByTypeCount = blogExe.getBlogByTypeCount(type);
-        return blogByTypeCount;
     }
     /**
      * 发布博客
@@ -151,6 +146,11 @@ public class BlogDomain {
         return blogById;
     }
 
+    /**
+     * 更新网站
+     * @param blogDTO
+     * @return
+     */
     public boolean updateBlog(BlogDTO blogDTO){
         //设置最新更新时间
         blogDTO.setUpdateTime(LocalDateTime.now());
@@ -159,11 +159,6 @@ public class BlogDomain {
             clearCacheExe.clearBlogQueryByIdCache(blogDTO.getId());
         }
         return b;
-    }
-
-    public Page<WebHistoryDTO> getWebHistory(Integer index,Integer size){
-        Page<WebHistoryDTO> webHistory = blogExe.getWebHistory(index, size);
-        return  webHistory;
     }
 
     /**
@@ -176,7 +171,74 @@ public class BlogDomain {
         switch (type){
             case 0:
                 //0 网站更新公告
-                boolean b = blogExe.addHistory(TransformationUtil.copyToDTO(noticeDTO, WebHistoryDTO.class));
+                boolean b = noticeExe.addHistory(TransformationUtil.copyToDTO(noticeDTO, WebHistoryDTO.class));
+                if(b){
+                    clearCacheExe.clearWebHistoryCache();
+                }
+                return b;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * 分页获取公告
+     * @param index
+     * @param size
+     * @param conditionName
+     * @param type
+     * @return
+     */
+    public Page<NoticeDTO> getNoticePage(Integer index,Integer size,String conditionName,int type){
+        Page<NoticeDTO> result=null;
+        switch (type){
+            case 0:
+                Page<WebHistoryDTO> webHistory=null;
+                //查询网站更新公告
+                if(StringUtils.isNotEmpty(conditionName)){
+                   webHistory = noticeExe.getWebHistory(index,size,conditionName);
+                }else{
+                   webHistory = noticeExe.getWebHistory(index, size);
+                }
+               if(null!=webHistory){
+                   List<NoticeDTO> noticeDTOS = TransformationUtil.copyToLists(webHistory.getRecords(), NoticeDTO.class);
+                   result=new Page<>(index,size);
+                   result.setRecords(noticeDTOS);
+                   result.setTotal(webHistory.getTotal());
+               }
+               return result;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * 得到一条公告
+     * @param id
+     * @param type
+     * @return
+     */
+    public NoticeDTO getNoticeOne(Integer id,int type){
+        switch (type){
+            case 0:
+                WebHistoryDTO webHistoryById = noticeExe.getWebHistoryById(id);
+                return TransformationUtil.copyToDTO(webHistoryById,NoticeDTO.class);
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * 更新公告
+     * @param noticeDTO
+     * @return
+     */
+    public boolean updateNotice(NoticeDTO noticeDTO){
+        switch (noticeDTO.getType()){
+            case 0:
+                //更新网站历史
+                WebHistoryDTO webHistoryDTO = TransformationUtil.copyToDTO(noticeDTO, WebHistoryDTO.class);
+                boolean b = noticeExe.updateWebHis(webHistoryDTO);
                 if(b){
                     clearCacheExe.clearWebHistoryCache();
                 }

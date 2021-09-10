@@ -30,9 +30,6 @@ public class BlogExe {
     @Autowired
     private BlogDao blogDao;
 
-    @Autowired
-    private WebHistoryDao historyDao;
-
     // redis緩存
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -139,33 +136,5 @@ public class BlogExe {
     public boolean updateBlog(BlogDTO blogDTO){
         boolean b = blogDao.updateById(TransformationUtil.copyToDTO(blogDTO, Blog.class));
         return b;
-    }
-
-    /**
-     * 分页查询网站更新历史
-     * @param index
-     * @param size
-     * @return
-     */
-    @Cacheable(cacheNames = "getWebHistory")
-    public Page<WebHistoryDTO> getWebHistory(Integer index, Integer size){
-        Page<WebHistory> page=new Page<>(index,size);
-        IPage<WebHistory> webHistoryIPage = historyDao.queryByConPageOrderCreateTime(new WebHistory(), page,0);
-
-        //封装结果集
-        Page<WebHistoryDTO> historyDTOS=new Page<>(index,size,page.getTotal());
-        historyDTOS.setRecords(TransformationUtil.copyToLists(webHistoryIPage.getRecords(),WebHistoryDTO.class));
-        return historyDTOS;
-    }
-
-    /**
-     * 添加网站历史
-     * @param webHistoryDTO
-     * @return
-     */
-    public boolean addHistory(WebHistoryDTO webHistoryDTO){
-        webHistoryDTO.setCreateTime(LocalDateTime.now());
-        boolean save = historyDao.save(TransformationUtil.copyToDTO(webHistoryDTO, WebHistory.class));
-        return save;
     }
 }

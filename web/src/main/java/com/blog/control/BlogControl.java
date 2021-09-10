@@ -114,7 +114,7 @@ public class BlogControl extends SysBaseControl {
      */
     @RequestMapping("/history")
     public ResponseBean getWebHistory(Integer index,Integer size){
-        Page<WebHistoryDTO> webHistory = blogDomain.getWebHistory(index, size);
+        Page<NoticeDTO> webHistory=blogDomain.getNoticePage(index, size,null,0);
         return successResponseBean(webHistory);
     }
 
@@ -152,13 +152,56 @@ public class BlogControl extends SysBaseControl {
         }
     }
 
+    /**
+     * 创建当前数据库中所有博客的索引库
+     * @return
+     */
     @PostMapping("/createDocument")
     public ResponseBean createAllBlogDocument(){
+        userDomain.checkLock();
         boolean blogSearch = searchDomain.createBlogSearch();
         if(blogSearch){
             return successResponseBean();
         }else{
             return failResponseBean();
+        }
+    }
+
+    /**
+     * 查询站内所有公告
+     * @param index
+     * @param size
+     * @param conditionName
+     * @return
+     */
+    @GetMapping("/notices")
+    public ResponseBean getAllNotice(@RequestParam(required = false) Integer index,
+                                    @RequestParam(required = false) Integer size,
+                                    @RequestParam(required = false) String conditionName){
+        Page<NoticeDTO> noticePage = blogDomain.getNoticePage(index, size, conditionName, 0);
+        return successResponseBean(noticePage);
+    }
+
+    /**
+     * 根据类型和id查询公告
+     * @param id
+     * @param type
+     * @return
+     */
+    @GetMapping("/notice/{id}/{type}")
+    public ResponseBean getNoticeOne(@PathVariable(value = "id")Integer id,@PathVariable(value = "type")Integer type){
+        NoticeDTO noticeOne = blogDomain.getNoticeOne(id, type);
+        return successResponseBean(noticeOne);
+    }
+
+    @PostMapping("/editNotice")
+    public ResponseBean editNotice(@RequestBody NoticeBean noticeBean){
+        userDomain.checkLock();
+        boolean b = blogDomain.updateNotice(TransformationUtil.copyToDTO(noticeBean, NoticeDTO.class));
+        if(b){
+            return successResponseBean();
+        }else{
+            return failResponseBean(SystemAsserts.UPDATE_BLOG_FAIL.getMsg());
         }
     }
 }
