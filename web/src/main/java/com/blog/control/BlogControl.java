@@ -6,6 +6,7 @@ import com.blog.api.domain.BlogDomain;
 import com.blog.api.domain.SearchDomain;
 import com.blog.api.domain.UserDomain;
 import com.blog.api.dto.BlogDTO;
+import com.blog.api.dto.LuceneDTO;
 import com.blog.api.dto.NoticeDTO;
 import com.blog.api.dto.WebHistoryDTO;
 import com.blog.bean.BlogBean;
@@ -55,7 +56,7 @@ public class BlogControl extends SysBaseControl {
         if(b){
             return successResponseBean();
         }else{
-            return failResponseBean(SystemAsserts.ADD_BLOG_FAIL);
+            return failResponseBean(SystemAsserts.ADD_BLOG_FAIL.getMsg());
         }
     }
 
@@ -101,7 +102,7 @@ public class BlogControl extends SysBaseControl {
         if(b){
             return successResponseBean();
         }else{
-            return failResponseBean(SystemAsserts.UPDATE_BLOG_FAIL);
+            return failResponseBean(SystemAsserts.UPDATE_BLOG_FAIL.getMsg());
         }
     }
 
@@ -128,7 +129,7 @@ public class BlogControl extends SysBaseControl {
         if(b){
             return successResponseBean();
         }else{
-            return failResponseBean(SystemAsserts.ADD_BLOG_FAIL);
+            return failResponseBean(SystemAsserts.ADD_BLOG_FAIL.getMsg());
         }
     }
 
@@ -141,11 +142,13 @@ public class BlogControl extends SysBaseControl {
      */
     @GetMapping("/search")
     public ResponseBean blogSearch(String key,Integer index,Integer size){
-        List<BlogDTO> blogFromSearch = searchDomain.getBlogFromSearch(key, index, size);
-        if(CollectionUtils.isNotEmpty(blogFromSearch)){
+        //查关键词
+        LuceneDTO blogFromSearch = searchDomain.getBlogFromSearch(key, index, size);
+        //
+        if(null!=blogFromSearch){
             return successResponseBean(blogFromSearch);
         }else{
-            return failResponseBean(blogFromSearch);
+            return failResponseBean(SystemAsserts.QUERY_SEARCH.getMsg());
         }
     }
 

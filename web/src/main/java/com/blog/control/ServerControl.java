@@ -34,7 +34,7 @@ public class ServerControl extends SysBaseControl {
         if(b){
             return successResponseBean(format+"/"+file.getOriginalFilename());
         }else{
-            return failResponseBean(SystemAsserts.UPLOCAD_IMG_FAIL);
+            return failResponseBean(SystemAsserts.UPLOCAD_IMG_FAIL.getMsg());
         }
     }
 }

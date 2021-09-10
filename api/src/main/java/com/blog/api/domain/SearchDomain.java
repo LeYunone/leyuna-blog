@@ -3,7 +3,9 @@ package com.blog.api.domain;
 import com.blog.api.command.BlogExe;
 import com.blog.api.command.LuceneExe;
 import com.blog.api.dto.BlogDTO;
+import com.blog.api.dto.LuceneDTO;
 import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,11 +48,11 @@ public class SearchDomain {
      * @param size
      * @return
      */
-    public List<BlogDTO> getBlogFromSearch(String key,Integer index,Integer size){
-        List<BlogDTO> blogDir=null;
+    public LuceneDTO getBlogFromSearch(String key, Integer index, Integer size){
+        LuceneDTO blogDir=null;
         try {
             blogDir = luceneExe.getBlogDir(key, index, size);
-        }catch (IOException | ParseException e){
+        }catch (IOException | ParseException | InvalidTokenOffsetsException e){
 
         }
         return blogDir;

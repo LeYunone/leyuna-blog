@@ -271,7 +271,7 @@ public class TagTypeControl extends SysBaseControl{
         if(b){
             return successResponseBean();
         }else{
-            return failResponseBean(SystemAsserts.ADD_TYPENAV_FAIL);
+            return failResponseBean(SystemAsserts.ADD_TYPENAV_FAIL.getMsg());
         }
     }
 
@@ -287,7 +287,7 @@ public class TagTypeControl extends SysBaseControl{
         if(b){
             return successResponseBean();
         }else{
-            return failResponseBean(SystemAsserts.UPDATE_TYPENAV_FAIL);
+            return failResponseBean(SystemAsserts.UPDATE_TYPENAV_FAIL.getMsg());
         }
     }
 
@@ -298,7 +298,7 @@ public class TagTypeControl extends SysBaseControl{
         if(b){
             return successResponseBean();
         }else{
-            return failResponseBean(SystemAsserts.DELETE_TYPENAV_FAIL);
+            return failResponseBean(SystemAsserts.DELETE_TYPENAV_FAIL.getMsg());
         }
     }
 }

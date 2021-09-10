@@ -1,8 +1,10 @@
 package com.blog.api.command;
 
 import com.blog.api.dto.BlogDTO;
+import com.blog.api.dto.LuceneDTO;
 import com.blog.api.lucene.MyIKAnalyzer;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
@@ -16,6 +18,10 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.highlight.Highlighter;
+import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
+import org.apache.lucene.search.highlight.QueryScorer;
+import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
@@ -24,6 +30,7 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,12 +79,16 @@ public class LuceneExe {
      * @param index
      * @return
      */
-    public List<BlogDTO> getBlogDir(String key,Integer index,Integer size) throws IOException, ParseException {
+    public LuceneDTO getBlogDir(String key, Integer index, Integer size) throws IOException, ParseException, InvalidTokenOffsetsException {
         List<BlogDTO> result=new ArrayList<>();
         Analyzer analyzer=new MyIKAnalyzer();
         //关键词
         QueryParser qp = new QueryParser("title",analyzer);
         Query query=qp.parse(key);
+
+        //高亮关键字
+        SimpleHTMLFormatter simpleHTMLFormatter = new SimpleHTMLFormatter("<span style='color:red'>", "</span>");
+        Highlighter highlighter = new Highlighter(simpleHTMLFormatter, new QueryScorer(query));
 
         //打开索引库输入流
         Directory directory=FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
@@ -88,13 +99,19 @@ public class LuceneExe {
 
         //从上一页最后一条数据开始查询  达到分页的目的
         TopDocs topDocs = indexSearcher.searchAfter(lastScoreDoc, query, size);
+        long totle=topDocs.totalHits;
         for(ScoreDoc scoreDoc:topDocs.scoreDocs){
             //获得对应的文档
             Document doc = indexSearcher.doc(scoreDoc.doc);
-            result.add(BlogDTO.builder().id(Integer.valueOf(doc.get("id"))).title(doc.get("title")).build());
+            String title=doc.get("title");
+            TokenStream tokenStream = analyzer.tokenStream("title", new StringReader(title));
+            result.add(BlogDTO.builder().id(Integer.valueOf(doc.get("id"))).title(highlighter.getBestFragment(tokenStream,title)).build());
         }
         indexReader.close();
-        return result;
+        LuceneDTO luceneDTO=new LuceneDTO();
+        luceneDTO.setListData(result);
+        luceneDTO.setTotole(totle);
+        return luceneDTO;
     }
 
     private ScoreDoc getLastScoreDoc(int pageIndex, int pageSize, Query query, IndexSearcher indexSearcher) throws IOException{
