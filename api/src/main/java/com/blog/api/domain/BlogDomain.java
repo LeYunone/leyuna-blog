@@ -70,7 +70,11 @@ public class BlogDomain {
         blogDTO.setCommentCount(0);
         blogDTO.setCreateTime(LocalDateTime.now());
         blogDTO.setUpdateTime(LocalDateTime.now());
-        boolean b = blogExe.addBlog(blogDTO);
+        Integer blogId=blogExe.addBlog(blogDTO);
+        boolean b=true;
+        if(null==blogId){
+            b=false;
+        }
         if(b){
             //先处理新增标签
             if(StringUtils.isNotEmpty(tag)){
@@ -109,6 +113,7 @@ public class BlogDomain {
 
             //添加改博客的索引库文档
             List<BlogDTO> list=new ArrayList<>();
+            blogDTO.setId(blogId);
             list.add(blogDTO);
             try {
                 luceneExe.addBlogDir(list);
@@ -147,7 +152,7 @@ public class BlogDomain {
     }
 
     /**
-     * 更新网站
+     * 更新文章
      * @param blogDTO
      * @return
      */
@@ -156,6 +161,13 @@ public class BlogDomain {
         blogDTO.setUpdateTime(LocalDateTime.now());
         boolean b = blogExe.updateBlog(blogDTO);
         if(b){
+            //更新索引库中的Key
+            try {
+                luceneExe.updateBlogDocument(blogDTO);
+            } catch (IOException e) {
+                return false;
+            }
+            //清除这篇文章的缓存
             clearCacheExe.clearBlogQueryByIdCache(blogDTO.getId());
         }
         return b;

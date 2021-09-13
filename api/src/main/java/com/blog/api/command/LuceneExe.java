@@ -8,10 +8,7 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.*;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -26,6 +23,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import java.io.File;
@@ -42,6 +40,7 @@ import java.util.List;
  * Lucene 操作指令
  */
 @Service
+@Transactional
 public class LuceneExe {
 
     /**
@@ -120,5 +119,25 @@ public class LuceneExe {
         int num = pageSize*(pageIndex-1);
         TopDocs tds = indexSearcher.search(query, num);
         return tds.scoreDocs[num-1];
+    }
+
+    /**
+     * 指定更新博客的索引文档
+     * @throws IOException
+     */
+    public void updateBlogDocument(BlogDTO blogDTO) throws IOException {
+        Directory directory=FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
+        Analyzer analyzer=new MyIKAnalyzer();
+        IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+        IndexWriter indexWriter = new IndexWriter(directory,indexWriterConfig);
+        Document document=new Document();//替换的文档
+        Field id=new TextField("id",String.valueOf(blogDTO.getId()), Field.Store.YES);
+        Field title=new TextField("title",blogDTO.getTitle(), Field.Store.YES);
+        document.add(title);
+        document.add(id);
+        Term term=new Term("title",blogDTO.getTitle());
+        indexWriter.updateDocument(term,document);
+        indexWriter.commit();
+        indexWriter.close();
     }
 }

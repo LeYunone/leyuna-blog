@@ -39,10 +39,13 @@ public class BlogExe {
      * @param blogDTO
      * @return
      */
-    public boolean addBlog(BlogDTO blogDTO){
+    public Integer addBlog(BlogDTO blogDTO){
         Blog blog = TransformationUtil.copyToDTO(blogDTO, Blog.class);
         boolean save = blogDao.save(blog);
-        return save;
+        if(save){
+            return blog.getId();
+        }
+        return null;
     }
 
     /**
