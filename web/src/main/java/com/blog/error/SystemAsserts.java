@@ -18,7 +18,10 @@ public enum  SystemAsserts {
 
     UPLOCAD_IMG_FAIL("上传图片失败"),
 
-    QUERY_SEARCH("站内搜索失败");
+    QUERY_SEARCH("站内搜索失败"),
+
+    REQUEST_FAIL("请求失败"),
+    REQUEST_FREQUENTLY_FAIL("说慢一点，我缓一下");
 
     private final String msg;
 
