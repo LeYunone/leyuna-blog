@@ -36,14 +36,14 @@ public class TouristDomain {
     }
 
     /**
-     * 取指定博客下的所有评论
+     * 取评论
      * @param index
      * @param size
      * @param blogId
      * @param type  [类型： 最新   最热  混杂型]
      * @return
      */
-    public Page<CommentDTO> getBlogComment(Integer index,Integer size,Integer blogId,Integer type){
+    public Page<CommentDTO> getComment(Integer index,Integer size,Integer blogId,Integer type){
         Page<CommentDTO> commentDTOPage=null;
         switch (type){
             case 0:
