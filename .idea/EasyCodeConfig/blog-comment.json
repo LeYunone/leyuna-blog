@@ -66,6 +66,20 @@
     "shortType" : null,
     "custom" : false,
     "ext" : { }
+  }, {
+    "name" : "blogId",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "respondent",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
   } ],
   "pkColumn" : null,
   "otherColumn" : null,

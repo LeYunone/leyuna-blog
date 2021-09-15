@@ -4,18 +4,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.dto.BlogDTO;
-import com.blog.api.dto.WebHistoryDTO;
 import com.blog.daoservice.dao.BlogDao;
-import com.blog.daoservice.dao.WebHistoryDao;
 import com.blog.daoservice.entry.Blog;
-import com.blog.daoservice.entry.WebHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import util.TransformationUtil;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -63,7 +59,7 @@ public class BlogExe {
      * 查询所有博客
      * @return
      */
-    public List<BlogDTO> getAllBlog(){
+    public List<BlogDTO> queryAllBlog(){
         List<Blog> blogs = blogDao.queryByCon(new Blog());
         List<BlogDTO> blogDTOS = TransformationUtil.copyToLists(blogs, BlogDTO.class);
         return blogDTOS;
@@ -129,11 +125,6 @@ public class BlogExe {
         Blog blog = blogDao.queryByid(id);
         BlogDTO blogDTO = TransformationUtil.copyToDTO(blog, BlogDTO.class);
         return blogDTO;
-    }
-
-    public int getBlogByTypeCount(Integer type){
-        int i = blogDao.queryCountByType(type);
-        return i;
     }
 
     public boolean updateBlog(BlogDTO blogDTO){

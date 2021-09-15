@@ -4,12 +4,13 @@ package com.blog.api.dto;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * (Comment)出参
  *
  * @author
- * @since 2021-09-14 19:30:08
+ * @since 2021-09-15 14:47:22
  */
 @Getter
 @Setter
@@ -61,5 +62,20 @@ public class CommentDTO {
      * 评论人地址
      */
     private String ip;
+
+    /**
+     * 博客编号
+     */
+    private Integer blogId;
+
+    /**
+     * 被回复人名
+     */
+    private String respondent;
+
+    /**
+     * 子评论
+     */
+    private List<CommentDTO> subComment;
 }
 

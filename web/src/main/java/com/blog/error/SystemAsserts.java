@@ -21,7 +21,9 @@ public enum  SystemAsserts {
     QUERY_SEARCH("站内搜索失败"),
 
     REQUEST_FAIL("请求失败"),
-    REQUEST_FREQUENTLY_FAIL("说慢一点，我缓一下");
+    REQUEST_FREQUENTLY_FAIL("说慢一点，我缓一下"),
+
+    COMMENT_FAIL("回复失败-系统故障");
 
     private final String msg;
 

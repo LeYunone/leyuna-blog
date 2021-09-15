@@ -15,7 +15,7 @@ import lombok.*;
  * (Comment)实体对象
  *
  * @author
- * @since 2021-09-14 19:29:57
+ * @since 2021-09-15 14:47:16
  */
 @Getter
 @Setter
@@ -27,7 +27,7 @@ import lombok.*;
 @TableName("comment")
 public class Comment implements Serializable {
 
-    private static final long serialVersionUID = -85124323071067027L;
+    private static final long serialVersionUID = -50170116670319906L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
@@ -79,6 +79,18 @@ public class Comment implements Serializable {
      */
     @TableField(value = "ip")
     private String ip;
+
+    /**
+     * 博客编号
+     */
+    @TableField(value = "blog_id")
+    private Integer blogId;
+
+    /**
+     * 被回复人名
+     */
+    @TableField(value = "respondent")
+    private String respondent;
 
 }
 

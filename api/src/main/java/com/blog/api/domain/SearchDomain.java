@@ -31,7 +31,7 @@ public class SearchDomain {
      */
     public boolean createBlogSearch(){
         //查询所有博客
-        List<BlogDTO> allBlog = blogExe.getAllBlog();
+        List<BlogDTO> allBlog = blogExe.queryAllBlog();
         //创建blog的索引库  field有id 和title
         try {
             luceneExe.addBlogDir(allBlog);
