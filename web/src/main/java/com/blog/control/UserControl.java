@@ -32,7 +32,7 @@ public class UserControl extends SysBaseControl {
             userDomain.userLock(login.getId());
             return successResponseBean();
         }else{
-            return failResponseBean(UserAsserts.LOGINT_FAIL);
+            return failResponseBean(UserAsserts.LOGINT_FAIL.getMsg());
         }
     }
 }

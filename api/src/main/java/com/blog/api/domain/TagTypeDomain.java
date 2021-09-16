@@ -3,7 +3,7 @@ package com.blog.api.domain;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.Error.ErrorMessage;
-import com.blog.api.command.ClearCacheExe;
+import com.blog.api.command.CacheExe;
 import com.blog.api.command.TagAndTypeExe;
 import com.blog.api.dto.ResultDTO;
 import com.blog.api.dto.TagDTO;
@@ -30,7 +30,7 @@ public class TagTypeDomain {
     private TagAndTypeExe tagAndTypeExe;
 
     @Autowired
-    private ClearCacheExe clearCacheExe;
+    private CacheExe clearCacheExe;
     /**
      * 根据id查询标签
      * @param ids

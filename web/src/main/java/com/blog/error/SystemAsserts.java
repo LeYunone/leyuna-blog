@@ -23,7 +23,9 @@ public enum  SystemAsserts {
     REQUEST_FAIL("请求失败"),
     REQUEST_FREQUENTLY_FAIL("说慢一点，我缓一下"),
 
-    COMMENT_FAIL("回复失败-系统故障");
+    COMMENT_FAIL("回复失败-系统故障"),
+
+    UPDOWN_IMG_FAIL("解析图片失败-系统故障");
 
     private final String msg;
 

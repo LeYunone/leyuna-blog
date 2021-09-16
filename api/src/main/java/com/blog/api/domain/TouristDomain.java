@@ -1,6 +1,7 @@
 package com.blog.api.domain;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.blog.api.command.CacheExe;
 import com.blog.api.command.CommentExe;
 import com.blog.api.dto.CommentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class TouristDomain {
 
     @Autowired
     private CommentExe commentExe;
+    @Autowired
+    private CacheExe cacheExe;
     /**
      * 评论== 添加
      * @return
@@ -45,18 +48,24 @@ public class TouristDomain {
      */
     public Page<CommentDTO> getComment(Integer index,Integer size,Integer blogId,Integer type){
         Page<CommentDTO> commentDTOPage=null;
-        switch (type){
-            case 0:
-                //0为最新评论
-                commentDTOPage = commentExe.queryComment(index, size, blogId);
-                break;
-            case 1:
-                //1 根据时间和热度一起排序
-
-                break;
-            default:
-                break;
-        }
+        commentDTOPage=commentExe.queryComment(index, size, blogId, type);
         return commentDTOPage;
+    }
+
+    /**
+     * 用户请求上传图片
+     * @return
+     */
+    public boolean requestUpDownImg(String ip){
+        boolean b = cacheExe.hasCacheByKey(ip);
+        if(b){
+            return false;
+        }
+//       cacheExe.setCacheKey(ip,86400);
+        return true;
+    }
+
+    public String getToDayHeadImg(String ip){
+        return cacheExe.getCacheByKey(ip);
     }
 }

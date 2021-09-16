@@ -1,16 +1,16 @@
 package com.blog.control;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.domain.TouristDomain;
 import com.blog.api.dto.CommentDTO;
 import com.blog.bean.CommentBean;
 import com.blog.bean.ResponseBean;
 import com.blog.error.SystemAsserts;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import util.TransformationUtil;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author pengli
@@ -47,7 +47,23 @@ public class TouristControl extends SysBaseControl{
      * @return
      */
     @RequestMapping("/comment/blog")
-    public ResponseBean getComment(Integer index,Integer size,Integer blogId){
+    public ResponseBean getComment(Integer index,Integer size,Integer blogId,@RequestParam(required = false) Integer type){
+        Page<CommentDTO> comment = touristDomain.getComment(index, size, blogId, type);
+        return successResponseBean(comment);
+    }
 
+    /**
+     * 用户请求上传头像图片
+     */
+    @RequestMapping("/requestUpImg")
+    public ResponseBean requestUpImg(HttpServletRequest request){
+        String remoteAddr = request.getRemoteAddr();
+        boolean b = touristDomain.requestUpDownImg(remoteAddr);
+        if(b){
+            //去找今天这个用户设置的头像
+            return successResponseBean(touristDomain.getToDayHeadImg(remoteAddr));
+        }else{
+            return failResponseBean(touristDomain.getToDayHeadImg(remoteAddr));
+        }
     }
 }

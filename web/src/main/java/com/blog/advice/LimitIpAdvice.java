@@ -23,7 +23,7 @@ public class LimitIpAdvice {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    @Pointcut("execution(public * com.blog.control.TouristControl.*())")
+    @Pointcut("execution(public * com.blog.control.TouristControl.commpent())")
     public void before(){
     }
 

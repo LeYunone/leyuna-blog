@@ -39,4 +39,26 @@ public class UpLoadUtil {
             return false;
         }
     }
+
+    /**
+     * 自定义名字上传图片
+     * @param file
+     * @return
+     */
+    public static boolean imgUpLoadFromClientCustomName(MultipartFile file,String name){
+        String fileName=file.getOriginalFilename();
+        //目的服务器存储文件的位置
+        String path="c:/img/avatar";
+        File serverFile=new File(path+"/"+name+fileName.substring(fileName.lastIndexOf(".")));
+        if(!serverFile.getParentFile().exists()){
+            //创建服务器日期文件夹
+            serverFile.getParentFile().mkdirs();
+        }
+        try {
+            file.transferTo(serverFile);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
 }

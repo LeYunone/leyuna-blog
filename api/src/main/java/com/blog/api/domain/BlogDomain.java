@@ -37,7 +37,7 @@ public class BlogDomain {
     @Autowired
     private TagAndTypeExe tagAndTypeExe;
     @Autowired
-    private ClearCacheExe clearCacheExe;
+    private CacheExe clearCacheExe;
     @Autowired
     private LuceneExe luceneExe;
     /**
@@ -51,7 +51,6 @@ public class BlogDomain {
     public Page<BlogDTO> getBlogsByPage(Integer index,Integer size,Integer type,String tags,String conditionName){
         Page<BlogDTO> result=null;
         //查询所有
-        clearCacheExe.clearBlogQueryCache();
         if(type==null && StringUtils.isEmpty(tags)){
             result = blogExe.getAllBlogByPage(index, size,conditionName);
         }else{

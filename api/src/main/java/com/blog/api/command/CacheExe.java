@@ -9,6 +9,7 @@ import util.SpringUtil;
 
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author pengli
@@ -17,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * 清除缓存指令
  */
 @Service
-public class ClearCacheExe {
+public class CacheExe {
     @Autowired
     private  StringRedisTemplate stringRedisTemplate;
 
@@ -136,5 +137,17 @@ public class ClearCacheExe {
             });
             stringRedisTemplate.delete(copyOnWriteArrayList);
         }
+    }
+
+    public boolean hasCacheByKey(String key){
+        return stringRedisTemplate.hasKey(key);
+    }
+
+    public void setCacheKey(String key,String value,long sec){
+        stringRedisTemplate.opsForValue().set(key,value,sec*1, TimeUnit.SECONDS);
+    }
+
+    public String getCacheByKey(String key){
+        return stringRedisTemplate.opsForValue().get(key);
     }
 }

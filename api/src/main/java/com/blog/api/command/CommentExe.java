@@ -39,12 +39,17 @@ public class CommentExe {
     }
 
     /**
-     * 分页查询指定博客下的最新评论
+     * 分页查询指定博客下的评论
      * @return
      */
-    public Page<CommentDTO> queryComment(Integer index ,Integer size,Integer blogId){
-        IPage<Comment> commentIPage = commentDao.selectNewCommentByBlogId(index,size,blogId);
-
+    public Page<CommentDTO> queryComment(Integer index ,Integer size,Integer blogId,Integer type){
+        IPage<Comment> commentIPage =null;
+        if(type==0){
+            commentIPage=commentDao.selectNewCommentByBlogId(index,size,blogId);
+        }
+        if(type==1){
+            commentIPage=commentDao.selectNewAndGoodsCommentByBlogId(index,size,blogId);
+        }
         Page<CommentDTO> result=new Page<>(index,size);
         commentIPage.getTotal();
         result.setTotal(commentIPage.getTotal());
@@ -57,19 +62,6 @@ public class CommentExe {
             c.setSubComment(TransformationUtil.copyToLists(subComment,CommentDTO.class));
         });
         result.setRecords(commentDTOS);
-        return result;
-    }
-
-    /**
-     * 分页查询指定博客下的最新最热评论
-     * @return
-     */
-    public Page<CommentDTO> queryNewGoodsComment(Integer index ,Integer size,Integer blogId){
-        IPage<Comment> commentIPage = commentDao.selectNewAndGoodsCommentByBlogId(index,size,blogId);
-
-        Page<CommentDTO> result=new Page<>(index,size);
-        result.setTotal(commentIPage.getTotal());
-        result.setRecords(TransformationUtil.copyToLists(commentIPage.getRecords(),CommentDTO.class));
         return result;
     }
 }

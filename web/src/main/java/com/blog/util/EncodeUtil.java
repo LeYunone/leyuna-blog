@@ -2,6 +2,8 @@ package com.blog.util;
 
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.blog.error.SystemAsserts;
+import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -16,11 +18,11 @@ import java.io.*;
 public class EncodeUtil {
 
     /**
-     * 文件转字符串格式
+     * 文件路径转字符串格式
      * @param path  文件路径
      * @return
      */
-    public static String FileToString(String path){
+    public static String FilePathTo64String(String path){
         InputStream is=null;
         byte [] bytes = null;
         try {
@@ -38,6 +40,22 @@ public class EncodeUtil {
         }
         BASE64Encoder encoder = new BASE64Encoder();
         return encoder.encode(bytes);//返回Base64编码过的字节数组字符串
+    }
+
+    /**
+     * 现文件转成64编码
+     * @param file
+     * @return
+     */
+    public static String FileTo64String(MultipartFile file){
+        byte[] bytes=null;
+        try {
+            bytes = file.getBytes();
+        } catch (IOException e) {
+            throw new RuntimeException(SystemAsserts.UPDOWN_IMG_FAIL.getMsg());
+        }
+        BASE64Encoder encoder = new BASE64Encoder();
+        return encoder.encode(bytes);
     }
 
     /**
