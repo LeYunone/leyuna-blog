@@ -8,5 +8,9 @@ package com.blog.api.constant;
  */
 public class ServerCode {
 
+    //服务器头像文件地址
     public static String SERVER_HEAD_IMG_ADDR="https://www.leyuna.xyz/image/avatar/";
+
+    //服务器默认头像地址
+    public static String SERVER_HEAD_IMG_DEFAULT="https://www.leyuna.xyz/image/avatar/default.jpg";
 }

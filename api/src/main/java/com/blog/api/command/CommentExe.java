@@ -1,6 +1,7 @@
 package com.blog.api.command;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.dto.CommentDTO;
 import com.blog.daoservice.dao.CommentDao;
@@ -28,6 +29,7 @@ public class CommentExe {
      * @return
      */
     public CommentDTO addComment(CommentDTO commentDTO){
+        if(StringUtils.isEmpty(commentDTO.getInformation())) commentDTO.setInformation("不愿透露位置的某人");
         commentDTO.setCreateTime(LocalDateTime.now());
         commentDTO.setGoods(0);
         Comment comment = TransformationUtil.copyToDTO(commentDTO, Comment.class);

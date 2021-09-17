@@ -1,6 +1,9 @@
 package com.blog.control;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.blog.api.command.CacheExe;
+import com.blog.api.constant.ServerCode;
 import com.blog.api.domain.TouristDomain;
 import com.blog.api.dto.CommentDTO;
 import com.blog.bean.CommentBean;
@@ -24,13 +27,25 @@ public class TouristControl extends SysBaseControl{
 
     @Autowired
     private TouristDomain touristDomain;
+    @Autowired
+    private CacheExe cacheExe;
 
     /**
      * 用户评论
      * @return
      */
-    @RequestMapping("/commpent")
-    public ResponseBean commpent(@RequestBody CommentBean commentBean){
+    @PostMapping("/commpent")
+    public ResponseBean commpent(@RequestBody CommentBean commentBean,HttpServletRequest request){
+        String remoteAddr = request.getRemoteAddr();
+        commentBean.setIp(remoteAddr);
+        if(StringUtils.isEmpty(commentBean.getCommentHead())){
+            String touristOldHead = touristDomain.getTouristOldHead(remoteAddr);
+            if(StringUtils.isNotEmpty(touristOldHead)){
+                commentBean.setCommentHead(touristOldHead);
+            }else{
+                commentBean.setCommentHead(ServerCode.SERVER_HEAD_IMG_DEFAULT);
+            }
+        }
         CommentDTO commentDTO = TransformationUtil.copyToDTO(commentBean, CommentDTO.class);
         CommentDTO comment = touristDomain.comment(commentDTO);
         if(comment!=null){
@@ -58,12 +73,12 @@ public class TouristControl extends SysBaseControl{
     @RequestMapping("/requestUpImg")
     public ResponseBean requestUpImg(HttpServletRequest request){
         String remoteAddr = request.getRemoteAddr();
-        boolean b = touristDomain.requestUpDownImg(remoteAddr);
+        boolean b = cacheExe.hasCacheByKey(remoteAddr);
         if(b){
             //去找今天这个用户设置的头像
-            return successResponseBean(touristDomain.getToDayHeadImg(remoteAddr));
+            return failResponseBean(cacheExe.getCacheByKey(remoteAddr));
         }else{
-            return failResponseBean(touristDomain.getToDayHeadImg(remoteAddr));
+            return successResponseBean();
         }
     }
 }

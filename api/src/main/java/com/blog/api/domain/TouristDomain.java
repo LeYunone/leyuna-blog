@@ -1,8 +1,10 @@
 package com.blog.api.domain;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.api.command.CacheExe;
 import com.blog.api.command.CommentExe;
+import com.blog.api.command.FileExe;
 import com.blog.api.dto.CommentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,8 @@ public class TouristDomain {
     private CommentExe commentExe;
     @Autowired
     private CacheExe cacheExe;
+    @Autowired
+    private FileExe fileExe;
     /**
      * 评论== 添加
      * @return
@@ -52,20 +56,20 @@ public class TouristDomain {
         return commentDTOPage;
     }
 
-    /**
-     * 用户请求上传图片
-     * @return
-     */
-    public boolean requestUpDownImg(String ip){
-        boolean b = cacheExe.hasCacheByKey(ip);
-        if(b){
-            return false;
-        }
-//       cacheExe.setCacheKey(ip,86400);
-        return true;
+    public String getTouristOldHead(String ip){
+        String touristHead = fileExe.getTouristHead(ip);
+        return touristHead;
     }
 
-    public String getToDayHeadImg(String ip){
-        return cacheExe.getCacheByKey(ip);
+    public boolean addOrUpdateHead(String head,String ip){
+        String touristHead = fileExe.getTouristHead(ip);
+        boolean is=true;
+        if(StringUtils.isNotEmpty(touristHead)){
+            //说明需要更新头像
+            is=fileExe.updateTouristHead(head, ip);
+        }else{
+            is=fileExe.addTouristHead(head,ip);
+        }
+        return is;
     }
 }

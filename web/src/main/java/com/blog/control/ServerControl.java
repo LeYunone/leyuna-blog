@@ -1,7 +1,9 @@
 package com.blog.control;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.blog.api.command.CacheExe;
 import com.blog.api.constant.ServerCode;
+import com.blog.api.domain.TouristDomain;
 import com.blog.api.domain.UserDomain;
 import com.blog.bean.ResponseBean;
 import com.blog.error.SystemAsserts;
@@ -9,11 +11,13 @@ import com.blog.util.EncodeUtil;
 import com.blog.util.UpLoadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -30,6 +34,8 @@ public class ServerControl extends SysBaseControl {
     private UserDomain userDomain;
     @Autowired
     private CacheExe cacheExe;
+    @Autowired
+    private TouristDomain touristDomain;
     @PostMapping("/updownimg")
     public ResponseBean upDownImgToServer( MultipartFile file) {
         userDomain.checkLock();
@@ -50,15 +56,42 @@ public class ServerControl extends SysBaseControl {
      * @return
      */
     @PostMapping("/tourist/upImg")
-    public ResponseBean touristDoUpImg(MultipartFile file, HttpServletRequest request){
+    public ResponseBean touristDoUpImg( MultipartFile file, HttpServletRequest request){
         String remoteAddr = request.getRemoteAddr();
-        boolean b = UpLoadUtil.imgUpLoadFromClientCustomName(file, remoteAddr);
-        if(b){
-            //拼装图片位置
 
+        if(file==null){
+            //如果文件为空，三种情况，一是使用今天换头像的缓存，二是用以前的照片，三是使用系统默认的照片
+            if(cacheExe.hasCacheByKey(remoteAddr)){
+                return successResponseBean(cacheExe.getCacheByKey(remoteAddr));
+            }else{
+                String touristOldHead = touristDomain.getTouristOldHead(remoteAddr);
+                if(StringUtils.isNotEmpty(touristOldHead)){
+                    return successResponseBean(touristOldHead);
+                }else{
+                    return successResponseBean(ServerCode.SERVER_HEAD_IMG_DEFAULT);
+                }
+            }
+        }else{
+            String fileName=file.getOriginalFilename();
 
-            //加入今天的缓存中
-            cacheExe.setCacheKey(remoteAddr, ServerCode.SERVER_HEAD_IMG_ADDR,43200);
+            String sufName=fileName.substring(fileName.lastIndexOf("."));
+            boolean b = UpLoadUtil.imgUpLoadFromClientCustomName(file,sufName, fileName);
+            if(b){
+                //拼装图片位置
+                String value=ServerCode.SERVER_HEAD_IMG_ADDR+fileName+sufName;
+                //加入今天的缓存中
+                cacheExe.setCacheKey(remoteAddr, value,43200);
+                //添加到数据库中
+                boolean b1 = touristDomain.addOrUpdateHead(value, remoteAddr);
+                if(!b1){
+                    cacheExe.clearCacheKey(remoteAddr);
+                    return failResponseBean(SystemAsserts.UPLOCAD_IMG_FAIL.getMsg());
+                }
+                ResponseBean responseBean = successResponseBean(value);
+                responseBean.setObjData(remoteAddr);
+                return responseBean;
+            }
         }
+        return failResponseBean(SystemAsserts.UPLOCAD_IMG_FAIL.getMsg());
     }
 }

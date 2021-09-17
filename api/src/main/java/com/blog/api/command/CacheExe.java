@@ -150,4 +150,8 @@ public class CacheExe {
     public String getCacheByKey(String key){
         return stringRedisTemplate.opsForValue().get(key);
     }
+
+    public void clearCacheKey(String key){
+        stringRedisTemplate.delete(key);
+    }
 }

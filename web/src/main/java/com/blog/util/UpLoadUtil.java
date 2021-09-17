@@ -45,11 +45,10 @@ public class UpLoadUtil {
      * @param file
      * @return
      */
-    public static boolean imgUpLoadFromClientCustomName(MultipartFile file,String name){
-        String fileName=file.getOriginalFilename();
+    public static boolean imgUpLoadFromClientCustomName(MultipartFile file,String suf,String name){
         //目的服务器存储文件的位置
         String path="c:/img/avatar";
-        File serverFile=new File(path+"/"+name+fileName.substring(fileName.lastIndexOf(".")));
+        File serverFile=new File(path+"/"+name+suf);
         if(!serverFile.getParentFile().exists()){
             //创建服务器日期文件夹
             serverFile.getParentFile().mkdirs();

@@ -1,9 +1,15 @@
 package com.blog.bean;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
+
 /**
  * @author pengli
  * @create 2021-09-15 09:06
  */
+@Getter
+@Setter
 public class CommentBean {
 
     //评论内容
@@ -26,5 +32,7 @@ public class CommentBean {
 
     //被回复人
     private String respondent;
+
+    private String ip;
 
 }

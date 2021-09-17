@@ -1,7 +1,9 @@
 package com.blog.api.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +33,7 @@ public class CommentDTO {
     /**
      * 评论时间
      */
+    @JsonFormat( pattern = "yyyy-MM-dd")
     private LocalDateTime createTime;
 
     /**
