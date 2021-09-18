@@ -66,4 +66,15 @@ public class CommentExe {
         result.setRecords(commentDTOS);
         return result;
     }
+
+    /**
+     * 点赞加一
+     * @return
+     */
+    public boolean updateGoods(Integer commentId){
+        Comment byId = commentDao.getById(commentId);
+        Integer goods = byId.getGoods();
+        boolean b = commentDao.updateGoodsById(commentId, goods + 1);
+        return b;
+    }
 }

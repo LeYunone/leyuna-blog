@@ -2,6 +2,7 @@ package com.blog.daoservice.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.daoservice.dao.CommentDao;
@@ -57,6 +58,10 @@ public class CommentDaoImpl extends SysBaseMpImpl<CommentMapper, Comment> implem
         List<Comment> comments = this.baseMapper.selectList(new QueryWrapper<Comment>().lambda()
                 .eq(Comment::getFatherCommentId, commentId).orderByDesc(Comment::getGoods, Comment::getCreateTime));
         return comments;
+    }
+
+    public boolean updateGoodsById(Integer commentId,Integer count){
+        return this.update(new UpdateWrapper<Comment>().lambda().eq(Comment::getId,commentId).set(Comment::getGoods,count));
     }
 }
 

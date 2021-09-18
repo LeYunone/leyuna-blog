@@ -80,5 +80,10 @@ public class CommentDTO {
      * 子评论
      */
     private List<CommentDTO> subComment;
+
+    /**
+     * 判断是否是站主
+     */
+    private String admin ;
 }
 

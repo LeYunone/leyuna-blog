@@ -21,5 +21,7 @@ public interface CommentDao extends SysBaseDao<Comment> {
     IPage<Comment> selectNewAndGoodsCommentByBlogId(Integer index, Integer size, Integer blogId);
 
     List<Comment> selectSubComment(Integer commentId);
+
+    boolean updateGoodsById(Integer commentId,Integer count);
 }
 

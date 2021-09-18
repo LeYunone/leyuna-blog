@@ -73,12 +73,10 @@ public class ServerControl extends SysBaseControl {
             }
         }else{
             String fileName=file.getOriginalFilename();
-
-            String sufName=fileName.substring(fileName.lastIndexOf("."));
-            boolean b = UpLoadUtil.imgUpLoadFromClientCustomName(file,sufName, fileName);
+            boolean b = UpLoadUtil.imgUpLoadFromClientCustomName(file,null, fileName);
             if(b){
                 //拼装图片位置
-                String value=ServerCode.SERVER_HEAD_IMG_ADDR+fileName+sufName;
+                String value=ServerCode.SERVER_HEAD_IMG_ADDR+fileName;
                 //加入今天的缓存中
                 cacheExe.setCacheKey(remoteAddr, value,43200);
                 //添加到数据库中

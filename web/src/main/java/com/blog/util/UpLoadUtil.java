@@ -1,5 +1,6 @@
 package com.blog.util;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -48,7 +49,12 @@ public class UpLoadUtil {
     public static boolean imgUpLoadFromClientCustomName(MultipartFile file,String suf,String name){
         //目的服务器存储文件的位置
         String path="c:/img/avatar";
-        File serverFile=new File(path+"/"+name+suf);
+        File serverFile=null;
+        if(StringUtils.isEmpty(suf)){
+            serverFile=new File(path+"/"+name);
+        }else{
+            serverFile=new File(path+"/"+name+suf);
+        }
         if(!serverFile.getParentFile().exists()){
             //创建服务器日期文件夹
             serverFile.getParentFile().mkdirs();

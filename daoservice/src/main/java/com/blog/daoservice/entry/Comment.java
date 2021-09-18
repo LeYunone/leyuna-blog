@@ -92,5 +92,8 @@ public class Comment implements Serializable {
     @TableField(value = "respondent")
     private String respondent;
 
+    @TableField(value = "admin")
+    private String admin;
+
 }
 

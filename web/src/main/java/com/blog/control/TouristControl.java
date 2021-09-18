@@ -9,6 +9,7 @@ import com.blog.api.dto.CommentDTO;
 import com.blog.bean.CommentBean;
 import com.blog.bean.ResponseBean;
 import com.blog.error.SystemAsserts;
+import com.blog.error.UserAsserts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import util.TransformationUtil;
@@ -36,17 +37,24 @@ public class TouristControl extends SysBaseControl{
      */
     @PostMapping("/commpent")
     public ResponseBean commpent(@RequestBody CommentBean commentBean,HttpServletRequest request){
+        CommentDTO commentDTO = TransformationUtil.copyToDTO(commentBean, CommentDTO.class);
         String remoteAddr = request.getRemoteAddr();
-        commentBean.setIp(remoteAddr);
-        if(StringUtils.isEmpty(commentBean.getCommentHead())){
+        commentDTO.setIp(remoteAddr);
+        if(StringUtils.isEmpty(commentDTO.getCommentHead())){
             String touristOldHead = touristDomain.getTouristOldHead(remoteAddr);
             if(StringUtils.isNotEmpty(touristOldHead)){
-                commentBean.setCommentHead(touristOldHead);
+                commentDTO.setCommentHead(touristOldHead);
             }else{
-                commentBean.setCommentHead(ServerCode.SERVER_HEAD_IMG_DEFAULT);
+                commentDTO.setCommentHead(ServerCode.SERVER_HEAD_IMG_DEFAULT);
             }
         }
-        CommentDTO commentDTO = TransformationUtil.copyToDTO(commentBean, CommentDTO.class);
+        if(commentDTO.getInformation().equals("a3201360")){
+            //站主通道
+            commentDTO.setInformation("365627310@qq.com");
+            commentDTO.setCommentHead(ServerCode.SERVER_HEAD_IMG_ADMIN);
+            commentDTO.setAdmin("admin");
+        }
+
         CommentDTO comment = touristDomain.comment(commentDTO);
         if(comment!=null){
             return successResponseBean(comment);
@@ -80,5 +88,14 @@ public class TouristControl extends SysBaseControl{
         }else{
             return successResponseBean();
         }
+    }
+
+    @RequestMapping("/goods")
+    public ResponseBean goodsByComment(Integer commentId,HttpServletRequest request){
+        boolean b = touristDomain.addGoods(commentId, request.getRemoteAddr());
+        if(b) {
+            return successResponseBean();
+        }
+        return failResponseBean(UserAsserts.GOODS_COMMENT_FAIL.getMsg());
     }
 }

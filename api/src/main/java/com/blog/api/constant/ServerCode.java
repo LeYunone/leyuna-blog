@@ -13,4 +13,7 @@ public class ServerCode {
 
     //服务器默认头像地址
     public static String SERVER_HEAD_IMG_DEFAULT="https://www.leyuna.xyz/image/avatar/default.jpg";
+
+    //服务器站主头像地址
+    public static String SERVER_HEAD_IMG_ADMIN = "https://www.leyuna.xyz/image/avatar/admin.jpg";
 }

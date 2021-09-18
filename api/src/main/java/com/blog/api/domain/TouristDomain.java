@@ -72,4 +72,20 @@ public class TouristDomain {
         }
         return is;
     }
+
+    /**
+     * 点赞
+     * @return
+     */
+    public boolean addGoods(Integer commentId,String ip){
+        if(cacheExe.hasCacheByKey(ip+":"+commentId)){
+            return false;
+        }else{
+            boolean b = commentExe.updateGoods(commentId);
+            if(b){
+                cacheExe.setCacheKey(ip+":"+commentId,"yes",86400);
+            }
+            return b;
+        }
+    }
 }

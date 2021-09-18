@@ -35,4 +35,6 @@ public class CommentBean {
 
     private String ip;
 
+    private String admin;
+
 }
