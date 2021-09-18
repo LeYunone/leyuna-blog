@@ -8,6 +8,7 @@ import com.blog.api.domain.UserDomain;
 import com.blog.bean.ResponseBean;
 import com.blog.error.SystemAsserts;
 import com.blog.util.EncodeUtil;
+import com.blog.util.ServerUtil;
 import com.blog.util.UpLoadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,12 +58,12 @@ public class ServerControl extends SysBaseControl {
      */
     @PostMapping("/tourist/upImg")
     public ResponseBean touristDoUpImg( MultipartFile file, HttpServletRequest request){
-        String remoteAddr = request.getRemoteAddr();
+        String remoteAddr = ServerUtil.getClientIp(request);
 
         if(file==null){
             //如果文件为空，三种情况，一是使用今天换头像的缓存，二是用以前的照片，三是使用系统默认的照片
-            if(cacheExe.hasCacheByKey(remoteAddr)){
-                return successResponseBean(cacheExe.getCacheByKey(remoteAddr));
+            if(cacheExe.hasCacheByKey(remoteAddr+":head")){
+                return successResponseBean(cacheExe.getCacheByKey(remoteAddr+":head"));
             }else{
                 String touristOldHead = touristDomain.getTouristOldHead(remoteAddr);
                 if(StringUtils.isNotEmpty(touristOldHead)){
@@ -78,11 +79,11 @@ public class ServerControl extends SysBaseControl {
                 //拼装图片位置
                 String value=ServerCode.SERVER_HEAD_IMG_ADDR+fileName;
                 //加入今天的缓存中
-                cacheExe.setCacheKey(remoteAddr, value,43200);
+                cacheExe.setCacheKey(remoteAddr+":head", value,43200);
                 //添加到数据库中
                 boolean b1 = touristDomain.addOrUpdateHead(value, remoteAddr);
                 if(!b1){
-                    cacheExe.clearCacheKey(remoteAddr);
+                    cacheExe.clearCacheKey(remoteAddr+":head");
                     return failResponseBean(SystemAsserts.UPLOCAD_IMG_FAIL.getMsg());
                 }
                 ResponseBean responseBean = successResponseBean(value);

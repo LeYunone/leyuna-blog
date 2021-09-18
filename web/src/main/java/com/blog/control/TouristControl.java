@@ -10,6 +10,7 @@ import com.blog.bean.CommentBean;
 import com.blog.bean.ResponseBean;
 import com.blog.error.SystemAsserts;
 import com.blog.error.UserAsserts;
+import com.blog.util.ServerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import util.TransformationUtil;
@@ -38,7 +39,7 @@ public class TouristControl extends SysBaseControl{
     @PostMapping("/commpent")
     public ResponseBean commpent(@RequestBody CommentBean commentBean,HttpServletRequest request){
         CommentDTO commentDTO = TransformationUtil.copyToDTO(commentBean, CommentDTO.class);
-        String remoteAddr = request.getRemoteAddr();
+        String remoteAddr = ServerUtil.getClientIp(request);
         commentDTO.setIp(remoteAddr);
         if(StringUtils.isEmpty(commentDTO.getCommentHead())){
             String touristOldHead = touristDomain.getTouristOldHead(remoteAddr);
@@ -80,11 +81,11 @@ public class TouristControl extends SysBaseControl{
      */
     @RequestMapping("/requestUpImg")
     public ResponseBean requestUpImg(HttpServletRequest request){
-        String remoteAddr = request.getRemoteAddr();
-        boolean b = cacheExe.hasCacheByKey(remoteAddr);
+        String remoteAddr = ServerUtil.getClientIp(request);
+        boolean b = cacheExe.hasCacheByKey(remoteAddr+":head");
         if(b){
             //去找今天这个用户设置的头像
-            return failResponseBean(cacheExe.getCacheByKey(remoteAddr));
+            return failResponseBean(cacheExe.getCacheByKey(remoteAddr+":head"));
         }else{
             return successResponseBean();
         }
@@ -92,7 +93,7 @@ public class TouristControl extends SysBaseControl{
 
     @RequestMapping("/goods")
     public ResponseBean goodsByComment(Integer commentId,HttpServletRequest request){
-        boolean b = touristDomain.addGoods(commentId, request.getRemoteAddr());
+        boolean b = touristDomain.addGoods(commentId, ServerUtil.getClientIp(request));
         if(b) {
             return successResponseBean();
         }

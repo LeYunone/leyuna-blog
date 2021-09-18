@@ -1,6 +1,7 @@
 package com.blog.advice;
 
 import com.blog.error.SystemAsserts;
+import com.blog.util.ServerUtil;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -38,7 +39,7 @@ public class LimitIpAdvice {
             throw new RuntimeException(SystemAsserts.REQUEST_FAIL.getMsg());
         }
         //获取此次请求用户ip
-        String remoteAddr = request.getRemoteAddr();
+        String remoteAddr = ServerUtil.getClientIp(request);
         if(!stringRedisTemplate.hasKey(remoteAddr)){
             //加入次用户ip限制，最快一分钟评论一次
             stringRedisTemplate.opsForValue().set(remoteAddr,"1",60*1, TimeUnit.SECONDS);
