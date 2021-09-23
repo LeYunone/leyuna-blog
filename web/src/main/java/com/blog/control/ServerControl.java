@@ -78,14 +78,13 @@ public class ServerControl extends SysBaseControl {
             if(b){
                 //拼装图片位置
                 String value=ServerCode.SERVER_HEAD_IMG_ADDR+fileName;
-                //加入今天的缓存中
-                cacheExe.setCacheKey(remoteAddr+":head", value,43200);
                 //添加到数据库中
                 boolean b1 = touristDomain.addOrUpdateHead(value, remoteAddr);
                 if(!b1){
-                    cacheExe.clearCacheKey(remoteAddr+":head");
                     return failResponseBean(SystemAsserts.UPLOCAD_IMG_FAIL.getMsg());
                 }
+                //加入今天的缓存中
+                cacheExe.setCacheKey(remoteAddr+":head", value,43200);
                 ResponseBean responseBean = successResponseBean(value);
                 responseBean.setObjData(remoteAddr);
                 return responseBean;

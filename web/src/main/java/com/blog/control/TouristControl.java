@@ -41,21 +41,21 @@ public class TouristControl extends SysBaseControl{
         CommentDTO commentDTO = TransformationUtil.copyToDTO(commentBean, CommentDTO.class);
         String remoteAddr = ServerUtil.getClientIp(request);
         commentDTO.setIp(remoteAddr);
-        if(StringUtils.isEmpty(commentDTO.getCommentHead())){
-            String touristOldHead = touristDomain.getTouristOldHead(remoteAddr);
-            if(StringUtils.isNotEmpty(touristOldHead)){
-                commentDTO.setCommentHead(touristOldHead);
-            }else{
-                commentDTO.setCommentHead(ServerCode.SERVER_HEAD_IMG_DEFAULT);
-            }
-        }
         if(commentDTO.getInformation().equals("a3201360")){
             //站主通道
             commentDTO.setInformation("365627310@qq.com");
             commentDTO.setCommentHead(ServerCode.SERVER_HEAD_IMG_ADMIN);
             commentDTO.setAdmin("admin");
+        }else{
+            if(StringUtils.isEmpty(commentDTO.getCommentHead())){
+                String touristOldHead = touristDomain.getTouristOldHead(remoteAddr);
+                if(StringUtils.isNotEmpty(touristOldHead)){
+                    commentDTO.setCommentHead(touristOldHead);
+                }else{
+                    commentDTO.setCommentHead(ServerCode.SERVER_HEAD_IMG_DEFAULT);
+                }
+            }
         }
-
         CommentDTO comment = touristDomain.comment(commentDTO);
         if(comment!=null){
             return successResponseBean(comment);
