@@ -24,7 +24,7 @@ public class LimitIpAdvice {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    @Pointcut("execution(public * com.blog.control.TouristControl.commpent())")
+    @Pointcut("execution(public * com.blog.control.TouristControl.commpent(..))")
     public void before(){
     }
 
@@ -42,7 +42,7 @@ public class LimitIpAdvice {
         String remoteAddr = ServerUtil.getClientIp(request);
         if(!stringRedisTemplate.hasKey(remoteAddr)){
             //加入次用户ip限制，最快一分钟评论一次
-            stringRedisTemplate.opsForValue().set(remoteAddr,"1",60*1, TimeUnit.SECONDS);
+            stringRedisTemplate.opsForValue().set(remoteAddr,"1",30*1, TimeUnit.SECONDS);
         }else{
             throw new RuntimeException(SystemAsserts.REQUEST_FREQUENTLY_FAIL.getMsg());
         }
