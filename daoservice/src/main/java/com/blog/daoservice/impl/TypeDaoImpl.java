@@ -25,26 +25,6 @@ import java.util.Map;
  */
 @Service
 public class TypeDaoImpl extends SysBaseMpImpl<TypeMapper,Type> implements TypeDao {
-
-    @Override
-    public List<Type> selectByIds(List<Integer> ids) {
-        List<Type> types = this.baseMapper.selectBatchIds(ids);
-        return types;
-    }
-
-    @Override
-    public Type selectById(Integer id) {
-        Type type = this.baseMapper.selectById(id);
-        return type;
-    }
-
-    @Transactional
-    @Override
-    public int deleteTypesByIds(List<Integer> ids) {
-        int i = this.baseMapper.deleteBatchIds(ids);
-        return i;
-    }
-
     /**
      * 分页模糊查询
      * @param

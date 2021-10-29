@@ -60,7 +60,7 @@ public class BlogExe {
      * @return
      */
     public List<BlogDTO> queryAllBlog(){
-        List<Blog> blogs = blogDao.queryByCon(new Blog());
+        List<Blog> blogs = blogDao.selectByCon(new Blog());
         List<BlogDTO> blogDTOS = TransformationUtil.copyToLists(blogs, BlogDTO.class);
         return blogDTOS;
     }
@@ -79,7 +79,7 @@ public class BlogExe {
         if(StringUtils.isNotEmpty(conditionName)){
             blogIPage=blogDao.queryByBlogName(conditionName, page);
         }else{
-            blogIPage=blogDao.queryByConPageOrderCreateTime(new Blog(), page,0);
+            blogIPage=blogDao.selectByConPageOrderCreateTime(new Blog(), page,0);
         }
         //转换结果集
         Page<BlogDTO> blogDTOPage=new Page<>(index,size);
@@ -106,7 +106,7 @@ public class BlogExe {
             blogIPage = blogDao.queryByTagName(Blog.builder().tag(tag).build(), page);
         }else{
             //根据分类查询
-            blogIPage = blogDao.queryByConPageOrderCreateTime(Blog.builder().type(type).build(), page,0);
+            blogIPage = blogDao.selectByConPageOrderCreateTime(Blog.builder().type(type).build(), page,0);
         }
         //转换结果集
         Page<BlogDTO> blogDTOPage=new Page<>(index,size);
@@ -122,7 +122,7 @@ public class BlogExe {
      */
     @Cacheable(cacheNames = "getBlogById")
     public BlogDTO getBlogById(Integer id){
-        Blog blog = blogDao.queryByid(id);
+        Blog blog = blogDao.selectById(id);
         BlogDTO blogDTO = TransformationUtil.copyToDTO(blog, BlogDTO.class);
         return blogDTO;
     }

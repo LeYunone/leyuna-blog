@@ -50,7 +50,7 @@ public class TagAndTypeExe {
         Page<Tag> page=new Page(pageIndex,pageSize);
         //如果有模糊查询条件则走模糊查询
         if(StringUtils.isEmpty(conditionName)){
-            tagIPage = tagDao.queryByConPage(new Tag(), page);
+            tagIPage = tagDao.selectByConPage(new Tag(), page);
         }else{
             tagIPage = tagDao.selectByLikeNamePage(new Tag(),page,conditionName);
         }
@@ -91,7 +91,7 @@ public class TagAndTypeExe {
         }
         //如果有模糊查询条件则走模糊查询
         if(StringUtils.isEmpty(conditionName)){
-            typeIPage = typeDao.queryByConPage(new Type(), page);
+            typeIPage = typeDao.selectByConPage(new Type(), page);
         }else{
             typeIPage = typeDao.selectByLikeNamePage(new Type(),page,conditionName);
         }
@@ -147,8 +147,8 @@ public class TagAndTypeExe {
      */
     @Transactional
     public void deleteTypes(List<Integer> types){
-        int i = typeDao.deleteTypesByIds(types);
-        if(i!=types.size()){
+        boolean is = typeDao.deleteByIds(types);
+        if(!is){
             //抛出异常使之回滚
             throw new RuntimeException();
         }
@@ -160,8 +160,8 @@ public class TagAndTypeExe {
      */
     @Transactional
     public void deleteTags(List<Integer> tags){
-        int i = tagDao.deleteTagsByIds(tags);
-        if(i!=tags.size()){
+        boolean b = tagDao.deleteByIds(tags);
+        if(!b){
             //抛出异常使之回滚
             throw new RuntimeException();
         }
@@ -198,7 +198,7 @@ public class TagAndTypeExe {
      * @return
      */
     public boolean getTagByName(String name){
-        List<Tag> tags = tagDao.queryByCon(Tag.builder().tagName(name).build());
+        List<Tag> tags = tagDao.selectByCon(Tag.builder().tagName(name).build());
         if(CollectionUtils.isNotEmpty(tags)){
             return true;
         }else{
@@ -211,7 +211,7 @@ public class TagAndTypeExe {
      * @return
      */
     public boolean addTagUseCountByName(String name){
-        List<Tag> tags = tagDao.queryByCon(Tag.builder().tagName(name).build());
+        List<Tag> tags = tagDao.selectByCon(Tag.builder().tagName(name).build());
         Tag first = CollectionUtil.getFirst(tags);
         Integer useCount = first.getUseCount();
         boolean b = tagDao.updateUseCountByName(name, useCount+1);
@@ -254,7 +254,7 @@ public class TagAndTypeExe {
         if(StringUtils.isNotEmpty(conditionName)){
             typeNavs=typeNavDao.queryAllTypeNavConditionName(conditionName);
         }else{
-            typeNavs=typeNavDao.queryByCon(new TypeNav());
+            typeNavs=typeNavDao.selectByCon(new TypeNav());
         }
         return TransformationUtil.copyToLists(typeNavs,TypeNavDTO.class);
     }

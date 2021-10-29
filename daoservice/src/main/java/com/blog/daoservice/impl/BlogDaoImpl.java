@@ -39,11 +39,6 @@ public class BlogDaoImpl extends SysBaseMpImpl<BlogMapper,Blog> implements BlogD
     }
 
     @Override
-    public Blog queryByid(Integer blogId){
-        return this.baseMapper.selectById(blogId);
-    }
-
-    @Override
     public boolean updateClickCount(Integer blogId,Integer clickCount){
         return this.update(new UpdateWrapper<Blog>().lambda().eq(Blog::getId,blogId).set(Blog::getClickCount,clickCount));
     }

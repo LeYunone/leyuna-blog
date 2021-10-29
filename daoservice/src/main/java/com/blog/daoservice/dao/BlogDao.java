@@ -17,8 +17,6 @@ public interface BlogDao extends SysBaseDao<Blog> {
 
     int queryCountByType(Integer type);
 
-    Blog queryByid(Integer blogId);
-
     boolean updateClickCount(Integer blogId,Integer clickCount);
 
     IPage<Blog> queryByBlogName(String title, Page<Blog> page);

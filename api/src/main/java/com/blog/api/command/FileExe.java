@@ -20,7 +20,7 @@ public class FileExe {
     private TouristHeadDao touristHeadDao;
 
     public String getTouristHead(String ip){
-        List<TouristHead> touristHeads = touristHeadDao.queryByCon(TouristHead.builder().ip(ip).build());
+        List<TouristHead> touristHeads = touristHeadDao.selectByCon(TouristHead.builder().ip(ip).build());
         TouristHead first = CollectionUtil.getFirst(touristHeads);
         if(null!=first){
             return first.getHead();

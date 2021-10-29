@@ -33,9 +33,5 @@ public class WebHistoryDaoImpl extends SysBaseMpImpl<WebHistoryMapper, WebHistor
         return iPage;
     }
 
-    @Override
-    public WebHistory selecyById(Integer id){
-        return this.baseMapper.selectById(id);
-    }
 }
 

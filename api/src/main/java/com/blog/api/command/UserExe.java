@@ -26,7 +26,7 @@ public class UserExe{
     public UserDTO selectUserByCon(UserDTO userDTO) {
         User user = TransformationUtil.copyToDTO(userDTO, User.class);
         List<User> users =
-                userDao.queryByCon(user);
+                userDao.selectByCon(user);
         User first = CollectionUtil.getFirst(users);
         if(null!=first){
             userDTO.setId(first.getId());

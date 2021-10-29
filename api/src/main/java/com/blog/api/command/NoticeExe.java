@@ -35,7 +35,7 @@ public class NoticeExe {
     @Cacheable(cacheNames = "getWebHistory")
     public Page<WebHistoryDTO> getWebHistory(Integer index, Integer size){
         Page<WebHistory> page=new Page<>(index,size);
-        IPage<WebHistory> webHistoryIPage = historyDao.queryByConPageOrderCreateTime(new WebHistory(), page,0);
+        IPage<WebHistory> webHistoryIPage = historyDao.selectByConPageOrderCreateTime(new WebHistory(), page,0);
 
         //封装结果集
         Page<WebHistoryDTO> historyDTOS=new Page<>(index,size,page.getTotal());
@@ -44,7 +44,7 @@ public class NoticeExe {
     }
 
     public WebHistoryDTO getWebHistoryById(Integer id){
-        WebHistory webHistory = historyDao.selecyById(id);
+        WebHistory webHistory = historyDao.selectById(id);
         return TransformationUtil.copyToDTO(webHistory,WebHistoryDTO.class);
     }
 

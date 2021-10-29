@@ -13,11 +13,23 @@ import java.util.List;
  *
  * 原子服务基类方法
  */
-public interface SysBaseDao<T> extends IService<T>{
+public interface SysBaseDao<E> extends IService<E>{
 
-    List<T> queryByCon(T m);
+    boolean deleteByIds(List<Integer> ids);
 
-    IPage<T> queryByConPage(T e, Page<T> page);
+    E selectById(int id);
 
-    IPage<T> queryByConPageOrderCreateTime(T e, Page<T> page,Integer type);
+    List<E> selectByIds(List<Integer> ids);
+
+    boolean deleteById(int id);
+
+    boolean create(E e);
+
+    boolean batchCreate(List<E> es);
+
+    List<E> selectByCon(E m);
+
+    IPage<E> selectByConPage(E e, Page<E> page);
+
+    IPage<E> selectByConPageOrderCreateTime(E e, Page<E> page,Integer type);
 }

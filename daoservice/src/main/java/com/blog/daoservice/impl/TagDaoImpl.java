@@ -27,19 +27,6 @@ import java.util.Map;
 @Service
 public class TagDaoImpl extends SysBaseMpImpl<TagMapper,Tag> implements TagDao {
 
-    @Override
-    public List<Tag> selectByIds(List<Integer> ids) {
-        List<Tag> tags = this.baseMapper.selectBatchIds(ids);
-        return tags;
-    }
-
-    @Transactional
-    @Override
-    public int deleteTagsByIds(List<Integer> ids) {
-        int i = this.baseMapper.deleteBatchIds(ids);
-        return i;
-    }
-
     /**
      * 分页模糊查询
      * @param

@@ -20,7 +20,5 @@ public interface WebHistoryDao extends SysBaseDao<WebHistory> {
      * @return
      */
     IPage<WebHistory> selectByLikeNamePage(Integer index, Integer size, String conditionName);
-
-    WebHistory selecyById(Integer id);
 }
 
