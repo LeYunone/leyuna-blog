@@ -79,7 +79,7 @@ public class BlogExe {
         if(StringUtils.isNotEmpty(conditionName)){
             blogIPage=blogDao.queryByBlogName(conditionName, page);
         }else{
-            blogIPage=blogDao.selectByConPageOrderCreateTime(new Blog(), page,0);
+            blogIPage=blogDao.selectByConPageOrderCreateTime(new Blog(), page,2);
         }
         //转换结果集
         Page<BlogDTO> blogDTOPage=new Page<>(index,size);
@@ -128,7 +128,8 @@ public class BlogExe {
     }
 
     public boolean updateBlog(BlogDTO blogDTO){
-        boolean b = blogDao.updateById(TransformationUtil.copyToDTO(blogDTO, Blog.class));
+        Blog blog = TransformationUtil.copyToDTO(blogDTO, Blog.class);
+        boolean b = blogDao.updateById(blog);
         return b;
     }
 }

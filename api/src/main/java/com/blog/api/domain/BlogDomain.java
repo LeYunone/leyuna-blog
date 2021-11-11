@@ -168,6 +168,7 @@ public class BlogDomain {
             }
             //清除这篇文章的缓存
             clearCacheExe.clearBlogQueryByIdCache(blogDTO.getId());
+            clearCacheExe.clearBlogQueryCache();
         }
         return b;
     }

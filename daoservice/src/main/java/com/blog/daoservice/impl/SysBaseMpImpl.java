@@ -82,10 +82,18 @@ public class SysBaseMpImpl<M extends BaseMapper<E>,E> extends ServiceImpl<M,E> i
         AssertUtil.isTrue(ObjectUtil.isNotNull (e), ErrorMeassage.OBJECT_NULL);
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(e);
         IPage<E> iPage =null;
-        if(type==0){
-             iPage=this.baseMapper.selectPage(page, new QueryWrapper<E>().allEq(stringObjectMap).orderByDesc("create_time"));
-        }else{
-            iPage=this.baseMapper.selectPage(page, new QueryWrapper<E>().allEq(stringObjectMap).orderByAsc("create_time"));
+        switch (type){
+            case 0:
+                iPage=this.baseMapper.selectPage(page, new QueryWrapper<E>().allEq(stringObjectMap).orderByDesc("create_time"));
+                break;
+            case 1:
+                iPage=this.baseMapper.selectPage(page, new QueryWrapper<E>().allEq(stringObjectMap).orderByAsc("create_time"));
+                break;
+            case 2:
+                iPage=this.baseMapper.selectPage(page, new QueryWrapper<E>().allEq(stringObjectMap).orderByDesc("update_time"));
+                break;
+            default:
+                break;
         }
         return iPage;
     }
