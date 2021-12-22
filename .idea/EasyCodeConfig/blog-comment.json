@@ -2,7 +2,7 @@
   "name" : "Comment",
   "preName" : "",
   "comment" : null,
-  "templateGroupName" : "myblog",
+  "templateGroupName" : "leyuna-disk",
   "fullColumn" : [ {
     "name" : "id",
     "comment" : null,
@@ -80,10 +80,17 @@
     "shortType" : null,
     "custom" : false,
     "ext" : { }
+  }, {
+    "name" : "admin",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
   } ],
   "pkColumn" : null,
   "otherColumn" : null,
   "savePackageName" : "",
-  "savePath" : "./api/src/main/java",
-  "saveModelName" : "api"
+  "savePath" : "./blog-domain/src/main/java",
+  "saveModelName" : "blog-domain"
 }

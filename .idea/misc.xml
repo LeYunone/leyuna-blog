@@ -7,9 +7,12 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/web/pom.xml" />
-        <option value="$PROJECT_DIR$/api/pom.xml" />
-        <option value="$PROJECT_DIR$/daoservice/pom.xml" />
+        <option value="$PROJECT_DIR$/blog-start/pom.xml" />
+        <option value="$PROJECT_DIR$/blog-web/pom.xml" />
+        <option value="$PROJECT_DIR$/blog-service/pom.xml" />
+        <option value="$PROJECT_DIR$/blog-dao/pom.xml" />
+        <option value="$PROJECT_DIR$/blog-domain/pom.xml" />
+        <option value="$PROJECT_DIR$/blog-client/pom.xml" />
       </list>
     </option>
   </component>

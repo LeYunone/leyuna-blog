@@ -7,22 +7,22 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="api" />
-        <module name="web" />
-        <module name="daoservice" />
-        <module name="blog" />
+        <module name="blog-web" />
+        <module name="blog-client" />
+        <module name="blog-dao" />
+        <module name="blog-domain" />
+        <module name="blog-start" />
+        <module name="blog-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="api" target="8" />
-      <module name="blog" target="8" />
-      <module name="daoservice" target="8" />
-      <module name="web" target="8" />
+      <module name="blog" target="1.5" />
+      <module name="blog-client" target="1.5" />
+      <module name="blog-dao" target="1.5" />
+      <module name="blog-domain" target="1.5" />
+      <module name="blog-service" target="1.5" />
+      <module name="blog-start" target="1.5" />
+      <module name="blog-web" target="1.5" />
     </bytecodeTargetLevel>
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="daoservice" options="" />
-    </option>
   </component>
 </project>

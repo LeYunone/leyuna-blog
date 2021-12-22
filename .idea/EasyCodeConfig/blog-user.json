@@ -2,7 +2,7 @@
   "name" : "User",
   "preName" : "",
   "comment" : null,
-  "templateGroupName" : "myblog",
+  "templateGroupName" : "leyuna-disk",
   "fullColumn" : [ {
     "name" : "id",
     "comment" : null,
@@ -28,6 +28,6 @@
   "pkColumn" : null,
   "otherColumn" : null,
   "savePackageName" : "",
-  "savePath" : "./daoservice/src/main/java",
-  "saveModelName" : "daoservice"
+  "savePath" : "./blog-domain/src/main/java",
+  "saveModelName" : "blog-domain"
 }

@@ -1,0 +1,78 @@
+package com.leyuna.blog.repository;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyuna.blog.co.TagCO;
+import com.leyuna.blog.entry.Tag;
+import com.leyuna.blog.gateway.TagGateway;
+import com.leyuna.blog.repository.mapper.TagMapper;
+import com.leyuna.blog.util.AssertUtil;
+import com.leyuna.blog.util.ErrorMeassage;
+import com.leyuna.blog.util.ObjectUtil;
+import com.leyuna.blog.util.TransformationUtil;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Map;
+
+/**
+ * @author pengli
+ * @create 2021-08-10 14:49
+ *  user表原子对象
+ */
+@Service
+public class TagRepository extends BaseRepository<TagMapper,Tag, TagCO> implements TagGateway {
+
+    /**
+     * 分页模糊查询
+     * @param
+     * @param page
+     * @return
+     */
+    @Override
+    public IPage<Tag> selectByLikeNamePage(Tag tag, Page<Tag> page, String conditionName) {
+        AssertUtil.isTrue(ObjectUtil.isNotNull (tag), ErrorMeassage.OBJECT_NULL);
+        Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(tag);
+        IPage<Tag> iPage = this.baseMapper.selectPage(page, new QueryWrapper<Tag>()
+                .allEq(stringObjectMap).like("tag_Name",conditionName));
+        return iPage;
+    }
+
+    @Override
+    public int getTagsCount(){
+        int count = this.count();
+        return count;
+    }
+
+    @Override
+    public int getTagsCountByLikeName(String conditionName) {
+        return this.count(new QueryWrapper<Tag>().lambda().like(Tag::getTagName,conditionName));
+    }
+
+    @Override
+    public boolean updateNameById(Tag tag){
+        boolean update = this.update(new UpdateWrapper<Tag>().lambda().eq(Tag::getId, tag.getId()).set(Tag::getTagName, tag.getTagName()));
+        return update;
+    }
+
+    @Override
+    public boolean updateLastUseTimeByName(String[] names) {
+        boolean is=true;
+        for(String name:names){
+            boolean update = this.update(new UpdateWrapper<Tag>().lambda().eq(Tag::getTagName, name).set(Tag::getLastUserTime, LocalDateTime.now()));
+            is=update;
+            if(!is){
+                break;
+            }
+        }
+        return is;
+    }
+
+    @Override
+    public boolean updateUseCountByName(String name,int userCount){
+        boolean update = this.update(new UpdateWrapper<Tag>().lambda().eq(Tag::getTagName, name).set(Tag::getUseCount, userCount));
+        return update;
+    }
+}
