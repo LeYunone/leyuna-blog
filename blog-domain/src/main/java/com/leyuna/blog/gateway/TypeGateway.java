@@ -2,9 +2,8 @@ package com.leyuna.blog.gateway;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.TypeCO;
-import com.leyuna.blog.entry.Type;
+import com.leyuna.blog.domain.TypeE;
 
 /**
  * @author pengli
@@ -12,13 +11,13 @@ import com.leyuna.blog.entry.Type;
  */
 public interface TypeGateway extends BaseGateway<TypeCO> {
 
-    IPage<Type> selectByLikeNamePage (Type type, Page<Type> page, String conditionName);
+    IPage<TypeCO> selectByLikeNamePage (TypeE type, Integer index,Integer size, String conditionName);
 
     int getTagsCount ();
 
-    boolean updateNameById (Type type);
+    boolean updateNameById (TypeE type);
 
-    boolean updateLastUseTimeById (Integer id);
+    boolean updateLastUseTimeById (String id);
 
-    boolean updateUseCountByName (Integer id, int userCount);
+    boolean updateUseCountByName (String id, int userCount);
 }

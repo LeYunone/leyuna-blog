@@ -51,7 +51,7 @@ public class TypeCO implements Serializable {
     /**
      * 分类导航
      */
-    private Integer fatherType;
+    private String fatherType;
 
     private String userStatus;
 }

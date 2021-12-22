@@ -3,7 +3,6 @@ package com.leyuna.blog.gateway;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.leyuna.blog.co.WebHistoryCO;
-import com.leyuna.blog.entry.WebHistory;
 
 /**
  * (WebHistory)dao
@@ -20,6 +19,6 @@ public interface WebHistoryGateway extends BaseGateway<WebHistoryCO> {
      * @param conditionName
      * @return
      */
-    IPage<WebHistory> selectByLikeNamePage (Integer index, Integer size, String conditionName);
+    IPage<WebHistoryCO> selectByLikeNamePage (Integer index, Integer size, String conditionName);
 }
 

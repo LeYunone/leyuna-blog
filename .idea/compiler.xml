@@ -7,11 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="blog-web" />
-        <module name="blog-client" />
-        <module name="blog-dao" />
-        <module name="blog-domain" />
         <module name="blog-start" />
+        <module name="blog-domain" />
+        <module name="blog-client" />
+        <module name="blog-web" />
+        <module name="blog-dao" />
         <module name="blog-service" />
       </profile>
     </annotationProcessing>

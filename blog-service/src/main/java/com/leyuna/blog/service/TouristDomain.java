@@ -1,11 +1,12 @@
 package com.leyuna.blog.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.blog.api.command.CacheExe;
-import com.blog.api.command.CommentExe;
-import com.blog.api.command.FileExe;
-import com.blog.api.dto.CommentDTO;
+import com.leyuna.blog.co.CommentCO;
+import com.leyuna.blog.command.CacheExe;
+import com.leyuna.blog.command.CommentExe;
+import com.leyuna.blog.command.FileExe;
+import com.leyuna.blog.domain.CommentE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +30,9 @@ public class TouristDomain {
      * 评论== 添加
      * @return
      */
-    public CommentDTO comment(CommentDTO commentDTO){
+    public CommentCO comment(CommentE commentDTO){
         //添加评论
-        CommentDTO thisComment=commentExe.addComment(commentDTO);
+        CommentCO thisComment=commentExe.addComment(commentDTO);
         if(thisComment!=null){
             //如果添加评论成功了，则需要回显这次评论到页面上
             //待扩展 9/15
@@ -48,8 +49,8 @@ public class TouristDomain {
      * @param type  [类型： 最新   最热  混杂型]
      * @return
      */
-    public Page<CommentDTO> getComment(Integer index,Integer size,Integer blogId,Integer type){
-        Page<CommentDTO> commentDTOPage=null;
+    public IPage<CommentCO> getComment(Integer index, Integer size, String blogId, Integer type){
+        IPage<CommentCO> commentDTOPage=null;
         commentDTOPage=commentExe.queryComment(index, size, blogId, type);
         return commentDTOPage;
     }
@@ -75,7 +76,7 @@ public class TouristDomain {
      * 点赞
      * @return
      */
-    public boolean addGoods(Integer commentId,String ip){
+    public boolean addGoods(String commentId,String ip){
         if(cacheExe.hasCacheByKey(ip+":"+commentId)){
             return false;
         }else{

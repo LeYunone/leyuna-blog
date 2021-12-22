@@ -1,10 +1,9 @@
 package com.leyuna.blog.command;
 
-import com.blog.daoservice.dao.TouristHeadDao;
-import com.blog.daoservice.entry.TouristHead;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.leyuna.blog.co.TouristHeadCO;
+import com.leyuna.blog.domain.TouristHeadE;
+import com.leyuna.blog.util.CollectionUtil;
 import org.springframework.stereotype.Service;
-import util.CollectionUtil;
 
 import java.util.List;
 
@@ -16,12 +15,9 @@ import java.util.List;
 @Service
 public class FileExe {
 
-    @Autowired
-    private TouristHeadDao touristHeadDao;
-
     public String getTouristHead(String ip){
-        List<TouristHead> touristHeads = touristHeadDao.selectByCon(TouristHead.builder().ip(ip).build());
-        TouristHead first = CollectionUtil.getFirst(touristHeads);
+        List<TouristHeadCO> touristHeads = TouristHeadE.queryInstance().setIp(ip).selectByCon();
+        TouristHeadCO first = CollectionUtil.getFirst(touristHeads);
         if(null!=first){
             return first.getHead();
         }
@@ -29,13 +25,12 @@ public class FileExe {
     }
 
     public boolean addTouristHead(String head,String ip){
-        TouristHead touristHead=TouristHead.builder().head(head).ip(ip).build();
-        boolean save = touristHeadDao.save(touristHead);
-        return save;
+        TouristHeadCO save = TouristHeadE.queryInstance().setHead(head).setIp(ip).save();
+        return true;
     }
 
     public boolean updateTouristHead(String head,String ip){
-        boolean b = touristHeadDao.updateHead(ip, head);
+        boolean b = TouristHeadE.queryInstance().getGateway().updateHead(ip, head);
         return b;
     }
 }

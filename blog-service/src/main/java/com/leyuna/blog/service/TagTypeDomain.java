@@ -1,13 +1,16 @@
 package com.leyuna.blog.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.blog.api.Error.ErrorMessage;
-import com.blog.api.command.CacheExe;
-import com.blog.api.command.TagAndTypeExe;
-import com.blog.api.dto.ResultDTO;
-import com.blog.api.dto.TagDTO;
-import com.blog.api.dto.TypeDTO;
-import com.blog.api.dto.TypeNavDTO;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.leyuna.blog.bean.ResultDTO;
+import com.leyuna.blog.co.TagCO;
+import com.leyuna.blog.co.TypeCO;
+import com.leyuna.blog.co.TypeNavCO;
+import com.leyuna.blog.command.CacheExe;
+import com.leyuna.blog.command.TagAndTypeExe;
+import com.leyuna.blog.domain.TagE;
+import com.leyuna.blog.domain.TypeE;
+import com.leyuna.blog.domain.TypeNavE;
+import com.leyuna.blog.error.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,8 +37,8 @@ public class TagTypeDomain {
      * @param ids
      * @return
      */
-    public List<TagDTO> getTagsByIds(Integer ... ids){
-        List<TagDTO> allTag=null;
+    public List<TagCO> getTagsByIds(String ... ids){
+        List<TagCO> allTag=null;
         //独立查询
         allTag=tagAndTypeExe.getTagByIds(Arrays.asList(ids));
         allTag.stream().forEach(tag->{
@@ -55,8 +58,8 @@ public class TagTypeDomain {
      * @param ids
      * @return
      */
-    public List<TypeDTO> getTypesByIds(Integer ... ids){
-        List<TypeDTO> allType=null;
+    public List<TypeCO> getTypesByIds(String ... ids){
+        List<TypeCO> allType=null;
         //独立查询
         allType=tagAndTypeExe.getTypeByIds(Arrays.asList(ids));
         allType.stream().forEach(type->{
@@ -76,8 +79,8 @@ public class TagTypeDomain {
      * @param
      * @return
      */
-    public Page<TagDTO> getALlTags(Integer pageIndex,Integer pageSize,String conditionName){
-        Page<TagDTO> iPage=null;
+    public IPage<TagCO> getALlTags(Integer pageIndex, Integer pageSize, String conditionName){
+        IPage<TagCO> iPage=null;
         if(pageIndex!=null){
             iPage = tagAndTypeExe.getAllTags(pageIndex,pageSize,conditionName);
             iPage.getRecords().stream().forEach(tag->{
@@ -101,8 +104,8 @@ public class TagTypeDomain {
      * @param
      * @return
      */
-    public Page<TypeDTO> getALlTypes(Integer pageIndex,Integer pageSize,String conditionName){
-        Page<TypeDTO> iPage = tagAndTypeExe.getAllTypes(pageIndex,pageSize,conditionName);
+    public IPage<TypeCO> getALlTypes(Integer pageIndex,Integer pageSize,String conditionName){
+        IPage<TypeCO> iPage = tagAndTypeExe.getAllTypes(pageIndex,pageSize,conditionName);
         iPage.getRecords().stream().forEach(tag->{
             LocalDateTime lastTime=tag.getLastUserTime();
             //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
@@ -121,41 +124,43 @@ public class TagTypeDomain {
      * @param types
      * @return
      */
-    public ResultDTO addTypesOrTags(List<String> tags,List<String> types,Integer typeNav){
-        ResultDTO resultDTO=new ResultDTO();
+    public String addTypesOrTags(List<String> tags, List<String> types, Integer typeNav){
+        String message=null;
         //添加分类
         if(!CollectionUtils.isEmpty(types)){
-            List<TypeDTO> listTypes=new ArrayList<>();
+            List<TypeE> listTypes=new ArrayList<>();
             //将名字封装成类
             types.stream().forEach(type->{
-                TypeDTO typeDTOBuilder = TypeDTO.builder().typeName(type).createTime(LocalDateTime.now()).
-                        lastUserTime(LocalDateTime.now()).useCount(0).fatherType(typeNav).build();
+                TypeE typeDTOBuilder = TypeE.queryInstance().setTypeName(type).
+                        setCreateTime(LocalDateTime.now()).
+                        setLastUserTime(LocalDateTime.now()).setUseCount(0).setFatherType(typeNav);
                 listTypes.add(typeDTOBuilder);
             });
             boolean b = tagAndTypeExe.addTypes(listTypes);
             if(!b){
-                resultDTO.addMessage(ErrorMessage.ADD_TYPE_FALE);
+                message=ErrorMessage.ADD_TYPE_FALE;
             }else{
                 clearCacheExe.clearTypeQueryCache();
             }
         }
         //添加标签
         if(!CollectionUtils.isEmpty(tags)){
-            List<TagDTO> listTags=new ArrayList<>();
+            List<TagE> listTags=new ArrayList<>();
             //将名字封装成类
             tags.stream().forEach(tag->{
-                TagDTO tagDTO = TagDTO.builder().tagName(tag).createTime(LocalDateTime.now()).
-                        lastUserTime(LocalDateTime.now()).useCount(0).build();
+                TagE tagDTO = TagE.queryInstance().
+                        setTagName(tag).setCreateTime(LocalDateTime.now()).
+                        setLastUserTime(LocalDateTime.now()).setUseCount(0);
                 listTags.add(tagDTO);
             });
             boolean b = tagAndTypeExe.addTags(listTags);
             if(!b){
-                resultDTO.addMessage(ErrorMessage.ADD_TAG_FALE);
+                message=ErrorMessage.ADD_TAG_FALE;
             }else{
                 clearCacheExe.clearTagQueryCache();
             }
         }
-        return resultDTO;
+        return message;
     }
 
     /**
@@ -165,15 +170,15 @@ public class TagTypeDomain {
      * @return
      */
     @Transactional
-    public ResultDTO deleteTypesOrTags(List<Integer> tags,List<Integer> types){
-        ResultDTO resultDTO=new ResultDTO();
+    public String deleteTypesOrTags(List<String> tags,List<String> types){
+        String message =null;
         try {
             if(!CollectionUtils.isEmpty(types)){
                 tagAndTypeExe.deleteTypes(types);
                 clearCacheExe.clearTypeQueryCache();
             }
         }catch (Exception e){
-            resultDTO.addMessage(ErrorMessage.DELETE_TYPE_FALE);
+            message = ErrorMessage.DELETE_TYPE_FALE ;
         }
         try {
             if(!CollectionUtils.isEmpty(tags)){
@@ -181,9 +186,9 @@ public class TagTypeDomain {
                 clearCacheExe.clearTagQueryCache();
             }
         }catch (Exception e) {
-            resultDTO.addMessage(ErrorMessage.DELETE_TAG_FALE);
+            message = ErrorMessage.DELETE_TAG_FALE;
         }
-        return resultDTO;
+        return message;
     }
 
 
@@ -194,7 +199,7 @@ public class TagTypeDomain {
      * @return
      */
     @Transactional
-    public ResultDTO updateTypesOrTags(TagDTO tags,TypeDTO types){
+    public ResultDTO updateTypesOrTags(TagE tags, TypeE types){
         ResultDTO resultDTO=new ResultDTO();
         if(null!=types){
             boolean b = tagAndTypeExe.updateTypes(types);
@@ -220,8 +225,9 @@ public class TagTypeDomain {
      * @param navName
      * @return
      */
-    public boolean updateTypeNav(String navName,Integer typeNavId){
-        boolean b = tagAndTypeExe.updateTypeNav(TypeNavDTO.builder().typeNavName(navName).id(typeNavId).build());
+    public boolean updateTypeNav(String navName,String typeNavId){
+        boolean b = tagAndTypeExe.updateTypeNav(TypeNavE.queryInstance()
+                .setTypeNavName(navName).setId(typeNavId));
         if(b){
             clearCacheExe.clearTypeNavQueryCache();
         }
@@ -232,9 +238,9 @@ public class TagTypeDomain {
      * 得到所有分类导航
      * @return
      */
-    public Map<Integer,TypeNavDTO> getTypeNavMap(){
-        List<TypeNavDTO> typeNav = tagAndTypeExe.getTypeNav(null);
-        Map<Integer,TypeNavDTO> resultMap=new HashMap<>();
+    public Map<String, TypeNavCO> getTypeNavMap(){
+        List<TypeNavCO> typeNav = tagAndTypeExe.getTypeNav(null);
+        Map<String,TypeNavCO> resultMap=new HashMap<>();
         typeNav.stream().forEach(t->{
             resultMap.put(t.getId(),t);
         });
@@ -246,8 +252,8 @@ public class TagTypeDomain {
      * 得到所有分类导航
      * @return
      */
-    public List<TypeNavDTO> getTypeNavList(String conditionName){
-        List<TypeNavDTO> typeNav = tagAndTypeExe.getTypeNav(conditionName);
+    public List<TypeNavCO> getTypeNavList(String conditionName){
+        List<TypeNavCO> typeNav = tagAndTypeExe.getTypeNav(conditionName);
         return typeNav;
     }
 
@@ -259,7 +265,7 @@ public class TagTypeDomain {
         return b;
     }
 
-    public boolean deleteTypeNav(Integer typeNavId){
+    public boolean deleteTypeNav(String typeNavId){
         boolean b = tagAndTypeExe.deleteTypeNav(typeNavId);
         return b;
     }

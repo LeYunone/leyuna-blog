@@ -9,6 +9,7 @@ import com.leyuna.blog.co.CommentCO;
 import com.leyuna.blog.entry.Comment;
 import com.leyuna.blog.gateway.CommentGateway;
 import com.leyuna.blog.repository.mapper.CommentMapper;
+import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,11 +30,11 @@ public class CommentRepository extends BaseRepository<CommentMapper, Comment, Co
      * @param blogId
      * @return
      */
-    public IPage<Comment> selectNewCommentByBlogId(Integer index, Integer size, Integer blogId){
+    public IPage<CommentCO> selectNewCommentByBlogId(Integer index, Integer size, String blogId){
         Page<Comment> page=new Page<>(index,size);
         IPage<Comment> page1 = this.page(page, new QueryWrapper<Comment>().lambda().
                 isNull(Comment::getFatherCommentId).eq(Comment::getBlogId, blogId).orderByDesc(Comment::getCreateTime));
-        return page1;
+        return TransformationUtil.copyToPage(page1,CommentCO.class);
     }
 
     /**
@@ -43,11 +44,11 @@ public class CommentRepository extends BaseRepository<CommentMapper, Comment, Co
      * @param blogId
      * @return
      */
-    public IPage<Comment> selectNewAndGoodsCommentByBlogId(Integer index, Integer size, Integer blogId){
+    public IPage<CommentCO> selectNewAndGoodsCommentByBlogId(Integer index, Integer size, String blogId){
         Page<Comment> page=new Page<>(index,size);
         IPage<Comment> page1 = this.page(page, new QueryWrapper<Comment>().lambda().
                 isNull(Comment::getFatherCommentId).eq(Comment::getBlogId, blogId).orderByDesc(Comment::getGoods,Comment::getCreateTime));
-        return page1;
+        return TransformationUtil.copyToPage(page1,CommentCO.class);
     }
 
     /**
@@ -55,13 +56,13 @@ public class CommentRepository extends BaseRepository<CommentMapper, Comment, Co
      * @param commentId
      * @return
      */
-    public List<Comment> selectSubComment(Integer commentId){
+    public List<CommentCO> selectSubComment(String commentId){
         List<Comment> comments = this.baseMapper.selectList(new QueryWrapper<Comment>().lambda()
                 .eq(Comment::getFatherCommentId, commentId).orderByDesc(Comment::getGoods, Comment::getCreateTime));
-        return comments;
+        return TransformationUtil.copyToLists(comments,CommentCO.class);
     }
 
-    public boolean updateGoodsById(Integer commentId,Integer count){
+    public boolean updateGoodsById(String commentId,Integer count){
         return this.update(new UpdateWrapper<Comment>().lambda().eq(Comment::getId,commentId).set(Comment::getGoods,count));
     }
 }

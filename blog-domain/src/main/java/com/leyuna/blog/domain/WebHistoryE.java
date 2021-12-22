@@ -33,6 +33,8 @@ public class WebHistoryE implements Serializable {
 
     private String content;
 
+    private Integer type;
+
     private LocalDateTime createTime;
 
     //===========自定义方法区==========

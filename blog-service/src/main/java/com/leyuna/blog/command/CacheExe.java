@@ -64,7 +64,7 @@ public class CacheExe {
     /**
      * 清空指定博客缓存  服务 getBlogById
      */
-    public  void clearBlogQueryByIdCache(Integer id){
+    public  void clearBlogQueryByIdCache(String id){
         Set<String> keys = stringRedisTemplate.keys("*");
         if (ObjectUtils.isNotEmpty(keys)) {
             for(String key:keys){

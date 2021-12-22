@@ -1,17 +1,18 @@
 package com.leyuna.blog.control;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.leyuna.blog.bean.CommentBean;
 import com.leyuna.blog.bean.ResponseBean;
+import com.leyuna.blog.co.CommentCO;
 import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.constant.ServerCode;
-import com.leyuna.blog.dto.CommentDTO;
+import com.leyuna.blog.domain.CommentE;
 import com.leyuna.blog.error.SystemAsserts;
 import com.leyuna.blog.error.UserAsserts;
 import com.leyuna.blog.service.TouristDomain;
 import com.leyuna.blog.util.ServerUtil;
 import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +39,7 @@ public class TouristControl extends SysBaseControl {
      */
     @PostMapping("/commpent")
     public ResponseBean commpent(@RequestBody CommentBean commentBean, HttpServletRequest request){
-        CommentDTO commentDTO = TransformationUtil.copyToDTO(commentBean, CommentDTO.class);
+        CommentE commentDTO = TransformationUtil.copyToDTO(commentBean, CommentE.class);
         String remoteAddr = ServerUtil.getClientIp(request);
         commentDTO.setIp(remoteAddr);
         if(commentDTO.getInformation().equals("a3201360")){
@@ -49,14 +50,14 @@ public class TouristControl extends SysBaseControl {
         }else{
             if(StringUtils.isEmpty(commentDTO.getCommentHead())){
                 String touristOldHead = touristDomain.getTouristOldHead(remoteAddr);
-                if(StringUtils.isNotEmpty(touristOldHead)){
+                if(!StringUtils.isEmpty(touristOldHead)){
                     commentDTO.setCommentHead(touristOldHead);
                 }else{
                     commentDTO.setCommentHead(ServerCode.SERVER_HEAD_IMG_DEFAULT);
                 }
             }
         }
-        CommentDTO comment = touristDomain.comment(commentDTO);
+        CommentCO comment = touristDomain.comment(commentDTO);
         if(comment!=null){
             return successResponseBean(comment);
         }
@@ -71,8 +72,8 @@ public class TouristControl extends SysBaseControl {
      * @return
      */
     @RequestMapping("/comment/blog")
-    public ResponseBean getComment(Integer index,Integer size,Integer blogId,@RequestParam(required = false) Integer type){
-        Page<CommentDTO> comment = touristDomain.getComment(index, size, blogId, type);
+    public ResponseBean getComment(Integer index,Integer size,String blogId,@RequestParam(required = false) Integer type){
+        IPage<CommentCO> comment = touristDomain.getComment(index, size, blogId, type);
         return successResponseBean(comment);
     }
 

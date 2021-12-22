@@ -1,13 +1,16 @@
 package com.leyuna.blog.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyuna.blog.bean.NoticeDTO;
+import com.leyuna.blog.co.BlogCO;
+import com.leyuna.blog.co.WebHistoryCO;
 import com.leyuna.blog.command.*;
-import com.leyuna.blog.dto.BlogDTO;
-import com.leyuna.blog.dto.NoticeDTO;
-import com.leyuna.blog.dto.TagDTO;
-import com.leyuna.blog.dto.WebHistoryDTO;
+import com.leyuna.blog.domain.BlogE;
+import com.leyuna.blog.domain.TagE;
+import com.leyuna.blog.domain.WebHistoryE;
 import com.leyuna.blog.error.ErrorMessage;
 import com.leyuna.blog.util.AssertUtil;
 import com.leyuna.blog.util.TransformationUtil;
@@ -47,8 +50,8 @@ public class BlogDomain {
      * @param tags
      * @return
      */
-    public Page<BlogDTO> getBlogsByPage(Integer index, Integer size, Integer type, String tags, String conditionName){
-        Page<BlogDTO> result=null;
+    public IPage<BlogCO> getBlogsByPage(Integer index, Integer size, Integer type, String tags, String conditionName){
+        IPage<BlogCO> result=null;
         //查询所有
         if(type==null && StringUtils.isEmpty(tags)){
             result = blogExe.getAllBlogByPage(index, size,conditionName);
@@ -62,13 +65,13 @@ public class BlogDomain {
      * @return
      */
     @Transactional
-    public boolean addBlog(BlogDTO blogDTO){
+    public boolean addBlog(BlogE blogDTO){
         String tag = blogDTO.getTag();
         blogDTO.setClickCount(0);
         blogDTO.setCommentCount(0);
         blogDTO.setCreateTime(LocalDateTime.now());
         blogDTO.setUpdateTime(LocalDateTime.now());
-        Integer blogId=blogExe.addBlog(blogDTO);
+        String blogId=blogExe.addBlog(blogDTO);
         boolean b=true;
         if(null==blogId){
             b=false;
@@ -77,14 +80,14 @@ public class BlogDomain {
             //先处理新增标签
             if(StringUtils.isNotEmpty(tag)){
                 String[] split = tag.split(",");
-                List<TagDTO> addList=new ArrayList<>();
+                List<TagE> addList=new ArrayList<>();
                 for(String name:split){
                     //判断有没有这个名字的标签，如果没有的话则需要创建这个标签.
                     boolean tagByName = tagAndTypeExe.getTagByName(name);
                     //如果查不到则创建这个标签
                     if(!tagByName){
-                        TagDTO build = TagDTO.builder().tagName(name).createTime(LocalDateTime.now())
-                                .lastUserTime(LocalDateTime.now()).useCount(1).build();
+                        TagE build = TagE.queryInstance().setTagName(name).setCreateTime(LocalDateTime.now())
+                                .setLastUserTime(LocalDateTime.now()).setUseCount(1);
                         addList.add(build);
                     }else{
                         //如果查到了，则说明这个标签使用次数需要添加一
@@ -105,12 +108,12 @@ public class BlogDomain {
 
 
             //更新分类 和标签的最后使用时间
-            Integer type = blogDTO.getType();
+            String type = blogDTO.getType();
             tagAndTypeExe.addTypeUseCount(type);
             tagAndTypeExe.updateTagsAndTypes(tag,type);
 
             //添加改博客的索引库文档
-            List<BlogDTO> list=new ArrayList<>();
+            List<BlogE> list=new ArrayList<>();
             blogDTO.setId(blogId);
             list.add(blogDTO);
             try {
@@ -136,9 +139,9 @@ public class BlogDomain {
      * @return
      */
     @Transactional
-    public BlogDTO openBlogById(Integer id){
+    public BlogCO openBlogById(String id){
         //找到博客
-        BlogDTO blogById = blogExe.getBlogById(id);
+        BlogCO blogById = blogExe.getBlogById(id);
         //博客增加一点击量
         boolean b = blogExe.addBlogClickCount(id, blogById.getClickCount() + 1);
         if(!b){
@@ -154,11 +157,11 @@ public class BlogDomain {
      * @param blogDTO
      * @return
      */
-    public boolean updateBlog(BlogDTO blogDTO){
+    public boolean updateBlog(BlogE blogDTO){
         //设置最新更新时间
         blogDTO.setUpdateTime(LocalDateTime.now());
-        boolean b = blogExe.updateBlog(blogDTO);
-        if(b){
+        boolean update = blogDTO.update();
+        if(update){
             //更新索引库中的Key
             try {
                 luceneExe.updateBlogDocument(blogDTO);
@@ -169,7 +172,7 @@ public class BlogDomain {
             clearCacheExe.clearBlogQueryByIdCache(blogDTO.getId());
             clearCacheExe.clearBlogQueryCache();
         }
-        return b;
+        return update;
     }
 
     /**
@@ -177,12 +180,12 @@ public class BlogDomain {
      * @param noticeDTO
      * @return
      */
-    public boolean addNotice(NoticeDTO noticeDTO){
+    public boolean addNotice(WebHistoryE noticeDTO){
         Integer type = noticeDTO.getType();
         switch (type){
             case 0:
                 //0 网站更新公告
-                boolean b = noticeExe.addHistory(TransformationUtil.copyToDTO(noticeDTO, WebHistoryDTO.class));
+                boolean b = noticeExe.addHistory(TransformationUtil.copyToDTO(noticeDTO, WebHistoryE.class));
                 if(b){
                     clearCacheExe.clearWebHistoryCache();
                 }
@@ -200,24 +203,18 @@ public class BlogDomain {
      * @param type
      * @return
      */
-    public Page<NoticeDTO> getNoticePage(Integer index,Integer size,String conditionName,int type){
+    public IPage<WebHistoryCO> getNoticePage(Integer index, Integer size, String conditionName, int type){
         Page<NoticeDTO> result=null;
         switch (type){
             case 0:
-                Page<WebHistoryDTO> webHistory=null;
+                IPage<WebHistoryCO> webHistory=null;
                 //查询网站更新公告
                 if(StringUtils.isNotEmpty(conditionName)){
                    webHistory = noticeExe.getWebHistory(index,size,conditionName);
                 }else{
                    webHistory = noticeExe.getWebHistory(index, size);
                 }
-               if(null!=webHistory){
-                   List<NoticeDTO> noticeDTOS = TransformationUtil.copyToLists(webHistory.getRecords(), NoticeDTO.class);
-                   result=new Page<>(index,size);
-                   result.setRecords(noticeDTOS);
-                   result.setTotal(webHistory.getTotal());
-               }
-               return result;
+               return webHistory;
             default:
                 return null;
         }
@@ -229,11 +226,11 @@ public class BlogDomain {
      * @param type
      * @return
      */
-    public NoticeDTO getNoticeOne(Integer id,int type){
+    public WebHistoryCO getNoticeOne(String id,int type){
         switch (type){
             case 0:
-                WebHistoryDTO webHistoryById = noticeExe.getWebHistoryById(id);
-                return TransformationUtil.copyToDTO(webHistoryById,NoticeDTO.class);
+                WebHistoryCO webHistoryById = noticeExe.getWebHistoryById(id);
+                return webHistoryById;
             default:
                 return null;
         }
@@ -244,12 +241,10 @@ public class BlogDomain {
      * @param noticeDTO
      * @return
      */
-    public boolean updateNotice(NoticeDTO noticeDTO){
+    public boolean updateNotice(WebHistoryE noticeDTO){
         switch (noticeDTO.getType()){
             case 0:
-                //更新网站历史
-                WebHistoryDTO webHistoryDTO = TransformationUtil.copyToDTO(noticeDTO, WebHistoryDTO.class);
-                boolean b = noticeExe.updateWebHis(webHistoryDTO);
+                boolean b = noticeExe.updateWebHis(noticeDTO);
                 if(b){
                     clearCacheExe.clearWebHistoryCache();
                 }

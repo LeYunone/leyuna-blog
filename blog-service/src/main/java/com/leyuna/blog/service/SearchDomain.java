@@ -1,9 +1,11 @@
 package com.leyuna.blog.service;
 
+import com.leyuna.blog.co.BlogCO;
+import com.leyuna.blog.co.LuceneCO;
 import com.leyuna.blog.command.BlogExe;
 import com.leyuna.blog.command.LuceneExe;
-import com.leyuna.blog.dto.BlogDTO;
-import com.leyuna.blog.dto.LuceneDTO;
+import com.leyuna.blog.domain.BlogE;
+import com.leyuna.blog.util.TransformationUtil;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +33,10 @@ public class SearchDomain {
      */
     public boolean createBlogSearch(){
         //查询所有博客
-        List<BlogDTO> allBlog = blogExe.queryAllBlog();
+        List<BlogCO> allBlog = blogExe.queryAllBlog();
         //创建blog的索引库  field有id 和title
         try {
-            luceneExe.addBlogDir(allBlog);
+            luceneExe.addBlogDir(TransformationUtil.copyToLists(allBlog, BlogE.class));
         }catch (IOException e) {
             return false;
         }
@@ -48,8 +50,8 @@ public class SearchDomain {
      * @param size
      * @return
      */
-    public LuceneDTO getBlogFromSearch(String key, Integer index, Integer size){
-        LuceneDTO blogDir=null;
+    public LuceneCO getBlogFromSearch(String key, Integer index, Integer size){
+        LuceneCO blogDir=null;
         try {
             blogDir = luceneExe.getBlogDir(key, index, size);
         }catch (IOException | ParseException | InvalidTokenOffsetsException e){

@@ -3,7 +3,6 @@ package com.leyuna.blog.gateway;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.leyuna.blog.co.CommentCO;
-import com.leyuna.blog.entry.Comment;
 
 import java.util.List;
 
@@ -15,12 +14,12 @@ import java.util.List;
  */
 public interface CommentGateway extends BaseGateway<CommentCO> {
 
-    IPage<Comment> selectNewCommentByBlogId (Integer index, Integer size, Integer blogId);
+    IPage<CommentCO> selectNewCommentByBlogId (Integer index, Integer size, String blogId);
 
-    IPage<Comment> selectNewAndGoodsCommentByBlogId (Integer index, Integer size, Integer blogId);
+    IPage<CommentCO> selectNewAndGoodsCommentByBlogId (Integer index, Integer size, String blogId);
 
-    List<Comment> selectSubComment (Integer commentId);
+    List<CommentCO> selectSubComment (String commentId);
 
-    boolean updateGoodsById (Integer commentId, Integer count);
+    boolean updateGoodsById (String commentId, Integer count);
 }
 

@@ -9,6 +9,7 @@ import com.leyuna.blog.co.BlogCO;
 import com.leyuna.blog.entry.Blog;
 import com.leyuna.blog.gateway.BlogGateway;
 import com.leyuna.blog.repository.mapper.BlogMapper;
+import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,9 +22,10 @@ import org.springframework.stereotype.Service;
 public class BlogRepository extends BaseRepository<BlogMapper, Blog, BlogCO> implements BlogGateway {
 
     @Override
-    public IPage<Blog> queryByTagName(Blog e, Page<Blog> page) {
+    public IPage<BlogCO> queryByTagName (BlogCO e, Integer index , Integer size) {
+        Page page=new Page(index,size);
         IPage<Blog> iPage = this.baseMapper.selectPage(page, new QueryWrapper<Blog>().lambda().like(Blog::getTag,e.getTag()).orderByDesc(Blog::getCreateTime));
-        return iPage;
+        return TransformationUtil.copyToPage(iPage,BlogCO.class);
     }
 
     @Override
@@ -32,15 +34,16 @@ public class BlogRepository extends BaseRepository<BlogMapper, Blog, BlogCO> imp
     }
 
     @Override
-    public boolean updateClickCount(Integer blogId,Integer clickCount){
+    public boolean updateClickCount(String blogId,Integer clickCount){
         return this.update(new UpdateWrapper<Blog>().lambda().eq(Blog::getId,blogId).set(Blog::getClickCount,clickCount));
     }
 
     @Override
-    public IPage<Blog> queryByBlogName(String title, Page<Blog> page) {
+    public IPage<BlogCO> queryByBlogName(String title, Integer index, Integer size) {
+        Page page=new Page(index,size);
         IPage<Blog> iPage = this.baseMapper.selectPage(page,
                 new QueryWrapper<Blog>().lambda().like(Blog::getTitle,title).orderByDesc(Blog::getCreateTime));
-        return iPage;
+        return TransformationUtil.copyToPage(iPage,BlogCO.class);
     }
 
 }

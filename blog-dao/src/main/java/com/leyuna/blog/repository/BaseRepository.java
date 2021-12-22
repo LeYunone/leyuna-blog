@@ -229,9 +229,10 @@ public abstract class BaseRepository<M extends BaseMapper<DO>, DO,CO> extends Se
      * @return
      */
     @Override
-    public IPage<CO> selectByConPageOrderCreateTime(Object e, Page page,Integer type) {
+    public IPage<CO> selectByConOrderPage(Object e,Integer index,Integer size,Integer type) {
         AssertUtil.isTrue(ObjectUtil.isNotNull (e), ErrorMeassage.OBJECT_NULL);
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(e);
+        Page page=new Page(index,size);
         IPage<DO> iPage =null;
         switch (type){
             case 0:

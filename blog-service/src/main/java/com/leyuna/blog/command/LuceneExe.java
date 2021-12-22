@@ -1,13 +1,15 @@
 package com.leyuna.blog.command;
 
-import com.blog.api.dto.BlogDTO;
-import com.blog.api.dto.LuceneDTO;
-import com.blog.api.lucene.MyIKAnalyzer;
+import com.leyuna.blog.co.BlogCO;
+import com.leyuna.blog.co.LuceneCO;
+import com.leyuna.blog.domain.BlogE;
+import com.leyuna.blog.lucene.MyIKAnalyzer;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.*;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -42,7 +44,7 @@ public class LuceneExe {
     /**
      * 创建blog 索引库文档
      */
-    public void addBlogDir(List<BlogDTO> blogs) throws IOException {
+    public void addBlogDir(List<BlogE> blogs) throws IOException {
         List<Document> documents=new ArrayList<>();
         //创建索引库位置
         Directory directory= FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
@@ -52,7 +54,7 @@ public class LuceneExe {
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
         IndexWriter indexWriter = new IndexWriter(directory,indexWriterConfig);
 
-        for(BlogDTO blogDTO:blogs){
+        for(BlogE blogDTO:blogs){
             Document document=new Document();
             //记录标题和id即可
             Field id=new TextField("id",String.valueOf(blogDTO.getId()), Field.Store.YES);
@@ -74,8 +76,8 @@ public class LuceneExe {
      * @param index
      * @return
      */
-    public LuceneDTO getBlogDir(String key, Integer index, Integer size) throws IOException, ParseException, InvalidTokenOffsetsException {
-        List<BlogDTO> result=new ArrayList<>();
+    public LuceneCO getBlogDir(String key, Integer index, Integer size) throws IOException, ParseException, InvalidTokenOffsetsException {
+        List<BlogCO> result=new ArrayList<>();
         Analyzer analyzer=new MyIKAnalyzer();
         //关键词
         QueryParser qp = new QueryParser("title",analyzer);
@@ -100,10 +102,10 @@ public class LuceneExe {
             Document doc = indexSearcher.doc(scoreDoc.doc);
             String title=doc.get("title");
             TokenStream tokenStream = analyzer.tokenStream("title", new StringReader(title));
-            result.add(BlogDTO.builder().id(Integer.valueOf(doc.get("id"))).title(highlighter.getBestFragment(tokenStream,title)).build());
+            result.add(BlogCO.builder().id(doc.get("id")).title(highlighter.getBestFragment(tokenStream,title)).build());
         }
         indexReader.close();
-        LuceneDTO luceneDTO=new LuceneDTO();
+        LuceneCO luceneDTO=new LuceneCO();
         luceneDTO.setListData(result);
         luceneDTO.setTotole(totle);
         return luceneDTO;
@@ -121,7 +123,7 @@ public class LuceneExe {
      * 指定更新博客的索引文档
      * @throws IOException
      */
-    public void updateBlogDocument(BlogDTO blogDTO) throws IOException {
+    public void updateBlogDocument(BlogE blogDTO) throws IOException {
         Directory directory=FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
         Analyzer analyzer=new MyIKAnalyzer();
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);

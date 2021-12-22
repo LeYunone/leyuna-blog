@@ -1,4 +1,4 @@
-package com.leyuna.blog.dto;
+package com.leyuna.blog.bean;
 
 import lombok.*;
 

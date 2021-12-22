@@ -2,12 +2,13 @@ package com.leyuna.blog.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.blog.api.command.TokenExe;
-import com.blog.api.command.UserExe;
-import com.blog.api.dto.UserDTO;
+import com.leyuna.blog.co.UserCO;
+import com.leyuna.blog.command.TokenExe;
+import com.leyuna.blog.command.UserExe;
+import com.leyuna.blog.domain.UserE;
+import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import util.AssertUtil;
 
 /**
  * @author pengli
@@ -30,18 +31,18 @@ public class UserDomain {
      * @param passWord
      * @return
      */
-    public UserDTO login(String userName, String passWord){
+    public UserCO login(String userName, String passWord){
         if(StringUtils.isEmpty(userName) || StringUtils.isEmpty(passWord)){
             return null;
         }
-        UserDTO userDTO=UserDTO.builder().userName(userName).build();
-        UserDTO user = userExe.selectUserByCon(userDTO);
+        UserE userDTO=UserE.queryInstance().setUserName(userName);
+        UserCO user = userExe.selectUserByCon(userDTO);
         if(null==user){
             //返回空对象
             return null;
         }else{
-            UserDTO build = UserDTO.builder().userName(userName).passWord(passWord).build();
-            UserDTO result = userExe.selectUserByCon(build);
+            UserE build = UserE.queryInstance().setUserName(userName).setPassWord(passWord);
+            UserCO result = userExe.selectUserByCon(build);
             //如果登录成功，则取得用户的id
             return result;
         }
@@ -50,7 +51,7 @@ public class UserDomain {
     /**
      * 用户token上锁操作
      */
-    public void userLock(Integer id){
+    public void userLock(String id){
         tokenExe.loginToken(id);
     }
 

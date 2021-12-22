@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.TypeCO;
+import com.leyuna.blog.domain.TypeE;
 import com.leyuna.blog.entry.Type;
 import com.leyuna.blog.gateway.TypeGateway;
 import com.leyuna.blog.repository.mapper.TypeMapper;
@@ -31,12 +32,13 @@ public class TypeRepository extends BaseRepository<TypeMapper,Type, TypeCO> impl
      * @return
      */
     @Override
-    public IPage<Type> selectByLikeNamePage(Type type, Page<Type> page, String conditionName) {
+    public IPage<TypeCO> selectByLikeNamePage(TypeE type,Integer index,Integer size, String conditionName) {
         AssertUtil.isTrue(ObjectUtil.isNotNull (type), ErrorMeassage.OBJECT_NULL);
+        Page page=new Page(index,size);
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(type);
         IPage<Type> iPage = this.page(page, new QueryWrapper<Type>()
                 .allEq(stringObjectMap).like("type_Name",conditionName));
-        return iPage;
+        return TransformationUtil.copyToPage(iPage,TypeCO.class);
     }
 
     @Override
@@ -45,19 +47,19 @@ public class TypeRepository extends BaseRepository<TypeMapper,Type, TypeCO> impl
     }
 
     @Override
-    public boolean updateNameById(Type type){
+    public boolean updateNameById(TypeE type){
         boolean update = this.update(new UpdateWrapper<Type>().lambda().eq(Type::getId, type.getId()).set(Type::getTypeName, type.getTypeName()));
         return update;
     }
 
     @Override
-    public boolean updateLastUseTimeById(Integer id) {
+    public boolean updateLastUseTimeById(String id) {
         boolean update = this.update(new UpdateWrapper<Type>().lambda().eq(Type::getId, id).set(Type::getLastUserTime, LocalDateTime.now()));
         return update;
     }
 
     @Override
-    public boolean updateUseCountByName(Integer id,int userCount){
+    public boolean updateUseCountByName(String id,int userCount){
         boolean update = this.update(new UpdateWrapper<Type>().lambda().eq(Type::getId,id).
                 set(Type::getUseCount, userCount));
         return update;

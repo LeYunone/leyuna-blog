@@ -1,16 +1,14 @@
 package com.leyuna.blog.command;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.blog.api.dto.WebHistoryDTO;
-import com.blog.daoservice.dao.WebHistoryDao;
-import com.blog.daoservice.entry.WebHistory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.leyuna.blog.co.WebHistoryCO;
+import com.leyuna.blog.domain.WebHistoryE;
+import com.leyuna.blog.util.CollectionUtil;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import util.TransformationUtil;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author pengli
@@ -21,9 +19,6 @@ import java.time.LocalDateTime;
 public class NoticeExe {
 
 
-    @Autowired
-    private WebHistoryDao historyDao;
-
     /**
      * 分页查询网站更新历史
      * @param index
@@ -31,19 +26,15 @@ public class NoticeExe {
      * @return
      */
     @Cacheable(cacheNames = "getWebHistory")
-    public Page<WebHistoryDTO> getWebHistory(Integer index, Integer size){
-        Page<WebHistory> page=new Page<>(index,size);
-        IPage<WebHistory> webHistoryIPage = historyDao.selectByConPageOrderCreateTime(new WebHistory(), page,0);
-
-        //封装结果集
-        Page<WebHistoryDTO> historyDTOS=new Page<>(index,size,page.getTotal());
-        historyDTOS.setRecords(TransformationUtil.copyToLists(webHistoryIPage.getRecords(), WebHistoryDTO.class));
-        return historyDTOS;
+    public IPage<WebHistoryCO> getWebHistory(Integer index, Integer size){
+        IPage<WebHistoryCO> webHistoryIPage = WebHistoryE.queryInstance().getGateway().
+                selectByConOrderPage(new WebHistoryCO(), index , size ,0);
+        return webHistoryIPage;
     }
 
-    public WebHistoryDTO getWebHistoryById(Integer id){
-        WebHistory webHistory = historyDao.selectById(id);
-        return TransformationUtil.copyToDTO(webHistory,WebHistoryDTO.class);
+    public WebHistoryCO getWebHistoryById(String id){
+        List<WebHistoryCO> webHistoryCOS = WebHistoryE.queryInstance().setId(id).selectByCon();
+        return CollectionUtil.getFirst(webHistoryCOS);
     }
 
     /**
@@ -53,13 +44,11 @@ public class NoticeExe {
      * @return
      */
     @Cacheable(cacheNames = "getWebHistory")
-    public Page<WebHistoryDTO> getWebHistory(Integer index, Integer size,String conditionName){
-        Page<WebHistory> page=new Page<>(index,size);
-        IPage<WebHistory> webHistoryIPage = historyDao.selectByLikeNamePage(index,size,conditionName);
+    public IPage<WebHistoryCO> getWebHistory(Integer index, Integer size,String conditionName){
+        IPage<WebHistoryCO> webHistoryIPage = WebHistoryE.queryInstance().getGateway().
+                selectByLikeNamePage(index,size,conditionName);
         //封装结果集
-        Page<WebHistoryDTO> historyDTOS=new Page<>(index,size,page.getTotal());
-        historyDTOS.setRecords(TransformationUtil.copyToLists(webHistoryIPage.getRecords(),WebHistoryDTO.class));
-        return historyDTOS;
+        return webHistoryIPage;
     }
 
     /**
@@ -67,15 +56,15 @@ public class NoticeExe {
      * @param webHistoryDTO
      * @return
      */
-    public boolean addHistory(WebHistoryDTO webHistoryDTO){
+    public boolean addHistory(WebHistoryE webHistoryDTO){
         webHistoryDTO.setCreateTime(LocalDateTime.now());
-        boolean save = historyDao.save(TransformationUtil.copyToDTO(webHistoryDTO, WebHistory.class));
-        return save;
+        WebHistoryCO save = webHistoryDTO.save();
+        return save!=null;
     }
 
 
-    public boolean updateWebHis(WebHistoryDTO webHistoryDTO){
-        boolean b = historyDao.updateById(TransformationUtil.copyToDTO(webHistoryDTO, WebHistory.class));
-        return b;
+    public boolean updateWebHis(WebHistoryE webHistoryDTO){
+        boolean update = webHistoryDTO.update();
+        return update;
     }
 }

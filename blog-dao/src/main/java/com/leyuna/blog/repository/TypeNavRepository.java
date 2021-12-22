@@ -6,6 +6,7 @@ import com.leyuna.blog.co.TypeNavCO;
 import com.leyuna.blog.entry.TypeNav;
 import com.leyuna.blog.gateway.TypeNavGateway;
 import com.leyuna.blog.repository.mapper.TypeNavMapper;
+import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,10 +20,10 @@ import java.util.List;
 @Service
 public class TypeNavRepository extends BaseRepository<TypeNavMapper, TypeNav, TypeNavCO> implements TypeNavGateway {
 
-    public List<TypeNav> queryAllTypeNavConditionName(String conditionName){
+    public List<TypeNavCO> queryAllTypeNavConditionName(String conditionName){
         List<TypeNav> typeNavs = this.baseMapper.selectList(new QueryWrapper<TypeNav>().lambda()
                 .like(TypeNav::getTypeNavName, conditionName));
-        return typeNavs;
+        return TransformationUtil.copyToLists(typeNavs,TypeNavCO.class);
     }
 }
 

@@ -53,7 +53,7 @@ public class BlogE implements Serializable {
     /**
      * 分类
      */
-    private Integer type;
+    private String type;
     /**
      * 标签
      */

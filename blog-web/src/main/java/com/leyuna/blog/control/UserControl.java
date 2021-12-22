@@ -2,7 +2,7 @@ package com.leyuna.blog.control;
 
 import com.leyuna.blog.bean.ResponseBean;
 import com.leyuna.blog.bean.UserBean;
-import com.leyuna.blog.dto.UserDTO;
+import com.leyuna.blog.co.UserCO;
 import com.leyuna.blog.error.UserAsserts;
 import com.leyuna.blog.service.UserDomain;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class UserControl extends SysBaseControl {
 
     @PostMapping("/login")
     public ResponseBean login(@RequestBody UserBean user){
-        UserDTO login = userDomain.login(user.getUserName(),user.getPassWord());
+        UserCO login = userDomain.login(user.getUserName(),user.getPassWord());
         if(login!=null){
             //绑定令牌
             userDomain.userLock(login.getId());

@@ -82,10 +82,6 @@ public class SysBaseControl {
             return null;
         }
         List<Object> listData = res.getListData();
-        Page pageBean=new Page();
-        pageBean.setTotal(listData.size());
-        pageBean.setRecords(listData);
-        res.setPage(pageBean);
         return res;
     }
 }

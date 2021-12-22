@@ -18,7 +18,7 @@ public class TreeTypeBean {
     /**
      * 节点id
      */
-    private Integer id;
+    private String id;
     /**
      *  节点名
      */

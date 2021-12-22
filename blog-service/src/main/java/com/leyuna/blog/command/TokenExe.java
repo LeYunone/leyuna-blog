@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TokenExe {
 
-    public void loginToken(Integer id) {
+    public void loginToken(String id) {
         StpUtil.login(id);
     }
 

@@ -2,9 +2,8 @@ package com.leyuna.blog.gateway;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.TagCO;
-import com.leyuna.blog.entry.Tag;
+import com.leyuna.blog.domain.TagE;
 
 /**
  * @author pengli
@@ -12,13 +11,13 @@ import com.leyuna.blog.entry.Tag;
  */
 public interface TagGateway extends BaseGateway<TagCO> {
 
-    IPage<Tag> selectByLikeNamePage (Tag tag, Page<Tag> page, String conditionName);
+    IPage<TagCO> selectByLikeNamePage (TagE tag, Integer index,Integer size, String conditionName);
 
     int getTagsCount ();
 
     int getTagsCountByLikeName (String conditionName);
 
-    boolean updateNameById (Tag tag);
+    boolean updateNameById (TagE tag);
 
     boolean updateLastUseTimeByName (String[] names);
 

@@ -1,18 +1,20 @@
 package com.leyuna.blog.control;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.leyuna.blog.bean.BlogBean;
 import com.leyuna.blog.bean.NoticeBean;
 import com.leyuna.blog.bean.ResponseBean;
-import com.leyuna.blog.dto.BlogDTO;
-import com.leyuna.blog.dto.LuceneDTO;
-import com.leyuna.blog.dto.NoticeDTO;
+import com.leyuna.blog.co.BlogCO;
+import com.leyuna.blog.co.LuceneCO;
+import com.leyuna.blog.co.WebHistoryCO;
+import com.leyuna.blog.domain.BlogE;
+import com.leyuna.blog.domain.WebHistoryE;
 import com.leyuna.blog.error.SystemAsserts;
 import com.leyuna.blog.service.BlogDomain;
 import com.leyuna.blog.service.SearchDomain;
 import com.leyuna.blog.service.UserDomain;
 import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -47,7 +49,7 @@ public class BlogControl extends SysBaseControl {
             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
             blogBean.setTag(stringBuilder.toString());
         }
-        boolean b = blogDomain.addBlog(TransformationUtil.copyToDTO(blogBean, BlogDTO.class));
+        boolean b = blogDomain.addBlog(TransformationUtil.copyToDTO(blogBean, BlogE.class));
         if(b){
             return successResponseBean();
         }else{
@@ -65,7 +67,7 @@ public class BlogControl extends SysBaseControl {
                                     @RequestParam(required = false) Integer typeId,
                                     @RequestParam(required = false) String  tags,
                                     @RequestParam(required = false) String conditionName){
-        Page<BlogDTO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tags,conditionName);
+        IPage<BlogCO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tags,conditionName);
         return successResponseBean(blogsByPage);
     }
 
@@ -77,7 +79,7 @@ public class BlogControl extends SysBaseControl {
     public ResponseBean getAllBlogsByTypeOrTag(Integer index,Integer size,
                                             @RequestParam(required = false) Integer typeId,
                                             @RequestParam(required = false)String tagName){
-        Page<BlogDTO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tagName,null);
+        IPage<BlogCO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tagName,null);
         ResponseBean responseBean = successResponseBean(blogsByPage);
         //包装有多少条博客
         responseBean.setObjData(blogsByPage.getTotal());
@@ -85,15 +87,15 @@ public class BlogControl extends SysBaseControl {
     }
 
     @GetMapping("/blog/{id}")
-    public ResponseBean getBlogById(@PathVariable(value = "id")Integer blogId){
-        BlogDTO blogById = blogDomain.openBlogById(blogId);
+    public ResponseBean getBlogById(@PathVariable(value = "id")String blogId){
+        BlogCO blogById = blogDomain.openBlogById(blogId);
         return successResponseBean(blogById);
     }
 
     @PostMapping("/edit")
     public ResponseBean editBlog(@RequestBody BlogBean blogBean){
         userDomain.checkLock();
-        boolean b = blogDomain.updateBlog(TransformationUtil.copyToDTO(blogBean, BlogDTO.class));
+        boolean b = blogDomain.updateBlog(TransformationUtil.copyToDTO(blogBean, BlogE.class));
         if(b){
             return successResponseBean();
         }else{
@@ -109,7 +111,7 @@ public class BlogControl extends SysBaseControl {
      */
     @RequestMapping("/history")
     public ResponseBean getWebHistory(Integer index,Integer size){
-        Page<NoticeDTO> webHistory=blogDomain.getNoticePage(index, size,null,0);
+        IPage<WebHistoryCO> webHistory=blogDomain.getNoticePage(index, size,null,0);
         return successResponseBean(webHistory);
     }
     /**
@@ -119,7 +121,7 @@ public class BlogControl extends SysBaseControl {
     @PostMapping("/addWebNotice")
     public ResponseBean addWebNotice(@RequestBody NoticeBean noticeBean){
         userDomain.checkLock();
-        boolean b = blogDomain.addNotice(TransformationUtil.copyToDTO(noticeBean, NoticeDTO.class));
+        boolean b = blogDomain.addNotice(TransformationUtil.copyToDTO(noticeBean, WebHistoryE.class));
         if(b){
             return successResponseBean();
         }else{
@@ -137,7 +139,7 @@ public class BlogControl extends SysBaseControl {
     @GetMapping("/search")
     public ResponseBean blogSearch(String key,Integer index,Integer size){
         //查关键词
-        LuceneDTO blogFromSearch = searchDomain.getBlogFromSearch(key, index, size);
+        LuceneCO blogFromSearch = searchDomain.getBlogFromSearch(key, index, size);
         //
         if(null!=blogFromSearch){
             return successResponseBean(blogFromSearch);
@@ -172,7 +174,7 @@ public class BlogControl extends SysBaseControl {
     public ResponseBean getAllNotice(@RequestParam(required = false) Integer index,
                                     @RequestParam(required = false) Integer size,
                                     @RequestParam(required = false) String conditionName){
-        Page<NoticeDTO> noticePage = blogDomain.getNoticePage(index, size, conditionName, 0);
+        IPage<WebHistoryCO> noticePage = blogDomain.getNoticePage(index, size, conditionName, 0);
         return successResponseBean(noticePage);
     }
 
@@ -183,15 +185,15 @@ public class BlogControl extends SysBaseControl {
      * @return
      */
     @GetMapping("/notice/{id}/{type}")
-    public ResponseBean getNoticeOne(@PathVariable(value = "id")Integer id,@PathVariable(value = "type")Integer type){
-        NoticeDTO noticeOne = blogDomain.getNoticeOne(id, type);
+    public ResponseBean getNoticeOne(@PathVariable(value = "id")String id,@PathVariable(value = "type")Integer type){
+        WebHistoryCO noticeOne = blogDomain.getNoticeOne(id, type);
         return successResponseBean(noticeOne);
     }
 
     @PostMapping("/editNotice")
     public ResponseBean editNotice(@RequestBody NoticeBean noticeBean){
         userDomain.checkLock();
-        boolean b = blogDomain.updateNotice(TransformationUtil.copyToDTO(noticeBean, NoticeDTO.class));
+        boolean b = blogDomain.updateNotice(TransformationUtil.copyToDTO(noticeBean, WebHistoryE.class));
         if(b){
             return successResponseBean();
         }else{

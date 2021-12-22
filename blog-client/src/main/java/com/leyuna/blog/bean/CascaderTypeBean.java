@@ -18,7 +18,7 @@ public class CascaderTypeBean {
     /**
      * 值
      */
-    private Integer value;
+    private String value;
 
     /**
      * 展示文本

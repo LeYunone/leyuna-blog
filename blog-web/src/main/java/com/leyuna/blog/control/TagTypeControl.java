@@ -1,10 +1,15 @@
 package com.leyuna.blog.control;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.leyuna.blog.bean.CascaderTypeBean;
 import com.leyuna.blog.bean.ResponseBean;
 import com.leyuna.blog.bean.TreeTypeBean;
+import com.leyuna.blog.co.TagCO;
+import com.leyuna.blog.co.TypeCO;
+import com.leyuna.blog.co.TypeNavCO;
+import com.leyuna.blog.domain.TagE;
+import com.leyuna.blog.domain.TypeE;
 import com.leyuna.blog.dto.ResultDTO;
-import com.leyuna.blog.dto.TagDTO;
 import com.leyuna.blog.dto.TypeDTO;
 import com.leyuna.blog.dto.TypeNavDTO;
 import com.leyuna.blog.error.SystemAsserts;
@@ -43,7 +48,7 @@ public class TagTypeControl extends SysBaseControl {
     public ResponseBean getTags(@RequestParam(required = false)Integer pageIndex,
                                 @RequestParam(required = false)Integer pageSize,
                                 @RequestParam(required = false)String conditionName){
-        Page<TagDTO> aLlTags = tagTypeDomain.getALlTags(pageIndex,pageSize,conditionName);
+        IPage<TagCO> aLlTags = tagTypeDomain.getALlTags(pageIndex,pageSize,conditionName);
         ResponseBean responseBean = successResponseBean(aLlTags.getRecords());
         responseBean.setPage(aLlTags);
         responseBean.setObjData(aLlTags.getRecords().size());
@@ -51,8 +56,8 @@ public class TagTypeControl extends SysBaseControl {
     }
 
     @GetMapping("/tagsId")
-    public ResponseBean getTagsById(Integer...ids){
-        List<TagDTO> tagsByIds = tagTypeDomain.getTagsByIds(ids);
+    public ResponseBean getTagsById(String...ids){
+        List<TagCO> tagsByIds = tagTypeDomain.getTagsByIds(ids);
         return successResponseBean(tagsByIds);
     }
 
@@ -65,7 +70,7 @@ public class TagTypeControl extends SysBaseControl {
     public ResponseBean getTypes(@RequestParam(required = false)Integer pageIndex,
                                  @RequestParam(required = false)Integer pageSize,
                                  @RequestParam(required = false)String conditionName){
-        Page<TypeDTO> aLlTags = tagTypeDomain.getALlTypes(pageIndex,pageSize,conditionName);
+        IPage<TypeCO> aLlTags = tagTypeDomain.getALlTypes(pageIndex,pageSize,conditionName);
         ResponseBean responseBean = successResponseBean(aLlTags.getRecords());
         responseBean.setPage(aLlTags);
         return  responseBean;
@@ -78,23 +83,23 @@ public class TagTypeControl extends SysBaseControl {
     @RequestMapping("/getTypeInNav")
     public ResponseBean getTypeInNav(){
         //暂定默认最多只会有100个分类
-        Page<TypeDTO> aLlTypes = tagTypeDomain.getALlTypes(null, null, null);
-        List<TypeDTO> records = aLlTypes.getRecords();
-        Map<Integer, TypeNavDTO> typeNavMap = tagTypeDomain.getTypeNavMap();
+        IPage<TypeCO> aLlTypes = tagTypeDomain.getALlTypes(null, null, null);
+        List<TypeCO> records = aLlTypes.getRecords();
+        Map<String, TypeNavCO> typeNavMap = tagTypeDomain.getTypeNavMap();
         List<CascaderTypeBean> cascaderTypeResult = getCascaderTypeResult(records, typeNavMap);
         return successResponseBean(cascaderTypeResult);
     }
 
-    public List<CascaderTypeBean> getCascaderTypeResult(List<TypeDTO> types,Map<Integer, TypeNavDTO> typeNavMap){
+    public List<CascaderTypeBean> getCascaderTypeResult(List<TypeCO> types,Map<String, TypeNavCO> typeNavMap){
         List<CascaderTypeBean> lists=new ArrayList<>();
-        Map<Integer,CascaderTypeBean> map=new HashMap<>();
+        Map<String,CascaderTypeBean> map=new HashMap<>();
         types.stream().forEach(t->{
-            Integer fatherType = t.getFatherType();
+            String fatherType = t.getFatherType();
             CascaderTypeBean cascaderTypeBean = map.get(fatherType);
             if(null==cascaderTypeBean){
                 CascaderTypeBean reslutFul=new CascaderTypeBean();
                 //拿导航名
-                TypeNavDTO typeNavDTO = typeNavMap.get(fatherType);
+                TypeNavCO typeNavDTO = typeNavMap.get(fatherType);
                 reslutFul.setLabel(typeNavDTO.getTypeNavName());
                 reslutFul.setValue(t.getFatherType());
 
@@ -122,8 +127,8 @@ public class TagTypeControl extends SysBaseControl {
     }
 
     @GetMapping("/typesId")
-    public ResponseBean getTypesById(Integer...ids){
-        List<TypeDTO> tagsByIds = tagTypeDomain.getTypesByIds(ids);
+    public ResponseBean getTypesById(String...ids){
+        List<TypeCO> tagsByIds = tagTypeDomain.getTypesByIds(ids);
         return successResponseBean(tagsByIds);
     }
 
@@ -137,11 +142,11 @@ public class TagTypeControl extends SysBaseControl {
     public ResponseBean addTagsAndTypes(@RequestParam(required = false) List<String>
                                                     tags,@RequestParam(required = false) List<String> types,@RequestParam(required = false)Integer typeNav){
         userDomain.checkLock();
-        ResultDTO resultDTO = tagTypeDomain.addTypesOrTags(tags, types,typeNav);
-        if(resultDTO.getMessages()==null){
+        String message=tagTypeDomain.addTypesOrTags(tags, types,typeNav);
+        if(message==null){
             return successResponseBean();
         }else{
-            return failResponseBean(resultDTO.getMessages());
+            return failResponseBean(message);
         }
     }
 
@@ -152,13 +157,13 @@ public class TagTypeControl extends SysBaseControl {
      * @return
      */
     @GetMapping("/deleteTagsAndTypes")
-    public ResponseBean deleteTagsAndTypes(@RequestParam(required = false,value = "tags") List<Integer> tags,@RequestParam(required = false)List<Integer> types){
+    public ResponseBean deleteTagsAndTypes(@RequestParam(required = false,value = "tags") List<String> tags,@RequestParam(required = false)List<String> types){
         userDomain.checkLock();
-        ResultDTO resultDTO = tagTypeDomain.deleteTypesOrTags(tags, types);
-        if(resultDTO.getMessages()==null){
+        String message = tagTypeDomain.deleteTypesOrTags(tags, types);
+        if(message==null){
             return successResponseBean();
         }else{
-            return failResponseBean(resultDTO.getMessages());
+            return failResponseBean(message);
         }
     }
 
@@ -167,9 +172,9 @@ public class TagTypeControl extends SysBaseControl {
      * @return
      */
     @PostMapping("/updateTag")
-    public ResponseBean updateTag(Integer id,String tagName){
+    public ResponseBean updateTag(String id,String tagName){
         userDomain.checkLock();
-        TagDTO build = TagDTO.builder().id(id).tagName(tagName).build();
+        TagE build = TagE.queryInstance().setId(id).setTagName(tagName);
         ResultDTO resultDTO = tagTypeDomain.updateTypesOrTags(build, null);
         if(resultDTO.getMessages()==null){
             return successResponseBean();
@@ -183,8 +188,8 @@ public class TagTypeControl extends SysBaseControl {
      * @return
      */
     @PostMapping("/updateType")
-    public ResponseBean updateTypes(Integer id,String typeName){
-        TypeDTO build = TypeDTO.builder().id(id).typeName(typeName).build();
+    public ResponseBean updateTypes(String id,String typeName){
+        TypeE build = TypeE.queryInstance().setId(id).setTypeName(typeName);
         ResultDTO resultDTO = tagTypeDomain.updateTypesOrTags(null, build);
         if(resultDTO.getMessages()==null){
             return successResponseBean();
@@ -199,7 +204,7 @@ public class TagTypeControl extends SysBaseControl {
      */
     @GetMapping("/getTypeNav")
     public ResponseBean getTypeNav(@RequestParam(required = false)String conditionName){
-        List<TypeNavDTO> typeNavList = tagTypeDomain.getTypeNavList(conditionName);
+        List<TypeNavCO> typeNavList = tagTypeDomain.getTypeNavList(conditionName);
         return successResponseBean(typeNavList);
     }
     /**
@@ -209,10 +214,10 @@ public class TagTypeControl extends SysBaseControl {
     @GetMapping("/treeType")
     public ResponseBean getTreeType(){
         //得到分类导航  id - dto
-        Map<Integer, TypeNavDTO> typeNav = tagTypeDomain.getTypeNavMap();
+        Map<String, TypeNavCO> typeNav = tagTypeDomain.getTypeNavMap();
         //得到所有分类
-        Page<TypeDTO> aLlTypes = tagTypeDomain.getALlTypes(null, null, null);
-        List<TypeDTO> records = aLlTypes.getRecords();
+        IPage<TypeCO> aLlTypes = tagTypeDomain.getALlTypes(null, null, null);
+        List<TypeCO> records = aLlTypes.getRecords();
         List<TreeTypeBean> treeResult = getTreeResult(typeNav, records);
         ResponseBean responseBean = successResponseBean(treeResult);
         responseBean.setObjData(records.size());
@@ -224,15 +229,15 @@ public class TagTypeControl extends SysBaseControl {
      * 拼装树形结构数据
      * @return
      */
-    public List<TreeTypeBean> getTreeResult(Map<Integer,TypeNavDTO> typeNav,List<TypeDTO> types){
+    public List<TreeTypeBean> getTreeResult(Map<String,TypeNavCO> typeNav,List<TypeCO> types){
         List<TreeTypeBean> result=new ArrayList<>();
 
         //结果集
-        Map<Integer,TreeTypeBean> mapTreeType=new HashMap<>();
+        Map<String,TreeTypeBean> mapTreeType=new HashMap<>();
         types.stream().forEach(t->{
-            Integer navId=t.getFatherType();
+            String navId=t.getFatherType();
             TreeTypeBean thisTreeType = mapTreeType.get(navId);
-            TypeNavDTO typeNavDTO = typeNav.get(navId);
+            TypeNavCO typeNavDTO = typeNav.get(navId);
             //如果当前结果集里没有这个分类导航
             if(null==thisTreeType){
                 TreeTypeBean treeTypeBean=new TreeTypeBean();
@@ -281,7 +286,7 @@ public class TagTypeControl extends SysBaseControl {
      * @return
      */
     @PostMapping("/updateTypeNav")
-    public ResponseBean editTypeNav(String typeNavName,Integer typeNavId){
+    public ResponseBean editTypeNav(String typeNavName,String typeNavId){
         userDomain.checkLock();
         boolean b = tagTypeDomain.updateTypeNav(typeNavName, typeNavId);
         if(b){
@@ -292,7 +297,7 @@ public class TagTypeControl extends SysBaseControl {
     }
 
     @PostMapping("/deleteTypeNav")
-    public ResponseBean deleteTypeNav(Integer typeNavId){
+    public ResponseBean deleteTypeNav(String typeNavId){
         userDomain.checkLock();
         boolean b = tagTypeDomain.deleteTypeNav(typeNavId);
         if(b){
