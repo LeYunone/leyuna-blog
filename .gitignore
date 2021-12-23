@@ -8,5 +8,6 @@
 /blog-dao/target/
 /blog-domain/target/
 /blog-client/target/
+/cloud-server/target/
 
 /.idea/libraries/

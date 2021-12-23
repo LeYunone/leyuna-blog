@@ -13,6 +13,7 @@
         <option value="$PROJECT_DIR$/blog-dao/pom.xml" />
         <option value="$PROJECT_DIR$/blog-domain/pom.xml" />
         <option value="$PROJECT_DIR$/blog-client/pom.xml" />
+        <option value="$PROJECT_DIR$/cloud-server/pom.xml" />
       </list>
     </option>
   </component>
