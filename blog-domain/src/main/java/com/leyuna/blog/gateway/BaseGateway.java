@@ -1,6 +1,5 @@
 package com.leyuna.blog.gateway;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.util.List;
@@ -97,6 +96,6 @@ public interface BaseGateway<CO> {
      */
     Page<CO> selectByPage (Object con,Integer index,Integer size);
 
-    IPage<CO> selectByConOrderPage(Object e,Integer index,Integer size,Integer type) ;
+    Page<CO> selectByConOrderPage(Object e,Integer index,Integer size,Integer type) ;
 
 }

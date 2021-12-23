@@ -33,13 +33,13 @@ public class TagRepository extends BaseRepository<TagMapper,Tag, TagCO> implemen
      * @return
      */
     @Override
-    public IPage<TagCO> selectByLikeNamePage(TagE tag, Integer index, Integer size, String conditionName) {
+    public Page<TagCO> selectByLikeNamePage(TagE tag, Integer index, Integer size, String conditionName) {
         AssertUtil.isTrue(ObjectUtil.isNotNull (tag), ErrorMeassage.OBJECT_NULL);
         Page page=new Page(index,size);
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(tag);
-        IPage<Tag> iPage = this.baseMapper.selectPage(page, new QueryWrapper<Tag>()
+        IPage<Tag> Page = this.baseMapper.selectPage(page, new QueryWrapper<Tag>()
                 .allEq(stringObjectMap).like("tag_Name",conditionName));
-        return TransformationUtil.copyToPage(iPage,TagCO.class);
+        return TransformationUtil.copyToPage(Page,TagCO.class);
     }
 
     @Override

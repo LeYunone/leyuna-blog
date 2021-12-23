@@ -1,22 +1,19 @@
 package com.leyuna.blog.control;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.CascaderTypeBean;
 import com.leyuna.blog.bean.ResponseBean;
+import com.leyuna.blog.bean.ResultDTO;
 import com.leyuna.blog.bean.TreeTypeBean;
 import com.leyuna.blog.co.TagCO;
 import com.leyuna.blog.co.TypeCO;
 import com.leyuna.blog.co.TypeNavCO;
 import com.leyuna.blog.domain.TagE;
 import com.leyuna.blog.domain.TypeE;
-import com.leyuna.blog.dto.ResultDTO;
-import com.leyuna.blog.dto.TypeDTO;
-import com.leyuna.blog.dto.TypeNavDTO;
 import com.leyuna.blog.error.SystemAsserts;
 import com.leyuna.blog.service.TagTypeDomain;
 import com.leyuna.blog.service.UserDomain;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -32,7 +29,7 @@ import java.util.Map;
  */
 @RestController()
 @RequestMapping("/tagType")
-public class TagTypeControl extends SysBaseControl {
+public class TagTypeControl{
 
     @Autowired
     private TagTypeDomain tagTypeDomain;
@@ -48,17 +45,14 @@ public class TagTypeControl extends SysBaseControl {
     public ResponseBean getTags(@RequestParam(required = false)Integer pageIndex,
                                 @RequestParam(required = false)Integer pageSize,
                                 @RequestParam(required = false)String conditionName){
-        IPage<TagCO> aLlTags = tagTypeDomain.getALlTags(pageIndex,pageSize,conditionName);
-        ResponseBean responseBean = successResponseBean(aLlTags.getRecords());
-        responseBean.setPage(aLlTags);
-        responseBean.setObjData(aLlTags.getRecords().size());
-        return  responseBean;
+        Page<TagCO> aLlTags = tagTypeDomain.getALlTags(pageIndex,pageSize,conditionName);
+        return  ResponseBean.of(aLlTags);
     }
 
     @GetMapping("/tagsId")
     public ResponseBean getTagsById(String...ids){
         List<TagCO> tagsByIds = tagTypeDomain.getTagsByIds(ids);
-        return successResponseBean(tagsByIds);
+        return ResponseBean.of(tagsByIds);
     }
 
     /**
@@ -70,10 +64,8 @@ public class TagTypeControl extends SysBaseControl {
     public ResponseBean getTypes(@RequestParam(required = false)Integer pageIndex,
                                  @RequestParam(required = false)Integer pageSize,
                                  @RequestParam(required = false)String conditionName){
-        IPage<TypeCO> aLlTags = tagTypeDomain.getALlTypes(pageIndex,pageSize,conditionName);
-        ResponseBean responseBean = successResponseBean(aLlTags.getRecords());
-        responseBean.setPage(aLlTags);
-        return  responseBean;
+        Page<TypeCO> aLlTags = tagTypeDomain.getALlTypes(pageIndex,pageSize,conditionName);
+        return  ResponseBean.of(aLlTags);
     }
 
     /**
@@ -83,11 +75,11 @@ public class TagTypeControl extends SysBaseControl {
     @RequestMapping("/getTypeInNav")
     public ResponseBean getTypeInNav(){
         //暂定默认最多只会有100个分类
-        IPage<TypeCO> aLlTypes = tagTypeDomain.getALlTypes(null, null, null);
+        Page<TypeCO> aLlTypes = tagTypeDomain.getALlTypes(null, null, null);
         List<TypeCO> records = aLlTypes.getRecords();
         Map<String, TypeNavCO> typeNavMap = tagTypeDomain.getTypeNavMap();
         List<CascaderTypeBean> cascaderTypeResult = getCascaderTypeResult(records, typeNavMap);
-        return successResponseBean(cascaderTypeResult);
+        return ResponseBean.of(cascaderTypeResult);
     }
 
     public List<CascaderTypeBean> getCascaderTypeResult(List<TypeCO> types,Map<String, TypeNavCO> typeNavMap){
@@ -129,7 +121,7 @@ public class TagTypeControl extends SysBaseControl {
     @GetMapping("/typesId")
     public ResponseBean getTypesById(String...ids){
         List<TypeCO> tagsByIds = tagTypeDomain.getTypesByIds(ids);
-        return successResponseBean(tagsByIds);
+        return ResponseBean.of(tagsByIds);
     }
 
     /**
@@ -140,13 +132,13 @@ public class TagTypeControl extends SysBaseControl {
      */
     @RequestMapping("/addTagsAndTypes")
     public ResponseBean addTagsAndTypes(@RequestParam(required = false) List<String>
-                                                    tags,@RequestParam(required = false) List<String> types,@RequestParam(required = false)Integer typeNav){
+                                                    tags,@RequestParam(required = false) List<String> types,@RequestParam(required = false)String typeNav){
         userDomain.checkLock();
         String message=tagTypeDomain.addTypesOrTags(tags, types,typeNav);
         if(message==null){
-            return successResponseBean();
+            return ResponseBean.buildSuccess();
         }else{
-            return failResponseBean(message);
+            return ResponseBean.buildFailure(message);
         }
     }
 
@@ -161,9 +153,9 @@ public class TagTypeControl extends SysBaseControl {
         userDomain.checkLock();
         String message = tagTypeDomain.deleteTypesOrTags(tags, types);
         if(message==null){
-            return successResponseBean();
+            return ResponseBean.buildSuccess();
         }else{
-            return failResponseBean(message);
+            return ResponseBean.buildFailure(message);
         }
     }
 
@@ -177,9 +169,9 @@ public class TagTypeControl extends SysBaseControl {
         TagE build = TagE.queryInstance().setId(id).setTagName(tagName);
         ResultDTO resultDTO = tagTypeDomain.updateTypesOrTags(build, null);
         if(resultDTO.getMessages()==null){
-            return successResponseBean();
+            return ResponseBean.buildSuccess();
         }else{
-            return failResponseBean(resultDTO.getMessages());
+            return ResponseBean.buildFailure(resultDTO.getMessages().toString());
         }
     }
 
@@ -192,9 +184,9 @@ public class TagTypeControl extends SysBaseControl {
         TypeE build = TypeE.queryInstance().setId(id).setTypeName(typeName);
         ResultDTO resultDTO = tagTypeDomain.updateTypesOrTags(null, build);
         if(resultDTO.getMessages()==null){
-            return successResponseBean();
+            return ResponseBean.buildSuccess();
         }else{
-            return failResponseBean(resultDTO.getMessages());
+            return ResponseBean.buildFailure(resultDTO.getMessages().toString());
         }
     }
 
@@ -205,7 +197,7 @@ public class TagTypeControl extends SysBaseControl {
     @GetMapping("/getTypeNav")
     public ResponseBean getTypeNav(@RequestParam(required = false)String conditionName){
         List<TypeNavCO> typeNavList = tagTypeDomain.getTypeNavList(conditionName);
-        return successResponseBean(typeNavList);
+        return ResponseBean.of(typeNavList);
     }
     /**
      * 获得树形分类
@@ -216,12 +208,10 @@ public class TagTypeControl extends SysBaseControl {
         //得到分类导航  id - dto
         Map<String, TypeNavCO> typeNav = tagTypeDomain.getTypeNavMap();
         //得到所有分类
-        IPage<TypeCO> aLlTypes = tagTypeDomain.getALlTypes(null, null, null);
+        Page<TypeCO> aLlTypes = tagTypeDomain.getALlTypes(null, null, null);
         List<TypeCO> records = aLlTypes.getRecords();
         List<TreeTypeBean> treeResult = getTreeResult(typeNav, records);
-        ResponseBean responseBean = successResponseBean(treeResult);
-        responseBean.setObjData(records.size());
-        return responseBean;
+        return ResponseBean.of(treeResult);
     }
 
     /**
@@ -274,9 +264,9 @@ public class TagTypeControl extends SysBaseControl {
         userDomain.checkLock();
         boolean b = tagTypeDomain.addTypeNav(typeNavName);
         if(b){
-            return successResponseBean();
+            return ResponseBean.buildSuccess();
         }else{
-            return failResponseBean(SystemAsserts.ADD_TYPENAV_FAIL.getMsg());
+            return ResponseBean.buildFailure(SystemAsserts.ADD_TYPENAV_FAIL.getMsg());
         }
     }
 
@@ -290,9 +280,9 @@ public class TagTypeControl extends SysBaseControl {
         userDomain.checkLock();
         boolean b = tagTypeDomain.updateTypeNav(typeNavName, typeNavId);
         if(b){
-            return successResponseBean();
+            return ResponseBean.buildSuccess();
         }else{
-            return failResponseBean(SystemAsserts.UPDATE_TYPENAV_FAIL.getMsg());
+            return ResponseBean.buildFailure(SystemAsserts.UPDATE_TYPENAV_FAIL.getMsg());
         }
     }
 
@@ -301,9 +291,9 @@ public class TagTypeControl extends SysBaseControl {
         userDomain.checkLock();
         boolean b = tagTypeDomain.deleteTypeNav(typeNavId);
         if(b){
-            return successResponseBean();
+            return ResponseBean.buildSuccess();
         }else{
-            return failResponseBean(SystemAsserts.DELETE_TYPENAV_FAIL.getMsg());
+            return ResponseBean.buildFailure(SystemAsserts.DELETE_TYPENAV_FAIL.getMsg());
         }
     }
 }

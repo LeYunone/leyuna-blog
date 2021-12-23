@@ -22,10 +22,10 @@ import org.springframework.stereotype.Service;
 public class BlogRepository extends BaseRepository<BlogMapper, Blog, BlogCO> implements BlogGateway {
 
     @Override
-    public IPage<BlogCO> queryByTagName (BlogCO e, Integer index , Integer size) {
+    public Page<BlogCO> queryByTagName (BlogCO e, Integer index , Integer size) {
         Page page=new Page(index,size);
-        IPage<Blog> iPage = this.baseMapper.selectPage(page, new QueryWrapper<Blog>().lambda().like(Blog::getTag,e.getTag()).orderByDesc(Blog::getCreateTime));
-        return TransformationUtil.copyToPage(iPage,BlogCO.class);
+        IPage<Blog> Page = this.baseMapper.selectPage(page, new QueryWrapper<Blog>().lambda().like(Blog::getTag,e.getTag()).orderByDesc(Blog::getCreateTime));
+        return TransformationUtil.copyToPage(Page,BlogCO.class);
     }
 
     @Override
@@ -39,11 +39,11 @@ public class BlogRepository extends BaseRepository<BlogMapper, Blog, BlogCO> imp
     }
 
     @Override
-    public IPage<BlogCO> queryByBlogName(String title, Integer index, Integer size) {
+    public Page<BlogCO> queryByBlogName(String title, Integer index, Integer size) {
         Page page=new Page(index,size);
-        IPage<Blog> iPage = this.baseMapper.selectPage(page,
+        IPage<Blog> Page = this.baseMapper.selectPage(page,
                 new QueryWrapper<Blog>().lambda().like(Blog::getTitle,title).orderByDesc(Blog::getCreateTime));
-        return TransformationUtil.copyToPage(iPage,BlogCO.class);
+        return TransformationUtil.copyToPage(Page,BlogCO.class);
     }
 
 }

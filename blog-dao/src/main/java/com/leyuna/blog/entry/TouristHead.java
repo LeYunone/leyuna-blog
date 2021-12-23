@@ -27,7 +27,7 @@ public class TouristHead implements Serializable {
 
     private static final long serialVersionUID = 544200023655916831L;
 
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ID_WORKER_STR)
     private String id;
 
     /**

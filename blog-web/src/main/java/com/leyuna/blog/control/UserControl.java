@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController()
 @RequestMapping("/user")
-public class UserControl extends SysBaseControl {
+public class UserControl  {
 
     @Autowired
     private UserDomain userDomain;
@@ -30,9 +30,9 @@ public class UserControl extends SysBaseControl {
         if(login!=null){
             //绑定令牌
             userDomain.userLock(login.getId());
-            return successResponseBean();
+            return ResponseBean.buildSuccess();
         }else{
-            return failResponseBean(UserAsserts.LOGINT_FAIL.getMsg());
+            return ResponseBean.buildFailure(UserAsserts.LOGINT_FAIL.getMsg());
         }
     }
 }

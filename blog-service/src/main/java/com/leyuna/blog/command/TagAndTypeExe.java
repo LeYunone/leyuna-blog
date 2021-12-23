@@ -1,8 +1,8 @@
 package com.leyuna.blog.command;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.TagCO;
 import com.leyuna.blog.co.TypeCO;
 import com.leyuna.blog.co.TypeNavCO;
@@ -31,15 +31,15 @@ public class TagAndTypeExe {
      * @return
      */
     @Cacheable(cacheNames = "getAllTags")
-    public IPage<TagCO> getAllTags(Integer pageIndex, Integer pageSize, String conditionName){
-        IPage<TagCO> tagIPage=null;
+    public Page<TagCO> getAllTags(Integer pageIndex, Integer pageSize, String conditionName){
+        Page<TagCO> tagPage=null;
         //如果有模糊查询条件则走模糊查询
         if(StringUtils.isEmpty(conditionName)){
-            tagIPage = TagE.queryInstance().getGateway().selectByPage(TagE.queryInstance(), pageIndex,pageSize);
+            tagPage = TagE.queryInstance().getGateway().selectByPage(TagE.queryInstance(), pageIndex,pageSize);
         }else{
-            tagIPage = TagE.queryInstance().getGateway().selectByLikeNamePage(TagE.queryInstance(),pageIndex,pageSize,conditionName);
+            tagPage = TagE.queryInstance().getGateway().selectByLikeNamePage(TagE.queryInstance(),pageIndex,pageSize,conditionName);
         }
-        return tagIPage;
+        return tagPage;
     }
 
     /**
@@ -59,8 +59,8 @@ public class TagAndTypeExe {
      * @return
      */
     @Cacheable(cacheNames = "getAllTypes")
-    public IPage<TypeCO> getAllTypes(Integer pageIndex, Integer pageSize, String conditionName){
-        IPage<TypeCO> typeIPage=null;
+    public Page<TypeCO> getAllTypes(Integer pageIndex, Integer pageSize, String conditionName){
+        Page<TypeCO> typePage=null;
         if(pageIndex==null&&pageIndex==null){
             pageIndex=1;
             //暂时限定数据库中只会存在100条分类
@@ -69,11 +69,11 @@ public class TagAndTypeExe {
         }
         //如果有模糊查询条件则走模糊查询
         if(StringUtils.isEmpty(conditionName)){
-            typeIPage = TypeE.queryInstance().getGateway().selectByPage(TypeE.queryInstance(), pageIndex,pageSize);
+            typePage = TypeE.queryInstance().getGateway().selectByPage(TypeE.queryInstance(), pageIndex,pageSize);
         }else{
-            typeIPage = TypeE.queryInstance().getGateway().selectByLikeNamePage(TypeE.queryInstance(),pageIndex,pageSize,conditionName);
+            typePage = TypeE.queryInstance().getGateway().selectByLikeNamePage(TypeE.queryInstance(),pageIndex,pageSize,conditionName);
         }
-        return typeIPage;
+        return typePage;
     }
 
     /**

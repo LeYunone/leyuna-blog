@@ -1,7 +1,7 @@
 package com.leyuna.blog.gateway;
 
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.BlogCO;
 
 /**
@@ -12,12 +12,12 @@ import com.leyuna.blog.co.BlogCO;
  */
 public interface BlogGateway extends BaseGateway<BlogCO> {
 
-    IPage<BlogCO> queryByTagName (BlogCO e, Integer index , Integer size);
+    Page<BlogCO> queryByTagName (BlogCO e, Integer index , Integer size);
 
     int queryCountByType (Integer type);
 
     boolean updateClickCount (String blogId, Integer clickCount);
 
-    IPage<BlogCO> queryByBlogName (String title, Integer index,Integer size);
+    Page<BlogCO> queryByBlogName (String title, Integer index,Integer size);
 }
 

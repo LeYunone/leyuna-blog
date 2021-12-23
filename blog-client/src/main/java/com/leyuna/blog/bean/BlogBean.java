@@ -22,7 +22,7 @@ public class BlogBean {
     /**
      * 类型 S
      */
-    private Integer  type;
+    private String  type;
     /**
      * 标签 S 数组形式
      */
@@ -37,5 +37,5 @@ public class BlogBean {
      */
     private String tag;
 
-    private Integer id;
+    private String id;
 }

@@ -1,7 +1,7 @@
 package com.leyuna.blog.gateway;
 
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.CommentCO;
 
 import java.util.List;
@@ -14,9 +14,9 @@ import java.util.List;
  */
 public interface CommentGateway extends BaseGateway<CommentCO> {
 
-    IPage<CommentCO> selectNewCommentByBlogId (Integer index, Integer size, String blogId);
+    Page<CommentCO> selectNewCommentByBlogId (Integer index, Integer size, String blogId);
 
-    IPage<CommentCO> selectNewAndGoodsCommentByBlogId (Integer index, Integer size, String blogId);
+    Page<CommentCO> selectNewAndGoodsCommentByBlogId (Integer index, Integer size, String blogId);
 
     List<CommentCO> selectSubComment (String commentId);
 

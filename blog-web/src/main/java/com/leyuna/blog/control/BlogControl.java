@@ -1,6 +1,6 @@
 package com.leyuna.blog.control;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.BlogBean;
 import com.leyuna.blog.bean.NoticeBean;
 import com.leyuna.blog.bean.ResponseBean;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController()
 @RequestMapping("/blog")
-public class BlogControl extends SysBaseControl {
+public class BlogControl{
 
     @Autowired
     private BlogDomain blogDomain;
@@ -51,9 +51,9 @@ public class BlogControl extends SysBaseControl {
         }
         boolean b = blogDomain.addBlog(TransformationUtil.copyToDTO(blogBean, BlogE.class));
         if(b){
-            return successResponseBean();
+            return ResponseBean.buildSuccess();
         }else{
-            return failResponseBean(SystemAsserts.ADD_BLOG_FAIL.getMsg());
+            return ResponseBean.buildFailure(SystemAsserts.ADD_BLOG_FAIL.getMsg());
         }
     }
 
@@ -62,13 +62,13 @@ public class BlogControl extends SysBaseControl {
      * @return
      */
     @GetMapping("/blogs")
-    public ResponseBean getAllBlogs(@RequestParam(required = false) Integer index,
-                                    @RequestParam(required = false) Integer size,
+    public ResponseBean getAllBlogs(@RequestParam(required = false,defaultValue = "1") Integer index,
+                                    @RequestParam(required = false,defaultValue = "20") Integer size,
                                     @RequestParam(required = false) Integer typeId,
                                     @RequestParam(required = false) String  tags,
                                     @RequestParam(required = false) String conditionName){
-        IPage<BlogCO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tags,conditionName);
-        return successResponseBean(blogsByPage);
+        Page<BlogCO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tags,conditionName);
+        return ResponseBean.of(blogsByPage);
     }
 
     /**
@@ -79,17 +79,14 @@ public class BlogControl extends SysBaseControl {
     public ResponseBean getAllBlogsByTypeOrTag(Integer index,Integer size,
                                             @RequestParam(required = false) Integer typeId,
                                             @RequestParam(required = false)String tagName){
-        IPage<BlogCO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tagName,null);
-        ResponseBean responseBean = successResponseBean(blogsByPage);
-        //包装有多少条博客
-        responseBean.setObjData(blogsByPage.getTotal());
-        return responseBean;
+        Page<BlogCO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tagName,null);
+        return ResponseBean.of(blogsByPage);
     }
 
     @GetMapping("/blog/{id}")
     public ResponseBean getBlogById(@PathVariable(value = "id")String blogId){
         BlogCO blogById = blogDomain.openBlogById(blogId);
-        return successResponseBean(blogById);
+        return ResponseBean.of(blogById);
     }
 
     @PostMapping("/edit")
@@ -97,9 +94,9 @@ public class BlogControl extends SysBaseControl {
         userDomain.checkLock();
         boolean b = blogDomain.updateBlog(TransformationUtil.copyToDTO(blogBean, BlogE.class));
         if(b){
-            return successResponseBean();
+            return ResponseBean.buildSuccess();
         }else{
-            return failResponseBean(SystemAsserts.UPDATE_BLOG_FAIL.getMsg());
+            return ResponseBean.buildFailure(SystemAsserts.UPDATE_BLOG_FAIL.getMsg());
         }
     }
 
@@ -111,8 +108,8 @@ public class BlogControl extends SysBaseControl {
      */
     @RequestMapping("/history")
     public ResponseBean getWebHistory(Integer index,Integer size){
-        IPage<WebHistoryCO> webHistory=blogDomain.getNoticePage(index, size,null,0);
-        return successResponseBean(webHistory);
+        Page<WebHistoryCO> webHistory=blogDomain.getNoticePage(index, size,null,0);
+        return ResponseBean.of(webHistory);
     }
     /**
      *  发布网站更新历史
@@ -123,9 +120,9 @@ public class BlogControl extends SysBaseControl {
         userDomain.checkLock();
         boolean b = blogDomain.addNotice(TransformationUtil.copyToDTO(noticeBean, WebHistoryE.class));
         if(b){
-            return successResponseBean();
+            return ResponseBean.buildSuccess();
         }else{
-            return failResponseBean(SystemAsserts.ADD_BLOG_FAIL.getMsg());
+            return ResponseBean.buildFailure(SystemAsserts.ADD_BLOG_FAIL.getMsg());
         }
     }
 
@@ -142,9 +139,9 @@ public class BlogControl extends SysBaseControl {
         LuceneCO blogFromSearch = searchDomain.getBlogFromSearch(key, index, size);
         //
         if(null!=blogFromSearch){
-            return successResponseBean(blogFromSearch);
+            return ResponseBean.of(blogFromSearch);
         }else{
-            return failResponseBean(SystemAsserts.QUERY_SEARCH.getMsg());
+            return ResponseBean.buildFailure(SystemAsserts.QUERY_SEARCH.getMsg());
         }
     }
 
@@ -157,9 +154,9 @@ public class BlogControl extends SysBaseControl {
         userDomain.checkLock();
         boolean blogSearch = searchDomain.createBlogSearch();
         if(blogSearch){
-            return successResponseBean();
+            return ResponseBean.buildSuccess();
         }else{
-            return failResponseBean();
+            return ResponseBean.buildFailure();
         }
     }
 
@@ -174,8 +171,8 @@ public class BlogControl extends SysBaseControl {
     public ResponseBean getAllNotice(@RequestParam(required = false) Integer index,
                                     @RequestParam(required = false) Integer size,
                                     @RequestParam(required = false) String conditionName){
-        IPage<WebHistoryCO> noticePage = blogDomain.getNoticePage(index, size, conditionName, 0);
-        return successResponseBean(noticePage);
+        Page<WebHistoryCO> noticePage = blogDomain.getNoticePage(index, size, conditionName, 0);
+        return ResponseBean.of(noticePage);
     }
 
     /**
@@ -187,7 +184,7 @@ public class BlogControl extends SysBaseControl {
     @GetMapping("/notice/{id}/{type}")
     public ResponseBean getNoticeOne(@PathVariable(value = "id")String id,@PathVariable(value = "type")Integer type){
         WebHistoryCO noticeOne = blogDomain.getNoticeOne(id, type);
-        return successResponseBean(noticeOne);
+        return ResponseBean.of(noticeOne);
     }
 
     @PostMapping("/editNotice")
@@ -195,9 +192,9 @@ public class BlogControl extends SysBaseControl {
         userDomain.checkLock();
         boolean b = blogDomain.updateNotice(TransformationUtil.copyToDTO(noticeBean, WebHistoryE.class));
         if(b){
-            return successResponseBean();
+            return ResponseBean.buildSuccess();
         }else{
-            return failResponseBean(SystemAsserts.UPDATE_BLOG_FAIL.getMsg());
+            return ResponseBean.buildFailure(SystemAsserts.UPDATE_BLOG_FAIL.getMsg());
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.leyuna.blog.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.CommentCO;
 import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.command.CommentExe;
@@ -49,8 +49,8 @@ public class TouristDomain {
      * @param type  [类型： 最新   最热  混杂型]
      * @return
      */
-    public IPage<CommentCO> getComment(Integer index, Integer size, String blogId, Integer type){
-        IPage<CommentCO> commentDTOPage=null;
+    public Page<CommentCO> getComment(Integer index, Integer size, String blogId, Integer type){
+        Page<CommentCO> commentDTOPage=null;
         commentDTOPage=commentExe.queryComment(index, size, blogId, type);
         return commentDTOPage;
     }

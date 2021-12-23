@@ -1,7 +1,7 @@
 package com.leyuna.blog.command;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.BlogCO;
 import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.entry.Blog;
@@ -66,14 +66,14 @@ public class BlogExe {
      * @return
      */
     @Cacheable(value = "getAllBlogByPage")
-    public IPage<BlogCO> getAllBlogByPage(Integer index,Integer size,String conditionName){
-        IPage<BlogCO> blogIPage =null;
+    public Page<BlogCO> getAllBlogByPage(Integer index, Integer size, String conditionName){
+        Page<BlogCO> blogPage =null;
         if(StringUtils.isNotEmpty(conditionName)){
-            blogIPage=BlogE.queryInstance().getGateway().queryByBlogName(conditionName, index,size);
+            blogPage=BlogE.queryInstance().getGateway().queryByBlogName(conditionName, index,size);
         }else{
-            blogIPage=BlogE.queryInstance().getGateway().selectByConOrderPage(new Blog(), index,size,2);
+            blogPage=BlogE.queryInstance().getGateway().selectByConOrderPage(new Blog(), index,size,2);
         }
-        return blogIPage;
+        return blogPage;
     }
 
     /**
@@ -86,17 +86,17 @@ public class BlogExe {
      * @return
      */
     @Cacheable(cacheNames = "getBlogByPage")
-    public IPage<BlogCO> getBlogByPage(Integer index,Integer size,Integer type,String tag,String conditionName){
-        IPage<BlogCO> blogIPage =null;
+    public Page<BlogCO> getBlogByPage(Integer index,Integer size,Integer type,String tag,String conditionName){
+        Page<BlogCO> blogPage =null;
         if(null==type){
             //根据标签查询  名字里包含
-            blogIPage = BlogE.queryInstance().getGateway().queryByTagName(BlogCO.builder().tag(tag).build(), index,size);
+            blogPage = BlogE.queryInstance().getGateway().queryByTagName(BlogCO.builder().tag(tag).build(), index,size);
         }else{
             //根据分类查询
-            blogIPage = BlogE.queryInstance().getGateway().selectByConOrderPage(BlogCO.builder().type(type).build(), index,size,0);
+            blogPage = BlogE.queryInstance().getGateway().selectByConOrderPage(BlogCO.builder().type(type).build(), index,size,0);
         }
         //转换结果集
-        return blogIPage;
+        return blogPage;
     }
 
     /**

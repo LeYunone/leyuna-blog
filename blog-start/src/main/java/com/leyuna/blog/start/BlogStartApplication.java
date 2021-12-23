@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableCaching //开启缓存
-@ComponentScan({"com.leyuna.blog.*"})
+@ComponentScan({"com.leyuna.blog"})
 public class BlogStartApplication extends SpringBootServletInitializer {
 
     public static void main (String[] args) {

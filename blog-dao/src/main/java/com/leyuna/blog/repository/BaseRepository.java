@@ -207,53 +207,52 @@ public abstract class BaseRepository<M extends BaseMapper<DO>, DO,CO> extends Se
 
     @Override
     public Page<CO> selectByPage (Object con,Integer index,Integer size) {
-        IPage<DO> page = new Page<>(index,size);
+        Page<DO> page = new Page<>(index,size);
         Object copy = TransformationUtil.copyToDTO(con, DOclass);
         QueryWrapper<DO> dQueryWrapper = new QueryWrapper<DO>().allEq(TransformationUtil.transDTOColumnMap(copy), false);
-        IPage<DO> doiPage = this.baseMapper.selectPage(page, dQueryWrapper);
+        IPage<DO> doPage = this.baseMapper.selectPage(page, dQueryWrapper);
 
         Page<CO> result=new Page<>();
-        result.setRecords(TransformationUtil.copyToLists(doiPage.getRecords(),COclass));
-        result.setTotal(doiPage.getTotal());
-        result.setPages(doiPage.getPages());
-        result.setCurrent(doiPage.getCurrent());
-        result.setSize(doiPage.getSize());
+        result.setRecords(TransformationUtil.copyToLists(doPage.getRecords(),COclass));
+        result.setTotal(doPage.getTotal());
+        result.setPages(doPage.getPages());
+        result.setCurrent(doPage.getCurrent());
+        result.setSize(doPage.getSize());
         return  result;
     }
 
     /**
      * 分页查询 日期排序
      * @param e
-     * @param page
      * @param type 排序类型   0为查询最近的日期排序   1为查最早的日期排序
      * @return
      */
     @Override
-    public IPage<CO> selectByConOrderPage(Object e,Integer index,Integer size,Integer type) {
+    public Page<CO> selectByConOrderPage(Object e,Integer index,Integer size,Integer type) {
         AssertUtil.isTrue(ObjectUtil.isNotNull (e), ErrorMeassage.OBJECT_NULL);
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(e);
         Page page=new Page(index,size);
-        IPage<DO> iPage =null;
+        IPage<DO> ipage =null;
         switch (type){
             case 0:
-                iPage=this.baseMapper.selectPage(page, new QueryWrapper<DO>().allEq(stringObjectMap).orderByDesc("create_time"));
+                ipage=this.baseMapper.selectPage(page, new QueryWrapper<DO>().allEq(stringObjectMap).orderByDesc("create_time"));
                 break;
             case 1:
-                iPage=this.baseMapper.selectPage(page, new QueryWrapper<DO>().allEq(stringObjectMap).orderByAsc("create_time"));
+                ipage=this.baseMapper.selectPage(page, new QueryWrapper<DO>().allEq(stringObjectMap).orderByAsc("create_time"));
                 break;
             case 2:
-                iPage=this.baseMapper.selectPage(page, new QueryWrapper<DO>().allEq(stringObjectMap).orderByDesc("update_time"));
+                ipage=this.baseMapper.selectPage(page, new QueryWrapper<DO>().allEq(stringObjectMap).orderByDesc("update_time"));
                 break;
             default:
                 break;
         }
 
         Page<CO> result=new Page<>();
-        result.setRecords(TransformationUtil.copyToLists(iPage.getRecords(),COclass));
-        result.setTotal(iPage.getTotal());
-        result.setPages(iPage.getPages());
-        result.setCurrent(iPage.getCurrent());
-        result.setSize(iPage.getSize());
+        result.setRecords(TransformationUtil.copyToLists(ipage.getRecords(),COclass));
+        result.setTotal(ipage.getTotal());
+        result.setPages(ipage.getPages());
+        result.setCurrent(ipage.getCurrent());
+        result.setSize(ipage.getSize());
         return result;
     }
 

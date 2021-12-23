@@ -27,7 +27,7 @@ public class CommentBean {
     private String information;
 
     //博客编号
-    private Integer blogId;
+    private String blogId;
 
     //被回复人
     private String respondent;

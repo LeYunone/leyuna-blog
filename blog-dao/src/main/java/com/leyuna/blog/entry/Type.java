@@ -31,7 +31,7 @@ public class Type implements Serializable {
     /**
      * 标签id
      */
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ID_WORKER_STR)
     private String id;
 
     /**
@@ -62,7 +62,7 @@ public class Type implements Serializable {
      * 分类导航
      */
     @TableField(value = "father_type")
-    private Integer fatherType;
+    private String fatherType;
 
 }
 

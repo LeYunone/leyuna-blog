@@ -30,7 +30,7 @@ public class CommentRepository extends BaseRepository<CommentMapper, Comment, Co
      * @param blogId
      * @return
      */
-    public IPage<CommentCO> selectNewCommentByBlogId(Integer index, Integer size, String blogId){
+    public Page<CommentCO> selectNewCommentByBlogId(Integer index, Integer size, String blogId){
         Page<Comment> page=new Page<>(index,size);
         IPage<Comment> page1 = this.page(page, new QueryWrapper<Comment>().lambda().
                 isNull(Comment::getFatherCommentId).eq(Comment::getBlogId, blogId).orderByDesc(Comment::getCreateTime));
@@ -44,7 +44,7 @@ public class CommentRepository extends BaseRepository<CommentMapper, Comment, Co
      * @param blogId
      * @return
      */
-    public IPage<CommentCO> selectNewAndGoodsCommentByBlogId(Integer index, Integer size, String blogId){
+    public Page<CommentCO> selectNewAndGoodsCommentByBlogId(Integer index, Integer size, String blogId){
         Page<Comment> page=new Page<>(index,size);
         IPage<Comment> page1 = this.page(page, new QueryWrapper<Comment>().lambda().
                 isNull(Comment::getFatherCommentId).eq(Comment::getBlogId, blogId).orderByDesc(Comment::getGoods,Comment::getCreateTime));

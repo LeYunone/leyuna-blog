@@ -7,9 +7,19 @@
       <option name="url" value="https://maven.aliyun.com/repository/public" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="oppein-maven-public" />
+      <option name="name" value="maven-public" />
+      <option name="url" value="http://10.10.2.120:8081/repository/maven-public" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="Maven Central repository" />
       <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="http://10.10.2.120:8081/repository/maven-public" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="jboss.community" />

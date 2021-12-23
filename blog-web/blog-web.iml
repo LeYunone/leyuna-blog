@@ -59,6 +59,8 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-cache:2.3.7.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.baomidou:mybatis-plus-generator:3.2.0" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.22" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.11.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.11.3" level="project" />
     <orderEntry type="library" name="Maven: cn.dev33:sa-token-spring-boot-starter:1.25.0" level="project" />
     <orderEntry type="library" name="Maven: cn.dev33:sa-token-servlet:1.25.0" level="project" />
     <orderEntry type="library" name="Maven: cn.dev33:sa-token-core:1.25.0" level="project" />
@@ -78,8 +80,6 @@
     <orderEntry type="library" name="Maven: com.janeluo:ikanalyzer:2012_u6" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.3.7.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-json:2.3.7.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.11.3" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.11.3" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.11.3" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.3" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-parameter-names:2.11.3" level="project" />

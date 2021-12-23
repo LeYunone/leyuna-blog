@@ -1,7 +1,7 @@
 package com.leyuna.blog.command;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.CommentCO;
 import com.leyuna.blog.domain.CommentE;
 import org.springframework.stereotype.Service;
@@ -33,15 +33,15 @@ public class CommentExe {
      * 分页查询指定博客下的评论
      * @return
      */
-    public IPage<CommentCO> queryComment(Integer index ,Integer size,String blogId,Integer type){
-        IPage<CommentCO> commentIPage =null;
+    public Page<CommentCO> queryComment(Integer index , Integer size, String blogId, Integer type){
+        Page<CommentCO> commentPage =null;
         if(type==0){
-            commentIPage=CommentE.queryInstance().getGateway().selectNewCommentByBlogId(index,size,blogId);
+            commentPage=CommentE.queryInstance().getGateway().selectNewCommentByBlogId(index,size,blogId);
         }
         if(type==1){
-            commentIPage=CommentE.queryInstance().getGateway().selectNewAndGoodsCommentByBlogId(index,size,blogId);
+            commentPage=CommentE.queryInstance().getGateway().selectNewAndGoodsCommentByBlogId(index,size,blogId);
         }
-        List<CommentCO> commentDTOS = commentIPage.getRecords();
+        List<CommentCO> commentDTOS = commentPage.getRecords();
         commentDTOS.forEach(c->{
             //父类编号
             String fId=c.getId();
@@ -49,7 +49,7 @@ public class CommentExe {
             List<CommentCO> subComment = CommentE.queryInstance().getGateway().selectSubComment(fId);
             c.setSubComment(subComment);
         });
-        return commentIPage;
+        return commentPage;
     }
 
     /**

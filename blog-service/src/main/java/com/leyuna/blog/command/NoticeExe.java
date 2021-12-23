@@ -1,6 +1,6 @@
 package com.leyuna.blog.command;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.WebHistoryCO;
 import com.leyuna.blog.domain.WebHistoryE;
 import com.leyuna.blog.util.CollectionUtil;
@@ -26,10 +26,10 @@ public class NoticeExe {
      * @return
      */
     @Cacheable(cacheNames = "getWebHistory")
-    public IPage<WebHistoryCO> getWebHistory(Integer index, Integer size){
-        IPage<WebHistoryCO> webHistoryIPage = WebHistoryE.queryInstance().getGateway().
+    public Page<WebHistoryCO> getWebHistory(Integer index, Integer size){
+        Page<WebHistoryCO> webHistoryPage = WebHistoryE.queryInstance().getGateway().
                 selectByConOrderPage(new WebHistoryCO(), index , size ,0);
-        return webHistoryIPage;
+        return webHistoryPage;
     }
 
     public WebHistoryCO getWebHistoryById(String id){
@@ -44,11 +44,11 @@ public class NoticeExe {
      * @return
      */
     @Cacheable(cacheNames = "getWebHistory")
-    public IPage<WebHistoryCO> getWebHistory(Integer index, Integer size,String conditionName){
-        IPage<WebHistoryCO> webHistoryIPage = WebHistoryE.queryInstance().getGateway().
+    public Page<WebHistoryCO> getWebHistory(Integer index, Integer size,String conditionName){
+        Page<WebHistoryCO> webHistoryPage = WebHistoryE.queryInstance().getGateway().
                 selectByLikeNamePage(index,size,conditionName);
         //封装结果集
-        return webHistoryIPage;
+        return webHistoryPage;
     }
 
     /**

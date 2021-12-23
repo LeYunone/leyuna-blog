@@ -15,14 +15,14 @@
         <module name="blog-service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="blog" target="1.5" />
-      <module name="blog-client" target="1.5" />
-      <module name="blog-dao" target="1.5" />
-      <module name="blog-domain" target="1.5" />
-      <module name="blog-service" target="1.5" />
-      <module name="blog-start" target="1.5" />
-      <module name="blog-web" target="1.5" />
+    <bytecodeTargetLevel target="8">
+      <module name="blog" target="1.8" />
+      <module name="blog-client" target="1.8" />
+      <module name="blog-dao" target="1.8" />
+      <module name="blog-domain" target="1.8" />
+      <module name="blog-service" target="1.8" />
+      <module name="blog-start" target="1.8" />
+      <module name="blog-web" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

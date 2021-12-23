@@ -1,6 +1,12 @@
-.idea/**/libraries
+.idea/libraries
+.idea/EasyCodeConfig
 
-/api/target/
-/daoservice/target/
-/web/target/
+
+/blog-web/target/
+/blog-start/target/
+/blog-service/target/
+/blog-dao/target/
+/blog-domain/target/
+/blog-client/target/
+
 /.idea/libraries/

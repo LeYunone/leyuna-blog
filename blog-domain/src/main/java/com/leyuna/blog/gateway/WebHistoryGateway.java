@@ -1,7 +1,7 @@
 package com.leyuna.blog.gateway;
 
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.WebHistoryCO;
 
 /**
@@ -19,6 +19,6 @@ public interface WebHistoryGateway extends BaseGateway<WebHistoryCO> {
      * @param conditionName
      * @return
      */
-    IPage<WebHistoryCO> selectByLikeNamePage (Integer index, Integer size, String conditionName);
+    Page<WebHistoryCO> selectByLikeNamePage (Integer index, Integer size, String conditionName);
 }
 

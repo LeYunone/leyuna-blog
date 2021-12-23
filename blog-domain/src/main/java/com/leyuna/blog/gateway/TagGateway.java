@@ -1,7 +1,7 @@
 package com.leyuna.blog.gateway;
 
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.TagCO;
 import com.leyuna.blog.domain.TagE;
 
@@ -11,7 +11,7 @@ import com.leyuna.blog.domain.TagE;
  */
 public interface TagGateway extends BaseGateway<TagCO> {
 
-    IPage<TagCO> selectByLikeNamePage (TagE tag, Integer index,Integer size, String conditionName);
+    Page<TagCO> selectByLikeNamePage (TagE tag, Integer index, Integer size, String conditionName);
 
     int getTagsCount ();
 

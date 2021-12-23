@@ -32,13 +32,13 @@ public class TypeRepository extends BaseRepository<TypeMapper,Type, TypeCO> impl
      * @return
      */
     @Override
-    public IPage<TypeCO> selectByLikeNamePage(TypeE type,Integer index,Integer size, String conditionName) {
+    public Page<TypeCO> selectByLikeNamePage(TypeE type,Integer index,Integer size, String conditionName) {
         AssertUtil.isTrue(ObjectUtil.isNotNull (type), ErrorMeassage.OBJECT_NULL);
         Page page=new Page(index,size);
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(type);
-        IPage<Type> iPage = this.page(page, new QueryWrapper<Type>()
+        IPage<Type> Page = this.page(page, new QueryWrapper<Type>()
                 .allEq(stringObjectMap).like("type_Name",conditionName));
-        return TransformationUtil.copyToPage(iPage,TypeCO.class);
+        return TransformationUtil.copyToPage(Page,TypeCO.class);
     }
 
     @Override

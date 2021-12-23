@@ -94,7 +94,7 @@ public class TransformationUtil {
         return result;
     }
 
-    public static <D> IPage<D> copyToPage(IPage page, Class<D> toClass){
+    public static <D> Page<D> copyToPage(IPage page, Class<D> toClass){
         Page<D> result=new Page<>();
         result.setRecords(TransformationUtil.copyToLists(page.getRecords(),toClass));
         result.setTotal(page.getTotal());

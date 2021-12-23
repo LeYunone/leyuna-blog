@@ -1,6 +1,6 @@
 package com.leyuna.blog.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.ResultDTO;
 import com.leyuna.blog.co.TagCO;
 import com.leyuna.blog.co.TypeCO;
@@ -79,11 +79,11 @@ public class TagTypeDomain {
      * @param
      * @return
      */
-    public IPage<TagCO> getALlTags(Integer pageIndex, Integer pageSize, String conditionName){
-        IPage<TagCO> iPage=null;
+    public Page<TagCO> getALlTags(Integer pageIndex, Integer pageSize, String conditionName){
+        Page<TagCO> Page=null;
         if(pageIndex!=null){
-            iPage = tagAndTypeExe.getAllTags(pageIndex,pageSize,conditionName);
-            iPage.getRecords().stream().forEach(tag->{
+            Page = tagAndTypeExe.getAllTags(pageIndex,pageSize,conditionName);
+            Page.getRecords().stream().forEach(tag->{
                 LocalDateTime lastTime=tag.getLastUserTime();
                 //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
                 if(LocalDateTime.now().isBefore(lastTime.plusMonths(1))){
@@ -93,10 +93,10 @@ public class TagTypeDomain {
                 }
             });
         }else{
-            iPage = tagAndTypeExe.getAllTags(1,100,conditionName);
+            Page = tagAndTypeExe.getAllTags(1,100,conditionName);
         }
-        Collections.sort(iPage.getRecords());
-        return iPage;
+        Collections.sort(Page.getRecords());
+        return Page;
     }
 
     /**
@@ -104,9 +104,10 @@ public class TagTypeDomain {
      * @param
      * @return
      */
-    public IPage<TypeCO> getALlTypes(Integer pageIndex,Integer pageSize,String conditionName){
-        IPage<TypeCO> iPage = tagAndTypeExe.getAllTypes(pageIndex,pageSize,conditionName);
-        iPage.getRecords().stream().forEach(tag->{
+    public Page<TypeCO> getALlTypes(Integer pageIndex,Integer pageSize,String conditionName){
+        clearCacheExe.clearAllCache();
+        Page<TypeCO> Page = tagAndTypeExe.getAllTypes(pageIndex,pageSize,conditionName);
+        Page.getRecords().stream().forEach(tag->{
             LocalDateTime lastTime=tag.getLastUserTime();
             //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
             if(LocalDateTime.now().isBefore(lastTime.plusMonths(1))){
@@ -115,7 +116,7 @@ public class TagTypeDomain {
                 tag.setUserStatus("cold");
             }
         });
-        return iPage;
+        return Page;
     }
 
     /**
@@ -124,7 +125,7 @@ public class TagTypeDomain {
      * @param types
      * @return
      */
-    public String addTypesOrTags(List<String> tags, List<String> types, Integer typeNav){
+    public String addTypesOrTags(List<String> tags, List<String> types, String typeNav){
         String message=null;
         //添加分类
         if(!CollectionUtils.isEmpty(types)){

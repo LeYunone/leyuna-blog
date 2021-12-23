@@ -2,7 +2,6 @@ package com.leyuna.blog.util;
 
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.blog.error.SystemAsserts;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -52,7 +51,6 @@ public class EncodeUtil {
         try {
             bytes = file.getBytes();
         } catch (IOException e) {
-            throw new RuntimeException(SystemAsserts.UPDOWN_IMG_FAIL.getMsg());
         }
         BASE64Encoder encoder = new BASE64Encoder();
         return encoder.encode(bytes);

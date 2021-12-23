@@ -28,7 +28,7 @@ public class Tag implements Serializable {
 
     private static final long serialVersionUID = 158921696052289705L;
 
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ID_WORKER_STR)
     private String id;
 
     @TableField(value = "tag_name")

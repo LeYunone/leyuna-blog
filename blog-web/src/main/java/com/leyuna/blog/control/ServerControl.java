@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatter;
  */
 @RestController
 @RequestMapping("/server")
-public class ServerControl extends SysBaseControl {
+public class ServerControl{
     @Autowired
     private UserDomain userDomain;
     @Autowired
@@ -41,9 +41,9 @@ public class ServerControl extends SysBaseControl {
 
         boolean b = UpLoadUtil.imgUpLoadFromClient(file,format);
         if(b){
-            return successResponseBean(format+"/"+file.getOriginalFilename());
+            return ResponseBean.of(format+"/"+file.getOriginalFilename());
         }else{
-            return failResponseBean(SystemAsserts.UPLOCAD_IMG_FAIL.getMsg());
+            return ResponseBean.buildFailure(SystemAsserts.UPLOCAD_IMG_FAIL.getMsg());
         }
     }
 
@@ -59,13 +59,13 @@ public class ServerControl extends SysBaseControl {
         if(file==null){
             //如果文件为空，三种情况，一是使用今天换头像的缓存，二是用以前的照片，三是使用系统默认的照片
             if(cacheExe.hasCacheByKey(remoteAddr+":head")){
-                return successResponseBean(cacheExe.getCacheByKey(remoteAddr+":head"));
+                return ResponseBean.of(cacheExe.getCacheByKey(remoteAddr+":head"));
             }else{
                 String touristOldHead = touristDomain.getTouristOldHead(remoteAddr);
                 if(StringUtils.isNotEmpty(touristOldHead)){
-                    return successResponseBean(touristOldHead);
+                    return ResponseBean.of(touristOldHead);
                 }else{
-                    return successResponseBean(ServerCode.SERVER_HEAD_IMG_DEFAULT);
+                    return ResponseBean.of(ServerCode.SERVER_HEAD_IMG_DEFAULT);
                 }
             }
         }else{
@@ -77,15 +77,15 @@ public class ServerControl extends SysBaseControl {
                 //添加到数据库中
                 boolean b1 = touristDomain.addOrUpdateHead(value, remoteAddr);
                 if(!b1){
-                    return failResponseBean(SystemAsserts.UPLOCAD_IMG_FAIL.getMsg());
+                    return ResponseBean.buildFailure(SystemAsserts.UPLOCAD_IMG_FAIL.getMsg());
                 }
                 //加入今天的缓存中
                 cacheExe.setCacheKey(remoteAddr+":head", value,43200);
-                ResponseBean responseBean = successResponseBean(value);
-                responseBean.setObjData(remoteAddr);
-                return responseBean;
+                ResponseBean<String> of = ResponseBean.of(value);
+                of.setMessage(remoteAddr);
+                return of;
             }
         }
-        return failResponseBean(SystemAsserts.UPLOCAD_IMG_FAIL.getMsg());
+        return ResponseBean.buildFailure(SystemAsserts.UPLOCAD_IMG_FAIL.getMsg());
     }
 }

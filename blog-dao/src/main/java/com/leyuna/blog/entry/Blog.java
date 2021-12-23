@@ -31,7 +31,7 @@ public class Blog implements Serializable {
     /**
      * 博客编号
      */
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ID_WORKER_STR)
     private String id;
 
     /**
@@ -68,7 +68,7 @@ public class Blog implements Serializable {
      * 分类
      */
     @TableField(value = "type")
-    private Integer type;
+    private String type;
 
     /**
      * 标签

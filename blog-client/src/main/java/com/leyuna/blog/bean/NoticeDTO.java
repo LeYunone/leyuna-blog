@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 public class NoticeDTO implements Serializable {
 
-    private Integer id;
+    private String id;
 
     private String title;
 

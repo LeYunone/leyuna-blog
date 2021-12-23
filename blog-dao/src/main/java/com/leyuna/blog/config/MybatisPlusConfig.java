@@ -30,7 +30,7 @@ public class MybatisPlusConfig {
     public MapperScannerConfigurer mapperScannerConfigurer(){
         MapperScannerConfigurer scannerConfigurer = new MapperScannerConfigurer();
         //可以通过环境变量获取你的mapper路径,这样mapper扫描可以通过配置文件配置了
-        scannerConfigurer.setBasePackage("com.blog.daoservice.mapper");
+        scannerConfigurer.setBasePackage("com.leyuna.blog.repository.mapper");
         return scannerConfigurer;
     }
 

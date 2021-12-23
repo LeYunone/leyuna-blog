@@ -1,6 +1,6 @@
 package com.leyuna.blog.control;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.CommentBean;
 import com.leyuna.blog.bean.ResponseBean;
 import com.leyuna.blog.co.CommentCO;
@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RequestMapping("/tourist")
 @RestController
-public class TouristControl extends SysBaseControl {
+public class TouristControl {
 
     @Autowired
     private TouristDomain touristDomain;
@@ -59,9 +59,9 @@ public class TouristControl extends SysBaseControl {
         }
         CommentCO comment = touristDomain.comment(commentDTO);
         if(comment!=null){
-            return successResponseBean(comment);
+            return ResponseBean.of(comment);
         }
-        return failResponseBean(SystemAsserts.COMMENT_FAIL.getMsg());
+        return ResponseBean.buildFailure(SystemAsserts.COMMENT_FAIL.getMsg());
     }
 
     /**
@@ -73,8 +73,8 @@ public class TouristControl extends SysBaseControl {
      */
     @RequestMapping("/comment/blog")
     public ResponseBean getComment(Integer index,Integer size,String blogId,@RequestParam(required = false) Integer type){
-        IPage<CommentCO> comment = touristDomain.getComment(index, size, blogId, type);
-        return successResponseBean(comment);
+        Page<CommentCO> comment = touristDomain.getComment(index, size, blogId, type);
+        return ResponseBean.of(comment);
     }
 
     /**
@@ -86,18 +86,19 @@ public class TouristControl extends SysBaseControl {
         boolean b = cacheExe.hasCacheByKey(remoteAddr+":head");
         if(b){
             //去找今天这个用户设置的头像
-            return failResponseBean(cacheExe.getCacheByKey(remoteAddr+":head"));
+            String cacheByKey = cacheExe.getCacheByKey(remoteAddr + ":head");
+            return ResponseBean.buildFailure(cacheByKey);
         }else{
-            return successResponseBean();
+            return ResponseBean.buildSuccess();
         }
     }
 
     @RequestMapping("/goods")
-    public ResponseBean goodsByComment(Integer commentId,HttpServletRequest request){
+    public ResponseBean goodsByComment(String commentId,HttpServletRequest request){
         boolean b = touristDomain.addGoods(commentId, ServerUtil.getClientIp(request));
         if(b) {
-            return successResponseBean();
+            return ResponseBean.buildSuccess();
         }
-        return failResponseBean(UserAsserts.GOODS_COMMENT_FAIL.getMsg());
+        return ResponseBean.buildFailure(UserAsserts.GOODS_COMMENT_FAIL.getMsg());
     }
 }

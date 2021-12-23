@@ -28,7 +28,7 @@ public class WebHistory implements Serializable {
 
     private static final long serialVersionUID = 556322757071096126L;
 
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ID_WORKER_STR)
     private String id;
 
     @TableField(value = "title")

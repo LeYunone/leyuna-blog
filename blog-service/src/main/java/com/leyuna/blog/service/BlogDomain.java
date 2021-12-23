@@ -1,6 +1,5 @@
 package com.leyuna.blog.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -50,8 +49,8 @@ public class BlogDomain {
      * @param tags
      * @return
      */
-    public IPage<BlogCO> getBlogsByPage(Integer index, Integer size, Integer type, String tags, String conditionName){
-        IPage<BlogCO> result=null;
+    public Page<BlogCO> getBlogsByPage(Integer index, Integer size, Integer type, String tags, String conditionName){
+        Page<BlogCO> result=null;
         //查询所有
         if(type==null && StringUtils.isEmpty(tags)){
             result = blogExe.getAllBlogByPage(index, size,conditionName);
@@ -203,11 +202,12 @@ public class BlogDomain {
      * @param type
      * @return
      */
-    public IPage<WebHistoryCO> getNoticePage(Integer index, Integer size, String conditionName, int type){
+    public Page<WebHistoryCO> getNoticePage(Integer index, Integer size, String conditionName, int type){
         Page<NoticeDTO> result=null;
+        clearCacheExe.clearAllCache();
         switch (type){
             case 0:
-                IPage<WebHistoryCO> webHistory=null;
+                Page<WebHistoryCO> webHistory=null;
                 //查询网站更新公告
                 if(StringUtils.isNotEmpty(conditionName)){
                    webHistory = noticeExe.getWebHistory(index,size,conditionName);
