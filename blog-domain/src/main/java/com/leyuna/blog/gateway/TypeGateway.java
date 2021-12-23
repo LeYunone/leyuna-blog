@@ -15,8 +15,6 @@ public interface TypeGateway extends BaseGateway<TypeCO> {
 
     int getTagsCount ();
 
-    boolean updateNameById (TypeE type);
-
     boolean updateLastUseTimeById (String id);
 
     boolean updateUseCountByName (String id, int userCount);

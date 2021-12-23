@@ -7,10 +7,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.TagCO;
 import com.leyuna.blog.domain.TagE;
 import com.leyuna.blog.entry.Tag;
+import com.leyuna.blog.error.ErrorMessage;
 import com.leyuna.blog.gateway.TagGateway;
 import com.leyuna.blog.repository.mapper.TagMapper;
 import com.leyuna.blog.util.AssertUtil;
-import com.leyuna.blog.util.ErrorMeassage;
 import com.leyuna.blog.util.ObjectUtil;
 import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ public class TagRepository extends BaseRepository<TagMapper,Tag, TagCO> implemen
      */
     @Override
     public Page<TagCO> selectByLikeNamePage(TagE tag, Integer index, Integer size, String conditionName) {
-        AssertUtil.isTrue(ObjectUtil.isNotNull (tag), ErrorMeassage.OBJECT_NULL);
+        AssertUtil.isTrue(ObjectUtil.isNotNull (tag), ErrorMessage.OBJECT_NULL);
         Page page=new Page(index,size);
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(tag);
         IPage<Tag> Page = this.baseMapper.selectPage(page, new QueryWrapper<Tag>()
@@ -51,12 +51,6 @@ public class TagRepository extends BaseRepository<TagMapper,Tag, TagCO> implemen
     @Override
     public int getTagsCountByLikeName(String conditionName) {
         return this.count(new QueryWrapper<Tag>().lambda().like(Tag::getTagName,conditionName));
-    }
-
-    @Override
-    public boolean updateNameById(TagE tag){
-        boolean update = this.update(new UpdateWrapper<Tag>().lambda().eq(Tag::getId, tag.getId()).set(Tag::getTagName, tag.getTagName()));
-        return update;
     }
 
     @Override

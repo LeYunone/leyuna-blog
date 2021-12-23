@@ -3,7 +3,6 @@ package com.leyuna.blog.service;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.bean.NoticeDTO;
 import com.leyuna.blog.co.BlogCO;
 import com.leyuna.blog.co.WebHistoryCO;
 import com.leyuna.blog.command.*;
@@ -49,7 +48,7 @@ public class BlogDomain {
      * @param tags
      * @return
      */
-    public Page<BlogCO> getBlogsByPage(Integer index, Integer size, Integer type, String tags, String conditionName){
+    public Page<BlogCO> getBlogsByPage(Integer index, Integer size, String type, String tags, String conditionName){
         Page<BlogCO> result=null;
         //查询所有
         if(type==null && StringUtils.isEmpty(tags)){
@@ -203,8 +202,6 @@ public class BlogDomain {
      * @return
      */
     public Page<WebHistoryCO> getNoticePage(Integer index, Integer size, String conditionName, int type){
-        Page<NoticeDTO> result=null;
-        clearCacheExe.clearAllCache();
         switch (type){
             case 0:
                 Page<WebHistoryCO> webHistory=null;

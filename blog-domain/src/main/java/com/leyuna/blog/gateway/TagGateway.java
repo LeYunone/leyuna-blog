@@ -17,8 +17,6 @@ public interface TagGateway extends BaseGateway<TagCO> {
 
     int getTagsCountByLikeName (String conditionName);
 
-    boolean updateNameById (TagE tag);
-
     boolean updateLastUseTimeByName (String[] names);
 
     boolean updateUseCountByName (String name, int userCount);

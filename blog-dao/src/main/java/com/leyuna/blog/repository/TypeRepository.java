@@ -7,10 +7,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.TypeCO;
 import com.leyuna.blog.domain.TypeE;
 import com.leyuna.blog.entry.Type;
+import com.leyuna.blog.error.ErrorMessage;
 import com.leyuna.blog.gateway.TypeGateway;
 import com.leyuna.blog.repository.mapper.TypeMapper;
 import com.leyuna.blog.util.AssertUtil;
-import com.leyuna.blog.util.ErrorMeassage;
 import com.leyuna.blog.util.ObjectUtil;
 import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class TypeRepository extends BaseRepository<TypeMapper,Type, TypeCO> impl
      */
     @Override
     public Page<TypeCO> selectByLikeNamePage(TypeE type,Integer index,Integer size, String conditionName) {
-        AssertUtil.isTrue(ObjectUtil.isNotNull (type), ErrorMeassage.OBJECT_NULL);
+        AssertUtil.isTrue(ObjectUtil.isNotNull (type), ErrorMessage.OBJECT_NULL);
         Page page=new Page(index,size);
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(type);
         IPage<Type> Page = this.page(page, new QueryWrapper<Type>()
@@ -44,12 +44,6 @@ public class TypeRepository extends BaseRepository<TypeMapper,Type, TypeCO> impl
     @Override
     public int getTagsCount(){
         return this.count();
-    }
-
-    @Override
-    public boolean updateNameById(TypeE type){
-        boolean update = this.update(new UpdateWrapper<Type>().lambda().eq(Type::getId, type.getId()).set(Type::getTypeName, type.getTypeName()));
-        return update;
     }
 
     @Override

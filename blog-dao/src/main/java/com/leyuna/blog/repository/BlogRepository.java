@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.BlogCO;
+import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.entry.Blog;
 import com.leyuna.blog.gateway.BlogGateway;
 import com.leyuna.blog.repository.mapper.BlogMapper;
@@ -22,14 +23,14 @@ import org.springframework.stereotype.Service;
 public class BlogRepository extends BaseRepository<BlogMapper, Blog, BlogCO> implements BlogGateway {
 
     @Override
-    public Page<BlogCO> queryByTagName (BlogCO e, Integer index , Integer size) {
+    public Page<BlogCO> queryByTagName (BlogE e, Integer index , Integer size) {
         Page page=new Page(index,size);
         IPage<Blog> Page = this.baseMapper.selectPage(page, new QueryWrapper<Blog>().lambda().like(Blog::getTag,e.getTag()).orderByDesc(Blog::getCreateTime));
         return TransformationUtil.copyToPage(Page,BlogCO.class);
     }
 
     @Override
-    public int queryCountByType(Integer type){
+    public int queryCountByType(String type){
         return this.count(new QueryWrapper<Blog>().lambda().eq(Blog::getType,type));
     }
 

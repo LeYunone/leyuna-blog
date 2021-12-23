@@ -23,4 +23,7 @@ public class ErrorMessage {
     public static final String UPDATE_TYPE_FALE = "更新分类错误";
 
     public static final String CREATE_DOCUMENT_FALE = "创建索引文档失败";
+
+    public final static String OBJECT_NULL = "操作对象为空";
+
 }

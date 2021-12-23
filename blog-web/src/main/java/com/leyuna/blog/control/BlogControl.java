@@ -64,7 +64,7 @@ public class BlogControl{
     @GetMapping("/blogs")
     public ResponseBean getAllBlogs(@RequestParam(required = false,defaultValue = "1") Integer index,
                                     @RequestParam(required = false,defaultValue = "20") Integer size,
-                                    @RequestParam(required = false) Integer typeId,
+                                    @RequestParam(required = false) String typeId,
                                     @RequestParam(required = false) String  tags,
                                     @RequestParam(required = false) String conditionName){
         Page<BlogCO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tags,conditionName);
@@ -77,7 +77,7 @@ public class BlogControl{
      */
     @GetMapping("/blogIndex")
     public ResponseBean getAllBlogsByTypeOrTag(Integer index,Integer size,
-                                            @RequestParam(required = false) Integer typeId,
+                                            @RequestParam(required = false) String typeId,
                                             @RequestParam(required = false)String tagName){
         Page<BlogCO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tagName,null);
         return ResponseBean.of(blogsByPage);

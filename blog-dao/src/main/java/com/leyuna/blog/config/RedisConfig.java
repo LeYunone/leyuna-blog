@@ -4,12 +4,20 @@ package com.leyuna.blog.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+
+import java.time.Duration;
+import java.util.Optional;
 
 /**
  * @author pengli
@@ -50,20 +58,20 @@ public class RedisConfig {
         template.setValueSerializer(jackson2JsonRedisSerializer);
     }
 
-//    @Bean
-//    public RedisCacheManager setupRedisCacheManager(RedisProperties redisProperties,
-//                                                    RedisConnectionFactory redisConnectionFactory) {
-//        ObjectMapper mapper = new ObjectMapper();
-//        // 支持解析时间里面带T的格式
-//        mapper.registerModule(new JavaTimeModule());
-//
-//        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-//                // 设置超时时间
-//                .entryTtl(Optional.ofNullable(redisProperties.getTimeout()).orElse(Duration.ofMinutes(360)))
-//                // 禁止缓存null值
-//                .disableCachingNullValues();
-//
-//        return RedisCacheManager.builder(redisConnectionFactory)
-//                .cacheDefaults(redisCacheConfiguration).transactionAware().build();
-//    }
+    @Bean
+    public RedisCacheManager setupRedisCacheManager(RedisProperties redisProperties,
+                                                    RedisConnectionFactory redisConnectionFactory) {
+        ObjectMapper mapper = new ObjectMapper();
+        // 支持解析时间里面带T的格式
+        mapper.registerModule(new JavaTimeModule());
+
+        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+                // 设置超时时间
+                .entryTtl(Optional.ofNullable(redisProperties.getTimeout()).orElse(Duration.ofMinutes(360)))
+                // 禁止缓存null值
+                .disableCachingNullValues();
+
+        return RedisCacheManager.builder(redisConnectionFactory)
+                .cacheDefaults(redisCacheConfiguration).transactionAware().build();
+    }
 }

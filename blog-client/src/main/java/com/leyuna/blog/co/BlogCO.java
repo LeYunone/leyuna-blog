@@ -50,7 +50,7 @@ public class BlogCO implements Serializable {
      */
     private String blogContent;
 
-    private Integer type;
+    private String type;
 
     //存储的是用逗号分隔的标签名
     private String tag;

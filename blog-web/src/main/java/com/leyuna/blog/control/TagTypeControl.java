@@ -3,7 +3,6 @@ package com.leyuna.blog.control;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.CascaderTypeBean;
 import com.leyuna.blog.bean.ResponseBean;
-import com.leyuna.blog.bean.ResultDTO;
 import com.leyuna.blog.bean.TreeTypeBean;
 import com.leyuna.blog.co.TagCO;
 import com.leyuna.blog.co.TypeCO;
@@ -14,6 +13,7 @@ import com.leyuna.blog.error.SystemAsserts;
 import com.leyuna.blog.service.TagTypeDomain;
 import com.leyuna.blog.service.UserDomain;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -76,9 +76,9 @@ public class TagTypeControl{
     public ResponseBean getTypeInNav(){
         //暂定默认最多只会有100个分类
         Page<TypeCO> aLlTypes = tagTypeDomain.getALlTypes(null, null, null);
-        List<TypeCO> records = aLlTypes.getRecords();
         Map<String, TypeNavCO> typeNavMap = tagTypeDomain.getTypeNavMap();
-        List<CascaderTypeBean> cascaderTypeResult = getCascaderTypeResult(records, typeNavMap);
+
+        List<CascaderTypeBean> cascaderTypeResult = getCascaderTypeResult(aLlTypes.getRecords(), typeNavMap);
         return ResponseBean.of(cascaderTypeResult);
     }
 
@@ -167,11 +167,11 @@ public class TagTypeControl{
     public ResponseBean updateTag(String id,String tagName){
         userDomain.checkLock();
         TagE build = TagE.queryInstance().setId(id).setTagName(tagName);
-        ResultDTO resultDTO = tagTypeDomain.updateTypesOrTags(build, null);
-        if(resultDTO.getMessages()==null){
+        String message = tagTypeDomain.updateTypesOrTags(build, null);
+        if(StringUtils.isEmpty(message)){
             return ResponseBean.buildSuccess();
         }else{
-            return ResponseBean.buildFailure(resultDTO.getMessages().toString());
+            return ResponseBean.buildFailure(message);
         }
     }
 
@@ -182,11 +182,11 @@ public class TagTypeControl{
     @PostMapping("/updateType")
     public ResponseBean updateTypes(String id,String typeName){
         TypeE build = TypeE.queryInstance().setId(id).setTypeName(typeName);
-        ResultDTO resultDTO = tagTypeDomain.updateTypesOrTags(null, build);
-        if(resultDTO.getMessages()==null){
+        String message = tagTypeDomain.updateTypesOrTags(null, build);
+        if(StringUtils.isEmpty(message)){
             return ResponseBean.buildSuccess();
         }else{
-            return ResponseBean.buildFailure(resultDTO.getMessages().toString());
+            return ResponseBean.buildFailure(message);
         }
     }
 
@@ -209,8 +209,7 @@ public class TagTypeControl{
         Map<String, TypeNavCO> typeNav = tagTypeDomain.getTypeNavMap();
         //得到所有分类
         Page<TypeCO> aLlTypes = tagTypeDomain.getALlTypes(null, null, null);
-        List<TypeCO> records = aLlTypes.getRecords();
-        List<TreeTypeBean> treeResult = getTreeResult(typeNav, records);
+        List<TreeTypeBean> treeResult = getTreeResult(typeNav, aLlTypes.getRecords());
         return ResponseBean.of(treeResult);
     }
 

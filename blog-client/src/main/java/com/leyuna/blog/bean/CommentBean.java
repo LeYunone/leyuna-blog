@@ -15,7 +15,7 @@ public class CommentBean {
     private String content;
 
     //父评论编号
-    private Integer fatherCommentId;
+    private String fatherCommentId;
 
     //署名
     private String name;

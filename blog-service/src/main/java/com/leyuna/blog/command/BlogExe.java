@@ -86,14 +86,14 @@ public class BlogExe {
      * @return
      */
     @Cacheable(cacheNames = "getBlogByPage")
-    public Page<BlogCO> getBlogByPage(Integer index,Integer size,Integer type,String tag,String conditionName){
+    public Page<BlogCO> getBlogByPage(Integer index,Integer size,String type,String tag,String conditionName){
         Page<BlogCO> blogPage =null;
         if(null==type){
             //根据标签查询  名字里包含
-            blogPage = BlogE.queryInstance().getGateway().queryByTagName(BlogCO.builder().tag(tag).build(), index,size);
+            blogPage = BlogE.queryInstance().getGateway().queryByTagName(BlogE.queryInstance().setTag(tag), index,size);
         }else{
             //根据分类查询
-            blogPage = BlogE.queryInstance().getGateway().selectByConOrderPage(BlogCO.builder().type(type).build(), index,size,0);
+            blogPage = BlogE.queryInstance().getGateway().selectByConOrderPage(BlogE.queryInstance().setType(type), index,size,0);
         }
         //转换结果集
         return blogPage;

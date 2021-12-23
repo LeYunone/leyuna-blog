@@ -3,6 +3,7 @@ package com.leyuna.blog.gateway;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.BlogCO;
+import com.leyuna.blog.domain.BlogE;
 
 /**
  * (Blog)dao
@@ -12,9 +13,9 @@ import com.leyuna.blog.co.BlogCO;
  */
 public interface BlogGateway extends BaseGateway<BlogCO> {
 
-    Page<BlogCO> queryByTagName (BlogCO e, Integer index , Integer size);
+    Page<BlogCO> queryByTagName (BlogE e, Integer index , Integer size);
 
-    int queryCountByType (Integer type);
+    int queryCountByType (String type);
 
     boolean updateClickCount (String blogId, Integer clickCount);
 

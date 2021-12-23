@@ -1,7 +1,6 @@
 package com.leyuna.blog.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.bean.ResultDTO;
 import com.leyuna.blog.co.TagCO;
 import com.leyuna.blog.co.TypeCO;
 import com.leyuna.blog.co.TypeNavCO;
@@ -105,7 +104,6 @@ public class TagTypeDomain {
      * @return
      */
     public Page<TypeCO> getALlTypes(Integer pageIndex,Integer pageSize,String conditionName){
-        clearCacheExe.clearAllCache();
         Page<TypeCO> Page = tagAndTypeExe.getAllTypes(pageIndex,pageSize,conditionName);
         Page.getRecords().stream().forEach(tag->{
             LocalDateTime lastTime=tag.getLastUserTime();
@@ -200,12 +198,12 @@ public class TagTypeDomain {
      * @return
      */
     @Transactional
-    public ResultDTO updateTypesOrTags(TagE tags, TypeE types){
-        ResultDTO resultDTO=new ResultDTO();
+    public String updateTypesOrTags(TagE tags, TypeE types){
+        String message=null;
         if(null!=types){
             boolean b = tagAndTypeExe.updateTypes(types);
             if(!b){
-                resultDTO.addMessage(ErrorMessage.UPDATE_TYPE_FALE);
+                message = ErrorMessage.UPDATE_TYPE_FALE;
             }else{
                 clearCacheExe.clearTypeQueryCache();
             }
@@ -213,12 +211,12 @@ public class TagTypeDomain {
         if(null!=tags){
             boolean b = tagAndTypeExe.updateTags(tags);
             if(!b){
-                resultDTO.addMessage(ErrorMessage.UPDATE_TAG_FALE);
+                message = ErrorMessage.UPDATE_TAG_FALE;
             }else{
                 clearCacheExe.clearTagQueryCache();
             }
         }
-        return resultDTO;
+        return message;
     }
 
     /**
