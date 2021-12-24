@@ -31,7 +31,7 @@ public class ExcepetionConfig {
      */
     @ExceptionHandler(value = RuntimeException.class)
     public ResponseBean errorHander(HttpServletRequest request, Exception e){
-
+        e.printStackTrace();
         logger.error(e.getLocalizedMessage());
         return ResponseBean.buildFailure(e.getMessage());
     }

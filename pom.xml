@@ -23,7 +23,7 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
+        <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
         <lucene.version>7.6.0</lucene.version>
         <sa-token.verison>1.25.0</sa-token.verison>
         <mybatis-plus.version>3.1.0</mybatis-plus.version>

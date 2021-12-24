@@ -1,5 +1,7 @@
 ## 数据库配置
 spring:
+  application:
+    name: leyuna-blog
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/blog?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
@@ -17,7 +19,7 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
   servlet:
     multipart:
       max-file-size: 50MB
@@ -29,14 +31,19 @@ server:
     context-path: '/leyuna'
   address: 127.0.0.1
 
-### mp日志
-#mybatis-plus:
-#  configuration:Dom4j
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
-
 ## 打印日志级别
 logging:
   level:
     com.chz.mapper: debug
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8001/eureka/
+#
+### mp日志
+#mybatis-plus:
+#  configuration:Dom4j
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
 
 
