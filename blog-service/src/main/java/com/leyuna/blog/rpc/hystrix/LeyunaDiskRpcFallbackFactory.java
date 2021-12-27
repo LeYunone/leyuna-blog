@@ -1,6 +1,7 @@
 package com.leyuna.blog.rpc.hystrix;
 
 import com.leyuna.blog.bean.ResponseBean;
+import com.leyuna.blog.bean.UpFileBean;
 import com.leyuna.blog.constant.ResponseCode;
 import com.leyuna.blog.rpc.service.LeyunaDiskRpcService;
 import com.netflix.hystrix.exception.HystrixTimeoutException;
@@ -18,6 +19,21 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
         return new LeyunaDiskRpcService() {
             @Override
             public ResponseBean selectFile (String id) {
+                return response(throwable);
+            }
+
+            @Override
+            public ResponseBean requestSaveFile (UpFileBean upFileBean) {
+                return response(throwable);
+            }
+
+            @Override
+            public ResponseBean saveFile (UpFileBean upFileBean) {
+                return response(throwable);
+            }
+
+            @Override
+            public ResponseBean deleteFile (String id) {
                 return response(throwable);
             }
         };
