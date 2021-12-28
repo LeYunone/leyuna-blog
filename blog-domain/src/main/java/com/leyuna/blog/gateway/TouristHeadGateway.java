@@ -1,7 +1,7 @@
 package com.leyuna.blog.gateway;
 
 
-import com.leyuna.blog.co.TouristHeadCO;
+import com.leyuna.blog.co.blog.TouristHeadCO;
 
 /**
  * (TouristHead)dao

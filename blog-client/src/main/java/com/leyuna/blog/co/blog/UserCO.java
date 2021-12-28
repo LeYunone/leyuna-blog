@@ -1,4 +1,4 @@
-package com.leyuna.blog.co;
+package com.leyuna.blog.co.blog;
 
 import lombok.*;
 

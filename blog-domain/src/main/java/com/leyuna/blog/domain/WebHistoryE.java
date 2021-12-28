@@ -1,6 +1,6 @@
 package com.leyuna.blog.domain;
 
-import com.leyuna.blog.co.WebHistoryCO;
+import com.leyuna.blog.co.blog.WebHistoryCO;
 import com.leyuna.blog.gateway.WebHistoryGateway;
 import com.leyuna.blog.util.SpringContextUtil;
 import com.leyuna.blog.util.TransformationUtil;

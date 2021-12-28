@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.co.CommentCO;
+import com.leyuna.blog.co.blog.CommentCO;
 import com.leyuna.blog.entry.Comment;
 import com.leyuna.blog.gateway.CommentGateway;
 import com.leyuna.blog.repository.mapper.CommentMapper;

@@ -1,6 +1,6 @@
 package com.leyuna.blog.command;
 
-import com.leyuna.blog.co.TouristHeadCO;
+import com.leyuna.blog.co.blog.TouristHeadCO;
 import com.leyuna.blog.domain.TouristHeadE;
 import com.leyuna.blog.util.CollectionUtil;
 import org.springframework.stereotype.Service;

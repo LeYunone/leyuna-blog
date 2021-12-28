@@ -1,6 +1,6 @@
 package com.leyuna.blog.repository;
 
-import com.leyuna.blog.co.UserCO;
+import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.entry.User;
 import com.leyuna.blog.gateway.UserGateway;
 import com.leyuna.blog.repository.mapper.UserMapper;

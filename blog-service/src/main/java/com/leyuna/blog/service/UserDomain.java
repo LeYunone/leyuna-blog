@@ -3,7 +3,7 @@ package com.leyuna.blog.service;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.leyuna.blog.co.UserCO;
+import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.command.TokenExe;
 import com.leyuna.blog.command.UserExe;
 import com.leyuna.blog.domain.UserE;

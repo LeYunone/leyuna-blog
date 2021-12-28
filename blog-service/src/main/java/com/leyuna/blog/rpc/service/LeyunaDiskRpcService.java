@@ -1,7 +1,8 @@
 package com.leyuna.blog.rpc.service;
 
-import com.leyuna.blog.bean.ResponseBean;
-import com.leyuna.blog.bean.UpFileBean;
+import com.leyuna.blog.bean.blog.ResponseBean;
+import com.leyuna.blog.bean.disk.FileQueryBean;
+import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.rpc.hystrix.LeyunaDiskRpcFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @create 2021-12-23 16:36
  * 乐云一云盘 微服务
  */
-@FeignClient(value = "leyuna-disk",fallbackFactory = LeyunaDiskRpcFallbackFactory.class)
+@FeignClient(value = "LEYUNA-DISK",fallbackFactory = LeyunaDiskRpcFallbackFactory.class)
 public interface LeyunaDiskRpcService {
 
     @RequestMapping(value = "/file/selectFile/",method = RequestMethod.GET)
-    ResponseBean selectFile(@RequestParam("id")String id);
+    ResponseBean selectFile(FileQueryBean queryBean);
 
     @RequestMapping(value = "/requestSaveFile",method = RequestMethod.GET)
     ResponseBean requestSaveFile(UpFileBean upFileBean);

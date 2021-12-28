@@ -1,4 +1,4 @@
-package com.leyuna.blog.bean;
+package com.leyuna.blog.bean.blog;
 
 import com.leyuna.blog.constant.ResponseCode;
 import lombok.*;

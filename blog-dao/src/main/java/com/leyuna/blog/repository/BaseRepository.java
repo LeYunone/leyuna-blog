@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.leyuna.blog.error.ErrorMessage;
+import com.leyuna.blog.error.SystemAsserts;
 import com.leyuna.blog.gateway.BaseGateway;
 import com.leyuna.blog.util.AssertUtil;
 import com.leyuna.blog.util.ObjectUtil;
@@ -229,7 +229,7 @@ public abstract class BaseRepository<M extends BaseMapper<DO>, DO,CO> extends Se
      */
     @Override
     public Page<CO> selectByConOrderPage(Object e,Integer index,Integer size,Integer type) {
-        AssertUtil.isTrue(ObjectUtil.isNotNull (e), ErrorMessage.OBJECT_NULL);
+        AssertUtil.isTrue(ObjectUtil.isNotNull (e), SystemAsserts.OBJECT_NULL.getMsg());
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(e);
         Page page=new Page(index,size);
         IPage<DO> ipage =null;

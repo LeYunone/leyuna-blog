@@ -1,4 +1,5 @@
-package com.leyuna.blog.co;
+package com.leyuna.blog.co.blog;
+
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
@@ -7,8 +8,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
+ * (Type)出参
+ *
  * @author pengli
- * @create 2021-08-12 13:25
+ * @since 2021-08-23 13:54:42
  */
 @Getter
 @Setter
@@ -16,7 +19,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TagCO implements Comparable<TagCO>, Serializable {
+public class TypeCO implements Serializable {
+
 
     /**
      * 标签id
@@ -26,7 +30,7 @@ public class TagCO implements Comparable<TagCO>, Serializable {
     /**
      * 标签名
      */
-    private String tagName;
+    private String typeName;
 
     /**
      * 创建时间
@@ -39,18 +43,16 @@ public class TagCO implements Comparable<TagCO>, Serializable {
      */
     private Integer useCount;
 
+    /**
+     * 最后使用时间
+     */
     private LocalDateTime lastUserTime;
 
-    private String userStatus;
+    /**
+     * 分类导航
+     */
+    private String fatherType;
 
-    @Override
-    public int compareTo(TagCO o) {
-        if(o.getTagName().length()>this.getTagName().length()){
-            return -1;
-        }else if(o.getTagName().length()<this.getTagName().length()){
-            return 1;
-        }else{
-            return 0;
-        }
-    }
+    private String userStatus;
 }
+

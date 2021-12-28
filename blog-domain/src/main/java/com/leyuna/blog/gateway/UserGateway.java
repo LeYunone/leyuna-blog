@@ -1,7 +1,7 @@
 package com.leyuna.blog.gateway;
 
 
-import com.leyuna.blog.co.UserCO;
+import com.leyuna.blog.co.blog.UserCO;
 
 /**
  * @author pengli

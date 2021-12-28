@@ -2,7 +2,7 @@ package com.leyuna.blog.command;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.co.CommentCO;
+import com.leyuna.blog.co.blog.CommentCO;
 import com.leyuna.blog.domain.CommentE;
 import org.springframework.stereotype.Service;
 

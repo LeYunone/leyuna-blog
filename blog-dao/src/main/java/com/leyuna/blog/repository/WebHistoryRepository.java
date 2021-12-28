@@ -4,7 +4,7 @@ package com.leyuna.blog.repository;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.co.WebHistoryCO;
+import com.leyuna.blog.co.blog.WebHistoryCO;
 import com.leyuna.blog.entry.WebHistory;
 import com.leyuna.blog.gateway.WebHistoryGateway;
 import com.leyuna.blog.repository.mapper.WebHistoryMapper;

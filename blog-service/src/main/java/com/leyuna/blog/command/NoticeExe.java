@@ -1,7 +1,7 @@
 package com.leyuna.blog.command;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.co.WebHistoryCO;
+import com.leyuna.blog.co.blog.WebHistoryCO;
 import com.leyuna.blog.domain.WebHistoryE;
 import com.leyuna.blog.util.CollectionUtil;
 import org.springframework.cache.annotation.Cacheable;

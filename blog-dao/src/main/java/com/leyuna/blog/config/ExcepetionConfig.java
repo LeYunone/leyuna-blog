@@ -1,7 +1,7 @@
 package com.leyuna.blog.config;
 
 
-import com.leyuna.blog.bean.ResponseBean;
+import com.leyuna.blog.bean.blog.ResponseBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -29,7 +29,7 @@ public class ExcepetionConfig {
      * @param e
      * @return
      */
-    @ExceptionHandler(value = RuntimeException.class)
+    @ExceptionHandler(value = Exception.class)
     public ResponseBean errorHander(HttpServletRequest request, Exception e){
         e.printStackTrace();
         logger.error(e.getLocalizedMessage());

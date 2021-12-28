@@ -1,7 +1,7 @@
 package com.leyuna.blog.gateway;
 
 
-import com.leyuna.blog.co.TypeNavCO;
+import com.leyuna.blog.co.blog.TypeNavCO;
 
 import java.util.List;
 

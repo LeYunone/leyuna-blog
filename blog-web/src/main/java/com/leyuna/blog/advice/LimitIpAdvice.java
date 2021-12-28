@@ -1,6 +1,7 @@
 package com.leyuna.blog.advice;
 
 import com.leyuna.blog.error.SystemAsserts;
+import com.leyuna.blog.error.UserAsserts;
 import com.leyuna.blog.util.ServerUtil;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -44,7 +45,7 @@ public class LimitIpAdvice {
             //加入次用户ip限制，最快一分钟评论一次
             stringRedisTemplate.opsForValue().set(remoteAddr,"1",30*1, TimeUnit.SECONDS);
         }else{
-            throw new RuntimeException(SystemAsserts.REQUEST_FREQUENTLY_FAIL.getMsg());
+            throw new RuntimeException(UserAsserts.REQUEST_FREQUENTLY_FAIL.getMsg());
         }
     }
 }

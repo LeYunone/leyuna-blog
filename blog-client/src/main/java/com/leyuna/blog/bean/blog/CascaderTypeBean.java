@@ -1,4 +1,4 @@
-package com.leyuna.blog.bean;
+package com.leyuna.blog.bean.blog;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,6 @@
 package com.leyuna.blog.domain;
 
-import com.leyuna.blog.co.CommentCO;
+import com.leyuna.blog.co.blog.CommentCO;
 import com.leyuna.blog.gateway.CommentGateway;
 import com.leyuna.blog.util.SpringContextUtil;
 import com.leyuna.blog.util.TransformationUtil;

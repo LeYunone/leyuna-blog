@@ -1,7 +1,7 @@
 package com.leyuna.blog.command;
 
-import com.leyuna.blog.co.BlogCO;
-import com.leyuna.blog.co.LuceneCO;
+import com.leyuna.blog.co.blog.BlogCO;
+import com.leyuna.blog.co.blog.LuceneCO;
 import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.lucene.MyIKAnalyzer;
 import org.apache.lucene.analysis.Analyzer;

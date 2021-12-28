@@ -8,32 +8,47 @@ package com.leyuna.blog.error;
  */
 public enum  SystemAsserts {
 
-    ADD_BLOG_FAIL("发布失败:"),
-    ADD_TYPENAV_FAIL("添加分类导航失败"),
+    ADD_BLOG_FAIL("发布失败",1),
+    ADD_TYPENAV_FAIL("添加分类导航失败",2),
+    ADD_TAG_FALE("添加标签错误",3),
+    ADD_TYPE_FALE("添加分页错误",4),
 
-    UPDATE_TYPENAV_FAIL("更新分类导航失败"),
-    UPDATE_BLOG_FAIL("更新博客失败"),
+    DELETE_TAG_FALE("删除标签错误",5),
+    DELETE_TYPE_FALE("删除分页错误",6),
 
-    DELETE_TYPENAV_FAIL("删除分类导航失败"),
+    UPDATE_TAG_FALE("更新标签失败",7),
+    UPDATE_TYPE_FALE("更新分页失败",8),
+    UPDATE_TYPENAV_FAIL("更新分类导航失败",9),
+    UPDATE_BLOG_FAIL("更新博客失败",10),
 
-    UPLOCAD_IMG_FAIL("上传图片失败"),
+    CREATE_DOCUMENT_FALE("构建文档索引失败",11),
+    OBJECT_NULL("对象为空",12),
 
-    QUERY_SEARCH("站内搜索失败"),
+    DELETE_TYPENAV_FAIL("删除分类导航失败",13),
 
-    REQUEST_FAIL("请求失败"),
-    REQUEST_FREQUENTLY_FAIL("说慢一点，我缓一下"),
+    UPLOCAD_IMG_FAIL("上传图片失败",14),
 
-    COMMENT_FAIL("回复失败-系统故障"),
+    QUERY_SEARCH("站内搜索失败",15),
 
-    UPDOWN_IMG_FAIL("解析图片失败-系统故障");
+    REQUEST_FAIL("请求失败",16),
 
-    private final String msg;
+    COMMENT_FAIL("回复失败-系统故障",18),
 
-    SystemAsserts(String msg){
+    UPDOWN_IMG_FAIL("解析图片失败-系统故障",19);
+
+    private  String msg;
+    private  Integer value;
+
+    SystemAsserts(String msg,Integer value){
         this.msg=msg;
+        this.value=value;
     }
     public String getMsg(){
         return this.msg;
+    }
+
+    public Integer getValue(){
+        return this.value;
     }
 
     public String toString(){

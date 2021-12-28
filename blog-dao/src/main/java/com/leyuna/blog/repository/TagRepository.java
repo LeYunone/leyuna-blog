@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.co.TagCO;
+import com.leyuna.blog.co.blog.TagCO;
 import com.leyuna.blog.domain.TagE;
 import com.leyuna.blog.entry.Tag;
-import com.leyuna.blog.error.ErrorMessage;
+import com.leyuna.blog.error.SystemAsserts;
 import com.leyuna.blog.gateway.TagGateway;
 import com.leyuna.blog.repository.mapper.TagMapper;
 import com.leyuna.blog.util.AssertUtil;
@@ -34,7 +34,7 @@ public class TagRepository extends BaseRepository<TagMapper,Tag, TagCO> implemen
      */
     @Override
     public Page<TagCO> selectByLikeNamePage(TagE tag, Integer index, Integer size, String conditionName) {
-        AssertUtil.isTrue(ObjectUtil.isNotNull (tag), ErrorMessage.OBJECT_NULL);
+        AssertUtil.isTrue(ObjectUtil.isNotNull (tag), SystemAsserts.OBJECT_NULL.getMsg());
         Page page=new Page(index,size);
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(tag);
         IPage<Tag> Page = this.baseMapper.selectPage(page, new QueryWrapper<Tag>()

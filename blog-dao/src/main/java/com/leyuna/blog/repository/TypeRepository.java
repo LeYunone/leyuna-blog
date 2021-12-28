@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.co.TypeCO;
+import com.leyuna.blog.co.blog.TypeCO;
 import com.leyuna.blog.domain.TypeE;
 import com.leyuna.blog.entry.Type;
-import com.leyuna.blog.error.ErrorMessage;
+import com.leyuna.blog.error.SystemAsserts;
 import com.leyuna.blog.gateway.TypeGateway;
 import com.leyuna.blog.repository.mapper.TypeMapper;
 import com.leyuna.blog.util.AssertUtil;
@@ -33,7 +33,7 @@ public class TypeRepository extends BaseRepository<TypeMapper,Type, TypeCO> impl
      */
     @Override
     public Page<TypeCO> selectByLikeNamePage(TypeE type,Integer index,Integer size, String conditionName) {
-        AssertUtil.isTrue(ObjectUtil.isNotNull (type), ErrorMessage.OBJECT_NULL);
+        AssertUtil.isTrue(ObjectUtil.isNotNull (type), SystemAsserts.OBJECT_NULL.getMsg());
         Page page=new Page(index,size);
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(type);
         IPage<Type> Page = this.page(page, new QueryWrapper<Type>()

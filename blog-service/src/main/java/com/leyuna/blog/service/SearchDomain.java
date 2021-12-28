@@ -1,7 +1,7 @@
 package com.leyuna.blog.service;
 
-import com.leyuna.blog.co.BlogCO;
-import com.leyuna.blog.co.LuceneCO;
+import com.leyuna.blog.co.blog.BlogCO;
+import com.leyuna.blog.co.blog.LuceneCO;
 import com.leyuna.blog.command.BlogExe;
 import com.leyuna.blog.command.LuceneExe;
 import com.leyuna.blog.domain.BlogE;

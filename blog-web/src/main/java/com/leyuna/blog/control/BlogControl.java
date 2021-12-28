@@ -1,12 +1,12 @@
 package com.leyuna.blog.control;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.bean.BlogBean;
-import com.leyuna.blog.bean.NoticeBean;
-import com.leyuna.blog.bean.ResponseBean;
-import com.leyuna.blog.co.BlogCO;
-import com.leyuna.blog.co.LuceneCO;
-import com.leyuna.blog.co.WebHistoryCO;
+import com.leyuna.blog.bean.blog.BlogBean;
+import com.leyuna.blog.bean.blog.NoticeBean;
+import com.leyuna.blog.bean.blog.ResponseBean;
+import com.leyuna.blog.co.blog.BlogCO;
+import com.leyuna.blog.co.blog.LuceneCO;
+import com.leyuna.blog.co.blog.WebHistoryCO;
 import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.domain.WebHistoryE;
 import com.leyuna.blog.error.SystemAsserts;

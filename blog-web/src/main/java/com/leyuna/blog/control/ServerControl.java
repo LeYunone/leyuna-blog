@@ -1,7 +1,7 @@
 package com.leyuna.blog.control;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.leyuna.blog.bean.ResponseBean;
+import com.leyuna.blog.bean.blog.ResponseBean;
 import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.constant.ServerCode;
 import com.leyuna.blog.error.SystemAsserts;

@@ -1,6 +1,6 @@
 package com.leyuna.blog.domain;
 
-import com.leyuna.blog.co.TagCO;
+import com.leyuna.blog.co.blog.TagCO;
 import com.leyuna.blog.gateway.TagGateway;
 import com.leyuna.blog.util.SpringContextUtil;
 import com.leyuna.blog.util.TransformationUtil;

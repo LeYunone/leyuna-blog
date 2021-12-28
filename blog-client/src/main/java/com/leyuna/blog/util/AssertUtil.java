@@ -8,13 +8,27 @@ package com.leyuna.blog.util;
  */
 public class AssertUtil {
 
-    public static void isTrue(boolean expression, String message) {
-        if (!expression) {
-            throw new RuntimeException(message);
+    public static void isFalse(boolean condition,String message){
+        isFalse(condition,new RuntimeException(message));
+    }
+
+    public static void isFalse(boolean condition,RuntimeException ex){
+        isTrue(!condition,ex);
+    }
+
+    public static void isTrue(boolean condition,RuntimeException ex){
+        if(!condition){
+            throw ex;
         }
     }
 
-    public static void isTrue(String message) {
-        throw new RuntimeException(message);
+    public static void isTrue(boolean condition,String msg){
+        if(!condition){
+            throw new RuntimeException(msg);
+        }
+    }
+
+    public static void isTrue(String msg){
+        throw new RuntimeException(msg);
     }
 }

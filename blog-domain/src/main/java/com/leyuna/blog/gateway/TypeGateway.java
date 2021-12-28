@@ -2,7 +2,7 @@ package com.leyuna.blog.gateway;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.co.TypeCO;
+import com.leyuna.blog.co.blog.TypeCO;
 import com.leyuna.blog.domain.TypeE;
 
 /**

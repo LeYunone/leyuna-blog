@@ -2,7 +2,7 @@ package com.leyuna.blog.service;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.co.CommentCO;
+import com.leyuna.blog.co.blog.CommentCO;
 import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.command.CommentExe;
 import com.leyuna.blog.command.FileExe;

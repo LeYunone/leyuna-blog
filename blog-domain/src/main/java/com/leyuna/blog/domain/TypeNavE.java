@@ -1,6 +1,6 @@
 package com.leyuna.blog.domain;
 
-import com.leyuna.blog.co.TypeNavCO;
+import com.leyuna.blog.co.blog.TypeNavCO;
 import com.leyuna.blog.gateway.TypeNavGateway;
 import com.leyuna.blog.util.SpringContextUtil;
 import com.leyuna.blog.util.TransformationUtil;

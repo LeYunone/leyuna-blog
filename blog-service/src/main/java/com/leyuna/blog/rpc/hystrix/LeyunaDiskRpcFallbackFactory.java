@@ -1,10 +1,10 @@
 package com.leyuna.blog.rpc.hystrix;
 
-import com.leyuna.blog.bean.ResponseBean;
-import com.leyuna.blog.bean.UpFileBean;
-import com.leyuna.blog.constant.ResponseCode;
+import com.leyuna.blog.bean.blog.ResponseBean;
+import com.leyuna.blog.bean.disk.FileQueryBean;
+import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.rpc.service.LeyunaDiskRpcService;
-import com.netflix.hystrix.exception.HystrixTimeoutException;
+import com.leyuna.blog.util.AssertUtil;
 import feign.hystrix.FallbackFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
     public LeyunaDiskRpcService create (Throwable throwable) {
         return new LeyunaDiskRpcService() {
             @Override
-            public ResponseBean selectFile (String id) {
+            public ResponseBean selectFile (FileQueryBean queryBean) {
                 return response(throwable);
             }
 
@@ -47,16 +47,7 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
 
     private ResponseBean response(Throwable throwable){
         String errMsg = throwable.getMessage();
-        ResponseCode basicCode = ResponseCode.RPC_UNKNOWN_ERROR;
-
-        if (throwable instanceof HystrixTimeoutException) {
-            basicCode = ResponseCode.RPC_TIMEOUT;
-        }
-
-        if (errMsg != null && errMsg.contains("Load balancer does not have available server for client")) {
-            basicCode = ResponseCode.RPC_ERROR_503;
-        }
-
-        return ResponseBean.buildFailure(basicCode);
+        AssertUtil.isFalse(true,errMsg);
+        return ResponseBean.buildFailure(errMsg);
     }
 }

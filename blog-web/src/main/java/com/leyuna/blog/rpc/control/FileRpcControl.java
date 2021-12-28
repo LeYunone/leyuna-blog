@@ -1,7 +1,8 @@
 package com.leyuna.blog.rpc.control;
 
-import com.leyuna.blog.bean.ResponseBean;
-import com.leyuna.blog.bean.UpFileBean;
+import com.leyuna.blog.bean.blog.ResponseBean;
+import com.leyuna.blog.bean.disk.FileQueryBean;
+import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.service.file.DiskDomain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,8 @@ public class FileRpcControl {
      * @return
      */
     @RequestMapping("/selectFile")
-    public ResponseBean selectFile (String id) {
-        return fileDomain.selectFile(id);
+    public ResponseBean selectFile (FileQueryBean queryBean) {
+        return ResponseBean.of(fileDomain.selectFile(queryBean));
     }
 
     /**

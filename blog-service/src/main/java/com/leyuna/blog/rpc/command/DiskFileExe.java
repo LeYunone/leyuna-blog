@@ -1,7 +1,10 @@
 package com.leyuna.blog.rpc.command;
 
-import com.leyuna.blog.bean.ResponseBean;
-import com.leyuna.blog.bean.UpFileBean;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyuna.blog.bean.blog.ResponseBean;
+import com.leyuna.blog.bean.disk.FileQueryBean;
+import com.leyuna.blog.bean.disk.UpFileBean;
+import com.leyuna.blog.co.disk.FileInfoCO;
 import com.leyuna.blog.rpc.service.LeyunaDiskRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +20,9 @@ public class DiskFileExe {
     @Autowired
     private LeyunaDiskRpcService leyunaDiskRpcService;
 
-    public ResponseBean selectFile(String id){
-        return leyunaDiskRpcService.selectFile(id);
+    public Page<FileInfoCO> selectFile(FileQueryBean queryBean){
+        ResponseBean responseBean = leyunaDiskRpcService.selectFile(queryBean);
+        return (Page<FileInfoCO>) responseBean.getData();
     }
 
     public ResponseBean requestSaveFile(UpFileBean fileBean){

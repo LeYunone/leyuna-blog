@@ -1,6 +1,6 @@
 package com.leyuna.blog.domain;
 
-import com.leyuna.blog.co.TouristHeadCO;
+import com.leyuna.blog.co.blog.TouristHeadCO;
 import com.leyuna.blog.gateway.TouristHeadGateway;
 import com.leyuna.blog.util.SpringContextUtil;
 import com.leyuna.blog.util.TransformationUtil;

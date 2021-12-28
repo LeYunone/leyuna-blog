@@ -2,7 +2,7 @@ package com.leyuna.blog.repository;
 
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.leyuna.blog.co.TouristHeadCO;
+import com.leyuna.blog.co.blog.TouristHeadCO;
 import com.leyuna.blog.entry.TouristHead;
 import com.leyuna.blog.gateway.TouristHeadGateway;
 import com.leyuna.blog.repository.mapper.TouristHeadMapper;

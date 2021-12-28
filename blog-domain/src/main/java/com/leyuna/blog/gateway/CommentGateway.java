@@ -2,7 +2,7 @@ package com.leyuna.blog.gateway;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.co.CommentCO;
+import com.leyuna.blog.co.blog.CommentCO;
 
 import java.util.List;
 

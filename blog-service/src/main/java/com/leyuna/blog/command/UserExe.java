@@ -1,6 +1,6 @@
 package com.leyuna.blog.command;
 
-import com.leyuna.blog.co.UserCO;
+import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.domain.UserE;
 import com.leyuna.blog.util.CollectionUtil;
 import org.springframework.stereotype.Service;

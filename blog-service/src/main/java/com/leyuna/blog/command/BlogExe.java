@@ -2,7 +2,7 @@ package com.leyuna.blog.command;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.co.BlogCO;
+import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.entry.Blog;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,13 +3,13 @@ package com.leyuna.blog.service;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.co.BlogCO;
-import com.leyuna.blog.co.WebHistoryCO;
+import com.leyuna.blog.co.blog.BlogCO;
+import com.leyuna.blog.co.blog.WebHistoryCO;
 import com.leyuna.blog.command.*;
 import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.domain.TagE;
 import com.leyuna.blog.domain.WebHistoryE;
-import com.leyuna.blog.error.ErrorMessage;
+import com.leyuna.blog.error.SystemAsserts;
 import com.leyuna.blog.util.AssertUtil;
 import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +91,7 @@ public class BlogDomain {
                         //如果查到了，则说明这个标签使用次数需要添加一
                         boolean is = tagAndTypeExe.addTagUseCountByName(name);
                         if(!is){
-                            AssertUtil.isTrue(ErrorMessage.UPDATE_TAG_FALE) ;
+                            AssertUtil.isTrue(SystemAsserts.UPDATE_TAG_FALE.getMsg()) ;
                         }
                     }
                 }
@@ -99,7 +99,7 @@ public class BlogDomain {
                 if(CollectionUtils.isNotEmpty(addList)){
                     boolean is = tagAndTypeExe.addTags(addList);
                     if(!is){
-                        AssertUtil.isTrue(ErrorMessage.ADD_TAG_FALE);
+                        AssertUtil.isTrue(SystemAsserts.ADD_TAG_FALE.getMsg());
                     }
                 }
             }
@@ -117,7 +117,7 @@ public class BlogDomain {
             try {
                 luceneExe.addBlogDir(list);
             } catch (IOException e) {
-                AssertUtil.isTrue(ErrorMessage.CREATE_DOCUMENT_FALE);
+                AssertUtil.isTrue(SystemAsserts.CREATE_DOCUMENT_FALE.getMsg());
             }
 
             //更新博客\标签\分类\分类缓存
@@ -127,7 +127,7 @@ public class BlogDomain {
             clearCacheExe.clearTypeNavQueryCache();
             return b;
         }
-        AssertUtil.isTrue(ErrorMessage.ADD_BLOG_FALE);
+        AssertUtil.isTrue(SystemAsserts.ADD_BLOG_FAIL.getMsg());
         return false;
     }
 
