@@ -4,6 +4,7 @@ import com.leyuna.blog.bean.ResponseBean;
 import com.leyuna.blog.bean.UpFileBean;
 import com.leyuna.blog.rpc.hystrix.LeyunaDiskRpcFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,4 +28,7 @@ public interface LeyunaDiskRpcService {
 
     @RequestMapping(value = "/deleteFile",method = RequestMethod.POST)
     ResponseBean deleteFile(@RequestParam("id") String id);
+
+    @RequestMapping(value = "/downloadFile",method = RequestMethod.POST)
+    ResponseEntity downloadFile(@RequestParam("id") String id);
 }

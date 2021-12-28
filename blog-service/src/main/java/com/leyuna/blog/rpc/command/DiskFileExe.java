@@ -4,6 +4,7 @@ import com.leyuna.blog.bean.ResponseBean;
 import com.leyuna.blog.bean.UpFileBean;
 import com.leyuna.blog.rpc.service.LeyunaDiskRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,4 +32,9 @@ public class DiskFileExe {
     public ResponseBean deleteFile(String id){
         return leyunaDiskRpcService.deleteFile(id);
     }
+
+    public ResponseEntity downloadFile(String id){
+        return leyunaDiskRpcService.downloadFile(id);
+    }
+
 }

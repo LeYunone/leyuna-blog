@@ -6,6 +6,7 @@ import com.leyuna.blog.constant.ResponseCode;
 import com.leyuna.blog.rpc.service.LeyunaDiskRpcService;
 import com.netflix.hystrix.exception.HystrixTimeoutException;
 import feign.hystrix.FallbackFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,6 +36,11 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
             @Override
             public ResponseBean deleteFile (String id) {
                 return response(throwable);
+            }
+
+            @Override
+            public ResponseEntity downloadFile (String id) {
+                return null;
             }
         };
     }

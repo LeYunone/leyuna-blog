@@ -1,5 +1,6 @@
 package com.leyuna.blog.service;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.leyuna.blog.co.UserCO;
@@ -51,8 +52,8 @@ public class UserDomain {
     /**
      * 用户token上锁操作
      */
-    public void userLock(String id){
-        tokenExe.loginToken(id);
+    public SaTokenInfo userLock(String id){
+        return tokenExe.loginToken(id);
     }
 
     /**

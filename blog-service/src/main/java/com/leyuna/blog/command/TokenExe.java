@@ -1,5 +1,6 @@
 package com.leyuna.blog.command;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +13,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class TokenExe {
 
-    public void loginToken(String id) {
+    public SaTokenInfo loginToken(String id) {
         StpUtil.login(id);
+        SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+        return tokenInfo;
     }
 
     public boolean logoutToken() {
