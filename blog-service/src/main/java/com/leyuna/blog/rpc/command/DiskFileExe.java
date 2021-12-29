@@ -21,8 +21,8 @@ public class DiskFileExe {
     private LeyunaDiskRpcService leyunaDiskRpcService;
 
     public Page<FileInfoCO> selectFile(FileQueryBean queryBean){
-        ResponseBean responseBean = leyunaDiskRpcService.selectFile(queryBean);
-        return (Page<FileInfoCO>) responseBean.getData();
+        ResponseBean<Page<FileInfoCO>> responseBean = leyunaDiskRpcService.selectFile(queryBean);
+        return responseBean.getData();
     }
 
     public ResponseBean requestSaveFile(UpFileBean fileBean){

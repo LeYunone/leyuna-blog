@@ -12,8 +12,9 @@
         <module name="blog-web" />
         <module name="blog-client" />
         <module name="blog-domain" />
-        <module name="blog-start" />
         <module name="blog-service" />
+        <module name="blog-start" />
+        <module name="cloud-config" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8">
@@ -24,11 +25,13 @@
       <module name="blog-service" target="1.8" />
       <module name="blog-start" target="1.8" />
       <module name="blog-web" target="1.8" />
+      <module name="cloud-config" target="1.8" />
       <module name="cloud-server" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="cloud-config" options="-parameters" />
       <module name="cloud-server" options="-parameters" />
     </option>
   </component>

@@ -1,5 +1,6 @@
 package com.leyuna.blog.bean.disk;
 
+import com.leyuna.blog.bean.QueryPage;
 import lombok.*;
 
 /**
@@ -12,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class FileQueryBean {
+public class FileQueryBean extends QueryPage {
 
     private String id;
 
@@ -22,7 +23,4 @@ public class FileQueryBean {
 
     private String userId;
 
-    private Integer index;
-
-    private Integer size;
 }
