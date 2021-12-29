@@ -1,10 +1,13 @@
 package com.leyuna.blog.control;
 
+import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import com.leyuna.blog.bean.blog.ResponseBean;
 import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.co.disk.DiskCO;
+import com.leyuna.blog.error.UserAsserts;
 import com.leyuna.blog.service.file.DiskDomain;
+import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +33,10 @@ public class DiskControl {
     @GetMapping("/getDiskInfo")
     public ResponseBean getDiskInfo(){
         //看这个用户的云盘是否登录
-        UserCO user = (UserCO)StpUtil.getSession().get("user");
+        SaSession session = StpUtil.getSession();
+        AssertUtil.isFalse(ObjectUtils.isEmpty(session), UserAsserts.LOGINT_NOT.getMsg());
+        UserCO user = (UserCO)session.get("user");
+        AssertUtil.isFalse(ObjectUtils.isEmpty(user),UserAsserts.LOGINT_NOT.getMsg());
         if(ObjectUtils.isEmpty(user)){
             //直接驳回 返回前端登录展示
             return ResponseBean.buildFailure();

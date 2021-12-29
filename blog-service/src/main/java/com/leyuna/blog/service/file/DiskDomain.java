@@ -9,6 +9,7 @@ import com.leyuna.blog.co.disk.DiskCO;
 import com.leyuna.blog.co.disk.FileInfoCO;
 import com.leyuna.blog.rpc.command.DiskFileExe;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,9 @@ public class DiskDomain {
 
     @Autowired
     private DiskFileExe fileExe;
+
+    @Value("${disk.max.memory}")
+    private Long maxMemory;
 
     public Page<FileInfoCO> selectFile(FileQueryBean queryBean){
           return fileExe.selectFile(queryBean);
@@ -51,7 +55,8 @@ public class DiskDomain {
         List<FileInfoCO> fileInfos = fileInfoCOPage.getRecords();
         diskCO.setFileList(fileInfos);
         //获取内存占有量
-        diskCO.setFileTotalSize(CollectionUtils.isEmpty(fileInfos)?0:fileInfos.get(0).getFileSizeTotal());
+        Long totalSize=CollectionUtils.isEmpty(fileInfos)?0:fileInfos.get(0).getFileSizeTotal();
+        diskCO.setFileTotalSize(totalSize/maxMemory);
         diskCO.setFileCount(fileInfoCOPage.getTotal());
         return diskCO;
     }

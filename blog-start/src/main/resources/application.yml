@@ -1,7 +1,5 @@
 ## 数据库配置
 spring:
-  application:
-    name: leyuna-blog
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/blog?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
     username: root
