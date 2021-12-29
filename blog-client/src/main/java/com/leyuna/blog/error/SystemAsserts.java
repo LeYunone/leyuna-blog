@@ -30,7 +30,7 @@ public enum  SystemAsserts {
 
     QUERY_SEARCH("站内搜索失败",15),
 
-    REQUEST_FAIL("请求失败",16),
+    REQUEST_FAIL("请求失败,系统异常",16),
 
     COMMENT_FAIL("回复失败-系统故障",18),
 

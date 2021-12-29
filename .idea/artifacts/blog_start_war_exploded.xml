@@ -77,7 +77,6 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.0.7.RELEASE" />
           <element id="library" level="project" name="Maven: org.yaml:snakeyaml:1.19" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-json:2.0.3.RELEASE" />
-          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.6" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.6" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.6" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.module:jackson-module-parameter-names:2.9.6" />
@@ -173,6 +172,9 @@
           <element id="library" level="project" name="Maven: com.netflix.hystrix:hystrix-core:1.5.12" />
           <element id="library" level="project" name="Maven: org.hdrhistogram:HdrHistogram:2.1.9" />
           <element id="library" level="project" name="Maven: io.github.openfeign:feign-java8:9.5.1" />
+          <element id="library" level="project" name="Maven: org.springframework.cloud:spring-cloud-starter-config:2.0.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework.cloud:spring-cloud-config-client:2.0.0.RELEASE" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.6" />
           <element id="library" level="project" name="Maven: org.projectlombok:lombok:1.16.22" />
           <element id="archive" name="blog-client-0.0.1-SNAPSHOT.jar">
             <element id="module-output" name="blog-client" />
