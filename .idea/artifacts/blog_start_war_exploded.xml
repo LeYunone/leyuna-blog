@@ -38,6 +38,8 @@
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-cache:2.0.3.RELEASE" />
           <element id="library" level="project" name="Maven: com.baomidou:mybatis-plus-generator:3.2.0" />
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.46" />
+          <element id="library" level="project" name="Maven: io.github.openfeign.form:feign-form-spring:3.0.3" />
+          <element id="library" level="project" name="Maven: io.github.openfeign.form:feign-form:3.0.3" />
           <element id="library" level="project" name="Maven: cn.dev33:sa-token-spring-boot-starter:1.25.0" />
           <element id="library" level="project" name="Maven: cn.dev33:sa-token-servlet:1.25.0" />
           <element id="library" level="project" name="Maven: cn.dev33:sa-token-core:1.25.0" />

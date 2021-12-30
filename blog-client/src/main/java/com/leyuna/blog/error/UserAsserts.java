@@ -12,7 +12,9 @@ public enum  UserAsserts {
     FILE_ALl_TOO_OFTEN("今天上传的机会没了，明天再来吧",2),
 
     GOODS_COMMENT_FAIL("今天的这次点赞已经用完了，明天再来吧",3),
-    REQUEST_FREQUENTLY_FAIL("说慢一点，我缓一下",4);
+    REQUEST_FREQUENTLY_FAIL("说慢一点，我缓一下",4),
+
+    UPLOAD_NOT_FILE("操作失败：请求里文件为空",5);
 
 
     private final String msg;

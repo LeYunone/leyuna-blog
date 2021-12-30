@@ -1,5 +1,6 @@
 package com.leyuna.blog.service.file;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.ResponseBean;
@@ -7,7 +8,9 @@ import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.co.disk.DiskCO;
 import com.leyuna.blog.co.disk.FileInfoCO;
+import com.leyuna.blog.error.UserAsserts;
 import com.leyuna.blog.rpc.command.DiskFileExe;
+import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -62,7 +65,26 @@ public class DiskDomain {
         return diskCO;
     }
 
-    public void uploadFile(MultipartFile [] files){
-
+    /**
+     * 用户上传文件
+     * @param file
+     */
+    public ResponseBean uploadFile(List<MultipartFile> file){
+        AssertUtil.isFalse(CollectionUtils.isEmpty(file), UserAsserts.UPLOAD_NOT_FILE.getMsg());
+        //用户编号
+        String userId= (String) StpUtil.getLoginId();
+        UpFileBean fileBean=new UpFileBean();
+        fileBean.setFiles(file);
+        fileBean.setUserId(userId);
+        //得到过滤成功后的文件
+        ResponseBean<List<MultipartFile>> listResponseBean = fileExe.requestSaveFile(fileBean);
+        List<MultipartFile> data = listResponseBean.getData();
+        if(CollectionUtils.isEmpty(data)){
+            //过滤完文件为空则说明没有文件过来
+            return ResponseBean.buildSuccess();
+        }
+        //上传文件流程
+        ResponseBean responseBean = fileExe.saveFile(fileBean);
+        return responseBean;
     }
 }

@@ -43,6 +43,8 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-cache:2.0.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.baomidou:mybatis-plus-generator:3.2.0" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.46" level="project" />
+    <orderEntry type="library" name="Maven: io.github.openfeign.form:feign-form-spring:3.0.3" level="project" />
+    <orderEntry type="library" name="Maven: io.github.openfeign.form:feign-form:3.0.3" level="project" />
     <orderEntry type="library" name="Maven: cn.dev33:sa-token-spring-boot-starter:1.25.0" level="project" />
     <orderEntry type="library" name="Maven: cn.dev33:sa-token-servlet:1.25.0" level="project" />
     <orderEntry type="library" name="Maven: cn.dev33:sa-token-core:1.25.0" level="project" />

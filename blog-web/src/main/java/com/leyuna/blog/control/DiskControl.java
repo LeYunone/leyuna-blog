@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * @author pengli
  * @create 2021-12-28 14:01
@@ -44,11 +46,7 @@ public class DiskControl {
      * @return
      */
     @PostMapping("/uploadFile")
-    public ResponseBean uploadFile(MultipartFile [] files){
-        for(MultipartFile file:files){
-            System.out.println(file.getName());
-        }
-        diskDomain.uploadFile(files);
-        return ResponseBean.buildSuccess();
+    public ResponseBean uploadFile(List<MultipartFile> file){
+        return diskDomain.uploadFile(file);
     }
 }

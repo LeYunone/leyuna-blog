@@ -9,6 +9,9 @@ import com.leyuna.blog.rpc.service.LeyunaDiskRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author pengli
@@ -25,8 +28,8 @@ public class DiskFileExe {
         return responseBean.getData();
     }
 
-    public ResponseBean requestSaveFile(UpFileBean fileBean){
-        return leyunaDiskRpcService.requestSaveFile(fileBean);
+    public ResponseBean<List<MultipartFile>> requestSaveFile(UpFileBean fileBean){
+        return leyunaDiskRpcService.requestSaveFile(fileBean.getUserId(),fileBean.getFiles().get(0));
     }
 
     public ResponseBean saveFile(UpFileBean fileBean){

@@ -8,6 +8,7 @@ import com.leyuna.blog.util.AssertUtil;
 import feign.hystrix.FallbackFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author pengli
@@ -24,7 +25,7 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
             }
 
             @Override
-            public ResponseBean requestSaveFile (UpFileBean upFileBean) {
+            public ResponseBean requestSaveFile (String userId, MultipartFile file) {
                 return response(throwable);
             }
 

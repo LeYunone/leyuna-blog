@@ -7,11 +7,14 @@ import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.co.disk.FileInfoCO;
 import com.leyuna.blog.rpc.hystrix.LeyunaDiskRpcFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author pengli
@@ -21,18 +24,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "LEYUNA-DISK",fallbackFactory = LeyunaDiskRpcFallbackFactory.class)
 public interface LeyunaDiskRpcService {
 
-    @RequestMapping(value = "/file/selectFile/",method = RequestMethod.POST)
-    ResponseBean<Page<FileInfoCO>> selectFile(@RequestBody FileQueryBean queryBean);
+    @RequestMapping(value = "/file/selectFile",method = RequestMethod.POST)
+    ResponseBean<Page<FileInfoCO>> selectFile( FileQueryBean queryBean);
 
-    @RequestMapping(value = "/requestSaveFile",method = RequestMethod.GET)
-    ResponseBean requestSaveFile(UpFileBean upFileBean);
+    @RequestMapping(value = "/file/requestSaveFile",method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseBean<List<MultipartFile>> requestSaveFile(@RequestParam("userId")String userId,@RequestParam("files") MultipartFile file);
 
-    @RequestMapping(value = "/saveFile",method = RequestMethod.POST)
-    ResponseBean saveFile(UpFileBean upFileBean);
+    @RequestMapping(value = "/file/saveFile",method = RequestMethod.POST)
+    ResponseBean saveFile( UpFileBean upFileBean);
 
-    @RequestMapping(value = "/deleteFile",method = RequestMethod.POST)
+    @RequestMapping(value = "/file/deleteFile",method = RequestMethod.POST)
     ResponseBean deleteFile(@RequestParam("id") String id);
 
-    @RequestMapping(value = "/downloadFile",method = RequestMethod.POST)
+    @RequestMapping(value = "/file/downloadFile",method = RequestMethod.POST)
     ResponseEntity downloadFile(@RequestParam("id") String id);
 }

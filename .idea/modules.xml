@@ -9,8 +9,6 @@
       <module fileurl="file://$PROJECT_DIR$/blog-service/blog-service.iml" filepath="$PROJECT_DIR$/blog-service/blog-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/blog-start/blog-start.iml" filepath="$PROJECT_DIR$/blog-start/blog-start.iml" />
       <module fileurl="file://$PROJECT_DIR$/blog-web/blog-web.iml" filepath="$PROJECT_DIR$/blog-web/blog-web.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../leyuna-cloud/cloud-config/cloud-config.iml" filepath="$PROJECT_DIR$/../leyuna-cloud/cloud-config/cloud-config.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../leyuna-cloud/cloud-server/cloud-server.iml" filepath="$PROJECT_DIR$/../leyuna-cloud/cloud-server/cloud-server.iml" />
     </modules>
   </component>
 </project>

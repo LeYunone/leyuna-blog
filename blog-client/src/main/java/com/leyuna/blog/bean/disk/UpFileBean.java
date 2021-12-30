@@ -5,7 +5,9 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author pengli
@@ -15,7 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class UpFileBean {
+public class UpFileBean implements Serializable {
 
     /**
      * 上传文件人的userId
@@ -23,19 +25,9 @@ public class UpFileBean {
     private String userId;
 
     /**
-     * 文件名
-     */
-    private String fileName;
-
-    /**
-     * 文件大小
-     */
-    private Integer fileSize;
-
-    /**
      * 多文件
      */
-    private MultipartFile[] files;
+    private List<MultipartFile> files;
 
     /**
      * 保存时间
