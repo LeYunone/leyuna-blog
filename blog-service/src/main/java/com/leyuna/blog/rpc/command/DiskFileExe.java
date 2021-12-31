@@ -29,7 +29,7 @@ public class DiskFileExe {
     }
 
     public ResponseBean<List<MultipartFile>> requestSaveFile(UpFileBean fileBean){
-        return leyunaDiskRpcService.requestSaveFile(fileBean.getUserId(),fileBean.getFiles().get(0));
+        return leyunaDiskRpcService.requestSaveFile(fileBean.getUserId(),fileBean.getFiles().get(0),fileBean.getSaveTime());
     }
 
     public ResponseBean saveFile(UpFileBean fileBean){

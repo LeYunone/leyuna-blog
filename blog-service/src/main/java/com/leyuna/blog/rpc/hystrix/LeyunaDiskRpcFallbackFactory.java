@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  * @author pengli
  * @create 2021-12-24 13:39
@@ -25,7 +28,7 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
             }
 
             @Override
-            public ResponseBean requestSaveFile (String userId, MultipartFile file) {
+            public ResponseBean<List<MultipartFile>> requestSaveFile (String userId, MultipartFile files, LocalDateTime saveTime) {
                 return response(throwable);
             }
 
