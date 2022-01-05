@@ -77,10 +77,10 @@ public class DiskDomain {
         fileBean.setFiles(file);
         fileBean.setUserId(userId);
         //得到过滤成功后的文件
-        ResponseBean<List<MultipartFile>> listResponseBean = fileExe.requestSaveFile(fileBean);
-        List<MultipartFile> data = listResponseBean.getData();
-        if(CollectionUtils.isEmpty(data)){
-            //过滤完文件为空则说明没有文件过来
+        ResponseBean<Integer> listResponseBean = fileExe.requestSaveFile(fileBean);
+        Integer data = listResponseBean.getData();
+        if(0==data){
+            //编号0说明不需要上传文件流程，服务器内部解决
             return ResponseBean.buildSuccess();
         }
         //上传文件流程

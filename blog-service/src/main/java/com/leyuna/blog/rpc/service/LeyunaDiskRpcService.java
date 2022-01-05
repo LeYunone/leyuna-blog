@@ -3,7 +3,6 @@ package com.leyuna.blog.rpc.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.ResponseBean;
 import com.leyuna.blog.bean.disk.FileQueryBean;
-import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.co.disk.FileInfoCO;
 import com.leyuna.blog.rpc.hystrix.LeyunaDiskRpcFallbackFactory;
 import feign.codec.Encoder;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author pengli
@@ -48,12 +46,14 @@ public interface LeyunaDiskRpcService {
     ResponseBean<Page<FileInfoCO>> selectFile( FileQueryBean queryBean);
 
     @RequestMapping(value = "/file/requestSaveFile",method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseBean<List<MultipartFile>> requestSaveFile(@RequestParam(value = "userId",required = false)String userId,
+    ResponseBean<Integer> requestSaveFile(@RequestParam(value = "userId",required = false)String userId,
                                                       @RequestPart MultipartFile  file,
                                                       @RequestParam(value = "saveTime",required = false)LocalDateTime saveTime);
 
-    @RequestMapping(value = "/file/saveFile",method = RequestMethod.POST)
-    ResponseBean saveFile( UpFileBean upFileBean);
+    @RequestMapping(value = "/file/saveFile",method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseBean saveFile(@RequestParam(value = "userId",required = false)String userId,
+                          @RequestPart MultipartFile  file,
+                          @RequestParam(value = "saveTime",required = false)LocalDateTime saveTime);
 
     @RequestMapping(value = "/file/deleteFile",method = RequestMethod.POST)
     ResponseBean deleteFile(@RequestParam("id") String id);

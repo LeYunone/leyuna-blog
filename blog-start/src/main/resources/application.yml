@@ -20,8 +20,8 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
   servlet:
     multipart:
-      max-file-size: 50MB
-      max-request-size: 50MB
+      max-file-size: -1
+      max-request-size: -1
 ## 接口配置
 server:
   port: 9000

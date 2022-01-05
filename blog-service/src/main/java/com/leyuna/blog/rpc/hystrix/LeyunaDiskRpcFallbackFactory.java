@@ -2,22 +2,23 @@ package com.leyuna.blog.rpc.hystrix;
 
 import com.leyuna.blog.bean.blog.ResponseBean;
 import com.leyuna.blog.bean.disk.FileQueryBean;
-import com.leyuna.blog.bean.disk.UpFileBean;
+import com.leyuna.blog.constant.ResponseCode;
 import com.leyuna.blog.rpc.service.LeyunaDiskRpcService;
-import com.leyuna.blog.util.AssertUtil;
+import com.netflix.hystrix.exception.HystrixTimeoutException;
 import feign.hystrix.FallbackFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author pengli
  * @create 2021-12-24 13:39
  */
 @Component
+@Log4j2
 public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskRpcService> {
     @Override
     public LeyunaDiskRpcService create (Throwable throwable) {
@@ -28,12 +29,12 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
             }
 
             @Override
-            public ResponseBean<List<MultipartFile>> requestSaveFile (String userId, MultipartFile files, LocalDateTime saveTime) {
+            public ResponseBean<Integer> requestSaveFile (String userId, MultipartFile files, LocalDateTime saveTime) {
                 return response(throwable);
             }
 
             @Override
-            public ResponseBean saveFile (UpFileBean upFileBean) {
+            public ResponseBean saveFile (String userId, MultipartFile files, LocalDateTime saveTime) {
                 return response(throwable);
             }
 
@@ -49,9 +50,15 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
         };
     }
 
-    private ResponseBean response(Throwable throwable){
-        String errMsg = throwable.getMessage();
-        AssertUtil.isFalse(true,errMsg);
-        return ResponseBean.buildFailure(errMsg);
+    private ResponseBean response(Throwable cause){
+        String errMsg = cause.getMessage();
+        log.error(errMsg);
+        if (cause instanceof HystrixTimeoutException) {
+            return ResponseBean.buildFailure(ResponseCode.RPC_TIMEOUT);
+        }
+        if (errMsg != null && errMsg.contains("Load balancer does not have available server for client")) {
+            return ResponseBean.buildFailure(ResponseCode.RPC_ERROR_503);
+        }
+        return ResponseBean.buildFailure(ResponseCode.RPC_UNKNOWN_ERROR);
     }
 }
