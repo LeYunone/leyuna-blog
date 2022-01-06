@@ -182,6 +182,7 @@
             <element id="module-output" name="blog-client" />
           </element>
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.0" />
+          <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.51" />
           <element id="library" level="project" name="Maven: com.baomidou:mybatis-plus-extension:3.2.0" />
           <element id="library" level="project" name="Maven: com.baomidou:mybatis-plus-core:3.2.0" />
           <element id="library" level="project" name="Maven: com.baomidou:mybatis-plus-annotation:3.2.0" />

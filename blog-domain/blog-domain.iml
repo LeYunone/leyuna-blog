@@ -69,5 +69,6 @@
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.16.22" level="project" />
     <orderEntry type="module" module-name="blog-client" />
     <orderEntry type="library" name="Maven: org.springframework:spring-web:5.0.7.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.51" level="project" />
   </component>
 </module>

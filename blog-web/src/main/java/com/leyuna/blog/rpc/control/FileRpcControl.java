@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author pengli
@@ -23,7 +26,6 @@ public class FileRpcControl {
 
     /**
      * 查询文件列表
-     * @param id
      * @return
      */
     @RequestMapping("/selectFile")
@@ -33,12 +35,11 @@ public class FileRpcControl {
 
     /**
      * 请求上传文件
-     * @param fileBean
      * @return
      */
     @RequestMapping("/requestSaveFile")
-    public ResponseBean requestSaveFile(UpFileBean fileBean){
-        return fileDomain.requestSaveFile(fileBean);
+    public ResponseBean requestSaveFile(List<MultipartFile> file){
+        return fileDomain.requestSaveFile(file);
     }
 
     /**

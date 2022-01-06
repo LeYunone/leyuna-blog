@@ -36,8 +36,18 @@ public class DiskDomain {
           return fileExe.selectFile(queryBean);
     }
 
-    public ResponseBean requestSaveFile(UpFileBean fileBean){
-        return fileExe.requestSaveFile(fileBean);
+    public ResponseBean requestSaveFile(List<MultipartFile> file){
+        AssertUtil.isFalse(CollectionUtils.isEmpty(file), UserAsserts.UPLOAD_NOT_FILE.getMsg());
+        //用户编号
+        String userId= (String) StpUtil.getLoginId();
+        UpFileBean fileBean=new UpFileBean();
+        fileBean.setFiles(file);
+        fileBean.setUserId(userId);
+        //得到过滤成功后的文件
+        ResponseBean<Integer> listResponseBean = fileExe.requestSaveFile(fileBean);
+        Integer data = listResponseBean.getData();
+        //0 是服务器内部处理文件    1 是需要在服务器生成文件
+        return ResponseBean.of(data);
     }
 
     public ResponseBean saveFile(UpFileBean fileBean){
@@ -76,13 +86,6 @@ public class DiskDomain {
         UpFileBean fileBean=new UpFileBean();
         fileBean.setFiles(file);
         fileBean.setUserId(userId);
-        //得到过滤成功后的文件
-        ResponseBean<Integer> listResponseBean = fileExe.requestSaveFile(fileBean);
-        Integer data = listResponseBean.getData();
-        if(0==data){
-            //编号0说明不需要上传文件流程，服务器内部解决
-            return ResponseBean.buildSuccess();
-        }
         //上传文件流程
         ResponseBean responseBean = fileExe.saveFile(fileBean);
         return responseBean;

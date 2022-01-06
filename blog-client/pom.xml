@@ -32,6 +32,11 @@
             <artifactId>spring-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.51</version>
+        </dependency>
+        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-extension</artifactId>
             <version>3.2.0</version>

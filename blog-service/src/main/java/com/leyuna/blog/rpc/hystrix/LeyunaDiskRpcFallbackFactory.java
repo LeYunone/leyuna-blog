@@ -59,6 +59,10 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
         if (errMsg != null && errMsg.contains("Load balancer does not have available server for client")) {
             return ResponseBean.buildFailure(ResponseCode.RPC_ERROR_503);
         }
+        //微服务端的指定异常
+        if(errMsg.contains("message")){
+            return ResponseBean.buildFailure("远程服务调用未知错误:"+errMsg.substring(errMsg.indexOf("message:")+8));
+        }
         return ResponseBean.buildFailure(ResponseCode.RPC_UNKNOWN_ERROR);
     }
 }

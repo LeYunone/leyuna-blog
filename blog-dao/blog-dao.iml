@@ -82,5 +82,6 @@
     <orderEntry type="library" name="Maven: io.github.openfeign:feign-core:9.5.1" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.16.22" level="project" />
     <orderEntry type="module" module-name="blog-client" />
+    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.51" level="project" />
   </component>
 </module>
