@@ -64,7 +64,9 @@ public class DiskDomain {
     public DiskCO getFileList(String userId){
         DiskCO diskCO=new DiskCO();
         //用户当前文件列表
-        Page<FileInfoCO> fileInfoCOPage = fileExe.selectFile(FileQueryBean.builder().userId(userId).type(3).build());
+        FileQueryBean build = FileQueryBean.builder().userId(userId).type(5).build();
+        build.setOrderCondition("file_size_total");
+        Page<FileInfoCO> fileInfoCOPage = fileExe.selectFile(build);
         //初始化页面时，默认取前十条展示到所有文件
         List<FileInfoCO> fileInfos = fileInfoCOPage.getRecords();
         diskCO.setFileList(fileInfos);

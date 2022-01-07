@@ -212,13 +212,7 @@ public abstract class BaseRepository<M extends BaseMapper<DO>, DO,CO> extends Se
         QueryWrapper<DO> dQueryWrapper = new QueryWrapper<DO>().allEq(TransformationUtil.transDTOColumnMap(copy), false);
         IPage<DO> doPage = this.baseMapper.selectPage(page, dQueryWrapper);
 
-        Page<CO> result=new Page<>();
-        result.setRecords(TransformationUtil.copyToLists(doPage.getRecords(),COclass));
-        result.setTotal(doPage.getTotal());
-        result.setPages(doPage.getPages());
-        result.setCurrent(doPage.getCurrent());
-        result.setSize(doPage.getSize());
-        return  result;
+        return TransformationUtil.copyToPage(doPage,COclass);
     }
 
     /**
@@ -247,13 +241,7 @@ public abstract class BaseRepository<M extends BaseMapper<DO>, DO,CO> extends Se
                 break;
         }
 
-        Page<CO> result=new Page<>();
-        result.setRecords(TransformationUtil.copyToLists(ipage.getRecords(),COclass));
-        result.setTotal(ipage.getTotal());
-        result.setPages(ipage.getPages());
-        result.setCurrent(ipage.getCurrent());
-        result.setSize(ipage.getSize());
-        return result;
+        return TransformationUtil.copyToPage(ipage,COclass);
     }
 
     /**
