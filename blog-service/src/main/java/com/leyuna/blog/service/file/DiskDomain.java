@@ -29,7 +29,7 @@ public class DiskDomain {
     @Autowired
     private DiskFileExe fileExe;
 
-    @Value("${disk.max.memory}")
+    @Value("${disk.max.memory:1}")
     private Long maxMemory;
 
     public Page<FileInfoCO> selectFile(FileQueryBean queryBean){
@@ -72,6 +72,7 @@ public class DiskDomain {
         diskCO.setFileList(fileInfos);
         //获取内存占有量
         Long totalSize=CollectionUtils.isEmpty(fileInfos)?0:fileInfos.get(0).getFileSizeTotal();
+        //百分比
         diskCO.setFileTotalSize(totalSize/maxMemory);
         diskCO.setFileCount(fileInfoCOPage.getTotal());
         return diskCO;

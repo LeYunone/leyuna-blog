@@ -47,17 +47,17 @@ public interface LeyunaDiskRpcService {
 
     @RequestMapping(value = "/file/requestSaveFile",method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseBean<Integer> requestSaveFile(@RequestParam(value = "userId",required = false)String userId,
-                                                      @RequestPart MultipartFile  file,
+                                                      @RequestPart(value = "file") MultipartFile  file,
                                                       @RequestParam(value = "saveTime",required = false)LocalDateTime saveTime);
 
     @RequestMapping(value = "/file/saveFile",method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseBean saveFile(@RequestParam(value = "userId",required = false)String userId,
-                          @RequestPart MultipartFile  file,
+                          @RequestPart(value = "file") MultipartFile  file,
                           @RequestParam(value = "saveTime",required = false)LocalDateTime saveTime);
 
     @RequestMapping(value = "/file/deleteFile",method = RequestMethod.POST)
-    ResponseBean deleteFile(@RequestParam("id") String id);
+    ResponseBean deleteFile(@RequestParam(value = "id") String id);
 
     @RequestMapping(value = "/file/downloadFile",method = RequestMethod.POST)
-    ResponseEntity downloadFile(@RequestParam("id") String id);
+    ResponseEntity downloadFile(@RequestParam(value = "id") String id);
 }

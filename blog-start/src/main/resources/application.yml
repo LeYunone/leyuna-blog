@@ -34,10 +34,10 @@ logging:
   level:
     com.chz.mapper: debug
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8001/eureka/
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:8001/eureka/
 #
 ### mp日志
 #mybatis-plus:
