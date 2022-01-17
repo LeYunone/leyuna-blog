@@ -42,7 +42,6 @@ public class DiskControl {
 
     /**
      * 上传文件
-     * @param files
      * @return
      */
     @PostMapping("/uploadFile")

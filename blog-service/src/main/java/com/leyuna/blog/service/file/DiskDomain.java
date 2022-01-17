@@ -11,15 +11,12 @@ import com.leyuna.blog.co.disk.FileInfoCO;
 import com.leyuna.blog.error.UserAsserts;
 import com.leyuna.blog.rpc.command.DiskFileExe;
 import com.leyuna.blog.util.AssertUtil;
-import com.leyuna.blog.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -90,10 +87,7 @@ public class DiskDomain {
         //用户编号
         String userId= (String) StpUtil.getLoginId();
         UpFileBean fileBean=new UpFileBean();
-        if(StringUtil.isNotBanks(saveTime)){
-            LocalDateTime parse = LocalDateTime.parse(saveTime, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            fileBean.setSaveTime(parse);
-        }
+        fileBean.setSaveTime(saveTime);
         fileBean.setFiles(file);
         fileBean.setUserId(userId);
         //上传文件流程

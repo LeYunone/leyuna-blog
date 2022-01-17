@@ -29,12 +29,12 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
             }
 
             @Override
-            public ResponseBean<Integer> requestSaveFile (String userId, MultipartFile files, LocalDateTime saveTime) {
+            public ResponseBean<Integer> requestSaveFile (String userId, MultipartFile files) {
                 return response(throwable);
             }
 
             @Override
-            public ResponseBean saveFile (String userId, MultipartFile files, LocalDateTime saveTime) {
+            public ResponseBean saveFile (String userId, MultipartFile files, String saveTime) {
                 return response(throwable);
             }
 

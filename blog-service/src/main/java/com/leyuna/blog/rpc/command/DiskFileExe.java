@@ -12,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
-
 /**
  * @author pengli
  * @create 2021-12-24 11:02
@@ -32,8 +30,7 @@ public class DiskFileExe {
     public ResponseBean<Integer> requestSaveFile(UpFileBean fileBean){
         String userId = fileBean.getUserId();
         MultipartFile multipartFile = fileBean.getFiles().get(0);
-        LocalDateTime saveTime = fileBean.getSaveTime();
-        ResponseBean<Integer> integerResponseBean = leyunaDiskRpcService.requestSaveFile(userId, multipartFile, saveTime);
+        ResponseBean<Integer> integerResponseBean = leyunaDiskRpcService.requestSaveFile(userId, multipartFile);
         AssertUtil.isTrue(integerResponseBean.isStatus(),integerResponseBean.getMessage());
         return integerResponseBean;
     }
@@ -41,7 +38,7 @@ public class DiskFileExe {
     public ResponseBean saveFile(UpFileBean fileBean){
         String userId = fileBean.getUserId();
         MultipartFile multipartFile = fileBean.getFiles().get(0);
-        LocalDateTime saveTime = fileBean.getSaveTime();
+        String saveTime = fileBean.getSaveTime();
         ResponseBean responseBean = leyunaDiskRpcService.saveFile(userId, multipartFile, saveTime);
         AssertUtil.isTrue(responseBean.isStatus(),responseBean.getMessage());
         return responseBean;

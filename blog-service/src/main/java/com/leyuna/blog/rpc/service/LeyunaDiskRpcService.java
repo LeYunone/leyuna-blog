@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
-
 /**
  * @author pengli
  * @create 2021-12-23 16:36
@@ -47,13 +45,12 @@ public interface LeyunaDiskRpcService {
 
     @RequestMapping(value = "/file/requestSaveFile",method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseBean<Integer> requestSaveFile(@RequestParam(value = "userId",required = false)String userId,
-                                                      @RequestPart(value = "file") MultipartFile  file,
-                                                      @RequestParam(value = "saveTime",required = false)LocalDateTime saveTime);
+                                                      @RequestPart(value = "file") MultipartFile  file);
 
     @RequestMapping(value = "/file/saveFile",method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseBean saveFile(@RequestParam(value = "userId",required = false)String userId,
                           @RequestPart(value = "file") MultipartFile  file,
-                          @RequestParam(value = "saveTime",required = false)LocalDateTime saveTime);
+                          @RequestParam(value = "saveTime",required = false)String saveTime);
 
     @RequestMapping(value = "/file/deleteFile",method = RequestMethod.POST)
     ResponseBean deleteFile(@RequestParam(value = "id") String id);
