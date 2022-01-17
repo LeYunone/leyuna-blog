@@ -46,7 +46,7 @@ public class DiskControl {
      * @return
      */
     @PostMapping("/uploadFile")
-    public ResponseBean uploadFile(List<MultipartFile> file){
-        return diskDomain.uploadFile(file);
+    public ResponseBean uploadFile(List<MultipartFile> file, String saveTime){
+        return diskDomain.uploadFile(file,saveTime);
     }
 }
