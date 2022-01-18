@@ -146,7 +146,6 @@ public class BlogDomain {
             //回滚事务
             throw new RuntimeException();
         }
-        clearCacheExe.clearBlogQueryByIdCache(id);
         return blogById;
     }
 

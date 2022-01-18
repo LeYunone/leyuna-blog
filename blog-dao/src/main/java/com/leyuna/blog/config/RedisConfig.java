@@ -17,7 +17,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 
 import java.time.Duration;
-import java.util.Optional;
 
 /**
  * @author pengli
@@ -67,7 +66,7 @@ public class RedisConfig {
 
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 // 设置超时时间
-                .entryTtl(Optional.ofNullable(redisProperties.getTimeout()).orElse(Duration.ofMinutes(360)))
+                .entryTtl(Duration.ofHours(12))
                 // 禁止缓存null值
                 .disableCachingNullValues();
 

@@ -8,9 +8,11 @@ import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.co.disk.DiskCO;
 import com.leyuna.blog.co.disk.FileInfoCO;
+import com.leyuna.blog.error.SystemAsserts;
 import com.leyuna.blog.error.UserAsserts;
 import com.leyuna.blog.rpc.command.DiskFileExe;
 import com.leyuna.blog.util.AssertUtil;
+import com.leyuna.blog.util.ObjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -67,6 +69,7 @@ public class DiskDomain {
         FileQueryBean build = FileQueryBean.builder().userId(userId).type(5).build();
         build.setOrderCondition("file_size_total");
         Page<FileInfoCO> fileInfoCOPage = fileExe.selectFile(build);
+        AssertUtil.isFalse(ObjectUtil.isNull(fileInfoCOPage), SystemAsserts.REQUEST_FAIL.getMsg());
         //初始化页面时，默认取前十条展示到所有文件
         List<FileInfoCO> fileInfos = fileInfoCOPage.getRecords();
         diskCO.setFileList(fileInfos);
