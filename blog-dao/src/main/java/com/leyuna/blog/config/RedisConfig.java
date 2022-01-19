@@ -66,7 +66,7 @@ public class RedisConfig {
 
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 // 设置超时时间
-                .entryTtl(Duration.ofHours(12))
+                .entryTtl(Duration.ofSeconds(5))
                 // 禁止缓存null值
                 .disableCachingNullValues();
 

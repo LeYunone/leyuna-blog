@@ -66,15 +66,14 @@ public class DiskDomain {
     public DiskCO getFileList(String userId){
         DiskCO diskCO=new DiskCO();
         //用户当前文件列表
-        FileQueryBean build = FileQueryBean.builder().userId(userId).type(5).build();
-        build.setOrderCondition("file_size_total");
+        FileQueryBean build = FileQueryBean.builder().userId(userId).type(3).build();
         Page<FileInfoCO> fileInfoCOPage = fileExe.selectFile(build);
         AssertUtil.isFalse(ObjectUtil.isNull(fileInfoCOPage), SystemAsserts.REQUEST_FAIL.getMsg());
         //初始化页面时，默认取前十条展示到所有文件
         List<FileInfoCO> fileInfos = fileInfoCOPage.getRecords();
         diskCO.setFileList(fileInfos);
         //获取内存占有量
-        Long totalSize=CollectionUtils.isEmpty(fileInfos)?0:fileInfos.get(0).getFileSizeTotal();
+        Double totalSize = fileExe.selectAllFileSize(userId);
         //百分比
         diskCO.setFileTotalSize(totalSize/maxMemory);
         diskCO.setFileCount(fileInfoCOPage.getTotal());

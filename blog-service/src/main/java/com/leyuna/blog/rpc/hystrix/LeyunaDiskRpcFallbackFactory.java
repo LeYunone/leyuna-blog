@@ -11,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
-
 /**
  * @author pengli
  * @create 2021-12-24 13:39
@@ -25,6 +23,11 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
         return new LeyunaDiskRpcService() {
             @Override
             public ResponseBean selectFile (FileQueryBean queryBean) {
+                return response(throwable);
+            }
+
+            @Override
+            public ResponseBean<Double> selectAllFileSize (String userId) {
                 return response(throwable);
             }
 

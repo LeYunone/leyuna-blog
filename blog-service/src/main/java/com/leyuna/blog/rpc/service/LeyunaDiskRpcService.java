@@ -40,13 +40,40 @@ public interface LeyunaDiskRpcService {
         }
     }
 
+    /**
+     * 分页 - 条件 查询文件
+     * @param queryBean
+     * @return
+     */
     @RequestMapping(value = "/file/selectFile",method = RequestMethod.POST)
     ResponseBean<Page<FileInfoCO>> selectFile( FileQueryBean queryBean);
 
+    /**
+     * 获得指定用户的当前文件内存
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/file/selectAllFileSize",method = RequestMethod.GET)
+    ResponseBean<Double> selectAllFileSize( @RequestParam("userId") String userId);
+
+
+    /**
+     * 用户请求上传文件
+     * @param userId
+     * @param file
+     * @return
+     */
     @RequestMapping(value = "/file/requestSaveFile",method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseBean<Integer> requestSaveFile(@RequestParam(value = "userId",required = false)String userId,
                                                       @RequestPart(value = "file") MultipartFile  file);
 
+    /**
+     * 上传文件
+     * @param userId
+     * @param file
+     * @param saveTime
+     * @return
+     */
     @RequestMapping(value = "/file/saveFile",method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseBean saveFile(@RequestParam(value = "userId",required = false)String userId,
                           @RequestPart(value = "file") MultipartFile  file,

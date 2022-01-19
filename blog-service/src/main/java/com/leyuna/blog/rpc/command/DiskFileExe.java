@@ -27,6 +27,13 @@ public class DiskFileExe {
         return responseBean.getData();
     }
 
+
+    public Double selectAllFileSize(String userId){
+        ResponseBean<Double> doubleResponseBean = leyunaDiskRpcService.selectAllFileSize(userId);
+        AssertUtil.isTrue(doubleResponseBean.isStatus(), doubleResponseBean.getMessage());
+        return doubleResponseBean.getData();
+    }
+
     public ResponseBean<Integer> requestSaveFile(UpFileBean fileBean){
         String userId = fileBean.getUserId();
         MultipartFile multipartFile = fileBean.getFiles().get(0);
