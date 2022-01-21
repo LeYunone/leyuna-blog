@@ -31,4 +31,6 @@ public class FileInfoCO {
     private String userId;
 
     private Integer fileType;
+
+    private String fileTypeName;
 }

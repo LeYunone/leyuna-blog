@@ -138,5 +138,6 @@
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.12" level="project" />
     <orderEntry type="module" module-name="blog-client" />
     <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.51" level="project" />
+    <orderEntry type="library" name="Maven: javax.servlet:javax.servlet-api:4.0.1" level="project" />
   </component>
 </module>

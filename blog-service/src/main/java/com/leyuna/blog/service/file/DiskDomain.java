@@ -75,7 +75,8 @@ public class DiskDomain {
         //获取内存占有量
         Double totalSize = fileExe.selectAllFileSize(userId);
         //百分比
-        diskCO.setFileTotalSize(totalSize/maxMemory);
+        double total=(totalSize/maxMemory)*100;
+        diskCO.setFileTotalSize(String.format("%.2f",total));
         diskCO.setFileCount(fileInfoCOPage.getTotal());
         return diskCO;
     }
@@ -94,6 +95,13 @@ public class DiskDomain {
         fileBean.setUserId(userId);
         //上传文件流程
         ResponseBean responseBean = fileExe.saveFile(fileBean);
-        return responseBean;
+
+        DiskCO diskCO=new DiskCO();
+        //获取内存占有量
+        Double totalSize = fileExe.selectAllFileSize(userId);
+        //百分比
+        double total=(totalSize/maxMemory)*100;
+        diskCO.setFileTotalSize(String.format("%.2f",total));
+        return ResponseBean.of(diskCO);
     }
 }

@@ -180,6 +180,7 @@
           <element id="library" level="project" name="Maven: com.github.jsqlparser:jsqlparser:2.1" />
           <element id="library" level="project" name="Maven: org.mybatis:mybatis:3.5.2" />
           <element id="library" level="project" name="Maven: org.mybatis:mybatis-spring:2.0.2" />
+          <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:4.0.1" />
         </element>
       </element>
       <element id="directory" name="META-INF">

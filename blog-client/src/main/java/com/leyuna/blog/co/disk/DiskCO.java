@@ -28,7 +28,7 @@ public class DiskCO {
 
     private List<FileInfoCO> fileList;
 
-    private Double fileTotalSize;
+    private String fileTotalSize;
 
     private Long fileCount;
 }
