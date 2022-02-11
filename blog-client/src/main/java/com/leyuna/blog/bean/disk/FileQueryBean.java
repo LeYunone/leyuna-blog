@@ -23,4 +23,6 @@ public class FileQueryBean extends QueryPage {
 
     private String userId;
 
+    private Integer fileType;
+
 }

@@ -20,17 +20,20 @@ public class FileInfoCO {
 
     private String name;
 
-    private LocalDateTime createDt;
+    private String createDt;
 
     private LocalDateTime updateDt;
 
     private Integer deleted;
 
-    private Long fileSize;
+    private Double fileSize;
 
     private String userId;
 
-    private Integer fileType;
-
     private String fileTypeName;
+
+    /**
+     * 文件类型：1图片、2音视、3文档、4其他文件
+     */
+    private Integer fileType;
 }

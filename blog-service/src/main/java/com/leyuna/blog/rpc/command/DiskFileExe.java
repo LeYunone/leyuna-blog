@@ -1,9 +1,11 @@
 package com.leyuna.blog.rpc.command;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.ResponseBean;
 import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.bean.disk.UpFileBean;
+import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.co.disk.FileInfoCO;
 import com.leyuna.blog.rpc.service.LeyunaDiskRpcService;
 import com.leyuna.blog.util.AssertUtil;
@@ -56,7 +58,8 @@ public class DiskFileExe {
     }
 
     public ResponseEntity downloadFile(String id){
-        return leyunaDiskRpcService.downloadFile(id);
+        UserCO user=(UserCO)StpUtil.getSession().get("user");
+        return leyunaDiskRpcService.downloadFile(id,user.getId());
     }
 
 }

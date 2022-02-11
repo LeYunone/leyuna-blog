@@ -47,7 +47,7 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
             }
 
             @Override
-            public ResponseEntity downloadFile (String id) {
+            public ResponseEntity downloadFile (String id,String userId) {
                 return null;
             }
         };
