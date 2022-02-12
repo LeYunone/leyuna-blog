@@ -5,7 +5,6 @@ import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.service.file.DiskDomain;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,15 +59,5 @@ public class FileRpcControl {
     @PostMapping("/deleteFile")
     public ResponseBean deleteFile(String id){
         return fileDomain.deleteFile(id);
-    }
-
-    /**
-     * 下载文件
-     * @param id
-     * @return
-     */
-    @PostMapping("/downloadFile")
-    public ResponseEntity downloadFile(String id){
-        return fileDomain.downloadFile(id);
     }
 }

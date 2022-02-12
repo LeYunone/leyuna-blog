@@ -15,7 +15,6 @@ import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -83,5 +82,5 @@ public interface LeyunaDiskRpcService {
     ResponseBean deleteFile(@RequestParam(value = "id") String id);
 
     @RequestMapping(value = "/file/downloadFile",method = RequestMethod.POST)
-    ResponseEntity downloadFile(@RequestParam(value = "id") String id,@RequestParam(value = "userId") String userId);
+    ResponseBean<FileInfoCO> downloadFile(@RequestParam(value = "id") String id,@RequestParam(value = "userId") String userId);
 }

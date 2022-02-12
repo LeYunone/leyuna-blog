@@ -7,10 +7,10 @@ import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.co.disk.FileInfoCO;
+import com.leyuna.blog.error.SystemAsserts;
 import com.leyuna.blog.rpc.service.LeyunaDiskRpcService;
 import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,9 +57,12 @@ public class DiskFileExe {
         return leyunaDiskRpcService.deleteFile(id);
     }
 
-    public ResponseEntity downloadFile(String id){
+    public FileInfoCO downloadFile(String id){
         UserCO user=(UserCO)StpUtil.getSession().get("user");
-        return leyunaDiskRpcService.downloadFile(id,user.getId());
+        ResponseBean<FileInfoCO> fileInfoCOResponseBean = leyunaDiskRpcService.downloadFile(id, user.getId());
+        FileInfoCO data = fileInfoCOResponseBean.getData();
+        AssertUtil.isFalse(null==data, SystemAsserts.REQUEST_FAIL.getMsg());
+        return data;
     }
 
 }

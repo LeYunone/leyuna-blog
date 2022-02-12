@@ -5,15 +5,21 @@ import com.leyuna.blog.bean.blog.ResponseBean;
 import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.co.disk.DiskCO;
+import com.leyuna.blog.co.disk.FileInfoCO;
 import com.leyuna.blog.service.file.DiskDomain;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -61,8 +67,37 @@ public class DiskControl {
         return diskDomain.uploadFile(file,saveTime);
     }
 
-    @GetMapping("/downFile")
-    public ResponseEntity downFile(String fileId){
-        return diskDomain.downloadFile(fileId);
+    @GetMapping(value = "/downFile")
+    public void downFile(String fileId, HttpServletResponse response){
+        FileInfoCO fileInfoCO = diskDomain.downloadFile(fileId);
+        byte[] buffer = new byte[1024];
+        BufferedInputStream bis = null;
+        OutputStream os = null; //输出流
+        try {
+            //设置返回文件信息
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileInfoCO.getName(), "UTF-8"));
+            response.setContentType("application/octet-stream");
+            response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+            
+            os = response.getOutputStream();
+            bis = new BufferedInputStream(new ByteArrayInputStream(fileInfoCO.getBase64File()));
+            while(bis.read(buffer) != -1){
+                os.write(buffer);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(bis != null) {
+                    bis.close();
+                }
+                if(os != null) {
+                    os.flush();
+                    os.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -2,12 +2,12 @@ package com.leyuna.blog.rpc.hystrix;
 
 import com.leyuna.blog.bean.blog.ResponseBean;
 import com.leyuna.blog.bean.disk.FileQueryBean;
+import com.leyuna.blog.co.disk.FileInfoCO;
 import com.leyuna.blog.constant.ResponseCode;
 import com.leyuna.blog.rpc.service.LeyunaDiskRpcService;
 import com.netflix.hystrix.exception.HystrixTimeoutException;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,8 +47,8 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
             }
 
             @Override
-            public ResponseEntity downloadFile (String id,String userId) {
-                return null;
+            public ResponseBean<FileInfoCO> downloadFile (String id, String userId) {
+                return response(throwable);
             }
         };
     }
