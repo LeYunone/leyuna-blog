@@ -67,6 +67,11 @@ public class DiskControl {
         return diskDomain.uploadFile(file,saveTime);
     }
 
+    /**
+     * 下载文件
+     * @param fileId
+     * @param response
+     */
     @GetMapping(value = "/downFile")
     public void downFile(String fileId, HttpServletResponse response){
         FileInfoCO fileInfoCO = diskDomain.downloadFile(fileId);
@@ -99,5 +104,15 @@ public class DiskControl {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 删除文件
+     * @param fileId
+     * @return
+     */
+    @GetMapping(value = "/deleteFile")
+    public ResponseBean deleteFile(String fileId){
+        return diskDomain.deleteFile(fileId);
     }
 }

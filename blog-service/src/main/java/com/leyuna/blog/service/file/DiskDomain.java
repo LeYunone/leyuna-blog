@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.ResponseBean;
 import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.bean.disk.UpFileBean;
+import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.co.disk.DiskCO;
 import com.leyuna.blog.co.disk.FileInfoCO;
 import com.leyuna.blog.error.SystemAsserts;
@@ -60,7 +61,15 @@ public class DiskDomain {
     }
 
     public ResponseBean deleteFile (String id) {
-        return fileExe.deleteFile(id);
+        ResponseBean responseBean = fileExe.deleteFile(id);
+        UserCO user=(UserCO)StpUtil.getSession().get("user");
+        String userId=user.getId();
+        //删除之后获得最新的总内存大小
+        Double totalSize = fileExe.selectAllFileSize(userId);
+        //百分比
+        double total = (totalSize / maxMemory) * 100;
+        responseBean.setData(String.format("%.2f", total));
+        return responseBean;
     }
 
     public FileInfoCO downloadFile (String id) {

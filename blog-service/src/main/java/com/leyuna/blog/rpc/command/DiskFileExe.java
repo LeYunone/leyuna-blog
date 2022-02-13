@@ -54,7 +54,9 @@ public class DiskFileExe {
     }
 
     public ResponseBean deleteFile(String id){
-        return leyunaDiskRpcService.deleteFile(id);
+        UserCO user=(UserCO)StpUtil.getSession().get("user");
+        ResponseBean responseBean = leyunaDiskRpcService.deleteFile(id, user.getId());
+        return responseBean;
     }
 
     public FileInfoCO downloadFile(String id){

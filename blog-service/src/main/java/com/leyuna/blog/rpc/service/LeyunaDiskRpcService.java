@@ -79,7 +79,7 @@ public interface LeyunaDiskRpcService {
                           @RequestParam(value = "saveTime",required = false)String saveTime);
 
     @RequestMapping(value = "/file/deleteFile",method = RequestMethod.POST)
-    ResponseBean deleteFile(@RequestParam(value = "id") String id);
+    ResponseBean deleteFile(@RequestParam(value = "id") String id,@RequestParam(value = "userId") String userId);
 
     @RequestMapping(value = "/file/downloadFile",method = RequestMethod.POST)
     ResponseBean<FileInfoCO> downloadFile(@RequestParam(value = "id") String id,@RequestParam(value = "userId") String userId);

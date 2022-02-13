@@ -42,7 +42,7 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
             }
 
             @Override
-            public ResponseBean deleteFile (String id) {
+            public ResponseBean deleteFile (String id,String userId) {
                 return response(throwable);
             }
 
