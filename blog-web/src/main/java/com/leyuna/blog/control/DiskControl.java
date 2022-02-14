@@ -1,6 +1,7 @@
 package com.leyuna.blog.control;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.ResponseBean;
 import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.co.blog.UserCO;
@@ -8,10 +9,7 @@ import com.leyuna.blog.co.disk.DiskCO;
 import com.leyuna.blog.co.disk.FileInfoCO;
 import com.leyuna.blog.service.file.DiskDomain;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -49,13 +47,11 @@ public class DiskControl {
     }
 
     @GetMapping("/getDiskFileList")
-    public ResponseBean getDiskFileList(Integer fileType,Integer type){
+    public ResponseBean getDiskFileList(FileQueryBean queryBean){
         UserCO user=(UserCO) StpUtil.getSession().get("user");
-        FileQueryBean queryBean=new FileQueryBean();
-        queryBean.setFileType(fileType);
         queryBean.setUserId(user.getId());
-        queryBean.setType(type);
-        return ResponseBean.of(diskDomain.selectFile(queryBean));
+        Page<FileInfoCO> fileInfoCOPage = diskDomain.selectFile(queryBean);
+        return ResponseBean.of(fileInfoCOPage);
     }
 
     /**
