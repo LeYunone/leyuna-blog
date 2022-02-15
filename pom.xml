@@ -14,6 +14,7 @@
     <modules>
         <module>blog-web</module>
         <module>blog-dao</module>
+        <module>blog-client</module>
         <module>blog-domain</module>
         <module>blog-service</module>
     </modules>
@@ -35,10 +36,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.leyuna</groupId>
-            <artifactId>blog-client</artifactId>
         </dependency>
     </dependencies>
     <dependencyManagement>

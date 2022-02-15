@@ -40,9 +40,8 @@ public class DiskControl {
      */
     @GetMapping("/getDiskInfo")
     public ResponseBean getDiskInfo(Integer fileType){
-        UserCO user = (UserCO)StpUtil.getSession().get("user");
         //开始组装云盘初始信息源
-        DiskCO fileList = diskDomain.getFileList(user.getId(),fileType);
+        DiskCO fileList = diskDomain.getFileList(fileType);
         return ResponseBean.of(fileList);
     }
 

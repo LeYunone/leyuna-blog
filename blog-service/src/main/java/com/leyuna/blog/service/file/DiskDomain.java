@@ -76,28 +76,8 @@ public class DiskDomain {
         return fileExe.downloadFile(id);
     }
 
-    public DiskCO getFileList (String userId, Integer fileType) {
-        DiskCO diskCO = new DiskCO();
-        //用户当前文件列表
-        FileQueryBean build = FileQueryBean.builder().userId(userId).type(3).build();
-        if (fileType != 0) {
-            build.setFileType(fileType);
-        }
-        Page<FileInfoCO> fileInfoCOPage = fileExe.selectFile(build);
-        AssertUtil.isFalse(ObjectUtil.isNull(fileInfoCOPage), SystemAsserts.REQUEST_FAIL.getMsg());
-        //初始化页面时，默认取前十条展示到所有文件
-        List<FileInfoCO> fileInfos = fileInfoCOPage.getRecords();
-        //获取内存占有量
-        Double totalSize = fileExe.selectAllFileSize(userId);
-        //百分比
-        double total = (totalSize / maxMemory) * 100;
-
-        //封装基本信息
-        diskCO.setFileList(fileInfos);
-
-        diskCO.setFileTotalSize(String.format("%.2f", total));
-        diskCO.setFileCount(fileInfoCOPage.getTotal());
-        return diskCO;
+    public DiskCO getFileList (Integer fileType) {
+        return getUserFileInfo(fileType);
     }
 
     /**
@@ -116,12 +96,36 @@ public class DiskDomain {
         //上传文件流程
         ResponseBean responseBean = fileExe.saveFile(fileBean);
 
+        DiskCO diskCO = getUserFileInfo(0);
+        return ResponseBean.of(diskCO);
+    }
+
+    /**
+     * 获取用户的文件列表相关信息
+     * @param fileType
+     * @return
+     */
+    private DiskCO getUserFileInfo(Integer fileType){
         DiskCO diskCO = new DiskCO();
+        String userId=String.valueOf(StpUtil.getLoginId());
+        //用户当前文件列表
+        FileQueryBean build = FileQueryBean.builder().userId(userId).type(3).build();
+        if (fileType != 0) {
+            build.setFileType(fileType);
+        }
+        Page<FileInfoCO> fileInfoCOPage = fileExe.selectFile(build);
+        AssertUtil.isFalse(ObjectUtil.isNull(fileInfoCOPage), SystemAsserts.REQUEST_FAIL.getMsg());
+        //初始化页面时，默认取前十条展示到所有文件
+        List<FileInfoCO> fileInfos = fileInfoCOPage.getRecords();
         //获取内存占有量
         Double totalSize = fileExe.selectAllFileSize(userId);
         //百分比
         double total = (totalSize / maxMemory) * 100;
+
+        //封装基本信息
+        diskCO.setFileList(fileInfos);
         diskCO.setFileTotalSize(String.format("%.2f", total));
-        return ResponseBean.of(diskCO);
+        diskCO.setFileCount(fileInfoCOPage.getTotal());
+        return diskCO;
     }
 }
