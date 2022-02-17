@@ -24,10 +24,8 @@ spring:
       max-request-size: -1
 ## 接口配置
 server:
-  port: 9000
   servlet:
     context-path: '/leyuna'
-  address: 127.0.0.1
 
 ## 打印日志级别
 logging:
