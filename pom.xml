@@ -17,6 +17,7 @@
         <module>blog-client</module>
         <module>blog-domain</module>
         <module>blog-service</module>
+        <module>blog-start</module>
     </modules>
 
     <properties>
