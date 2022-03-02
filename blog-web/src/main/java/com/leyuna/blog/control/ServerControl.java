@@ -46,6 +46,15 @@ public class ServerControl{
             return ResponseBean.buildFailure(SystemAsserts.UPLOCAD_IMG_FAIL.getMsg());
         }
     }
+    
+    @RequestMapping("/clearCache")
+    public ResponseBean clearCache(String name){
+        if(ServerCode.SERVER_NAME.equals(name)){
+            cacheExe.clearAllCache();
+            return ResponseBean.buildSuccess();
+        }
+        return ResponseBean.buildFailure("暗号错啦，错啦！！！");
+    }
 
     /**
      * 游客上传图片
