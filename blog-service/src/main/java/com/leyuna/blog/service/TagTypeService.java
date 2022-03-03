@@ -24,7 +24,7 @@ import java.util.*;
  *  标签和类型 领域活动对象
  */
 @Service
-public class TagTypeDomain {
+public class TagTypeService {
 
     @Autowired
     private TagAndTypeExe tagAndTypeExe;

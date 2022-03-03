@@ -2,7 +2,7 @@ package com.leyuna.blog.control;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.CascaderTypeBean;
-import com.leyuna.blog.bean.blog.ResponseBean;
+import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.blog.TreeTypeBean;
 import com.leyuna.blog.co.blog.TagCO;
 import com.leyuna.blog.co.blog.TypeCO;
@@ -10,8 +10,8 @@ import com.leyuna.blog.co.blog.TypeNavCO;
 import com.leyuna.blog.domain.TagE;
 import com.leyuna.blog.domain.TypeE;
 import com.leyuna.blog.error.SystemAsserts;
-import com.leyuna.blog.service.TagTypeDomain;
-import com.leyuna.blog.service.UserDomain;
+import com.leyuna.blog.service.TagTypeService;
+import com.leyuna.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -32,27 +32,27 @@ import java.util.Map;
 public class TagTypeControl{
 
     @Autowired
-    private TagTypeDomain tagTypeDomain;
+    private TagTypeService tagTypeDomain;
 
     @Autowired
-    private UserDomain userDomain;
+    private UserService userDomain;
     /**
      * 取标签  【二级分类】
      * @param
      * @return
      */
     @RequestMapping("/tags")
-    public ResponseBean getTags(@RequestParam(required = false)Integer pageIndex,
+    public DataResponse getTags(@RequestParam(required = false)Integer pageIndex,
                                 @RequestParam(required = false)Integer pageSize,
                                 @RequestParam(required = false)String conditionName){
         Page<TagCO> aLlTags = tagTypeDomain.getALlTags(pageIndex,pageSize,conditionName);
-        return  ResponseBean.of(aLlTags);
+        return  DataResponse.of(aLlTags);
     }
 
     @GetMapping("/tagsId")
-    public ResponseBean getTagsById(String...ids){
+    public DataResponse getTagsById(String...ids){
         List<TagCO> tagsByIds = tagTypeDomain.getTagsByIds(ids);
-        return ResponseBean.of(tagsByIds);
+        return DataResponse.of(tagsByIds);
     }
 
     /**
@@ -61,11 +61,11 @@ public class TagTypeControl{
      * @return
      */
     @RequestMapping("/types")
-    public ResponseBean getTypes(@RequestParam(required = false)Integer pageIndex,
+    public DataResponse getTypes(@RequestParam(required = false)Integer pageIndex,
                                  @RequestParam(required = false)Integer pageSize,
                                  @RequestParam(required = false)String conditionName){
         Page<TypeCO> aLlTags = tagTypeDomain.getALlTypes(pageIndex,pageSize,conditionName);
-        return  ResponseBean.of(aLlTags);
+        return  DataResponse.of(aLlTags);
     }
 
     /**
@@ -73,16 +73,16 @@ public class TagTypeControl{
      * @return
      */
     @RequestMapping("/getTypeInNav")
-    public ResponseBean getTypeInNav(){
+    public DataResponse getTypeInNav(){
         //暂定默认最多只会有100个分类
         Page<TypeCO> aLlTypes = tagTypeDomain.getALlTypes(null, null, null);
         Map<String, TypeNavCO> typeNavMap = tagTypeDomain.getTypeNavMap();
 
         List<CascaderTypeBean> cascaderTypeResult = getCascaderTypeResult(aLlTypes.getRecords(), typeNavMap);
-        return ResponseBean.of(cascaderTypeResult);
+        return DataResponse.of(cascaderTypeResult);
     }
 
-    public List<CascaderTypeBean> getCascaderTypeResult(List<TypeCO> types,Map<String, TypeNavCO> typeNavMap){
+    private List<CascaderTypeBean> getCascaderTypeResult(List<TypeCO> types,Map<String, TypeNavCO> typeNavMap){
         List<CascaderTypeBean> lists=new ArrayList<>();
         Map<String,CascaderTypeBean> map=new HashMap<>();
         types.stream().forEach(t->{
@@ -119,9 +119,9 @@ public class TagTypeControl{
     }
 
     @GetMapping("/typesId")
-    public ResponseBean getTypesById(String...ids){
+    public DataResponse getTypesById(String...ids){
         List<TypeCO> tagsByIds = tagTypeDomain.getTypesByIds(ids);
-        return ResponseBean.of(tagsByIds);
+        return DataResponse.of(tagsByIds);
     }
 
     /**
@@ -131,14 +131,15 @@ public class TagTypeControl{
      * @return
      */
     @RequestMapping("/addTagsAndTypes")
-    public ResponseBean addTagsAndTypes(@RequestParam(required = false) List<String>
-                                                    tags,@RequestParam(required = false) List<String> types,@RequestParam(required = false)String typeNav){
+    public DataResponse addTagsAndTypes(@RequestParam(required = false) List<String> tags,
+                                        @RequestParam(required = false) List<String> types,
+                                        @RequestParam(required = false)String typeNav){
         userDomain.checkLock();
         String message=tagTypeDomain.addTypesOrTags(tags, types,typeNav);
         if(message==null){
-            return ResponseBean.buildSuccess();
+            return DataResponse.buildSuccess();
         }else{
-            return ResponseBean.buildFailure(message);
+            return DataResponse.buildFailure(message);
         }
     }
 
@@ -149,13 +150,14 @@ public class TagTypeControl{
      * @return
      */
     @GetMapping("/deleteTagsAndTypes")
-    public ResponseBean deleteTagsAndTypes(@RequestParam(required = false,value = "tags") List<String> tags,@RequestParam(required = false)List<String> types){
+    public DataResponse deleteTagsAndTypes(@RequestParam(required = false,value = "tags") List<String> tags,
+                                           @RequestParam(required = false)List<String> types){
         userDomain.checkLock();
         String message = tagTypeDomain.deleteTypesOrTags(tags, types);
         if(message==null){
-            return ResponseBean.buildSuccess();
+            return DataResponse.buildSuccess();
         }else{
-            return ResponseBean.buildFailure(message);
+            return DataResponse.buildFailure(message);
         }
     }
 
@@ -164,14 +166,14 @@ public class TagTypeControl{
      * @return
      */
     @PostMapping("/updateTag")
-    public ResponseBean updateTag(String id,String tagName){
+    public DataResponse updateTag(String id,String tagName){
         userDomain.checkLock();
         TagE build = TagE.queryInstance().setId(id).setTagName(tagName);
         String message = tagTypeDomain.updateTypesOrTags(build, null);
         if(StringUtils.isEmpty(message)){
-            return ResponseBean.buildSuccess();
+            return DataResponse.buildSuccess();
         }else{
-            return ResponseBean.buildFailure(message);
+            return DataResponse.buildFailure(message);
         }
     }
 
@@ -180,13 +182,13 @@ public class TagTypeControl{
      * @return
      */
     @PostMapping("/updateType")
-    public ResponseBean updateTypes(String id,String typeName){
+    public DataResponse updateTypes(String id,String typeName){
         TypeE build = TypeE.queryInstance().setId(id).setTypeName(typeName);
         String message = tagTypeDomain.updateTypesOrTags(null, build);
         if(StringUtils.isEmpty(message)){
-            return ResponseBean.buildSuccess();
+            return DataResponse.buildSuccess();
         }else{
-            return ResponseBean.buildFailure(message);
+            return DataResponse.buildFailure(message);
         }
     }
 
@@ -195,22 +197,22 @@ public class TagTypeControl{
      * @return
      */
     @GetMapping("/getTypeNav")
-    public ResponseBean getTypeNav(@RequestParam(required = false)String conditionName){
+    public DataResponse getTypeNav(@RequestParam(required = false)String conditionName){
         List<TypeNavCO> typeNavList = tagTypeDomain.getTypeNavList(conditionName);
-        return ResponseBean.of(typeNavList);
+        return DataResponse.of(typeNavList);
     }
     /**
      * 获得树形分类
      * @return
      */
     @GetMapping("/treeType")
-    public ResponseBean getTreeType(){
+    public DataResponse getTreeType(){
         //得到分类导航  id - dto
         Map<String, TypeNavCO> typeNav = tagTypeDomain.getTypeNavMap();
         //得到所有分类
         Page<TypeCO> aLlTypes = tagTypeDomain.getALlTypes(null, null, null);
         List<TreeTypeBean> treeResult = getTreeResult(typeNav, aLlTypes.getRecords());
-        return ResponseBean.of(treeResult);
+        return DataResponse.of(treeResult);
     }
 
     /**
@@ -218,7 +220,7 @@ public class TagTypeControl{
      * 拼装树形结构数据
      * @return
      */
-    public List<TreeTypeBean> getTreeResult(Map<String,TypeNavCO> typeNav,List<TypeCO> types){
+    private List<TreeTypeBean> getTreeResult(Map<String,TypeNavCO> typeNav,List<TypeCO> types){
         List<TreeTypeBean> result=new ArrayList<>();
 
         //结果集
@@ -259,13 +261,13 @@ public class TagTypeControl{
     }
 
     @PostMapping("/addTypeNav")
-    public ResponseBean addTypeNav(String typeNavName){
+    public DataResponse addTypeNav(String typeNavName){
         userDomain.checkLock();
         boolean b = tagTypeDomain.addTypeNav(typeNavName);
         if(b){
-            return ResponseBean.buildSuccess();
+            return DataResponse.buildSuccess();
         }else{
-            return ResponseBean.buildFailure(SystemAsserts.ADD_TYPENAV_FAIL.getMsg());
+            return DataResponse.buildFailure(SystemAsserts.ADD_TYPENAV_FAIL.getMsg());
         }
     }
 
@@ -275,24 +277,24 @@ public class TagTypeControl{
      * @return
      */
     @PostMapping("/updateTypeNav")
-    public ResponseBean editTypeNav(String typeNavName,String typeNavId){
+    public DataResponse editTypeNav(String typeNavName,String typeNavId){
         userDomain.checkLock();
         boolean b = tagTypeDomain.updateTypeNav(typeNavName, typeNavId);
         if(b){
-            return ResponseBean.buildSuccess();
+            return DataResponse.buildSuccess();
         }else{
-            return ResponseBean.buildFailure(SystemAsserts.UPDATE_TYPENAV_FAIL.getMsg());
+            return DataResponse.buildFailure(SystemAsserts.UPDATE_TYPENAV_FAIL.getMsg());
         }
     }
 
     @PostMapping("/deleteTypeNav")
-    public ResponseBean deleteTypeNav(String typeNavId){
+    public DataResponse deleteTypeNav(String typeNavId){
         userDomain.checkLock();
         boolean b = tagTypeDomain.deleteTypeNav(typeNavId);
         if(b){
-            return ResponseBean.buildSuccess();
+            return DataResponse.buildSuccess();
         }else{
-            return ResponseBean.buildFailure(SystemAsserts.DELETE_TYPENAV_FAIL.getMsg());
+            return DataResponse.buildFailure(SystemAsserts.DELETE_TYPENAV_FAIL.getMsg());
         }
     }
 }

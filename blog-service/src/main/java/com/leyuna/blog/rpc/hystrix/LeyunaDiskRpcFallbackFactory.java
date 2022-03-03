@@ -1,6 +1,6 @@
 package com.leyuna.blog.rpc.hystrix;
 
-import com.leyuna.blog.bean.blog.ResponseBean;
+import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.co.disk.FileInfoCO;
 import com.leyuna.blog.constant.ResponseCode;
@@ -22,50 +22,50 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
     public LeyunaDiskRpcService create (Throwable throwable) {
         return new LeyunaDiskRpcService() {
             @Override
-            public ResponseBean selectFile (FileQueryBean queryBean) {
+            public DataResponse selectFile (FileQueryBean queryBean) {
                 return response(throwable);
             }
 
             @Override
-            public ResponseBean<Double> selectAllFileSize (String userId) {
+            public DataResponse<Double> selectAllFileSize (String userId) {
                 return response(throwable);
             }
 
             @Override
-            public ResponseBean<Integer> requestSaveFile (String userId, MultipartFile files) {
+            public DataResponse<Integer> requestSaveFile (String userId, MultipartFile files) {
                 return response(throwable);
             }
 
             @Override
-            public ResponseBean saveFile (String userId, MultipartFile files, String saveTime) {
+            public DataResponse saveFile (String userId, MultipartFile files, String saveTime) {
                 return response(throwable);
             }
 
             @Override
-            public ResponseBean deleteFile (String id,String userId) {
+            public DataResponse deleteFile (String id,String userId) {
                 return response(throwable);
             }
 
             @Override
-            public ResponseBean<FileInfoCO> downloadFile (String id, String userId) {
+            public DataResponse<FileInfoCO> downloadFile (String id, String userId) {
                 return response(throwable);
             }
         };
     }
 
-    private ResponseBean response(Throwable cause){
+    private DataResponse response(Throwable cause){
         String errMsg = cause.getMessage();
         log.error(errMsg);
         if (cause instanceof HystrixTimeoutException) {
-            return ResponseBean.buildFailure(ResponseCode.RPC_TIMEOUT);
+            return DataResponse.buildFailure(ResponseCode.RPC_TIMEOUT);
         }
         if (errMsg != null && errMsg.contains("Load balancer does not have available server for client")) {
-            return ResponseBean.buildFailure(ResponseCode.RPC_ERROR_503);
+            return DataResponse.buildFailure(ResponseCode.RPC_ERROR_503);
         }
         //微服务端的指定异常
         if(errMsg.contains("message")){
-            return ResponseBean.buildFailure("远程服务调用未知错误:"+errMsg.substring(errMsg.indexOf("message:")+8));
+            return DataResponse.buildFailure("远程服务调用未知错误:"+errMsg.substring(errMsg.indexOf("message:")+8));
         }
-        return ResponseBean.buildFailure(ResponseCode.RPC_UNKNOWN_ERROR);
+        return DataResponse.buildFailure(ResponseCode.RPC_UNKNOWN_ERROR);
     }
 }

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * 游客操作领域
  */
 @Service
-public class TouristDomain {
+public class TouristService {
 
     @Autowired
     private CommentExe commentExe;

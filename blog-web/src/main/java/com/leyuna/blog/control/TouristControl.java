@@ -2,14 +2,14 @@ package com.leyuna.blog.control;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.CommentBean;
-import com.leyuna.blog.bean.blog.ResponseBean;
+import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.CommentCO;
 import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.constant.ServerCode;
 import com.leyuna.blog.domain.CommentE;
 import com.leyuna.blog.error.SystemAsserts;
 import com.leyuna.blog.error.UserAsserts;
-import com.leyuna.blog.service.TouristDomain;
+import com.leyuna.blog.service.TouristService;
 import com.leyuna.blog.util.ServerUtil;
 import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 public class TouristControl {
 
     @Autowired
-    private TouristDomain touristDomain;
+    private TouristService touristDomain;
     @Autowired
     private CacheExe cacheExe;
 
@@ -38,7 +38,7 @@ public class TouristControl {
      * @return
      */
     @PostMapping("/commpent")
-    public ResponseBean commpent(@RequestBody CommentBean commentBean, HttpServletRequest request){
+    public DataResponse commpent(@RequestBody CommentBean commentBean, HttpServletRequest request){
         CommentE commentDTO = TransformationUtil.copyToDTO(commentBean, CommentE.class);
         String remoteAddr = ServerUtil.getClientIp(request);
         commentDTO.setIp(remoteAddr);
@@ -59,9 +59,9 @@ public class TouristControl {
         }
         CommentCO comment = touristDomain.comment(commentDTO);
         if(comment!=null){
-            return ResponseBean.of(comment);
+            return DataResponse.of(comment);
         }
-        return ResponseBean.buildFailure(SystemAsserts.COMMENT_FAIL.getMsg());
+        return DataResponse.buildFailure(SystemAsserts.COMMENT_FAIL.getMsg());
     }
 
     /**
@@ -72,33 +72,33 @@ public class TouristControl {
      * @return
      */
     @RequestMapping("/comment/blog")
-    public ResponseBean getComment(Integer index,Integer size,String blogId,@RequestParam(required = false) Integer type){
+    public DataResponse getComment(Integer index,Integer size,String blogId,@RequestParam(required = false) Integer type){
         Page<CommentCO> comment = touristDomain.getComment(index, size, blogId, type);
-        return ResponseBean.of(comment);
+        return DataResponse.of(comment);
     }
 
     /**
      * 用户请求上传头像图片
      */
     @RequestMapping("/requestUpImg")
-    public ResponseBean requestUpImg(HttpServletRequest request){
+    public DataResponse requestUpImg(HttpServletRequest request){
         String remoteAddr = ServerUtil.getClientIp(request);
         boolean b = cacheExe.hasCacheByKey(remoteAddr+":head");
         if(b){
             //去找今天这个用户设置的头像
             String cacheByKey = cacheExe.getCacheByKey(remoteAddr + ":head");
-            return ResponseBean.buildFailure(cacheByKey);
+            return DataResponse.buildFailure(cacheByKey);
         }else{
-            return ResponseBean.buildSuccess();
+            return DataResponse.buildSuccess();
         }
     }
 
     @RequestMapping("/goods")
-    public ResponseBean goodsByComment(String commentId,HttpServletRequest request){
+    public DataResponse goodsByComment(String commentId,HttpServletRequest request){
         boolean b = touristDomain.addGoods(commentId, ServerUtil.getClientIp(request));
         if(b) {
-            return ResponseBean.buildSuccess();
+            return DataResponse.buildSuccess();
         }
-        return ResponseBean.buildFailure(UserAsserts.GOODS_COMMENT_FAIL.getMsg());
+        return DataResponse.buildFailure(UserAsserts.GOODS_COMMENT_FAIL.getMsg());
     }
 }

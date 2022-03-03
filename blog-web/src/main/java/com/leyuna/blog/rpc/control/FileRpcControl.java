@@ -1,6 +1,6 @@
 package com.leyuna.blog.rpc.control;
 
-import com.leyuna.blog.bean.blog.ResponseBean;
+import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.service.file.DiskDomain;
@@ -28,8 +28,8 @@ public class FileRpcControl {
      * @return
      */
     @RequestMapping("/selectFile")
-    public ResponseBean selectFile (FileQueryBean queryBean) {
-        return ResponseBean.of(fileDomain.selectFile(queryBean));
+    public DataResponse selectFile (FileQueryBean queryBean) {
+        return DataResponse.of(fileDomain.selectFile(queryBean));
     }
 
     /**
@@ -37,7 +37,7 @@ public class FileRpcControl {
      * @return
      */
     @RequestMapping("/requestSaveFile")
-    public ResponseBean requestSaveFile(List<MultipartFile> file){
+    public DataResponse requestSaveFile(List<MultipartFile> file){
         return fileDomain.requestSaveFile(file);
     }
 
@@ -47,7 +47,7 @@ public class FileRpcControl {
      * @return
      */
     @PostMapping("/saveFile")
-    public ResponseBean saveFile(UpFileBean fileBean){
+    public DataResponse saveFile(UpFileBean fileBean){
         return fileDomain.saveFile(fileBean);
     }
 
@@ -57,7 +57,7 @@ public class FileRpcControl {
      * @return
      */
     @PostMapping("/deleteFile")
-    public ResponseBean deleteFile(String id){
+    public DataResponse deleteFile(String id){
         return fileDomain.deleteFile(id);
     }
 }

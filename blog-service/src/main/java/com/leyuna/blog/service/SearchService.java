@@ -21,7 +21,7 @@ import java.util.List;
  *  搜索[爬虫、站内] 活动领域
  */
 @Service
-public class SearchDomain {
+public class SearchService {
 
     @Autowired
     private LuceneExe luceneExe;

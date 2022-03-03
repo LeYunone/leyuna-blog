@@ -3,7 +3,7 @@ package com.leyuna.blog.service.file;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.bean.blog.ResponseBean;
+import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.co.blog.UserCO;
@@ -42,7 +42,7 @@ public class DiskDomain {
         return fileExe.selectFile(queryBean);
     }
 
-    public ResponseBean requestSaveFile (List<MultipartFile> file) {
+    public DataResponse requestSaveFile (List<MultipartFile> file) {
         AssertUtil.isFalse(CollectionUtils.isEmpty(file), UserAsserts.UPLOAD_NOT_FILE.getMsg());
         //用户编号
         String userId = (String) StpUtil.getLoginId();
@@ -50,18 +50,18 @@ public class DiskDomain {
         fileBean.setFiles(file);
         fileBean.setUserId(userId);
         //得到过滤成功后的文件
-        ResponseBean<Integer> listResponseBean = fileExe.requestSaveFile(fileBean);
-        Integer data = listResponseBean.getData();
+        DataResponse<Integer> listDataResponse = fileExe.requestSaveFile(fileBean);
+        Integer data = listDataResponse.getData();
         //0 是服务器内部处理文件    1 是需要在服务器生成文件
-        return ResponseBean.of(data);
+        return DataResponse.of(data);
     }
 
-    public ResponseBean saveFile (UpFileBean fileBean) {
+    public DataResponse saveFile (UpFileBean fileBean) {
         return fileExe.saveFile(fileBean);
     }
 
-    public ResponseBean deleteFile (String id) {
-        ResponseBean responseBean = fileExe.deleteFile(id);
+    public DataResponse deleteFile (String id) {
+        DataResponse responseBean = fileExe.deleteFile(id);
         UserCO user=(UserCO)StpUtil.getSession().get("user");
         String userId=user.getId();
         //删除之后获得最新的总内存大小
@@ -85,7 +85,7 @@ public class DiskDomain {
      *
      * @param file
      */
-    public ResponseBean uploadFile (List<MultipartFile> file, String saveTime) {
+    public DataResponse uploadFile (List<MultipartFile> file, String saveTime) {
         AssertUtil.isFalse(CollectionUtils.isEmpty(file), UserAsserts.UPLOAD_NOT_FILE.getMsg());
         //用户编号
         String userId = (String) StpUtil.getLoginId();
@@ -94,10 +94,10 @@ public class DiskDomain {
         fileBean.setFiles(file);
         fileBean.setUserId(userId);
         //上传文件流程
-        ResponseBean responseBean = fileExe.saveFile(fileBean);
+        DataResponse responseBean = fileExe.saveFile(fileBean);
 
         DiskCO diskCO = getUserFileInfo(0);
-        return ResponseBean.of(diskCO);
+        return DataResponse.of(diskCO);
     }
 
     /**

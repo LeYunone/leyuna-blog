@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * 用户领域活动类
  */
 @Service
-public class UserDomain {
+public class UserService {
 
     @Autowired
     private UserExe userExe;

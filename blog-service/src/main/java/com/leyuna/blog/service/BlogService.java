@@ -28,7 +28,7 @@ import java.util.List;
  * 博客领域
  */
 @Service
-public class BlogDomain {
+public class BlogService {
 
     @Autowired
     private BlogExe blogExe;

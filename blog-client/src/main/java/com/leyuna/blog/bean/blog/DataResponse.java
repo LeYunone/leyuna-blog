@@ -13,7 +13,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
-public class ResponseBean<T> {
+public class DataResponse<T> {
 
     private T data;
 
@@ -23,11 +23,11 @@ public class ResponseBean<T> {
 
     private String code;
 
-    public ResponseBean() {
+    public DataResponse() {
     }
 
-    public static <T> ResponseBean<T> of(T data) {
-        ResponseBean<T> response = new ResponseBean();
+    public static <T> DataResponse<T> of(T data) {
+        DataResponse<T> response = new DataResponse();
         response.setStatus(true);
         response.setData(data);
         response.setCode(ResponseCode.SUCCESS.getCode());
@@ -43,8 +43,8 @@ public class ResponseBean<T> {
         this.data = data;
     }
 
-    public static <T> ResponseBean<T> of(boolean status, ResponseCode responseCode, T data) {
-        ResponseBean<T> response = new ResponseBean();
+    public static <T> DataResponse<T> of(boolean status, ResponseCode responseCode, T data) {
+        DataResponse<T> response = new DataResponse();
         response.setStatus(status);
         response.setData(data);
         response.setCode(responseCode.getCode());
@@ -52,26 +52,26 @@ public class ResponseBean<T> {
         return response;
     }
 
-    public static ResponseBean buildFailure(ResponseCode responseCode) {
+    public static DataResponse buildFailure(ResponseCode responseCode) {
         return of(false, responseCode, (Object)null);
     }
 
-    public static ResponseBean buildFailure(String message) {
-        ResponseBean response = of(false, ResponseCode.ERROR, (Object)null);
+    public static DataResponse buildFailure(String message) {
+        DataResponse response = of(false, ResponseCode.ERROR, (Object)null);
         response.setMessage(message);
         return response;
     }
 
-    public static ResponseBean buildFailure(){
-        ResponseBean response = new ResponseBean();
+    public static DataResponse buildFailure(){
+        DataResponse response = new DataResponse();
         response.setStatus(false);
         response.setCode(ResponseCode.ERROR.getCode());
         response.setMessage(ResponseCode.ERROR.getDesc());
         return response;
     }
 
-    public static ResponseBean buildSuccess() {
-        ResponseBean response = new ResponseBean();
+    public static DataResponse buildSuccess() {
+        DataResponse response = new DataResponse();
         response.setStatus(true);
         response.setCode(ResponseCode.SUCCESS.getCode());
         response.setMessage(ResponseCode.SUCCESS.getDesc());
