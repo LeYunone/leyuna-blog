@@ -3,7 +3,7 @@ package com.leyuna.blog.command;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.co.blog.LuceneCO;
 import com.leyuna.blog.domain.BlogE;
-import com.leyuna.blog.lucene.MyIKAnalyzer;
+import com.leyuna.blog.lucene.SpiltCharAnalyzer;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
@@ -49,7 +49,7 @@ public class LuceneExe {
         //创建索引库位置
         Directory directory= FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
         //IK 分词器
-        Analyzer analyzer = new MyIKAnalyzer();
+        Analyzer analyzer = new SpiltCharAnalyzer();
         //创建输出流 write
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
         IndexWriter indexWriter = new IndexWriter(directory,indexWriterConfig);
@@ -78,7 +78,7 @@ public class LuceneExe {
      */
     public LuceneCO getBlogDir(String key, Integer index, Integer size) throws IOException, ParseException, InvalidTokenOffsetsException {
         List<BlogCO> result=new ArrayList<>();
-        Analyzer analyzer=new MyIKAnalyzer();
+        Analyzer analyzer=new SpiltCharAnalyzer();
         //关键词
         QueryParser qp = new QueryParser("title",analyzer);
         Query query=qp.parse(key);
@@ -125,7 +125,7 @@ public class LuceneExe {
      */
     public void updateBlogDocument(BlogE blogDTO) throws IOException {
         Directory directory=FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
-        Analyzer analyzer=new MyIKAnalyzer();
+        Analyzer analyzer=new SpiltCharAnalyzer();
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
         IndexWriter indexWriter = new IndexWriter(directory,indexWriterConfig);
         Document document=new Document();//替换的文档
