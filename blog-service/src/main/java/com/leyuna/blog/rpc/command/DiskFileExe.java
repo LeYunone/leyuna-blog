@@ -2,7 +2,7 @@ package com.leyuna.blog.rpc.command;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.bean.blog.ResponseBean;
+import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.co.blog.UserCO;
@@ -25,44 +25,44 @@ public class DiskFileExe {
     private LeyunaDiskRpcService leyunaDiskRpcService;
 
     public Page<FileInfoCO> selectFile(FileQueryBean queryBean){
-        ResponseBean<Page<FileInfoCO>> responseBean = leyunaDiskRpcService.selectFile(queryBean);
-        return responseBean.getData();
+        DataResponse<Page<FileInfoCO>> DataResponse = leyunaDiskRpcService.selectFile(queryBean);
+        return DataResponse.getData();
     }
 
 
     public Double selectAllFileSize(String userId){
-        ResponseBean<Double> doubleResponseBean = leyunaDiskRpcService.selectAllFileSize(userId);
-        AssertUtil.isTrue(doubleResponseBean.isStatus(), doubleResponseBean.getMessage());
-        return doubleResponseBean.getData();
+        DataResponse<Double> doubleDataResponse = leyunaDiskRpcService.selectAllFileSize(userId);
+        AssertUtil.isTrue(doubleDataResponse.isStatus(), doubleDataResponse.getMessage());
+        return doubleDataResponse.getData();
     }
 
-    public ResponseBean<Integer> requestSaveFile(UpFileBean fileBean){
+    public DataResponse<Integer> requestSaveFile(UpFileBean fileBean){
         String userId = fileBean.getUserId();
         MultipartFile multipartFile = fileBean.getFiles().get(0);
-        ResponseBean<Integer> integerResponseBean = leyunaDiskRpcService.requestSaveFile(userId, multipartFile);
-        AssertUtil.isTrue(integerResponseBean.isStatus(),integerResponseBean.getMessage());
-        return integerResponseBean;
+        DataResponse<Integer> integerDataResponse = leyunaDiskRpcService.requestSaveFile(userId, multipartFile);
+        AssertUtil.isTrue(integerDataResponse.isStatus(),integerDataResponse.getMessage());
+        return integerDataResponse;
     }
 
-    public ResponseBean saveFile(UpFileBean fileBean){
+    public DataResponse saveFile(UpFileBean fileBean){
         String userId = fileBean.getUserId();
         MultipartFile multipartFile = fileBean.getFiles().get(0);
         String saveTime = fileBean.getSaveTime();
-        ResponseBean responseBean = leyunaDiskRpcService.saveFile(userId, multipartFile, saveTime);
-        AssertUtil.isTrue(responseBean.isStatus(),responseBean.getMessage());
-        return responseBean;
+        DataResponse DataResponse = leyunaDiskRpcService.saveFile(userId, multipartFile, saveTime);
+        AssertUtil.isTrue(DataResponse.isStatus(),DataResponse.getMessage());
+        return DataResponse;
     }
 
-    public ResponseBean deleteFile(String id){
+    public DataResponse deleteFile(String id){
         UserCO user=(UserCO)StpUtil.getSession().get("user");
-        ResponseBean responseBean = leyunaDiskRpcService.deleteFile(id, user.getId());
-        return responseBean;
+        DataResponse DataResponse = leyunaDiskRpcService.deleteFile(id, user.getId());
+        return DataResponse;
     }
 
     public FileInfoCO downloadFile(String id){
         UserCO user=(UserCO)StpUtil.getSession().get("user");
-        ResponseBean<FileInfoCO> fileInfoCOResponseBean = leyunaDiskRpcService.downloadFile(id, user.getId());
-        FileInfoCO data = fileInfoCOResponseBean.getData();
+        DataResponse<FileInfoCO> fileInfoCODataResponse = leyunaDiskRpcService.downloadFile(id, user.getId());
+        FileInfoCO data = fileInfoCODataResponse.getData();
         AssertUtil.isFalse(null==data, SystemAsserts.REQUEST_FAIL.getMsg());
         return data;
     }

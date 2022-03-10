@@ -3,6 +3,7 @@ package com.leyuna.blog.service;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.co.blog.WebHistoryCO;
 import com.leyuna.blog.command.*;
@@ -28,7 +29,7 @@ import java.util.List;
  * 博客领域
  */
 @Service
-public class BlogDomain {
+public class BlogService {
 
     @Autowired
     private BlogExe blogExe;
@@ -48,7 +49,7 @@ public class BlogDomain {
      * @param tags
      * @return
      */
-    public Page<BlogCO> getBlogsByPage(Integer index, Integer size, String type, String tags, String conditionName){
+    public DataResponse getBlogsByPage(Integer index, Integer size, String type, String tags, String conditionName){
         Page<BlogCO> result=null;
         //查询所有
         if(type==null && StringUtils.isEmpty(tags)){
@@ -56,7 +57,7 @@ public class BlogDomain {
         }else{
             result = blogExe.getBlogByPage(index, size, type, tags,conditionName);
         }
-        return result;
+        return DataResponse.of(result);
     }
     /**
      * 发布博客

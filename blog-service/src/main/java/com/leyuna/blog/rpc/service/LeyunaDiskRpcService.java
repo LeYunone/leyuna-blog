@@ -1,7 +1,7 @@
 package com.leyuna.blog.rpc.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.bean.blog.ResponseBean;
+import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.co.disk.FileInfoCO;
 import com.leyuna.blog.rpc.hystrix.LeyunaDiskRpcFallbackFactory;
@@ -45,7 +45,7 @@ public interface LeyunaDiskRpcService {
      * @return
      */
     @RequestMapping(value = "/file/selectFile",method = RequestMethod.POST)
-    ResponseBean<Page<FileInfoCO>> selectFile( FileQueryBean queryBean);
+    DataResponse<Page<FileInfoCO>> selectFile( FileQueryBean queryBean);
 
     /**
      * 获得指定用户的当前文件内存
@@ -53,7 +53,7 @@ public interface LeyunaDiskRpcService {
      * @return
      */
     @RequestMapping(value = "/file/selectAllFileSize",method = RequestMethod.GET)
-    ResponseBean<Double> selectAllFileSize( @RequestParam("userId") String userId);
+    DataResponse<Double> selectAllFileSize( @RequestParam("userId") String userId);
 
 
     /**
@@ -63,7 +63,7 @@ public interface LeyunaDiskRpcService {
      * @return
      */
     @RequestMapping(value = "/file/requestSaveFile",method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseBean<Integer> requestSaveFile(@RequestParam(value = "userId",required = false)String userId,
+    DataResponse<Integer> requestSaveFile(@RequestParam(value = "userId",required = false)String userId,
                                                       @RequestPart(value = "file") MultipartFile  file);
 
     /**
@@ -74,13 +74,13 @@ public interface LeyunaDiskRpcService {
      * @return
      */
     @RequestMapping(value = "/file/saveFile",method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseBean saveFile(@RequestParam(value = "userId",required = false)String userId,
+    DataResponse saveFile(@RequestParam(value = "userId",required = false)String userId,
                           @RequestPart(value = "file") MultipartFile  file,
                           @RequestParam(value = "saveTime",required = false)String saveTime);
 
     @RequestMapping(value = "/file/deleteFile",method = RequestMethod.POST)
-    ResponseBean deleteFile(@RequestParam(value = "id") String id,@RequestParam(value = "userId") String userId);
+    DataResponse deleteFile(@RequestParam(value = "id") String id,@RequestParam(value = "userId") String userId);
 
     @RequestMapping(value = "/file/downloadFile",method = RequestMethod.POST)
-    ResponseBean<FileInfoCO> downloadFile(@RequestParam(value = "id") String id,@RequestParam(value = "userId") String userId);
+    DataResponse<FileInfoCO> downloadFile(@RequestParam(value = "id") String id,@RequestParam(value = "userId") String userId);
 }

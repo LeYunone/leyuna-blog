@@ -2,7 +2,7 @@ package com.leyuna.blog.control;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.bean.blog.ResponseBean;
+import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.co.disk.DiskCO;
@@ -39,18 +39,18 @@ public class DiskControl {
      * @return
      */
     @GetMapping("/getDiskInfo")
-    public ResponseBean getDiskInfo(Integer fileType){
+    public DataResponse getDiskInfo(Integer fileType){
         //开始组装云盘初始信息源
         DiskCO fileList = diskDomain.getFileList(fileType);
-        return ResponseBean.of(fileList);
+        return DataResponse.of(fileList);
     }
 
     @GetMapping("/getDiskFileList")
-    public ResponseBean getDiskFileList(FileQueryBean queryBean){
+    public DataResponse getDiskFileList(FileQueryBean queryBean){
         UserCO user=(UserCO) StpUtil.getSession().get("user");
         queryBean.setUserId(user.getId());
         Page<FileInfoCO> fileInfoCOPage = diskDomain.selectFile(queryBean);
-        return ResponseBean.of(fileInfoCOPage);
+        return DataResponse.of(fileInfoCOPage);
     }
 
     /**
@@ -58,7 +58,7 @@ public class DiskControl {
      * @return
      */
     @PostMapping("/uploadFile")
-    public ResponseBean uploadFile(List<MultipartFile> file, String saveTime){
+    public DataResponse uploadFile(List<MultipartFile> file, String saveTime){
         return diskDomain.uploadFile(file,saveTime);
     }
 
@@ -107,7 +107,7 @@ public class DiskControl {
      * @return
      */
     @GetMapping(value = "/deleteFile")
-    public ResponseBean deleteFile(String fileId){
+    public DataResponse deleteFile(String fileId){
         return diskDomain.deleteFile(fileId);
     }
 }
