@@ -28,14 +28,14 @@ import java.time.format.DateTimeFormatter;
 @RequestMapping("/server")
 public class ServerControl{
     @Autowired
-    private UserService UserService;
+    private UserService userDomain;
     @Autowired
     private CacheExe cacheExe;
     @Autowired
-    private TouristService TouristService;
+    private TouristService touristDomain;
     @PostMapping("/updownimg")
     public DataResponse upDownImgToServer(MultipartFile file) {
-        UserService.checkLock();
+        userDomain.checkLock();
         //上传服务器
         String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
@@ -70,7 +70,7 @@ public class ServerControl{
             if(cacheExe.hasCacheByKey(remoteAddr+":head")){
                 return DataResponse.of(cacheExe.getCacheByKey(remoteAddr+":head"));
             }else{
-                String touristOldHead = TouristService.getTouristOldHead(remoteAddr);
+                String touristOldHead = touristDomain.getTouristOldHead(remoteAddr);
                 if(StringUtils.isNotEmpty(touristOldHead)){
                     return DataResponse.of(touristOldHead);
                 }else{
@@ -84,7 +84,7 @@ public class ServerControl{
                 //拼装图片位置
                 String value=ServerCode.SERVER_HEAD_IMG_ADDR+fileName;
                 //添加到数据库中
-                boolean b1 = TouristService.addOrUpdateHead(value, remoteAddr);
+                boolean b1 = touristDomain.addOrUpdateHead(value, remoteAddr);
                 if(!b1){
                     return DataResponse.buildFailure(SystemAsserts.UPLOCAD_IMG_FAIL.getMsg());
                 }

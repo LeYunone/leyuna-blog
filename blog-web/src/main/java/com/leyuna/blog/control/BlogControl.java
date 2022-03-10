@@ -27,11 +27,11 @@ import org.springframework.web.bind.annotation.*;
 public class BlogControl{
 
     @Autowired
-    private BlogService BlogService;
+    private BlogService blogDomain;
     @Autowired
-    private UserService UserService;
+    private UserService userDomain;
     @Autowired
-    private SearchService SearchService;
+    private SearchService searchDomain;
     /**
      * 发布博客
      * @param blogBean
@@ -39,7 +39,7 @@ public class BlogControl{
      */
     @PostMapping("/addBlog")
     public DataResponse addBlog(@RequestBody BlogBean blogBean){
-        UserService.checkLock();
+        userDomain.checkLock();
         String[] tags = blogBean.getTags();
         if(tags.length!=0){
             StringBuilder stringBuilder=new StringBuilder();
@@ -49,7 +49,7 @@ public class BlogControl{
             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
             blogBean.setTag(stringBuilder.toString());
         }
-        boolean b = BlogService.addBlog(TransformationUtil.copyToDTO(blogBean, BlogE.class));
+        boolean b = blogDomain.addBlog(TransformationUtil.copyToDTO(blogBean, BlogE.class));
         if(b){
             return DataResponse.buildSuccess();
         }else{
@@ -67,7 +67,8 @@ public class BlogControl{
                                     @RequestParam(required = false) String typeId,
                                     @RequestParam(required = false) String  tags,
                                     @RequestParam(required = false) String conditionName){
-        return BlogService.getBlogsByPage(index, size, typeId, tags,conditionName);
+        Page<BlogCO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tags,conditionName);
+        return DataResponse.of(blogsByPage);
     }
 
     /**
@@ -78,19 +79,20 @@ public class BlogControl{
     public DataResponse getAllBlogsByTypeOrTag(Integer index,Integer size,
                                             @RequestParam(required = false) String typeId,
                                             @RequestParam(required = false)String tagName){
-        return BlogService.getBlogsByPage(index, size, typeId, tagName,null);
+        Page<BlogCO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tagName,null);
+        return DataResponse.of(blogsByPage);
     }
 
     @GetMapping("/blog/{id}")
     public DataResponse getBlogById(@PathVariable(value = "id")String blogId){
-        BlogCO blogById = BlogService.openBlogById(blogId);
+        BlogCO blogById = blogDomain.openBlogById(blogId);
         return DataResponse.of(blogById);
     }
 
     @PostMapping("/edit")
     public DataResponse editBlog(@RequestBody BlogBean blogBean){
-        UserService.checkLock();
-        boolean b = BlogService.updateBlog(TransformationUtil.copyToDTO(blogBean, BlogE.class));
+        userDomain.checkLock();
+        boolean b = blogDomain.updateBlog(TransformationUtil.copyToDTO(blogBean, BlogE.class));
         if(b){
             return DataResponse.buildSuccess();
         }else{
@@ -106,7 +108,7 @@ public class BlogControl{
      */
     @RequestMapping("/history")
     public DataResponse getWebHistory(Integer index,Integer size){
-        Page<WebHistoryCO> webHistory=BlogService.getNoticePage(index, size,null,0);
+        Page<WebHistoryCO> webHistory=blogDomain.getNoticePage(index, size,null,0);
         return DataResponse.of(webHistory);
     }
     /**
@@ -115,8 +117,8 @@ public class BlogControl{
      */
     @PostMapping("/addWebNotice")
     public DataResponse addWebNotice(@RequestBody NoticeBean noticeBean){
-        UserService.checkLock();
-        boolean b = BlogService.addNotice(TransformationUtil.copyToDTO(noticeBean, WebHistoryE.class));
+        userDomain.checkLock();
+        boolean b = blogDomain.addNotice(TransformationUtil.copyToDTO(noticeBean, WebHistoryE.class));
         if(b){
             return DataResponse.buildSuccess();
         }else{
@@ -134,7 +136,7 @@ public class BlogControl{
     @GetMapping("/search")
     public DataResponse blogSearch(String key,Integer index,Integer size){
         //查关键词
-        LuceneCO blogFromSearch = SearchService.getBlogFromSearch(key, index, size);
+        LuceneCO blogFromSearch = searchDomain.getBlogFromSearch(key, index, size);
         //
         if(null!=blogFromSearch){
             return DataResponse.of(blogFromSearch);
@@ -149,8 +151,8 @@ public class BlogControl{
      */
     @PostMapping("/createDocument")
     public DataResponse createAllBlogDocument(){
-        UserService.checkLock();
-        boolean blogSearch = SearchService.createBlogSearch();
+        userDomain.checkLock();
+        boolean blogSearch = searchDomain.createBlogSearch();
         if(blogSearch){
             return DataResponse.buildSuccess();
         }else{
@@ -169,7 +171,7 @@ public class BlogControl{
     public DataResponse getAllNotice(@RequestParam(required = false) Integer index,
                                     @RequestParam(required = false) Integer size,
                                     @RequestParam(required = false) String conditionName){
-        Page<WebHistoryCO> noticePage = BlogService.getNoticePage(index, size, conditionName, 0);
+        Page<WebHistoryCO> noticePage = blogDomain.getNoticePage(index, size, conditionName, 0);
         return DataResponse.of(noticePage);
     }
 
@@ -181,14 +183,14 @@ public class BlogControl{
      */
     @GetMapping("/notice/{id}/{type}")
     public DataResponse getNoticeOne(@PathVariable(value = "id")String id,@PathVariable(value = "type")Integer type){
-        WebHistoryCO noticeOne = BlogService.getNoticeOne(id, type);
+        WebHistoryCO noticeOne = blogDomain.getNoticeOne(id, type);
         return DataResponse.of(noticeOne);
     }
 
     @PostMapping("/editNotice")
     public DataResponse editNotice(@RequestBody NoticeBean noticeBean){
-        UserService.checkLock();
-        boolean b = BlogService.updateNotice(TransformationUtil.copyToDTO(noticeBean, WebHistoryE.class));
+        userDomain.checkLock();
+        boolean b = blogDomain.updateNotice(TransformationUtil.copyToDTO(noticeBean, WebHistoryE.class));
         if(b){
             return DataResponse.buildSuccess();
         }else{

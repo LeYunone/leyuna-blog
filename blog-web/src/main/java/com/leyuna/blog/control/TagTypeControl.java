@@ -32,10 +32,10 @@ import java.util.Map;
 public class TagTypeControl{
 
     @Autowired
-    private TagTypeService TagTypeService;
+    private TagTypeService tagTypeDomain;
 
     @Autowired
-    private UserService UserService;
+    private UserService userDomain;
     /**
      * 取标签  【二级分类】
      * @param
@@ -45,13 +45,13 @@ public class TagTypeControl{
     public DataResponse getTags(@RequestParam(required = false)Integer pageIndex,
                                 @RequestParam(required = false)Integer pageSize,
                                 @RequestParam(required = false)String conditionName){
-        Page<TagCO> aLlTags = TagTypeService.getALlTags(pageIndex,pageSize,conditionName);
+        Page<TagCO> aLlTags = tagTypeDomain.getALlTags(pageIndex,pageSize,conditionName);
         return  DataResponse.of(aLlTags);
     }
 
     @GetMapping("/tagsId")
     public DataResponse getTagsById(String...ids){
-        List<TagCO> tagsByIds = TagTypeService.getTagsByIds(ids);
+        List<TagCO> tagsByIds = tagTypeDomain.getTagsByIds(ids);
         return DataResponse.of(tagsByIds);
     }
 
@@ -64,7 +64,7 @@ public class TagTypeControl{
     public DataResponse getTypes(@RequestParam(required = false)Integer pageIndex,
                                  @RequestParam(required = false)Integer pageSize,
                                  @RequestParam(required = false)String conditionName){
-        Page<TypeCO> aLlTags = TagTypeService.getALlTypes(pageIndex,pageSize,conditionName);
+        Page<TypeCO> aLlTags = tagTypeDomain.getALlTypes(pageIndex,pageSize,conditionName);
         return  DataResponse.of(aLlTags);
     }
 
@@ -75,14 +75,14 @@ public class TagTypeControl{
     @RequestMapping("/getTypeInNav")
     public DataResponse getTypeInNav(){
         //暂定默认最多只会有100个分类
-        Page<TypeCO> aLlTypes = TagTypeService.getALlTypes(null, null, null);
-        Map<String, TypeNavCO> typeNavMap = TagTypeService.getTypeNavMap();
+        Page<TypeCO> aLlTypes = tagTypeDomain.getALlTypes(null, null, null);
+        Map<String, TypeNavCO> typeNavMap = tagTypeDomain.getTypeNavMap();
 
         List<CascaderTypeBean> cascaderTypeResult = getCascaderTypeResult(aLlTypes.getRecords(), typeNavMap);
         return DataResponse.of(cascaderTypeResult);
     }
 
-    public List<CascaderTypeBean> getCascaderTypeResult(List<TypeCO> types,Map<String, TypeNavCO> typeNavMap){
+    private List<CascaderTypeBean> getCascaderTypeResult(List<TypeCO> types,Map<String, TypeNavCO> typeNavMap){
         List<CascaderTypeBean> lists=new ArrayList<>();
         Map<String,CascaderTypeBean> map=new HashMap<>();
         types.stream().forEach(t->{
@@ -120,7 +120,7 @@ public class TagTypeControl{
 
     @GetMapping("/typesId")
     public DataResponse getTypesById(String...ids){
-        List<TypeCO> tagsByIds = TagTypeService.getTypesByIds(ids);
+        List<TypeCO> tagsByIds = tagTypeDomain.getTypesByIds(ids);
         return DataResponse.of(tagsByIds);
     }
 
@@ -131,10 +131,11 @@ public class TagTypeControl{
      * @return
      */
     @RequestMapping("/addTagsAndTypes")
-    public DataResponse addTagsAndTypes(@RequestParam(required = false) List<String>
-                                                    tags,@RequestParam(required = false) List<String> types,@RequestParam(required = false)String typeNav){
-        UserService.checkLock();
-        String message=TagTypeService.addTypesOrTags(tags, types,typeNav);
+    public DataResponse addTagsAndTypes(@RequestParam(required = false) List<String> tags,
+                                        @RequestParam(required = false) List<String> types,
+                                        @RequestParam(required = false)String typeNav){
+        userDomain.checkLock();
+        String message=tagTypeDomain.addTypesOrTags(tags, types,typeNav);
         if(message==null){
             return DataResponse.buildSuccess();
         }else{
@@ -149,9 +150,10 @@ public class TagTypeControl{
      * @return
      */
     @GetMapping("/deleteTagsAndTypes")
-    public DataResponse deleteTagsAndTypes(@RequestParam(required = false,value = "tags") List<String> tags,@RequestParam(required = false)List<String> types){
-        UserService.checkLock();
-        String message = TagTypeService.deleteTypesOrTags(tags, types);
+    public DataResponse deleteTagsAndTypes(@RequestParam(required = false,value = "tags") List<String> tags,
+                                           @RequestParam(required = false)List<String> types){
+        userDomain.checkLock();
+        String message = tagTypeDomain.deleteTypesOrTags(tags, types);
         if(message==null){
             return DataResponse.buildSuccess();
         }else{
@@ -165,9 +167,9 @@ public class TagTypeControl{
      */
     @PostMapping("/updateTag")
     public DataResponse updateTag(String id,String tagName){
-        UserService.checkLock();
+        userDomain.checkLock();
         TagE build = TagE.queryInstance().setId(id).setTagName(tagName);
-        String message = TagTypeService.updateTypesOrTags(build, null);
+        String message = tagTypeDomain.updateTypesOrTags(build, null);
         if(StringUtils.isEmpty(message)){
             return DataResponse.buildSuccess();
         }else{
@@ -182,7 +184,7 @@ public class TagTypeControl{
     @PostMapping("/updateType")
     public DataResponse updateTypes(String id,String typeName){
         TypeE build = TypeE.queryInstance().setId(id).setTypeName(typeName);
-        String message = TagTypeService.updateTypesOrTags(null, build);
+        String message = tagTypeDomain.updateTypesOrTags(null, build);
         if(StringUtils.isEmpty(message)){
             return DataResponse.buildSuccess();
         }else{
@@ -196,7 +198,7 @@ public class TagTypeControl{
      */
     @GetMapping("/getTypeNav")
     public DataResponse getTypeNav(@RequestParam(required = false)String conditionName){
-        List<TypeNavCO> typeNavList = TagTypeService.getTypeNavList(conditionName);
+        List<TypeNavCO> typeNavList = tagTypeDomain.getTypeNavList(conditionName);
         return DataResponse.of(typeNavList);
     }
     /**
@@ -206,9 +208,9 @@ public class TagTypeControl{
     @GetMapping("/treeType")
     public DataResponse getTreeType(){
         //得到分类导航  id - dto
-        Map<String, TypeNavCO> typeNav = TagTypeService.getTypeNavMap();
+        Map<String, TypeNavCO> typeNav = tagTypeDomain.getTypeNavMap();
         //得到所有分类
-        Page<TypeCO> aLlTypes = TagTypeService.getALlTypes(null, null, null);
+        Page<TypeCO> aLlTypes = tagTypeDomain.getALlTypes(null, null, null);
         List<TreeTypeBean> treeResult = getTreeResult(typeNav, aLlTypes.getRecords());
         return DataResponse.of(treeResult);
     }
@@ -218,7 +220,7 @@ public class TagTypeControl{
      * 拼装树形结构数据
      * @return
      */
-    public List<TreeTypeBean> getTreeResult(Map<String,TypeNavCO> typeNav,List<TypeCO> types){
+    private List<TreeTypeBean> getTreeResult(Map<String,TypeNavCO> typeNav,List<TypeCO> types){
         List<TreeTypeBean> result=new ArrayList<>();
 
         //结果集
@@ -260,8 +262,8 @@ public class TagTypeControl{
 
     @PostMapping("/addTypeNav")
     public DataResponse addTypeNav(String typeNavName){
-        UserService.checkLock();
-        boolean b = TagTypeService.addTypeNav(typeNavName);
+        userDomain.checkLock();
+        boolean b = tagTypeDomain.addTypeNav(typeNavName);
         if(b){
             return DataResponse.buildSuccess();
         }else{
@@ -276,8 +278,8 @@ public class TagTypeControl{
      */
     @PostMapping("/updateTypeNav")
     public DataResponse editTypeNav(String typeNavName,String typeNavId){
-        UserService.checkLock();
-        boolean b = TagTypeService.updateTypeNav(typeNavName, typeNavId);
+        userDomain.checkLock();
+        boolean b = tagTypeDomain.updateTypeNav(typeNavName, typeNavId);
         if(b){
             return DataResponse.buildSuccess();
         }else{
@@ -287,8 +289,8 @@ public class TagTypeControl{
 
     @PostMapping("/deleteTypeNav")
     public DataResponse deleteTypeNav(String typeNavId){
-        UserService.checkLock();
-        boolean b = TagTypeService.deleteTypeNav(typeNavId);
+        userDomain.checkLock();
+        boolean b = tagTypeDomain.deleteTypeNav(typeNavId);
         if(b){
             return DataResponse.buildSuccess();
         }else{

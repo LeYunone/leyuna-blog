@@ -61,15 +61,15 @@ public class DiskDomain {
     }
 
     public DataResponse deleteFile (String id) {
-        DataResponse DataResponse = fileExe.deleteFile(id);
+        DataResponse responseBean = fileExe.deleteFile(id);
         UserCO user=(UserCO)StpUtil.getSession().get("user");
         String userId=user.getId();
         //删除之后获得最新的总内存大小
         Double totalSize = fileExe.selectAllFileSize(userId);
         //百分比
         double total = (totalSize / maxMemory) * 100;
-        DataResponse.setData(String.format("%.2f", total));
-        return DataResponse;
+        responseBean.setData(String.format("%.2f", total));
+        return responseBean;
     }
 
     public FileInfoCO downloadFile (String id) {
@@ -94,7 +94,7 @@ public class DiskDomain {
         fileBean.setFiles(file);
         fileBean.setUserId(userId);
         //上传文件流程
-        DataResponse DataResponse = fileExe.saveFile(fileBean);
+        DataResponse responseBean = fileExe.saveFile(fileBean);
 
         DiskCO diskCO = getUserFileInfo(0);
         return DataResponse.of(diskCO);

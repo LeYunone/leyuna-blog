@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 public class TouristControl {
 
     @Autowired
-    private TouristService TouristService;
+    private TouristService touristDomain;
     @Autowired
     private CacheExe cacheExe;
 
@@ -49,7 +49,7 @@ public class TouristControl {
             commentDTO.setAdmin("admin");
         }else{
             if(StringUtils.isEmpty(commentDTO.getCommentHead())){
-                String touristOldHead = TouristService.getTouristOldHead(remoteAddr);
+                String touristOldHead = touristDomain.getTouristOldHead(remoteAddr);
                 if(!StringUtils.isEmpty(touristOldHead)){
                     commentDTO.setCommentHead(touristOldHead);
                 }else{
@@ -57,7 +57,7 @@ public class TouristControl {
                 }
             }
         }
-        CommentCO comment = TouristService.comment(commentDTO);
+        CommentCO comment = touristDomain.comment(commentDTO);
         if(comment!=null){
             return DataResponse.of(comment);
         }
@@ -73,7 +73,7 @@ public class TouristControl {
      */
     @RequestMapping("/comment/blog")
     public DataResponse getComment(Integer index,Integer size,String blogId,@RequestParam(required = false) Integer type){
-        Page<CommentCO> comment = TouristService.getComment(index, size, blogId, type);
+        Page<CommentCO> comment = touristDomain.getComment(index, size, blogId, type);
         return DataResponse.of(comment);
     }
 
@@ -95,7 +95,7 @@ public class TouristControl {
 
     @RequestMapping("/goods")
     public DataResponse goodsByComment(String commentId,HttpServletRequest request){
-        boolean b = TouristService.addGoods(commentId, ServerUtil.getClientIp(request));
+        boolean b = touristDomain.addGoods(commentId, ServerUtil.getClientIp(request));
         if(b) {
             return DataResponse.buildSuccess();
         }

@@ -25,8 +25,8 @@ public class DiskFileExe {
     private LeyunaDiskRpcService leyunaDiskRpcService;
 
     public Page<FileInfoCO> selectFile(FileQueryBean queryBean){
-        DataResponse<Page<FileInfoCO>> DataResponse = leyunaDiskRpcService.selectFile(queryBean);
-        return DataResponse.getData();
+        DataResponse<Page<FileInfoCO>> responseBean = leyunaDiskRpcService.selectFile(queryBean);
+        return responseBean.getData();
     }
 
 
@@ -48,15 +48,15 @@ public class DiskFileExe {
         String userId = fileBean.getUserId();
         MultipartFile multipartFile = fileBean.getFiles().get(0);
         String saveTime = fileBean.getSaveTime();
-        DataResponse DataResponse = leyunaDiskRpcService.saveFile(userId, multipartFile, saveTime);
-        AssertUtil.isTrue(DataResponse.isStatus(),DataResponse.getMessage());
-        return DataResponse;
+        DataResponse responseBean = leyunaDiskRpcService.saveFile(userId, multipartFile, saveTime);
+        AssertUtil.isTrue(responseBean.isStatus(),responseBean.getMessage());
+        return responseBean;
     }
 
     public DataResponse deleteFile(String id){
         UserCO user=(UserCO)StpUtil.getSession().get("user");
-        DataResponse DataResponse = leyunaDiskRpcService.deleteFile(id, user.getId());
-        return DataResponse;
+        DataResponse responseBean = leyunaDiskRpcService.deleteFile(id, user.getId());
+        return responseBean;
     }
 
     public FileInfoCO downloadFile(String id){

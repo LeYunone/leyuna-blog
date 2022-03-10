@@ -22,14 +22,14 @@ import org.springframework.web.bind.annotation.*;
 public class UserControl  {
 
     @Autowired
-    private UserService UserService;
+    private UserService userDomain;
 
     @PostMapping("/login")
     public DataResponse login(@RequestBody UserBean user){
-        UserCO login = UserService.login(user.getUserName(),user.getPassWord());
+        UserCO login = userDomain.login(user.getUserName(),user.getPassWord());
         if(login!=null){
             //绑定令牌
-            SaTokenInfo saTokenInfo = UserService.userLock(login.getId());
+            SaTokenInfo saTokenInfo = userDomain.userLock(login.getId());
             //设置session user
             StpUtil.getSession().set("user",login);
             return DataResponse.of(saTokenInfo);
