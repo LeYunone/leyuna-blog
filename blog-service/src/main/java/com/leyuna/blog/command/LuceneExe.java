@@ -1,9 +1,11 @@
 package com.leyuna.blog.command;
 
+import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.co.blog.LuceneCO;
-import com.leyuna.blog.domain.BlogE;
+import com.leyuna.blog.error.SystemErrorEnum;
 import com.leyuna.blog.lucene.SpiltCharAnalyzer;
+import com.leyuna.blog.util.AssertUtil;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
@@ -44,29 +46,41 @@ public class LuceneExe {
     /**
      * 创建blog 索引库文档
      */
-    public void addBlogDir (List<BlogE> blogs) throws IOException {
-        List<Document> documents = new ArrayList<>();
-        //创建索引库位置
-        Directory directory = FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
-        //IK 分词器
-        Analyzer analyzer = new SpiltCharAnalyzer();
-        //创建输出流 write
-        IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
-        IndexWriter indexWriter = new IndexWriter(directory, indexWriterConfig);
+    public void addBlogDir (List<BlogBean> blogs) {
+        IndexWriter indexWriter = null;
+        try {
+            List<Document> documents = new ArrayList<>();
+            //创建索引库位置
+            Directory directory = FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
+            //IK 分词器
+            Analyzer analyzer = new SpiltCharAnalyzer();
+            //创建输出流 write
+            IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+            indexWriter = new IndexWriter(directory, indexWriterConfig);
 
-        for (BlogE blogDTO : blogs) {
-            Document document = new Document();
-            //记录标题和id即可
-            Field id = new TextField("id", String.valueOf(blogDTO.getId()), Field.Store.YES);
-            Field title = new TextField("title", blogDTO.getTitle(), Field.Store.YES);
-            document.add(id);
-            document.add(title);
-            documents.add(document);
+            for (BlogBean blogDTO : blogs) {
+                Document document = new Document();
+                //记录标题和id即可
+                Field id = new TextField("id", String.valueOf(blogDTO.getId()), Field.Store.YES);
+                Field title = new TextField("title", blogDTO.getTitle(), Field.Store.YES);
+                document.add(id);
+                document.add(title);
+                documents.add(document);
+            }
+            //一次处理
+            indexWriter.addDocuments(documents);
+        } catch (Exception e) {
+            AssertUtil.isTrue(SystemErrorEnum.CREATE_DOCUMENT_FALE.getMsg());
+        } finally {
+            if(indexWriter!=null){
+                //关闭输出流
+                try {
+                    indexWriter.close();
+                } catch (IOException e) {
+                    AssertUtil.isTrue(SystemErrorEnum.CREATE_DOCUMENT_FALE.getMsg());
+                }
+            }
         }
-        //一次处理
-        indexWriter.addDocuments(documents);
-        //关闭输出流
-        indexWriter.close();
     }
 
     /**
@@ -125,7 +139,7 @@ public class LuceneExe {
      *
      * @throws IOException
      */
-    public void updateBlogDocument (BlogE blogDTO) {
+    public void updateBlogDocument (BlogBean blogDTO) {
         IndexWriter indexWriter = null;
 
         try {
@@ -135,16 +149,16 @@ public class LuceneExe {
             Document document = new Document();//替换的文档
             Field id = new TextField("id", String.valueOf(blogDTO.getId()), Field.Store.YES);
             Field title = new TextField("title", blogDTO.getTitle(), Field.Store.YES);
-            indexWriter=new IndexWriter(directory, indexWriterConfig);
+            indexWriter = new IndexWriter(directory, indexWriterConfig);
             document.add(title);
             document.add(id);
             Term term = new Term("title", blogDTO.getTitle());
             indexWriter.updateDocument(term, document);
             indexWriter.commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
-        }finally {
-            if(indexWriter!=null){
+        } finally {
+            if (indexWriter != null) {
                 try {
                     indexWriter.close();
                 } catch (IOException e) {

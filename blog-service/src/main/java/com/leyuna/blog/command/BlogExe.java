@@ -1,11 +1,11 @@
 package com.leyuna.blog.command;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.domain.BlogE;
-import com.leyuna.blog.entry.Blog;
+import com.leyuna.blog.domainservice.BlogDomainService;
 import com.leyuna.blog.error.SystemErrorEnum;
 import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -28,17 +29,34 @@ public class BlogExe {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private BlogDomainService blogDomainService;
+
     /**
      * 添加博客
-     * @param blogDTO
+     * @param
      * @return
      */
-    public String addBlog(BlogE blogDTO){
-        BlogCO save = blogDTO.save();
-        if(null!=save){
-            return save.getId();
+    public void addBlog(BlogBean blog){
+        String[] tags = blog.getTags();
+        if(tags.length!=0){
+            StringBuilder stringBuilder=new StringBuilder();
+            for(String tag:tags){
+                stringBuilder.append(tag+",");
+            }
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+            blog.setTag(stringBuilder.toString());
         }
-        return null;
+        BlogE blogDTO = BlogE.of(blog);
+        blogDTO.setClickCount(0);
+        blogDTO.setCommentCount(0);
+        blogDTO.setCreateTime(LocalDateTime.now());
+        blogDTO.setUpdateTime(LocalDateTime.now());
+        BlogCO save = blogDTO.save();
+        AssertUtil.isFalse(null == save , SystemErrorEnum.ADD_BLOG_FAIL.getMsg());
+
+        //后置内容
+        blogDomainService.addBlogAfter(blogDTO);
     }
 
     /**
@@ -63,43 +81,12 @@ public class BlogExe {
 
     /**
      * 支持模糊查询 分页  获得所有博客
-     * @param index
-     * @param size
-     * @param conditionName
      * @return
      */
     @Cacheable(value = "getAllBlogByPage")
-    public Page<BlogCO> getAllBlogByPage(Integer index, Integer size, String conditionName){
-        Page<BlogCO> blogPage =null;
-        if(StringUtils.isNotEmpty(conditionName)){
-            blogPage=BlogE.queryInstance().getGateway().queryByBlogName(conditionName, index,size);
-        }else{
-            blogPage=BlogE.queryInstance().getGateway().selectByConOrderPage(new Blog(), index,size,2);
-        }
-        return blogPage;
-    }
-
-    /**
-     * 根据 分类或标签 分页查询博客  支持模糊查询
-     * @param index
-     * @param size
-     * @param type
-     * @param tag
-     * @param conditionName
-     * @return
-     */
-    @Cacheable(cacheNames = "getBlogByPage")
-    public Page<BlogCO> getBlogByPage(Integer index,Integer size,String type,String tag,String conditionName){
-        Page<BlogCO> blogPage =null;
-        if(null==type){
-            //根据标签查询  名字里包含
-            blogPage = BlogE.queryInstance().getGateway().queryByTagName(BlogE.queryInstance().setTag(tag), index,size);
-        }else{
-            //根据分类查询
-            blogPage = BlogE.queryInstance().getGateway().selectByConOrderPage(BlogE.queryInstance().setType(type), index,size,0);
-        }
-        //转换结果集
-        return blogPage;
+    public DataResponse getAllBlogByPage(BlogBean blogBean){
+        Page<BlogCO> blogPage=BlogE.queryInstance().getGateway().queryBlog(blogBean);
+        return DataResponse.of(blogPage);
     }
 
     /**
@@ -113,9 +100,9 @@ public class BlogExe {
         return blog;
     }
 
-    public boolean updateBlog(BlogE blogDTO){
-        boolean update = blogDTO.update();
-        return update;
+    public boolean updateBlog(BlogBean blogDTO){
+        BlogE blog = BlogE.of(blogDTO);
+        return blog.update();
     }
 
     /**

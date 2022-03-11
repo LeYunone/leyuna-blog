@@ -2,6 +2,7 @@ package com.leyuna.blog.gateway;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.domain.BlogE;
 
@@ -19,6 +20,6 @@ public interface BlogGateway extends BaseGateway<BlogCO> {
 
     boolean updateClickCount (String blogId, Integer clickCount);
 
-    Page<BlogCO> queryByBlogName (String title, Integer index,Integer size);
+    Page<BlogCO> queryBlog (BlogBean blogBean);
 }
 

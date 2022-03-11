@@ -4,12 +4,10 @@ import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.blog.NoticeBean;
 import com.leyuna.blog.co.blog.LuceneCO;
-import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.error.SystemErrorEnum;
 import com.leyuna.blog.service.BlogService;
 import com.leyuna.blog.service.SearchService;
 import com.leyuna.blog.service.UserService;
-import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,21 +34,7 @@ public class BlogControl{
     @PostMapping("/addBlog")
     public DataResponse addBlog(@RequestBody BlogBean blogBean){
         userService.checkLock();
-        String[] tags = blogBean.getTags();
-        if(tags.length!=0){
-            StringBuilder stringBuilder=new StringBuilder();
-            for(String tag:tags){
-                stringBuilder.append(tag+",");
-            }
-            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-            blogBean.setTag(stringBuilder.toString());
-        }
-        boolean b = blogService.addBlog(TransformationUtil.copyToDTO(blogBean, BlogE.class));
-        if(b){
-            return DataResponse.buildSuccess();
-        }else{
-            return DataResponse.buildFailure(SystemErrorEnum.ADD_BLOG_FAIL.getMsg());
-        }
+        return blogService.addBlog(blogBean);
     }
 
     /**
@@ -58,23 +42,8 @@ public class BlogControl{
      * @return
      */
     @GetMapping("/blogs")
-    public DataResponse getAllBlogs(@RequestParam(required = false) Integer index,
-                                    @RequestParam(required = false) Integer size,
-                                    @RequestParam(required = false) String typeId,
-                                    @RequestParam(required = false) String  tags,
-                                    @RequestParam(required = false) String conditionName){
-        return blogService.getBlogsByPage(index, size, typeId, tags,conditionName);
-    }
-
-    /**
-     * 十条十条取当前所有的博客  每触发一次前端分页自动翻一页
-     * @return
-     */
-    @GetMapping("/blogIndex")
-    public DataResponse getAllBlogsByTypeOrTag(Integer index,Integer size,
-                                            @RequestParam(required = false) String typeId,
-                                            @RequestParam(required = false)String tagName){
-        return blogService.getBlogsByPage(index, size, typeId, tagName,null);
+    public DataResponse getAllBlogs(BlogBean blogBean){
+        return blogService.getBlogsByPage(blogBean);
     }
 
     @GetMapping("/blog/{id}")

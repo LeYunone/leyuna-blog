@@ -1,5 +1,6 @@
 package com.leyuna.blog.bean.blog;
 
+import com.leyuna.blog.bean.QueryPage;
 import lombok.*;
 
 /**
@@ -14,7 +15,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BlogBean {
+public class BlogBean extends QueryPage {
     /**
      * 内容  2021/8/25 版本  暂时只想存储markdown形式原文本
      */

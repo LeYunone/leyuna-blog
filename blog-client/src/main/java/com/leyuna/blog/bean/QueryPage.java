@@ -20,4 +20,6 @@ public class QueryPage {
     private Integer size=10;
 
     private String orderCondition;
+
+    private String conditionName;
 }
