@@ -1,7 +1,7 @@
 package com.leyuna.blog.advice;
 
-import com.leyuna.blog.error.SystemAsserts;
-import com.leyuna.blog.error.UserAsserts;
+import com.leyuna.blog.error.SystemErrorEnum;
+import com.leyuna.blog.error.UserErrorEnum;
 import com.leyuna.blog.util.ServerUtil;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -37,7 +37,7 @@ public class LimitIpAdvice {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         if(request==null){
-            throw new RuntimeException(SystemAsserts.REQUEST_FAIL.getMsg());
+            throw new RuntimeException(SystemErrorEnum.REQUEST_FAIL.getMsg());
         }
         //获取此次请求用户ip
         String remoteAddr = ServerUtil.getClientIp(request);
@@ -45,7 +45,7 @@ public class LimitIpAdvice {
             //加入次用户ip限制，最快一分钟评论一次
             stringRedisTemplate.opsForValue().set(remoteAddr,"1",30*1, TimeUnit.SECONDS);
         }else{
-            throw new RuntimeException(UserAsserts.REQUEST_FREQUENTLY_FAIL.getMsg());
+            throw new RuntimeException(UserErrorEnum.REQUEST_FREQUENTLY_FAIL.getMsg());
         }
     }
 }

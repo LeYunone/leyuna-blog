@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.constant.ServerCode;
-import com.leyuna.blog.error.SystemAsserts;
+import com.leyuna.blog.error.SystemErrorEnum;
 import com.leyuna.blog.service.TouristService;
 import com.leyuna.blog.service.UserService;
 import com.leyuna.blog.util.ServerUtil;
@@ -28,14 +28,14 @@ import java.time.format.DateTimeFormatter;
 @RequestMapping("/server")
 public class ServerControl{
     @Autowired
-    private UserService userDomain;
+    private UserService userService;
     @Autowired
     private CacheExe cacheExe;
     @Autowired
     private TouristService touristDomain;
     @PostMapping("/updownimg")
     public DataResponse upDownImgToServer(MultipartFile file) {
-        userDomain.checkLock();
+        userService.checkLock();
         //上传服务器
         String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
@@ -43,7 +43,7 @@ public class ServerControl{
         if(b){
             return DataResponse.of(format+"/"+file.getOriginalFilename());
         }else{
-            return DataResponse.buildFailure(SystemAsserts.UPLOCAD_IMG_FAIL.getMsg());
+            return DataResponse.buildFailure(SystemErrorEnum.UPLOCAD_IMG_FAIL.getMsg());
         }
     }
     
@@ -86,7 +86,7 @@ public class ServerControl{
                 //添加到数据库中
                 boolean b1 = touristDomain.addOrUpdateHead(value, remoteAddr);
                 if(!b1){
-                    return DataResponse.buildFailure(SystemAsserts.UPLOCAD_IMG_FAIL.getMsg());
+                    return DataResponse.buildFailure(SystemErrorEnum.UPLOCAD_IMG_FAIL.getMsg());
                 }
                 //加入今天的缓存中
                 cacheExe.setCacheKey(remoteAddr+":head", value,43200);
@@ -95,6 +95,6 @@ public class ServerControl{
                 return of;
             }
         }
-        return DataResponse.buildFailure(SystemAsserts.UPLOCAD_IMG_FAIL.getMsg());
+        return DataResponse.buildFailure(SystemErrorEnum.UPLOCAD_IMG_FAIL.getMsg());
     }
 }

@@ -5,7 +5,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.blog.UserBean;
 import com.leyuna.blog.co.blog.UserCO;
-import com.leyuna.blog.error.UserAsserts;
+import com.leyuna.blog.error.UserErrorEnum;
 import com.leyuna.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
@@ -22,19 +22,19 @@ import org.springframework.web.bind.annotation.*;
 public class UserControl  {
 
     @Autowired
-    private UserService userDomain;
+    private UserService userService;
 
     @PostMapping("/login")
     public DataResponse login(@RequestBody UserBean user){
-        UserCO login = userDomain.login(user.getUserName(),user.getPassWord());
+        UserCO login = userService.login(user.getUserName(),user.getPassWord());
         if(login!=null){
             //绑定令牌
-            SaTokenInfo saTokenInfo = userDomain.userLock(login.getId());
+            SaTokenInfo saTokenInfo = userService.userLock(login.getId());
             //设置session user
             StpUtil.getSession().set("user",login);
             return DataResponse.of(saTokenInfo);
         }else{
-            return DataResponse.buildFailure(UserAsserts.LOGINT_FAIL.getMsg());
+            return DataResponse.buildFailure(UserErrorEnum.LOGINT_FAIL.getMsg());
         }
     }
 

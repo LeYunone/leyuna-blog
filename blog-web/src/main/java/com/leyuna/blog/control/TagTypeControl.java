@@ -9,7 +9,7 @@ import com.leyuna.blog.co.blog.TypeCO;
 import com.leyuna.blog.co.blog.TypeNavCO;
 import com.leyuna.blog.domain.TagE;
 import com.leyuna.blog.domain.TypeE;
-import com.leyuna.blog.error.SystemAsserts;
+import com.leyuna.blog.error.SystemErrorEnum;
 import com.leyuna.blog.service.TagTypeService;
 import com.leyuna.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class TagTypeControl{
     private TagTypeService tagTypeDomain;
 
     @Autowired
-    private UserService userDomain;
+    private UserService userService;
     /**
      * 取标签  【二级分类】
      * @param
@@ -134,7 +134,7 @@ public class TagTypeControl{
     public DataResponse addTagsAndTypes(@RequestParam(required = false) List<String> tags,
                                         @RequestParam(required = false) List<String> types,
                                         @RequestParam(required = false)String typeNav){
-        userDomain.checkLock();
+        userService.checkLock();
         String message=tagTypeDomain.addTypesOrTags(tags, types,typeNav);
         if(message==null){
             return DataResponse.buildSuccess();
@@ -152,7 +152,7 @@ public class TagTypeControl{
     @GetMapping("/deleteTagsAndTypes")
     public DataResponse deleteTagsAndTypes(@RequestParam(required = false,value = "tags") List<String> tags,
                                            @RequestParam(required = false)List<String> types){
-        userDomain.checkLock();
+        userService.checkLock();
         String message = tagTypeDomain.deleteTypesOrTags(tags, types);
         if(message==null){
             return DataResponse.buildSuccess();
@@ -167,7 +167,7 @@ public class TagTypeControl{
      */
     @PostMapping("/updateTag")
     public DataResponse updateTag(String id,String tagName){
-        userDomain.checkLock();
+        userService.checkLock();
         TagE build = TagE.queryInstance().setId(id).setTagName(tagName);
         String message = tagTypeDomain.updateTypesOrTags(build, null);
         if(StringUtils.isEmpty(message)){
@@ -262,12 +262,12 @@ public class TagTypeControl{
 
     @PostMapping("/addTypeNav")
     public DataResponse addTypeNav(String typeNavName){
-        userDomain.checkLock();
+        userService.checkLock();
         boolean b = tagTypeDomain.addTypeNav(typeNavName);
         if(b){
             return DataResponse.buildSuccess();
         }else{
-            return DataResponse.buildFailure(SystemAsserts.ADD_TYPENAV_FAIL.getMsg());
+            return DataResponse.buildFailure(SystemErrorEnum.ADD_TYPENAV_FAIL.getMsg());
         }
     }
 
@@ -278,23 +278,23 @@ public class TagTypeControl{
      */
     @PostMapping("/updateTypeNav")
     public DataResponse editTypeNav(String typeNavName,String typeNavId){
-        userDomain.checkLock();
+        userService.checkLock();
         boolean b = tagTypeDomain.updateTypeNav(typeNavName, typeNavId);
         if(b){
             return DataResponse.buildSuccess();
         }else{
-            return DataResponse.buildFailure(SystemAsserts.UPDATE_TYPENAV_FAIL.getMsg());
+            return DataResponse.buildFailure(SystemErrorEnum.UPDATE_TYPENAV_FAIL.getMsg());
         }
     }
 
     @PostMapping("/deleteTypeNav")
     public DataResponse deleteTypeNav(String typeNavId){
-        userDomain.checkLock();
+        userService.checkLock();
         boolean b = tagTypeDomain.deleteTypeNav(typeNavId);
         if(b){
             return DataResponse.buildSuccess();
         }else{
-            return DataResponse.buildFailure(SystemAsserts.DELETE_TYPENAV_FAIL.getMsg());
+            return DataResponse.buildFailure(SystemErrorEnum.DELETE_TYPENAV_FAIL.getMsg());
         }
     }
 }

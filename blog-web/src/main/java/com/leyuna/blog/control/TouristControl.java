@@ -7,8 +7,8 @@ import com.leyuna.blog.co.blog.CommentCO;
 import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.constant.ServerCode;
 import com.leyuna.blog.domain.CommentE;
-import com.leyuna.blog.error.SystemAsserts;
-import com.leyuna.blog.error.UserAsserts;
+import com.leyuna.blog.error.SystemErrorEnum;
+import com.leyuna.blog.error.UserErrorEnum;
 import com.leyuna.blog.service.TouristService;
 import com.leyuna.blog.util.ServerUtil;
 import com.leyuna.blog.util.TransformationUtil;
@@ -61,7 +61,7 @@ public class TouristControl {
         if(comment!=null){
             return DataResponse.of(comment);
         }
-        return DataResponse.buildFailure(SystemAsserts.COMMENT_FAIL.getMsg());
+        return DataResponse.buildFailure(SystemErrorEnum.COMMENT_FAIL.getMsg());
     }
 
     /**
@@ -99,6 +99,6 @@ public class TouristControl {
         if(b) {
             return DataResponse.buildSuccess();
         }
-        return DataResponse.buildFailure(UserAsserts.GOODS_COMMENT_FAIL.getMsg());
+        return DataResponse.buildFailure(UserErrorEnum.GOODS_COMMENT_FAIL.getMsg());
     }
 }

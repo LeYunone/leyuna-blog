@@ -9,7 +9,7 @@ import com.leyuna.blog.command.TagAndTypeExe;
 import com.leyuna.blog.domain.TagE;
 import com.leyuna.blog.domain.TypeE;
 import com.leyuna.blog.domain.TypeNavE;
-import com.leyuna.blog.error.SystemAsserts;
+import com.leyuna.blog.error.SystemErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -137,7 +137,7 @@ public class TagTypeService {
             });
             boolean b = tagAndTypeExe.addTypes(listTypes);
             if(!b){
-                message=SystemAsserts.ADD_TYPE_FALE.getMsg();
+                message=SystemErrorEnum.ADD_TYPE_FALE.getMsg();
             }else{
                 clearCacheExe.clearTypeQueryCache();
             }
@@ -154,7 +154,7 @@ public class TagTypeService {
             });
             boolean b = tagAndTypeExe.addTags(listTags);
             if(!b){
-                message=SystemAsserts.ADD_TAG_FALE.getMsg();
+                message=SystemErrorEnum.ADD_TAG_FALE.getMsg();
             }else{
                 clearCacheExe.clearTagQueryCache();
             }
@@ -177,7 +177,7 @@ public class TagTypeService {
                 clearCacheExe.clearTypeQueryCache();
             }
         }catch (Exception e){
-            message = SystemAsserts.DELETE_TYPE_FALE.getMsg() ;
+            message = SystemErrorEnum.DELETE_TYPE_FALE.getMsg() ;
         }
         try {
             if(!CollectionUtils.isEmpty(tags)){
@@ -185,7 +185,7 @@ public class TagTypeService {
                 clearCacheExe.clearTagQueryCache();
             }
         }catch (Exception e) {
-            message = SystemAsserts.DELETE_TAG_FALE.getMsg();
+            message = SystemErrorEnum.DELETE_TAG_FALE.getMsg();
         }
         return message;
     }
@@ -203,7 +203,7 @@ public class TagTypeService {
         if(null!=types){
             boolean b = tagAndTypeExe.updateTypes(types);
             if(!b){
-                message = SystemAsserts.UPDATE_TYPE_FALE.getMsg();
+                message = SystemErrorEnum.UPDATE_TYPE_FALE.getMsg();
             }else{
                 clearCacheExe.clearTypeQueryCache();
             }
@@ -211,7 +211,7 @@ public class TagTypeService {
         if(null!=tags){
             boolean b = tagAndTypeExe.updateTags(tags);
             if(!b){
-                message = SystemAsserts.UPDATE_TAG_FALE.getMsg();
+                message = SystemErrorEnum.UPDATE_TAG_FALE.getMsg();
             }else{
                 clearCacheExe.clearTagQueryCache();
             }

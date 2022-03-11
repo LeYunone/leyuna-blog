@@ -6,7 +6,7 @@ package com.leyuna.blog.error;
  *
  * 系统操作异常参数
  */
-public enum  SystemAsserts {
+public enum  SystemErrorEnum {
 
     ADD_BLOG_FAIL("发布失败",1),
     ADD_TYPENAV_FAIL("添加分类导航失败",2),
@@ -34,12 +34,14 @@ public enum  SystemAsserts {
 
     COMMENT_FAIL("回复失败-系统故障",18),
 
-    UPDOWN_IMG_FAIL("解析图片失败-系统故障",19);
+    UPDOWN_IMG_FAIL("解析图片失败-系统故障",19),
+
+    SELECT_NOT_FAIL("信息查询失败",20);
 
     private  String msg;
     private  Integer value;
 
-    SystemAsserts(String msg,Integer value){
+    SystemErrorEnum(String msg,Integer value){
         this.msg=msg;
         this.value=value;
     }

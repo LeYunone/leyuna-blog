@@ -3,8 +3,8 @@ package com.leyuna.blog.advice;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import com.leyuna.blog.co.blog.UserCO;
-import com.leyuna.blog.error.SystemAsserts;
-import com.leyuna.blog.error.UserAsserts;
+import com.leyuna.blog.error.SystemErrorEnum;
+import com.leyuna.blog.error.UserErrorEnum;
 import com.leyuna.blog.util.AssertUtil;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -26,10 +26,10 @@ public class LimitUserAdvice {
 
     @Before("before()")
     public void LimitUserLogin(){
-        AssertUtil.isFalse(!StpUtil.isLogin(), UserAsserts.LOGINT_NOT.getMsg());
+        AssertUtil.isFalse(!StpUtil.isLogin(), UserErrorEnum.LOGINT_NOT.getMsg());
         SaSession session = StpUtil.getSession();
-        AssertUtil.isFalse(ObjectUtils.isEmpty(session), SystemAsserts.REQUEST_FAIL.getMsg());
+        AssertUtil.isFalse(ObjectUtils.isEmpty(session), SystemErrorEnum.REQUEST_FAIL.getMsg());
         UserCO user=(UserCO)session.get("user");
-        AssertUtil.isFalse(ObjectUtils.isEmpty(user),UserAsserts.LOGINT_NOT.getMsg());
+        AssertUtil.isFalse(ObjectUtils.isEmpty(user),UserErrorEnum.LOGINT_NOT.getMsg());
     }
 }

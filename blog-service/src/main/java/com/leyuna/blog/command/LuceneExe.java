@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * @author pengli
  * @create 2021-09-09 10:25
- *
+ * <p>
  * Lucene 操作指令
  */
 @Service
@@ -44,21 +44,21 @@ public class LuceneExe {
     /**
      * 创建blog 索引库文档
      */
-    public void addBlogDir(List<BlogE> blogs) throws IOException {
-        List<Document> documents=new ArrayList<>();
+    public void addBlogDir (List<BlogE> blogs) throws IOException {
+        List<Document> documents = new ArrayList<>();
         //创建索引库位置
-        Directory directory= FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
+        Directory directory = FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
         //IK 分词器
         Analyzer analyzer = new SpiltCharAnalyzer();
         //创建输出流 write
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
-        IndexWriter indexWriter = new IndexWriter(directory,indexWriterConfig);
+        IndexWriter indexWriter = new IndexWriter(directory, indexWriterConfig);
 
-        for(BlogE blogDTO:blogs){
-            Document document=new Document();
+        for (BlogE blogDTO : blogs) {
+            Document document = new Document();
             //记录标题和id即可
-            Field id=new TextField("id",String.valueOf(blogDTO.getId()), Field.Store.YES);
-            Field title=new TextField("title",blogDTO.getTitle(), Field.Store.YES);
+            Field id = new TextField("id", String.valueOf(blogDTO.getId()), Field.Store.YES);
+            Field title = new TextField("title", blogDTO.getTitle(), Field.Store.YES);
             document.add(id);
             document.add(title);
             documents.add(document);
@@ -71,71 +71,86 @@ public class LuceneExe {
 
     /**
      * 关键词搜索博客索引库
+     *
      * @param key
      * @param size
      * @param index
      * @return
      */
-    public LuceneCO getBlogDir(String key, Integer index, Integer size) throws IOException, ParseException, InvalidTokenOffsetsException {
-        List<BlogCO> result=new ArrayList<>();
-        Analyzer analyzer=new SpiltCharAnalyzer();
+    public LuceneCO getBlogDir (String key, Integer index, Integer size) throws IOException, ParseException, InvalidTokenOffsetsException {
+        List<BlogCO> result = new ArrayList<>();
+        Analyzer analyzer = new SpiltCharAnalyzer();
         //关键词
-        QueryParser qp = new QueryParser("title",analyzer);
-        Query query=qp.parse(key);
+        QueryParser qp = new QueryParser("title", analyzer);
+        Query query = qp.parse(key);
 
         //高亮关键字
         SimpleHTMLFormatter simpleHTMLFormatter = new SimpleHTMLFormatter("<span style='color:red'>", "</span>");
         Highlighter highlighter = new Highlighter(simpleHTMLFormatter, new QueryScorer(query));
 
         //打开索引库输入流
-        Directory directory=FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
+        Directory directory = FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
         IndexReader indexReader = DirectoryReader.open(directory);
-        IndexSearcher indexSearcher=new IndexSearcher(indexReader);
+        IndexSearcher indexSearcher = new IndexSearcher(indexReader);
         //上一页的结果
         ScoreDoc lastScoreDoc = getLastScoreDoc(index, size, query, indexSearcher);
 
         //从上一页最后一条数据开始查询  达到分页的目的
         TopDocs topDocs = indexSearcher.searchAfter(lastScoreDoc, query, size);
-        long totle=topDocs.totalHits;
-        for(ScoreDoc scoreDoc:topDocs.scoreDocs){
+        long totle = topDocs.totalHits;
+        for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
             //获得对应的文档
             Document doc = indexSearcher.doc(scoreDoc.doc);
-            String title=doc.get("title");
+            String title = doc.get("title");
             TokenStream tokenStream = analyzer.tokenStream("title", new StringReader(title));
-            result.add(BlogCO.builder().id(doc.get("id")).title(highlighter.getBestFragment(tokenStream,title)).build());
+            result.add(BlogCO.builder().id(doc.get("id")).title(highlighter.getBestFragment(tokenStream, title)).build());
         }
         indexReader.close();
-        LuceneCO luceneDTO=new LuceneCO();
+        LuceneCO luceneDTO = new LuceneCO();
         luceneDTO.setListData(result);
         luceneDTO.setTotole(totle);
         return luceneDTO;
     }
 
-    private ScoreDoc getLastScoreDoc(int pageIndex, int pageSize, Query query, IndexSearcher indexSearcher) throws IOException{
-        if(pageIndex==1)return null;
+    private ScoreDoc getLastScoreDoc (int pageIndex, int pageSize, Query query, IndexSearcher indexSearcher) throws IOException {
+        if (pageIndex == 1) return null;
         //获取上一页的数量
-        int num = pageSize*(pageIndex-1);
+        int num = pageSize * (pageIndex - 1);
         TopDocs tds = indexSearcher.search(query, num);
-        return tds.scoreDocs[num-1];
+        return tds.scoreDocs[num - 1];
     }
 
     /**
      * 指定更新博客的索引文档
+     *
      * @throws IOException
      */
-    public void updateBlogDocument(BlogE blogDTO) throws IOException {
-        Directory directory=FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
-        Analyzer analyzer=new SpiltCharAnalyzer();
-        IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
-        IndexWriter indexWriter = new IndexWriter(directory,indexWriterConfig);
-        Document document=new Document();//替换的文档
-        Field id=new TextField("id",String.valueOf(blogDTO.getId()), Field.Store.YES);
-        Field title=new TextField("title",blogDTO.getTitle(), Field.Store.YES);
-        document.add(title);
-        document.add(id);
-        Term term=new Term("title",blogDTO.getTitle());
-        indexWriter.updateDocument(term,document);
-        indexWriter.commit();
-        indexWriter.close();
+    public void updateBlogDocument (BlogE blogDTO) {
+        IndexWriter indexWriter = null;
+
+        try {
+            Directory directory = FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
+            Analyzer analyzer = new SpiltCharAnalyzer();
+            IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+            Document document = new Document();//替换的文档
+            Field id = new TextField("id", String.valueOf(blogDTO.getId()), Field.Store.YES);
+            Field title = new TextField("title", blogDTO.getTitle(), Field.Store.YES);
+            indexWriter=new IndexWriter(directory, indexWriterConfig);
+            document.add(title);
+            document.add(id);
+            Term term = new Term("title", blogDTO.getTitle());
+            indexWriter.updateDocument(term, document);
+            indexWriter.commit();
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            if(indexWriter!=null){
+                try {
+                    indexWriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

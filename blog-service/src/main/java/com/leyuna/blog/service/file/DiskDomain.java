@@ -9,8 +9,8 @@ import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.co.disk.DiskCO;
 import com.leyuna.blog.co.disk.FileInfoCO;
-import com.leyuna.blog.error.SystemAsserts;
-import com.leyuna.blog.error.UserAsserts;
+import com.leyuna.blog.error.SystemErrorEnum;
+import com.leyuna.blog.error.UserErrorEnum;
 import com.leyuna.blog.rpc.command.DiskFileExe;
 import com.leyuna.blog.util.AssertUtil;
 import com.leyuna.blog.util.ObjectUtil;
@@ -43,7 +43,7 @@ public class DiskDomain {
     }
 
     public DataResponse requestSaveFile (List<MultipartFile> file) {
-        AssertUtil.isFalse(CollectionUtils.isEmpty(file), UserAsserts.UPLOAD_NOT_FILE.getMsg());
+        AssertUtil.isFalse(CollectionUtils.isEmpty(file), UserErrorEnum.UPLOAD_NOT_FILE.getMsg());
         //用户编号
         String userId = (String) StpUtil.getLoginId();
         UpFileBean fileBean = new UpFileBean();
@@ -86,7 +86,7 @@ public class DiskDomain {
      * @param file
      */
     public DataResponse uploadFile (List<MultipartFile> file, String saveTime) {
-        AssertUtil.isFalse(CollectionUtils.isEmpty(file), UserAsserts.UPLOAD_NOT_FILE.getMsg());
+        AssertUtil.isFalse(CollectionUtils.isEmpty(file), UserErrorEnum.UPLOAD_NOT_FILE.getMsg());
         //用户编号
         String userId = (String) StpUtil.getLoginId();
         UpFileBean fileBean = new UpFileBean();
@@ -114,7 +114,7 @@ public class DiskDomain {
             build.setFileType(fileType);
         }
         Page<FileInfoCO> fileInfoCOPage = fileExe.selectFile(build);
-        AssertUtil.isFalse(ObjectUtil.isNull(fileInfoCOPage), SystemAsserts.REQUEST_FAIL.getMsg());
+        AssertUtil.isFalse(ObjectUtil.isNull(fileInfoCOPage), SystemErrorEnum.REQUEST_FAIL.getMsg());
         //初始化页面时，默认取前十条展示到所有文件
         List<FileInfoCO> fileInfos = fileInfoCOPage.getRecords();
         //获取内存占有量

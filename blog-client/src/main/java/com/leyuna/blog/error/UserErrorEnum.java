@@ -2,10 +2,10 @@ package com.leyuna.blog.error;
 
 /**
  * @author pengli
- * @create 2021-08-10 19:35
  * 用户操作错误参数
+ * @create 2021-08-10 19:35
  */
-public enum  UserAsserts {
+public enum  UserErrorEnum {
 
     LOGINT_FAIL("登录失败，用户名或密码错误",1),
     LOGINT_NOT("用户未登陆",101),
@@ -19,7 +19,7 @@ public enum  UserAsserts {
 
     private final String msg;
     private Integer value;
-    UserAsserts(String msg,Integer value){
+    UserErrorEnum(String msg,Integer value){
         this.msg=msg;
         this.value=value;
     }

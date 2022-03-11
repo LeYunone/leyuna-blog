@@ -7,7 +7,7 @@ import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.co.disk.FileInfoCO;
-import com.leyuna.blog.error.SystemAsserts;
+import com.leyuna.blog.error.SystemErrorEnum;
 import com.leyuna.blog.rpc.service.LeyunaDiskRpcService;
 import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class DiskFileExe {
         UserCO user=(UserCO)StpUtil.getSession().get("user");
         DataResponse<FileInfoCO> fileInfoCODataResponse = leyunaDiskRpcService.downloadFile(id, user.getId());
         FileInfoCO data = fileInfoCODataResponse.getData();
-        AssertUtil.isFalse(null==data, SystemAsserts.REQUEST_FAIL.getMsg());
+        AssertUtil.isFalse(null==data, SystemErrorEnum.REQUEST_FAIL.getMsg());
         return data;
     }
 

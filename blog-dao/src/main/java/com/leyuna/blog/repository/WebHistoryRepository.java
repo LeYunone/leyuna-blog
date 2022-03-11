@@ -9,6 +9,7 @@ import com.leyuna.blog.entry.WebHistory;
 import com.leyuna.blog.gateway.WebHistoryGateway;
 import com.leyuna.blog.repository.mapper.WebHistoryMapper;
 import com.leyuna.blog.util.TransformationUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,7 +26,8 @@ public class WebHistoryRepository extends BaseRepository<WebHistoryMapper, WebHi
     public Page<WebHistoryCO> selectByLikeNamePage(Integer index, Integer size, String conditionName) {
         Page page=new Page(index,size);
         IPage<WebHistory> Page = this.page(page, new QueryWrapper<WebHistory>().lambda().
-                like(WebHistory::getTitle,conditionName).orderByDesc(WebHistory::getCreateTime));
+                like(StringUtils.isNotBlank(conditionName),WebHistory::getTitle,conditionName)
+                .orderByDesc(WebHistory::getCreateTime));
         return TransformationUtil.copyToPage(Page,WebHistoryCO.class);
     }
 

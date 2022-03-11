@@ -1,14 +1,14 @@
 package com.leyuna.blog.command;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyuna.blog.bean.blog.DataResponse;
+import com.leyuna.blog.bean.blog.NoticeBean;
 import com.leyuna.blog.co.blog.WebHistoryCO;
 import com.leyuna.blog.domain.WebHistoryE;
-import com.leyuna.blog.util.CollectionUtil;
+import com.leyuna.blog.error.SystemErrorEnum;
+import com.leyuna.blog.util.AssertUtil;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author pengli
@@ -21,50 +21,54 @@ public class NoticeExe {
 
     /**
      * 分页查询网站更新历史
+     *
      * @param index
      * @param size
      * @return
      */
     @Cacheable(cacheNames = "getWebHistory")
-    public Page<WebHistoryCO> getWebHistory(Integer index, Integer size){
+    public Page<WebHistoryCO> getWebHistory (Integer index, Integer size) {
         Page<WebHistoryCO> webHistoryPage = WebHistoryE.queryInstance().getGateway().
-                selectByConOrderPage(new WebHistoryCO(), index , size ,0);
+                selectByConOrderPage(new WebHistoryCO(), index, size, 0);
         return webHistoryPage;
     }
 
-    public WebHistoryCO getWebHistoryById(String id){
-        List<WebHistoryCO> webHistoryCOS = WebHistoryE.queryInstance().setId(id).selectByCon();
-        return CollectionUtil.getFirst(webHistoryCOS);
+    public DataResponse<WebHistoryCO> getWebHistoryById (String id) {
+        WebHistoryCO webHistoryCO = WebHistoryE.queryInstance().setId(id).selectById();
+        return DataResponse.of(webHistoryCO);
     }
 
     /**
      * 分页查询网站更新历史 模糊查询
+     *
      * @param index
      * @param size
      * @return
      */
     @Cacheable(cacheNames = "getWebHistory")
-    public Page<WebHistoryCO> getWebHistory(Integer index, Integer size,String conditionName){
+    public DataResponse getWebHistory (Integer index, Integer size, String conditionName) {
         Page<WebHistoryCO> webHistoryPage = WebHistoryE.queryInstance().getGateway().
-                selectByLikeNamePage(index,size,conditionName);
+                selectByLikeNamePage(index, size, conditionName);
         //封装结果集
-        return webHistoryPage;
+        return DataResponse.of(webHistoryPage);
     }
 
     /**
      * 添加网站历史
-     * @param webHistoryDTO
+     *
+     * @param noticeDTO
      * @return
      */
-    public boolean addHistory(WebHistoryE webHistoryDTO){
-        webHistoryDTO.setCreateTime(LocalDateTime.now());
-        WebHistoryCO save = webHistoryDTO.save();
-        return save!=null;
+    public void addHistory (NoticeBean noticeDTO) {
+        //0 网站更新公告
+        WebHistoryCO save = WebHistoryE.of(noticeDTO).save();
+        AssertUtil.isFalse(null == save, SystemErrorEnum.ADD_BLOG_FAIL.getMsg());
     }
 
 
-    public boolean updateWebHis(WebHistoryE webHistoryDTO){
-        boolean update = webHistoryDTO.update();
+    public boolean updateWebHis (NoticeBean webHistoryDTO) {
+        boolean update = WebHistoryE.of(webHistoryDTO).update();
+        AssertUtil.isTrue(update,SystemErrorEnum.UPDATE_BLOG_FAIL.getMsg());
         return update;
     }
 }

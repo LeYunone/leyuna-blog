@@ -2,9 +2,12 @@ package com.leyuna.blog.command;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.entry.Blog;
+import com.leyuna.blog.error.SystemErrorEnum;
+import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -113,5 +116,22 @@ public class BlogExe {
     public boolean updateBlog(BlogE blogDTO){
         boolean update = blogDTO.update();
         return update;
+    }
+
+    /**
+     * 得到指定博客
+     * @param id 博客id
+     * @param count 本次添加点击
+     * @return
+     */
+    public DataResponse getBlog(String id, Integer count){
+        //找到博客
+        BlogCO blogCO = BlogE.queryInstance().setId(id).selectById();
+        AssertUtil.isFalse( null == blogCO, SystemErrorEnum.SELECT_NOT_FAIL.getMsg());
+        //添加点击量
+        if(0!=count){
+            BlogE.queryInstance().setId(id).setClickCount(blogCO.getClickCount()+count);
+        }
+        return DataResponse.of(blogCO);
     }
 }

@@ -1,15 +1,11 @@
 package com.leyuna.blog.control;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.BlogBean;
-import com.leyuna.blog.bean.blog.NoticeBean;
 import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.co.blog.BlogCO;
+import com.leyuna.blog.bean.blog.NoticeBean;
 import com.leyuna.blog.co.blog.LuceneCO;
-import com.leyuna.blog.co.blog.WebHistoryCO;
 import com.leyuna.blog.domain.BlogE;
-import com.leyuna.blog.domain.WebHistoryE;
-import com.leyuna.blog.error.SystemAsserts;
+import com.leyuna.blog.error.SystemErrorEnum;
 import com.leyuna.blog.service.BlogService;
 import com.leyuna.blog.service.SearchService;
 import com.leyuna.blog.service.UserService;
@@ -27,11 +23,11 @@ import org.springframework.web.bind.annotation.*;
 public class BlogControl{
 
     @Autowired
-    private BlogService blogDomain;
+    private BlogService blogService;
     @Autowired
-    private UserService userDomain;
+    private UserService userService;
     @Autowired
-    private SearchService searchDomain;
+    private SearchService searchService;
     /**
      * 发布博客
      * @param blogBean
@@ -39,7 +35,7 @@ public class BlogControl{
      */
     @PostMapping("/addBlog")
     public DataResponse addBlog(@RequestBody BlogBean blogBean){
-        userDomain.checkLock();
+        userService.checkLock();
         String[] tags = blogBean.getTags();
         if(tags.length!=0){
             StringBuilder stringBuilder=new StringBuilder();
@@ -49,11 +45,11 @@ public class BlogControl{
             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
             blogBean.setTag(stringBuilder.toString());
         }
-        boolean b = blogDomain.addBlog(TransformationUtil.copyToDTO(blogBean, BlogE.class));
+        boolean b = blogService.addBlog(TransformationUtil.copyToDTO(blogBean, BlogE.class));
         if(b){
             return DataResponse.buildSuccess();
         }else{
-            return DataResponse.buildFailure(SystemAsserts.ADD_BLOG_FAIL.getMsg());
+            return DataResponse.buildFailure(SystemErrorEnum.ADD_BLOG_FAIL.getMsg());
         }
     }
 
@@ -67,8 +63,7 @@ public class BlogControl{
                                     @RequestParam(required = false) String typeId,
                                     @RequestParam(required = false) String  tags,
                                     @RequestParam(required = false) String conditionName){
-        Page<BlogCO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tags,conditionName);
-        return DataResponse.of(blogsByPage);
+        return blogService.getBlogsByPage(index, size, typeId, tags,conditionName);
     }
 
     /**
@@ -79,25 +74,18 @@ public class BlogControl{
     public DataResponse getAllBlogsByTypeOrTag(Integer index,Integer size,
                                             @RequestParam(required = false) String typeId,
                                             @RequestParam(required = false)String tagName){
-        Page<BlogCO> blogsByPage = blogDomain.getBlogsByPage(index, size, typeId, tagName,null);
-        return DataResponse.of(blogsByPage);
+        return blogService.getBlogsByPage(index, size, typeId, tagName,null);
     }
 
     @GetMapping("/blog/{id}")
     public DataResponse getBlogById(@PathVariable(value = "id")String blogId){
-        BlogCO blogById = blogDomain.openBlogById(blogId);
-        return DataResponse.of(blogById);
+        return blogService.openBlogById(blogId);
     }
 
     @PostMapping("/edit")
     public DataResponse editBlog(@RequestBody BlogBean blogBean){
-        userDomain.checkLock();
-        boolean b = blogDomain.updateBlog(TransformationUtil.copyToDTO(blogBean, BlogE.class));
-        if(b){
-            return DataResponse.buildSuccess();
-        }else{
-            return DataResponse.buildFailure(SystemAsserts.UPDATE_BLOG_FAIL.getMsg());
-        }
+        userService.checkLock();
+        return blogService.updateBlog(blogBean);
     }
 
     /**
@@ -108,8 +96,7 @@ public class BlogControl{
      */
     @RequestMapping("/history")
     public DataResponse getWebHistory(Integer index,Integer size){
-        Page<WebHistoryCO> webHistory=blogDomain.getNoticePage(index, size,null,0);
-        return DataResponse.of(webHistory);
+        return blogService.getNoticePage(index, size,null,0);
     }
     /**
      *  发布网站更新历史
@@ -117,13 +104,8 @@ public class BlogControl{
      */
     @PostMapping("/addWebNotice")
     public DataResponse addWebNotice(@RequestBody NoticeBean noticeBean){
-        userDomain.checkLock();
-        boolean b = blogDomain.addNotice(TransformationUtil.copyToDTO(noticeBean, WebHistoryE.class));
-        if(b){
-            return DataResponse.buildSuccess();
-        }else{
-            return DataResponse.buildFailure(SystemAsserts.ADD_BLOG_FAIL.getMsg());
-        }
+        userService.checkLock();
+        return blogService.addNotice(noticeBean);
     }
 
     /**
@@ -136,12 +118,12 @@ public class BlogControl{
     @GetMapping("/search")
     public DataResponse blogSearch(String key,Integer index,Integer size){
         //查关键词
-        LuceneCO blogFromSearch = searchDomain.getBlogFromSearch(key, index, size);
+        LuceneCO blogFromSearch = searchService.getBlogFromSearch(key, index, size);
         //
         if(null!=blogFromSearch){
             return DataResponse.of(blogFromSearch);
         }else{
-            return DataResponse.buildFailure(SystemAsserts.QUERY_SEARCH.getMsg());
+            return DataResponse.buildFailure(SystemErrorEnum.QUERY_SEARCH.getMsg());
         }
     }
 
@@ -151,8 +133,8 @@ public class BlogControl{
      */
     @PostMapping("/createDocument")
     public DataResponse createAllBlogDocument(){
-        userDomain.checkLock();
-        boolean blogSearch = searchDomain.createBlogSearch();
+        userService.checkLock();
+        boolean blogSearch = searchService.createBlogSearch();
         if(blogSearch){
             return DataResponse.buildSuccess();
         }else{
@@ -171,8 +153,7 @@ public class BlogControl{
     public DataResponse getAllNotice(@RequestParam(required = false) Integer index,
                                     @RequestParam(required = false) Integer size,
                                     @RequestParam(required = false) String conditionName){
-        Page<WebHistoryCO> noticePage = blogDomain.getNoticePage(index, size, conditionName, 0);
-        return DataResponse.of(noticePage);
+        return blogService.getNoticePage(index, size, conditionName, 0);
     }
 
     /**
@@ -183,18 +164,12 @@ public class BlogControl{
      */
     @GetMapping("/notice/{id}/{type}")
     public DataResponse getNoticeOne(@PathVariable(value = "id")String id,@PathVariable(value = "type")Integer type){
-        WebHistoryCO noticeOne = blogDomain.getNoticeOne(id, type);
-        return DataResponse.of(noticeOne);
+        return blogService.getNoticeOne(id, type);
     }
 
     @PostMapping("/editNotice")
     public DataResponse editNotice(@RequestBody NoticeBean noticeBean){
-        userDomain.checkLock();
-        boolean b = blogDomain.updateNotice(TransformationUtil.copyToDTO(noticeBean, WebHistoryE.class));
-        if(b){
-            return DataResponse.buildSuccess();
-        }else{
-            return DataResponse.buildFailure(SystemAsserts.UPDATE_BLOG_FAIL.getMsg());
-        }
+        userService.checkLock();
+        return blogService.updateNotice(noticeBean);
     }
 }
