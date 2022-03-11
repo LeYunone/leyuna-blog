@@ -2,8 +2,8 @@ package com.leyuna.blog.gateway;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyuna.blog.bean.blog.TypeBean;
 import com.leyuna.blog.co.blog.TypeCO;
-import com.leyuna.blog.domain.TypeE;
 
 /**
  * @author pengli
@@ -11,7 +11,7 @@ import com.leyuna.blog.domain.TypeE;
  */
 public interface TypeGateway extends BaseGateway<TypeCO> {
 
-    Page<TypeCO> selectByLikeNamePage (TypeE type, Integer index, Integer size, String conditionName);
+    Page<TypeCO> selectLikePage (TypeBean typeBean);
 
     int getTagsCount ();
 

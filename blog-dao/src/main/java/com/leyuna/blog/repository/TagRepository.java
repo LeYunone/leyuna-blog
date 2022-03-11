@@ -4,15 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyuna.blog.bean.blog.TagBean;
 import com.leyuna.blog.co.blog.TagCO;
-import com.leyuna.blog.domain.TagE;
 import com.leyuna.blog.entry.Tag;
-import com.leyuna.blog.error.SystemErrorEnum;
 import com.leyuna.blog.gateway.TagGateway;
 import com.leyuna.blog.repository.mapper.TagMapper;
-import com.leyuna.blog.util.AssertUtil;
-import com.leyuna.blog.util.ObjectUtil;
 import com.leyuna.blog.util.TransformationUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,12 +31,12 @@ public class TagRepository extends BaseRepository<TagMapper,Tag, TagCO> implemen
      * @return
      */
     @Override
-    public Page<TagCO> selectByLikeNamePage(TagE tag, Integer index, Integer size, String conditionName) {
-        AssertUtil.isTrue(ObjectUtil.isNotNull (tag), SystemErrorEnum.OBJECT_NULL.getMsg());
-        Page page=new Page(index,size);
+    public Page<TagCO> selectLikePage(TagBean tag) {
+        Page page=new Page(tag.getIndex(),tag.getSize());
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(tag);
         IPage<Tag> Page = this.baseMapper.selectPage(page, new QueryWrapper<Tag>()
-                .allEq(stringObjectMap).like("tag_Name",conditionName));
+                .allEq(stringObjectMap)
+                .like(StringUtils.isNotBlank(tag.getConditionName()),"tag_Name",tag.getConditionName()));
         return TransformationUtil.copyToPage(Page,TagCO.class);
     }
 

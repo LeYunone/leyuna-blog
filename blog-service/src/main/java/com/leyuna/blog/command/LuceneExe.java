@@ -3,29 +3,30 @@ package com.leyuna.blog.command;
 import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.co.blog.LuceneCO;
+import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.error.SystemErrorEnum;
 import com.leyuna.blog.lucene.SpiltCharAnalyzer;
 import com.leyuna.blog.util.AssertUtil;
+import com.leyuna.blog.util.TransformationUtil;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.*;
-import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.highlight.Highlighter;
-import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -47,6 +48,11 @@ public class LuceneExe {
      * 创建blog 索引库文档
      */
     public void addBlogDir (List<BlogBean> blogs) {
+        if(CollectionUtils.isEmpty(blogs)){
+            //默认创建所有博客索引文档
+            List<BlogCO> blogCOS = BlogE.queryInstance().selectByCon();
+            blogs= TransformationUtil.copyToLists(blogCOS,BlogBean.class);
+        }
         IndexWriter indexWriter = null;
         try {
             List<Document> documents = new ArrayList<>();
@@ -91,38 +97,50 @@ public class LuceneExe {
      * @param index
      * @return
      */
-    public LuceneCO getBlogDir (String key, Integer index, Integer size) throws IOException, ParseException, InvalidTokenOffsetsException {
+    public LuceneCO getBlogDir (String key, Integer index, Integer size){
         List<BlogCO> result = new ArrayList<>();
-        Analyzer analyzer = new SpiltCharAnalyzer();
-        //关键词
-        QueryParser qp = new QueryParser("title", analyzer);
-        Query query = qp.parse(key);
-
-        //高亮关键字
-        SimpleHTMLFormatter simpleHTMLFormatter = new SimpleHTMLFormatter("<span style='color:red'>", "</span>");
-        Highlighter highlighter = new Highlighter(simpleHTMLFormatter, new QueryScorer(query));
-
-        //打开索引库输入流
-        Directory directory = FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
-        IndexReader indexReader = DirectoryReader.open(directory);
-        IndexSearcher indexSearcher = new IndexSearcher(indexReader);
-        //上一页的结果
-        ScoreDoc lastScoreDoc = getLastScoreDoc(index, size, query, indexSearcher);
-
-        //从上一页最后一条数据开始查询  达到分页的目的
-        TopDocs topDocs = indexSearcher.searchAfter(lastScoreDoc, query, size);
-        long totle = topDocs.totalHits;
-        for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
-            //获得对应的文档
-            Document doc = indexSearcher.doc(scoreDoc.doc);
-            String title = doc.get("title");
-            TokenStream tokenStream = analyzer.tokenStream("title", new StringReader(title));
-            result.add(BlogCO.builder().id(doc.get("id")).title(highlighter.getBestFragment(tokenStream, title)).build());
-        }
-        indexReader.close();
         LuceneCO luceneDTO = new LuceneCO();
+        IndexReader indexReader=null;
+        try {
+            Analyzer analyzer = new SpiltCharAnalyzer();
+            //关键词
+            QueryParser qp = new QueryParser("title", analyzer);
+            Query query = qp.parse(key);
+
+            //高亮关键字
+            SimpleHTMLFormatter simpleHTMLFormatter = new SimpleHTMLFormatter("<span style='color:red'>", "</span>");
+            Highlighter highlighter = new Highlighter(simpleHTMLFormatter, new QueryScorer(query));
+
+            //打开索引库输入流
+            Directory directory = FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
+            indexReader = DirectoryReader.open(directory);
+            IndexSearcher indexSearcher = new IndexSearcher(indexReader);
+            //上一页的结果
+            ScoreDoc lastScoreDoc = getLastScoreDoc(index, size, query, indexSearcher);
+
+            //从上一页最后一条数据开始查询  达到分页的目的
+            TopDocs topDocs = indexSearcher.searchAfter(lastScoreDoc, query, size);
+            long totle = topDocs.totalHits;
+            luceneDTO.setTotole(totle);
+            for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+                //获得对应的文档
+                Document doc = indexSearcher.doc(scoreDoc.doc);
+                String title = doc.get("title");
+                TokenStream tokenStream = analyzer.tokenStream("title", new StringReader(title));
+                result.add(BlogCO.builder().id(doc.get("id")).title(highlighter.getBestFragment(tokenStream, title)).build());
+            }
+        }catch (Exception e){
+
+        }finally {
+            if(indexReader!=null){
+                try {
+                    indexReader.close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        }
         luceneDTO.setListData(result);
-        luceneDTO.setTotole(totle);
         return luceneDTO;
     }
 

@@ -4,15 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyuna.blog.bean.blog.TypeBean;
 import com.leyuna.blog.co.blog.TypeCO;
-import com.leyuna.blog.domain.TypeE;
 import com.leyuna.blog.entry.Type;
-import com.leyuna.blog.error.SystemErrorEnum;
 import com.leyuna.blog.gateway.TypeGateway;
 import com.leyuna.blog.repository.mapper.TypeMapper;
-import com.leyuna.blog.util.AssertUtil;
-import com.leyuna.blog.util.ObjectUtil;
 import com.leyuna.blog.util.TransformationUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,12 +30,12 @@ public class TypeRepository extends BaseRepository<TypeMapper,Type, TypeCO> impl
      * @return
      */
     @Override
-    public Page<TypeCO> selectByLikeNamePage(TypeE type,Integer index,Integer size, String conditionName) {
-        AssertUtil.isTrue(ObjectUtil.isNotNull (type), SystemErrorEnum.OBJECT_NULL.getMsg());
-        Page page=new Page(index,size);
+    public Page<TypeCO> selectLikePage(TypeBean type) {
+        Page page=new Page(type.getIndex(),type.getSize());
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(type);
         IPage<Type> Page = this.page(page, new QueryWrapper<Type>()
-                .allEq(stringObjectMap).like("type_Name",conditionName));
+                .allEq(stringObjectMap)
+                .like(StringUtils.isNotBlank(type.getConditionName()),"type_Name",type.getConditionName()));
         return TransformationUtil.copyToPage(Page,TypeCO.class);
     }
 

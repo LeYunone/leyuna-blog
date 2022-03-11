@@ -1,9 +1,8 @@
 package com.leyuna.blog.control;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.bean.blog.CascaderTypeBean;
-import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.bean.blog.TreeTypeBean;
+import com.leyuna.blog.bean.QueryPage;
+import com.leyuna.blog.bean.blog.*;
 import com.leyuna.blog.co.blog.TagCO;
 import com.leyuna.blog.co.blog.TypeCO;
 import com.leyuna.blog.co.blog.TypeNavCO;
@@ -42,17 +41,8 @@ public class TagTypeControl{
      * @return
      */
     @RequestMapping("/tags")
-    public DataResponse getTags(@RequestParam(required = false)Integer pageIndex,
-                                @RequestParam(required = false)Integer pageSize,
-                                @RequestParam(required = false)String conditionName){
-        Page<TagCO> aLlTags = tagTypeDomain.getALlTags(pageIndex,pageSize,conditionName);
-        return  DataResponse.of(aLlTags);
-    }
-
-    @GetMapping("/tagsId")
-    public DataResponse getTagsById(String...ids){
-        List<TagCO> tagsByIds = tagTypeDomain.getTagsByIds(ids);
-        return DataResponse.of(tagsByIds);
+    public DataResponse getTags(TagBean query){
+        return tagTypeDomain.getALlTags(query);
     }
 
     /**
@@ -61,11 +51,8 @@ public class TagTypeControl{
      * @return
      */
     @RequestMapping("/types")
-    public DataResponse getTypes(@RequestParam(required = false)Integer pageIndex,
-                                 @RequestParam(required = false)Integer pageSize,
-                                 @RequestParam(required = false)String conditionName){
-        Page<TypeCO> aLlTags = tagTypeDomain.getALlTypes(pageIndex,pageSize,conditionName);
-        return  DataResponse.of(aLlTags);
+    public DataResponse getTypes(TypeBean query){
+        return tagTypeDomain.getALlTypes(query);
     }
 
     /**
@@ -118,12 +105,6 @@ public class TagTypeControl{
         return lists;
     }
 
-    @GetMapping("/typesId")
-    public DataResponse getTypesById(String...ids){
-        List<TypeCO> tagsByIds = tagTypeDomain.getTypesByIds(ids);
-        return DataResponse.of(tagsByIds);
-    }
-
     /**
      * 添加分类或标签  只要添加名字就好了
      * @param tags
@@ -135,12 +116,7 @@ public class TagTypeControl{
                                         @RequestParam(required = false) List<String> types,
                                         @RequestParam(required = false)String typeNav){
         userService.checkLock();
-        String message=tagTypeDomain.addTypesOrTags(tags, types,typeNav);
-        if(message==null){
-            return DataResponse.buildSuccess();
-        }else{
-            return DataResponse.buildFailure(message);
-        }
+        return tagTypeDomain.addTypesOrTags(tags, types,typeNav);
     }
 
     /**
@@ -153,12 +129,7 @@ public class TagTypeControl{
     public DataResponse deleteTagsAndTypes(@RequestParam(required = false,value = "tags") List<String> tags,
                                            @RequestParam(required = false)List<String> types){
         userService.checkLock();
-        String message = tagTypeDomain.deleteTypesOrTags(tags, types);
-        if(message==null){
-            return DataResponse.buildSuccess();
-        }else{
-            return DataResponse.buildFailure(message);
-        }
+        return tagTypeDomain.deleteTypesOrTags(tags, types);
     }
 
     /**
@@ -166,15 +137,9 @@ public class TagTypeControl{
      * @return
      */
     @PostMapping("/updateTag")
-    public DataResponse updateTag(String id,String tagName){
+    public DataResponse updateTag(List<TagBean> tag){
         userService.checkLock();
-        TagE build = TagE.queryInstance().setId(id).setTagName(tagName);
-        String message = tagTypeDomain.updateTypesOrTags(build, null);
-        if(StringUtils.isEmpty(message)){
-            return DataResponse.buildSuccess();
-        }else{
-            return DataResponse.buildFailure(message);
-        }
+        return tagTypeDomain.updateTypesOrTags(tag, null);
     }
 
     /**
@@ -182,14 +147,8 @@ public class TagTypeControl{
      * @return
      */
     @PostMapping("/updateType")
-    public DataResponse updateTypes(String id,String typeName){
-        TypeE build = TypeE.queryInstance().setId(id).setTypeName(typeName);
-        String message = tagTypeDomain.updateTypesOrTags(null, build);
-        if(StringUtils.isEmpty(message)){
-            return DataResponse.buildSuccess();
-        }else{
-            return DataResponse.buildFailure(message);
-        }
+    public DataResponse updateTypes(List<TypeBean> type){
+        return tagTypeDomain.updateTypesOrTags(null, type);
     }
 
     /**

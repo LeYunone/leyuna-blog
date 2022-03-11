@@ -3,8 +3,6 @@ package com.leyuna.blog.control;
 import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.blog.NoticeBean;
-import com.leyuna.blog.co.blog.LuceneCO;
-import com.leyuna.blog.error.SystemErrorEnum;
 import com.leyuna.blog.service.BlogService;
 import com.leyuna.blog.service.SearchService;
 import com.leyuna.blog.service.UserService;
@@ -87,13 +85,7 @@ public class BlogControl{
     @GetMapping("/search")
     public DataResponse blogSearch(String key,Integer index,Integer size){
         //查关键词
-        LuceneCO blogFromSearch = searchService.getBlogFromSearch(key, index, size);
-        //
-        if(null!=blogFromSearch){
-            return DataResponse.of(blogFromSearch);
-        }else{
-            return DataResponse.buildFailure(SystemErrorEnum.QUERY_SEARCH.getMsg());
-        }
+        return searchService.getBlogFromSearch(key, index, size);
     }
 
     /**
@@ -103,12 +95,7 @@ public class BlogControl{
     @PostMapping("/createDocument")
     public DataResponse createAllBlogDocument(){
         userService.checkLock();
-        boolean blogSearch = searchService.createBlogSearch();
-        if(blogSearch){
-            return DataResponse.buildSuccess();
-        }else{
-            return DataResponse.buildFailure();
-        }
+        return searchService.createBlogSearch();
     }
 
     /**
