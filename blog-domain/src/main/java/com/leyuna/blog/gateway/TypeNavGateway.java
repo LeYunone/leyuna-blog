@@ -2,6 +2,7 @@ package com.leyuna.blog.gateway;
 
 
 import com.leyuna.blog.co.blog.TypeNavCO;
+import com.leyuna.blog.domain.TypeNavE;
 
 import java.util.List;
 
@@ -13,6 +14,6 @@ import java.util.List;
  */
 public interface TypeNavGateway extends BaseGateway<TypeNavCO> {
 
-   List<TypeNavCO> queryAllTypeNavConditionName (String conditionName);
+    List<TypeNavCO> queryType(TypeNavE typeNavE);
 }
 

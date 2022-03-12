@@ -46,7 +46,7 @@ public class TagAndTypeExe {
      * @return
      */
     @Cacheable(cacheNames = "getAllTypes")
-    public DataResponse getAllTypes (TypeBean type) {
+    public DataResponse<Page<TypeCO>> getAllTypes (TypeBean type) {
         //如果有模糊查询条件则走模糊查询
         Page<TypeCO> typePage = TypeE.queryInstance().getGateway().selectLikePage(type);
         typePage.getRecords().stream().forEach(tag->{
@@ -178,22 +178,6 @@ public class TagAndTypeExe {
             //事务回滚
             throw new RuntimeException();
         }
-    }
-
-    /**
-     * 得到分类导航
-     *
-     * @return
-     */
-    @Cacheable(cacheNames = "getTypeNav")
-    public List<TypeNavCO> getTypeNav (String conditionName) {
-        List<TypeNavCO> typeNavs = null;
-        if (StringUtils.isNotEmpty(conditionName)) {
-            typeNavs = TypeNavE.queryInstance().getGateway().queryAllTypeNavConditionName(conditionName);
-        } else {
-            typeNavs = TypeNavE.queryInstance().selectByCon();
-        }
-        return typeNavs;
     }
 
     public boolean deleteTypeNav (String typeNavId) {

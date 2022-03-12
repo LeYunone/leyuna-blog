@@ -31,7 +31,8 @@ public class TypeNavE implements Serializable {
      * 导航名
      */
     private String typeNavName;
-
+    
+    private Integer deleted;
     //===========自定义方法区==========
     private TypeNavGateway gateway;
 
@@ -73,6 +74,10 @@ public class TypeNavE implements Serializable {
     public boolean update () {
         TypeNavGateway gateway = this.getGateway();
         return gateway.update(this);
+    }
+    
+    public List<TypeNavCO> selectNavType(){
+        return this.getGateway().queryType(this);
     }
 
     public static boolean batchCreate (List<TypeNavE> list) {

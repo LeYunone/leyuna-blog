@@ -1,20 +1,18 @@
 package com.leyuna.blog.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.blog.TagBean;
 import com.leyuna.blog.bean.blog.TypeBean;
+import com.leyuna.blog.bean.blog.TypeNavBean;
+import com.leyuna.blog.co.blog.TypeCO;
 import com.leyuna.blog.co.blog.TypeNavCO;
-import com.leyuna.blog.command.CacheExe;
-import com.leyuna.blog.command.TagAndTypeExe;
-import com.leyuna.blog.command.TagExe;
-import com.leyuna.blog.command.TypeExe;
-import com.leyuna.blog.domain.TypeNavE;
+import com.leyuna.blog.command.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +32,9 @@ public class TagTypeService {
 
     @Autowired
     private TypeExe typeExe;
+    
+    @Autowired
+    private TypeNavExe typeNavExe;
 
     @Autowired
     private CacheExe clearCacheExe;
@@ -51,7 +52,7 @@ public class TagTypeService {
      * @param
      * @return
      */
-    public DataResponse getALlTypes(TypeBean type){
+    public DataResponse<Page<TypeCO>> getALlTypes(TypeBean type){
         return tagAndTypeExe.getAllTypes(type);
     }
 
@@ -121,26 +122,18 @@ public class TagTypeService {
      * @param navName
      * @return
      */
-    public DataResponse updateTypeNav(String navName,String typeNavId){
-        boolean b = tagAndTypeExe.updateTypeNav(TypeNavE.queryInstance()
-                .setTypeNavName(navName).setId(typeNavId));
-        if(b){
-            clearCacheExe.clearTypeNavQueryCache();
-        }
-        return b;
+    public DataResponse updateTypeNav(TypeNavBean typeNavBean){
+        typeNavExe.updateTypeNav(typeNavBean);
+        clearCacheExe.clearTypeNavQueryCache();
+        return DataResponse.buildSuccess();
     }
 
     /**
      * 得到所有分类导航
      * @return
      */
-    public Map<String, TypeNavCO> getTypeNavMap(){
-        List<TypeNavCO> typeNav = tagAndTypeExe.getTypeNav(null);
-        Map<String,TypeNavCO> resultMap=new HashMap<>();
-        typeNav.stream().forEach(t->{
-            resultMap.put(t.getId(),t);
-        });
-        return resultMap;
+    public DataResponse<Map<String, TypeNavCO>> getTypeNavMap(TypeNavBean typeNavBean){
+        return typeNavExe.getTypeNav(typeNavBean,true);
     }
 
 
@@ -148,21 +141,18 @@ public class TagTypeService {
      * 得到所有分类导航
      * @return
      */
-    public List<TypeNavCO> getTypeNavList(String conditionName){
-        List<TypeNavCO> typeNav = tagAndTypeExe.getTypeNav(conditionName);
-        return typeNav;
+    public DataResponse getTypeNavList(TypeNavBean typeNavBean){
+        return typeNavExe.getTypeNav(typeNavBean,false);
     }
 
-    public boolean addTypeNav(String navName){
-        boolean b = tagAndTypeExe.addTypeNavs(navName);
-        if(b){
-            clearCacheExe.clearTypeNavQueryCache();
-        }
-        return b;
+    public DataResponse addTypeNav(TypeNavBean typeNavBean){
+        typeNavExe.updateTypeNav(typeNavBean);
+        clearCacheExe.clearTypeNavQueryCache();
+        return DataResponse.buildSuccess();
     }
 
-    public boolean deleteTypeNav(String typeNavId){
-        boolean b = tagAndTypeExe.deleteTypeNav(typeNavId);
-        return b;
+    public DataResponse deleteTypeNav(String typeNavId){
+        typeNavExe.deleteTypeNav(typeNavId);
+        return DataResponse.buildSuccess();
     }
 }
