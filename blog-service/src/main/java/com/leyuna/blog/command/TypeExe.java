@@ -1,12 +1,17 @@
 package com.leyuna.blog.command;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.blog.TypeBean;
+import com.leyuna.blog.co.blog.TypeCO;
 import com.leyuna.blog.domain.TypeE;
 import com.leyuna.blog.error.SystemErrorEnum;
 import com.leyuna.blog.util.AssertUtil;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,5 +51,27 @@ public class TypeExe {
             is = TypeE.of(typeBean).update();
         }
         AssertUtil.isTrue(is,SystemErrorEnum.UPDATE_TYPE_FALE.getMsg());
+    }
+
+    /**
+     * 获取所有分类  有分页和模糊
+     *
+     * @return
+     */
+    @Cacheable(cacheNames = "getAllTypes")
+    public DataResponse<Page<TypeCO>> getAllTypes (TypeBean type) {
+        //如果有模糊查询条件则走模糊查询
+        Page<TypeCO> typePage = TypeE.queryInstance().getGateway().selectLikePage(type);
+        typePage.getRecords().stream().forEach(tag->{
+            LocalDateTime lastTime=tag.getLastUserTime();
+            //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
+            if(LocalDateTime.now().isBefore(lastTime.plusMonths(1))){
+                tag.setUserStatus("hot");
+            }else{
+                tag.setUserStatus("cold");
+            }
+        });
+
+        return DataResponse.of(typePage);
     }
 }

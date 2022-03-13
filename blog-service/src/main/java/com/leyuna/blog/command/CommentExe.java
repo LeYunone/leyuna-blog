@@ -2,11 +2,19 @@ package com.leyuna.blog.command;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyuna.blog.bean.blog.CommentBean;
+import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.CommentCO;
+import com.leyuna.blog.co.blog.TouristHeadCO;
+import com.leyuna.blog.constant.ServerCode;
 import com.leyuna.blog.domain.CommentE;
+import com.leyuna.blog.domain.TouristHeadE;
+import com.leyuna.blog.error.SystemErrorEnum;
+import com.leyuna.blog.util.AssertUtil;
+import com.leyuna.blog.util.CollectionUtil;
+import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -21,25 +29,48 @@ public class CommentExe {
      * 添加评论
      * @return
      */
-    public CommentCO addComment(CommentE commentDTO){
-        if(StringUtils.isEmpty(commentDTO.getInformation())) commentDTO.setInformation("不愿透露位置的某人");
-        commentDTO.setCreateTime(LocalDateTime.now());
-        commentDTO.setGoods(0);
-        CommentCO save = commentDTO.save();
-        return save;
+    public DataResponse addComment(CommentBean commentBean){
+        CommentE comment = CommentE.of(commentBean);
+        //初始化基本信息
+        if(StringUtils.isEmpty(comment.getInformation())){
+            comment.setInformation("不愿透露位置的某人");
+        }
+        CommentE commentDTO = TransformationUtil.copyToDTO(commentBean, CommentE.class);
+        if(comment.getInformation().equals("a3201360")){
+            //站主通道
+            comment.setInformation("365627310@qq.com");
+            comment.setCommentHead(ServerCode.SERVER_HEAD_IMG_ADMIN);
+            comment.setAdmin("admin");
+        }else{
+            if(StringUtils.isEmpty(comment.getCommentHead())){
+                List<TouristHeadCO> touristHeadCOS = TouristHeadE.queryInstance().setIp(comment.getIp()).selectByCon();
+                TouristHeadCO first = CollectionUtil.getFirst(touristHeadCOS);
+                AssertUtil.isFalse(null == first, SystemErrorEnum.COMMENT_FAIL.getMsg());
+                String touristOldHead = first.getHead();
+                if(StringUtils.isEmpty(touristOldHead)){
+                    commentDTO.setCommentHead(ServerCode.SERVER_HEAD_IMG_DEFAULT);
+                }
+            }
+        }
+        comment.setGoods(0);
+        CommentCO save = comment.save();
+        AssertUtil.isFalse(save==null,SystemErrorEnum.COMMENT_FAIL.getMsg());
+        return DataResponse.of(save);
     }
 
     /**
      * 分页查询指定博客下的评论
      * @return
      */
-    public Page<CommentCO> queryComment(Integer index , Integer size, String blogId, Integer type){
+    public DataResponse queryComment(CommentBean commentBean){
         Page<CommentCO> commentPage =null;
+        Integer type=commentBean.getType();
+        String blogId=commentBean.getBlogId();
         if(type==0){
-            commentPage=CommentE.queryInstance().getGateway().selectNewCommentByBlogId(index,size,blogId);
+            commentPage=CommentE.queryInstance().getGateway().selectNewCommentByBlogId(commentBean.getIndex(),commentBean.getSize(),blogId);
         }
         if(type==1){
-            commentPage=CommentE.queryInstance().getGateway().selectNewAndGoodsCommentByBlogId(index,size,blogId);
+            commentPage=CommentE.queryInstance().getGateway().selectNewAndGoodsCommentByBlogId(commentBean.getIndex(),commentBean.getSize(),blogId);
         }
         List<CommentCO> commentDTOS = commentPage.getRecords();
         commentDTOS.forEach(c->{
@@ -49,7 +80,7 @@ public class CommentExe {
             List<CommentCO> subComment = CommentE.queryInstance().getGateway().selectSubComment(fId);
             c.setSubComment(subComment);
         });
-        return commentPage;
+        return DataResponse.of(commentPage);
     }
 
     /**

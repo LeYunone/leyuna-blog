@@ -1,12 +1,11 @@
 package com.leyuna.blog.service;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.co.blog.CommentCO;
+import com.leyuna.blog.bean.blog.CommentBean;
+import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.command.CommentExe;
 import com.leyuna.blog.command.FileExe;
-import com.leyuna.blog.domain.CommentE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,15 +29,9 @@ public class TouristService {
      * 评论== 添加
      * @return
      */
-    public CommentCO comment(CommentE commentDTO){
+    public DataResponse comment(CommentBean commentDTO){
         //添加评论
-        CommentCO thisComment=commentExe.addComment(commentDTO);
-        if(thisComment!=null){
-            //如果添加评论成功了，则需要回显这次评论到页面上
-            //待扩展 9/15
-            return thisComment;
-        }
-        return null;
+        return commentExe.addComment(commentDTO);
     }
 
     /**
@@ -49,10 +42,8 @@ public class TouristService {
      * @param type  [类型： 最新   最热  混杂型]
      * @return
      */
-    public Page<CommentCO> getComment(Integer index, Integer size, String blogId, Integer type){
-        Page<CommentCO> commentDTOPage=null;
-        commentDTOPage=commentExe.queryComment(index, size, blogId, type);
-        return commentDTOPage;
+    public DataResponse getComment(CommentBean commentBean){
+        return commentExe.queryComment(commentBean);
     }
 
     public String getTouristOldHead(String ip){

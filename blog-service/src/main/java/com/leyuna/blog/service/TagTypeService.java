@@ -24,8 +24,6 @@ import java.util.Map;
 @Service
 public class TagTypeService {
 
-    @Autowired
-    private TagAndTypeExe tagAndTypeExe;
 
     @Autowired
     private TagExe tagExe;
@@ -53,7 +51,7 @@ public class TagTypeService {
      * @return
      */
     public DataResponse<Page<TypeCO>> getALlTypes(TypeBean type){
-        return tagAndTypeExe.getAllTypes(type);
+        return typeExe.getAllTypes(type);
     }
 
     /**

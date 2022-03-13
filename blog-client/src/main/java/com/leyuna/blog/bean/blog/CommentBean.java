@@ -1,5 +1,6 @@
 package com.leyuna.blog.bean.blog;
 
+import com.leyuna.blog.bean.QueryPage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,10 +10,12 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class CommentBean {
+public class CommentBean extends QueryPage {
 
     //评论内容
     private String content;
+    
+    private Integer type;
 
     //父评论编号
     private String fatherCommentId;

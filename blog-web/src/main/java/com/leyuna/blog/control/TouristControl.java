@@ -1,20 +1,16 @@
 package com.leyuna.blog.control;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.CommentBean;
 import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.co.blog.CommentCO;
 import com.leyuna.blog.command.CacheExe;
-import com.leyuna.blog.constant.ServerCode;
-import com.leyuna.blog.domain.CommentE;
-import com.leyuna.blog.error.SystemErrorEnum;
 import com.leyuna.blog.error.UserErrorEnum;
 import com.leyuna.blog.service.TouristService;
 import com.leyuna.blog.util.ServerUtil;
-import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,29 +35,9 @@ public class TouristControl {
      */
     @PostMapping("/commpent")
     public DataResponse commpent(@RequestBody CommentBean commentBean, HttpServletRequest request){
-        CommentE commentDTO = TransformationUtil.copyToDTO(commentBean, CommentE.class);
-        String remoteAddr = ServerUtil.getClientIp(request);
-        commentDTO.setIp(remoteAddr);
-        if(commentDTO.getInformation().equals("a3201360")){
-            //站主通道
-            commentDTO.setInformation("365627310@qq.com");
-            commentDTO.setCommentHead(ServerCode.SERVER_HEAD_IMG_ADMIN);
-            commentDTO.setAdmin("admin");
-        }else{
-            if(StringUtils.isEmpty(commentDTO.getCommentHead())){
-                String touristOldHead = touristDomain.getTouristOldHead(remoteAddr);
-                if(!StringUtils.isEmpty(touristOldHead)){
-                    commentDTO.setCommentHead(touristOldHead);
-                }else{
-                    commentDTO.setCommentHead(ServerCode.SERVER_HEAD_IMG_DEFAULT);
-                }
-            }
-        }
-        CommentCO comment = touristDomain.comment(commentDTO);
-        if(comment!=null){
-            return DataResponse.of(comment);
-        }
-        return DataResponse.buildFailure(SystemErrorEnum.COMMENT_FAIL.getMsg());
+        //设置ip
+        commentBean.setIp(ServerUtil.getClientIp(request));
+        return touristDomain.comment(commentBean);
     }
 
     /**
@@ -72,9 +48,8 @@ public class TouristControl {
      * @return
      */
     @RequestMapping("/comment/blog")
-    public DataResponse getComment(Integer index,Integer size,String blogId,@RequestParam(required = false) Integer type){
-        Page<CommentCO> comment = touristDomain.getComment(index, size, blogId, type);
-        return DataResponse.of(comment);
+    public DataResponse getComment(CommentBean commentBean){
+        return touristDomain.getComment(commentBean);
     }
 
     /**
