@@ -2,8 +2,8 @@ package com.leyuna.blog.control;
 
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.command.CacheExe;
-import com.leyuna.blog.constant.ServerCode;
-import com.leyuna.blog.error.SystemErrorEnum;
+import com.leyuna.blog.constant.code.ServerCode;
+import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.service.TouristService;
 import com.leyuna.blog.service.UserService;
 import com.leyuna.blog.util.ServerUtil;

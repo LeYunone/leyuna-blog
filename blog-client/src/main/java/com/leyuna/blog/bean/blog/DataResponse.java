@@ -1,6 +1,6 @@
 package com.leyuna.blog.bean.blog;
 
-import com.leyuna.blog.constant.ResponseCode;
+import com.leyuna.blog.constant.code.ResponseCode;
 import lombok.*;
 
 /**

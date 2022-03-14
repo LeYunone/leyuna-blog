@@ -1,7 +1,7 @@
 package com.leyuna.blog.advice;
 
-import com.leyuna.blog.error.SystemErrorEnum;
-import com.leyuna.blog.error.UserErrorEnum;
+import com.leyuna.blog.constant.enums.SystemErrorEnum;
+import com.leyuna.blog.constant.enums.UserErrorEnum;
 import com.leyuna.blog.util.ServerUtil;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

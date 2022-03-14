@@ -4,7 +4,7 @@ import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.blog.TypeNavBean;
 import com.leyuna.blog.co.blog.TypeNavCO;
 import com.leyuna.blog.domain.TypeNavE;
-import com.leyuna.blog.error.SystemErrorEnum;
+import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.util.AssertUtil;
 import org.springframework.stereotype.Service;
 

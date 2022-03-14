@@ -3,7 +3,7 @@ package com.leyuna.blog.rpc.hystrix;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.co.disk.FileInfoCO;
-import com.leyuna.blog.constant.ResponseCode;
+import com.leyuna.blog.constant.code.ResponseCode;
 import com.leyuna.blog.rpc.service.LeyunaDiskRpcService;
 import com.netflix.hystrix.exception.HystrixTimeoutException;
 import feign.hystrix.FallbackFactory;

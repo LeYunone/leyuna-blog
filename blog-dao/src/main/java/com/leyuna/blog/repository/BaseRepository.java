@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.leyuna.blog.error.SystemErrorEnum;
+import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.gateway.BaseGateway;
 import com.leyuna.blog.util.AssertUtil;
 import com.leyuna.blog.util.ObjectUtil;

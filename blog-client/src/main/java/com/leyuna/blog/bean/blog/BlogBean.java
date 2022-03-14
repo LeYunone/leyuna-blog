@@ -23,7 +23,7 @@ public class BlogBean extends QueryPage {
     /**
      * 类型 S
      */
-    private String  type;
+    private String type;
     /**
      * 标签 S 数组形式
      */
@@ -32,6 +32,11 @@ public class BlogBean extends QueryPage {
     private String title;
 
     private String remarks;
+
+    /**
+     * 博客类型  1 博客  2 公告
+     */
+    private Integer blogType;
 
     /**
      * 标签  逗号分隔形式

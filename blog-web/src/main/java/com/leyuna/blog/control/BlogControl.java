@@ -31,7 +31,7 @@ public class BlogControl{
      */
     @PostMapping("/addBlog")
     public DataResponse addBlog(@RequestBody BlogBean blogBean){
-        userService.checkLock();
+//        userService.checkLock();
         return blogService.addBlog(blogBean);
     }
 

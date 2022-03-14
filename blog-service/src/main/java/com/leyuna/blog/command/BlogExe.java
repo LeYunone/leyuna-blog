@@ -1,12 +1,13 @@
 package com.leyuna.blog.command;
 
+import com.alibaba.nacos.api.utils.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.domainservice.BlogDomainService;
-import com.leyuna.blog.error.SystemErrorEnum;
+import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -68,25 +69,21 @@ public class BlogExe {
         return DataResponse.of(blogPage);
     }
 
-    public boolean updateBlog(BlogBean blogDTO){
-        BlogE blog = BlogE.of(blogDTO);
-        return blog.update();
+    public void updateBlog(BlogBean blogDTO){
+        AssertUtil.isFalse(StringUtils.isBlank(blogDTO.getId()),"操作失败：id can't empty");
+        boolean update = BlogE.of(blogDTO).update();
+        AssertUtil.isTrue(update, SystemErrorEnum.UPDATE_BLOG_FAIL.getMsg());
     }
 
     /**
      * 得到指定博客
      * @param id 博客id
-     * @param count 本次添加点击
      * @return
      */
-    public DataResponse getBlog(String id, Integer count){
+    public DataResponse<BlogCO> getBlog(String id){
         //找到博客
         BlogCO blogCO = BlogE.queryInstance().setId(id).selectById();
         AssertUtil.isFalse( null == blogCO, SystemErrorEnum.SELECT_NOT_FAIL.getMsg());
-        //添加点击量
-        if(0!=count){
-            BlogE.queryInstance().setId(id).setClickCount(blogCO.getClickCount()+count);
-        }
         return DataResponse.of(blogCO);
     }
 }

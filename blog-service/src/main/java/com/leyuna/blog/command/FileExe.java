@@ -2,9 +2,9 @@ package com.leyuna.blog.command;
 
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.TouristHeadCO;
-import com.leyuna.blog.constant.ServerCode;
+import com.leyuna.blog.constant.code.ServerCode;
 import com.leyuna.blog.domain.TouristHeadE;
-import com.leyuna.blog.error.SystemErrorEnum;
+import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.util.AssertUtil;
 import com.leyuna.blog.util.CollectionUtil;
 import com.leyuna.blog.util.UpLoadUtil;

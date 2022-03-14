@@ -4,7 +4,7 @@ import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.co.blog.LuceneCO;
 import com.leyuna.blog.domain.BlogE;
-import com.leyuna.blog.error.SystemErrorEnum;
+import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.lucene.SpiltCharAnalyzer;
 import com.leyuna.blog.util.AssertUtil;
 import com.leyuna.blog.util.TransformationUtil;

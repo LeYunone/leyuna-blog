@@ -7,7 +7,7 @@ import com.leyuna.blog.bean.blog.UserBean;
 import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.command.TokenExe;
 import com.leyuna.blog.command.UserExe;
-import com.leyuna.blog.error.UserErrorEnum;
+import com.leyuna.blog.constant.enums.UserErrorEnum;
 import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

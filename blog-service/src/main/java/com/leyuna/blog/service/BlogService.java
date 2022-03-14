@@ -7,8 +7,7 @@ import com.leyuna.blog.command.BlogExe;
 import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.command.LuceneExe;
 import com.leyuna.blog.command.NoticeExe;
-import com.leyuna.blog.error.SystemErrorEnum;
-import com.leyuna.blog.util.AssertUtil;
+import com.leyuna.blog.constant.enums.BlogTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +49,14 @@ public class BlogService {
      */
     @Transactional
     public DataResponse addBlog (BlogBean blogDTO) {
+        Integer blogType = blogDTO.getBlogType();
+
+        BlogTypeEnum.BLOG_TYPE.getValue();
+        switch (blogType){
+            case BlogTypeEnum.BLOG_TYPE:
+            default:
+                break;
+        }
         //添加博客
         blogExe.addBlog(blogDTO);
 
@@ -58,10 +65,10 @@ public class BlogService {
         list.add(blogDTO);
         luceneExe.addBlogDir(list);
         //更新博客\标签\分类\分类缓存
-        clearCacheExe.clearBlogQueryCache();
-        clearCacheExe.clearTagQueryCache();
-        clearCacheExe.clearTypeQueryCache();
-        clearCacheExe.clearTypeNavQueryCache();
+//        clearCacheExe.clearBlogQueryCache();
+//        clearCacheExe.clearTagQueryCache();
+//        clearCacheExe.clearTypeQueryCache();
+//        clearCacheExe.clearTypeNavQueryCache();
         return DataResponse.buildSuccess();
     }
 
@@ -73,7 +80,7 @@ public class BlogService {
      */
     @Transactional
     public DataResponse openBlogById (String id) {
-        return blogExe.getBlog(id, 1);
+        return blogExe.getBlog(id);
     }
 
     /**
@@ -83,13 +90,13 @@ public class BlogService {
      * @return
      */
     public DataResponse updateBlog (BlogBean blogDTO) {
-        boolean update = blogExe.updateBlog(blogDTO);
-        AssertUtil.isTrue(update, SystemErrorEnum.UPDATE_BLOG_FAIL.getMsg());
+        blogExe.updateBlog(blogDTO);
+        
         //更新索引库中的Key
         luceneExe.updateBlogDocument(blogDTO);
-        //清除这篇文章的缓存
-        clearCacheExe.clearBlogQueryByIdCache(blogDTO.getId());
-        clearCacheExe.clearBlogQueryCache();
+//        //清除这篇文章的缓存
+//        clearCacheExe.clearBlogQueryByIdCache(blogDTO.getId());
+//        clearCacheExe.clearBlogQueryCache();
         return DataResponse.buildSuccess();
     }
 

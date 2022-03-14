@@ -6,7 +6,7 @@ import com.leyuna.blog.bean.blog.TagBean;
 import com.leyuna.blog.co.blog.TagCO;
 import com.leyuna.blog.domain.TagE;
 import com.leyuna.blog.domain.TypeE;
-import com.leyuna.blog.error.SystemErrorEnum;
+import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.util.AssertUtil;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;

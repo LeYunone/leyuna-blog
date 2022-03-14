@@ -7,7 +7,7 @@ import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.co.disk.FileInfoCO;
-import com.leyuna.blog.error.SystemErrorEnum;
+import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.rpc.service.LeyunaDiskRpcService;
 import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
