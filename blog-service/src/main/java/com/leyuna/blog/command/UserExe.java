@@ -1,5 +1,6 @@
 package com.leyuna.blog.command;
 
+import com.leyuna.blog.bean.blog.UserBean;
 import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.domain.UserE;
 import com.leyuna.blog.util.CollectionUtil;
@@ -17,8 +18,8 @@ import java.util.List;
 @Service
 public class UserExe{
 
-    public UserCO selectUserByCon(UserE userDTO) {
-        List<UserCO> users = userDTO.selectByCon();
+    public UserCO selectUserByCon(UserBean userBean) {
+        List<UserCO> users = UserE.of(userBean).selectByCon();
         UserCO first = CollectionUtil.getFirst(users);
         return first;
     }

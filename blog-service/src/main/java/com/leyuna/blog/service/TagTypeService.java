@@ -117,7 +117,6 @@ public class TagTypeService {
 
     /**
      * 修改分类导航名
-     * @param navName
      * @return
      */
     public DataResponse updateTypeNav(TypeNavBean typeNavBean){

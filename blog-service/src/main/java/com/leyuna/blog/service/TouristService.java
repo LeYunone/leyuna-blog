@@ -6,6 +6,9 @@ import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.command.CommentExe;
 import com.leyuna.blog.command.FileExe;
+import com.leyuna.blog.error.SystemErrorEnum;
+import com.leyuna.blog.error.UserErrorEnum;
+import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,10 +39,6 @@ public class TouristService {
 
     /**
      * 取评论
-     * @param index
-     * @param size
-     * @param blogId
-     * @param type  [类型： 最新   最热  混杂型]
      * @return
      */
     public DataResponse getComment(CommentBean commentBean){
@@ -67,15 +66,14 @@ public class TouristService {
      * 点赞
      * @return
      */
-    public boolean addGoods(String commentId,String ip){
+    public DataResponse addGoods(String commentId ,String ip){
         if(cacheExe.hasCacheByKey(ip+":"+commentId)){
-            return false;
+            return DataResponse.buildFailure(UserErrorEnum.GOODS_COMMENT_FAIL.getMsg());
         }else{
             boolean b = commentExe.updateGoods(commentId);
-            if(b){
-                cacheExe.setCacheKey(ip+":"+commentId,"yes",86400);
-            }
-            return b;
+            AssertUtil.isTrue(b, SystemErrorEnum.REQUEST_FAIL.getMsg());
+            cacheExe.setCacheKey(ip+":"+commentId,"yes",86400);
         }
+        return DataResponse.buildSuccess();
     }
 }

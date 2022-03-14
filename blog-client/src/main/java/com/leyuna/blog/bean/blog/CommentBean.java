@@ -12,6 +12,8 @@ import lombok.Setter;
 @Setter
 public class CommentBean extends QueryPage {
 
+    private String id;
+
     //评论内容
     private String content;
     

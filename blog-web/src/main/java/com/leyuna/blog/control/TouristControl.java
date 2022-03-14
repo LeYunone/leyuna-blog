@@ -3,7 +3,6 @@ package com.leyuna.blog.control;
 import com.leyuna.blog.bean.blog.CommentBean;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.command.CacheExe;
-import com.leyuna.blog.error.UserErrorEnum;
 import com.leyuna.blog.service.TouristService;
 import com.leyuna.blog.util.ServerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,10 +69,6 @@ public class TouristControl {
 
     @RequestMapping("/goods")
     public DataResponse goodsByComment(String commentId,HttpServletRequest request){
-        boolean b = touristDomain.addGoods(commentId, ServerUtil.getClientIp(request));
-        if(b) {
-            return DataResponse.buildSuccess();
-        }
-        return DataResponse.buildFailure(UserErrorEnum.GOODS_COMMENT_FAIL.getMsg());
+        return touristDomain.addGoods(commentId, ServerUtil.getClientIp(request));
     }
 }
