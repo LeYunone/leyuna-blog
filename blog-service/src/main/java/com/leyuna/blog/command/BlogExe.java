@@ -14,7 +14,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author pengli
@@ -60,26 +59,6 @@ public class BlogExe {
     }
 
     /**
-     * 添加点击量
-     * @param blogId
-     * @param clickCount
-     * @return
-     */
-    public boolean addBlogClickCount(String blogId,Integer clickCount){
-        boolean save = BlogE.queryInstance().getGateway().updateClickCount(blogId,clickCount);
-        return save;
-    }
-
-    /**
-     * 查询所有博客
-     * @return
-     */
-    public List<BlogCO> queryAllBlog(){
-        List<BlogCO> blogs = BlogE.queryInstance().selectByCon();
-        return blogs;
-    }
-
-    /**
      * 支持模糊查询 分页  获得所有博客
      * @return
      */
@@ -87,17 +66,6 @@ public class BlogExe {
     public DataResponse getAllBlogByPage(BlogBean blogBean){
         Page<BlogCO> blogPage=BlogE.queryInstance().getGateway().queryBlog(blogBean);
         return DataResponse.of(blogPage);
-    }
-
-    /**
-     * 根据id查询博客  确定能查到直接返回结果
-     * @param id
-     * @return
-     */
-    @Cacheable(cacheNames = "getBlogById")
-    public BlogCO getBlogById(String id){
-        BlogCO blog = BlogE.queryInstance().setId(id).selectById();
-        return blog;
     }
 
     public boolean updateBlog(BlogBean blogDTO){

@@ -1,6 +1,5 @@
 package com.leyuna.blog.control;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.constant.ServerCode;
@@ -64,37 +63,6 @@ public class ServerControl{
     @PostMapping("/tourist/upImg")
     public DataResponse touristDoUpImg( MultipartFile file, HttpServletRequest request){
         String remoteAddr = ServerUtil.getClientIp(request);
-
-        if(file==null){
-            //如果文件为空，三种情况，一是使用今天换头像的缓存，二是用以前的照片，三是使用系统默认的照片
-            if(cacheExe.hasCacheByKey(remoteAddr+":head")){
-                return DataResponse.of(cacheExe.getCacheByKey(remoteAddr+":head"));
-            }else{
-                String touristOldHead = touristDomain.getTouristOldHead(remoteAddr);
-                if(StringUtils.isNotEmpty(touristOldHead)){
-                    return DataResponse.of(touristOldHead);
-                }else{
-                    return DataResponse.of(ServerCode.SERVER_HEAD_IMG_DEFAULT);
-                }
-            }
-        }else{
-            String fileName=file.getOriginalFilename();
-            boolean b = UpLoadUtil.imgUpLoadFromClientCustomName(file,null, fileName);
-            if(b){
-                //拼装图片位置
-                String value=ServerCode.SERVER_HEAD_IMG_ADDR+fileName;
-                //添加到数据库中
-                boolean b1 = touristDomain.addOrUpdateHead(value, remoteAddr);
-                if(!b1){
-                    return DataResponse.buildFailure(SystemErrorEnum.UPLOCAD_IMG_FAIL.getMsg());
-                }
-                //加入今天的缓存中
-                cacheExe.setCacheKey(remoteAddr+":head", value,43200);
-                DataResponse<String> of = DataResponse.of(value);
-                of.setMessage(remoteAddr);
-                return of;
-            }
-        }
-        return DataResponse.buildFailure(SystemErrorEnum.UPLOCAD_IMG_FAIL.getMsg());
+        return touristDomain.touristDoUpImg(file,remoteAddr);
     }
 }

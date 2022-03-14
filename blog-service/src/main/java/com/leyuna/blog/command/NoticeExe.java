@@ -18,21 +18,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class NoticeExe {
 
-
-    /**
-     * 分页查询网站更新历史
-     *
-     * @param index
-     * @param size
-     * @return
-     */
-    @Cacheable(cacheNames = "getWebHistory")
-    public Page<WebHistoryCO> getWebHistory (Integer index, Integer size) {
-        Page<WebHistoryCO> webHistoryPage = WebHistoryE.queryInstance().getGateway().
-                selectByConOrderPage(new WebHistoryCO(), index, size, 0);
-        return webHistoryPage;
-    }
-
     public DataResponse<WebHistoryCO> getWebHistoryById (String id) {
         WebHistoryCO webHistoryCO = WebHistoryE.queryInstance().setId(id).selectById();
         return DataResponse.of(webHistoryCO);

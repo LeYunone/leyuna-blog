@@ -38,11 +38,6 @@ public class TypeNavExe {
         }
     }
     
-    public void addTypeNav(TypeNavBean typeNavBean){
-        TypeNavCO save = TypeNavE.queryInstance().setTypeNavName(typeNavBean.getTypeNavName()).save();
-        AssertUtil.isFalse(save==null ,SystemErrorEnum.ADD_TYPENAV_FAIL.getMsg());
-    }
-    
     public void deleteTypeNav(String id){
         TypeNavE.queryInstance().setId(id).setDeleted(1);
     }

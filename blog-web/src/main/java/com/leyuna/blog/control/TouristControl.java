@@ -41,9 +41,6 @@ public class TouristControl {
 
     /**
      * 查询指定博客下的评论  分页
-     * @param index
-     * @param size
-     * @param blogId
      * @return
      */
     @RequestMapping("/comment/blog")
@@ -57,14 +54,7 @@ public class TouristControl {
     @RequestMapping("/requestUpImg")
     public DataResponse requestUpImg(HttpServletRequest request){
         String remoteAddr = ServerUtil.getClientIp(request);
-        boolean b = cacheExe.hasCacheByKey(remoteAddr+":head");
-        if(b){
-            //去找今天这个用户设置的头像
-            String cacheByKey = cacheExe.getCacheByKey(remoteAddr + ":head");
-            return DataResponse.buildFailure(cacheByKey);
-        }else{
-            return DataResponse.buildSuccess();
-        }
+        return touristDomain.requestUpImg(remoteAddr);
     }
 
     @RequestMapping("/goods")

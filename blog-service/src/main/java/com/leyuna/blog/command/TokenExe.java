@@ -18,8 +18,4 @@ public class TokenExe {
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
         return tokenInfo;
     }
-
-    public boolean logoutToken() {
-        return false;
-    }
 }

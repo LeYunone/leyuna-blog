@@ -2,7 +2,6 @@ package com.leyuna.blog.service;
 
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.LuceneCO;
-import com.leyuna.blog.command.BlogExe;
 import com.leyuna.blog.command.LuceneExe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,11 +18,6 @@ public class SearchService {
     @Autowired
     private LuceneExe luceneExe;
 
-    @Autowired
-    private BlogExe blogExe;
-    /**
-     * 创建blog的索引库
-     */
     public DataResponse createBlogSearch(){
         //创建所有blog的索引库
         luceneExe.addBlogDir(null);
