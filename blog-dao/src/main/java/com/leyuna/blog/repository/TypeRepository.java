@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.TypeBean;
 import com.leyuna.blog.co.blog.TypeCO;
-import com.leyuna.blog.entry.Type;
 import com.leyuna.blog.gateway.TypeGateway;
 import com.leyuna.blog.repository.mapper.TypeMapper;
 import com.leyuna.blog.util.TransformationUtil;
@@ -46,7 +45,7 @@ public class TypeRepository extends BaseRepository<TypeMapper,Type, TypeCO> impl
 
     @Override
     public boolean updateLastUseTimeById(String id) {
-        boolean update = this.update(new UpdateWrapper<Type>().lambda().eq(Type::getId, id).set(Type::getLastUserTime, LocalDateTime.now()));
+        boolean update = this.update(new UpdateWrapper<Type>().lambda().eq(Type::getId, id).set(Type::getupdateDt, LocalDateTime.now()));
         return update;
     }
 

@@ -4,11 +4,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.blog.TagBean;
 import com.leyuna.blog.co.blog.TagCO;
+import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.domain.TagE;
 import com.leyuna.blog.domain.TypeE;
-import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.util.AssertUtil;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,13 +27,12 @@ public class TagExe {
      * 获取所有标签  功能属于 分页 模糊
      * @return
      */
-    @Cacheable(cacheNames = "getAllTags")
-    public DataResponse getAllTags(TagBean tagBean){
+    public DataResponse<Page<TagCO>> getAllTags(TagBean tagBean){
         //如果有模糊查询条件则走模糊查询
         Page<TagCO> tagPage = TagE.queryInstance().getGateway().selectLikePage(tagBean);
         List<TagCO> records = tagPage.getRecords();
         records.stream().forEach(tag->{
-            LocalDateTime lastTime=tag.getLastUserTime();
+            LocalDateTime lastTime=tag.getupdateDt();
             //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
             if(LocalDateTime.now().isBefore(lastTime.plusMonths(1))){
                 tag.setUserStatus("hot");

@@ -2,7 +2,6 @@ package com.leyuna.blog.repository.mapper;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.leyuna.blog.entry.Comment;
 
 /**
  * (Comment)Mapper映射

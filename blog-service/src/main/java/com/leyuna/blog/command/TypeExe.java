@@ -58,12 +58,11 @@ public class TypeExe {
      *
      * @return
      */
-    @Cacheable(cacheNames = "getAllTypes")
     public DataResponse<Page<TypeCO>> getAllTypes (TypeBean type) {
         //如果有模糊查询条件则走模糊查询
         Page<TypeCO> typePage = TypeE.queryInstance().getGateway().selectLikePage(type);
         typePage.getRecords().stream().forEach(tag->{
-            LocalDateTime lastTime=tag.getLastUserTime();
+            LocalDateTime lastTime=tag.getupdateDt();
             //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
             if(LocalDateTime.now().isBefore(lastTime.plusMonths(1))){
                 tag.setUserStatus("hot");

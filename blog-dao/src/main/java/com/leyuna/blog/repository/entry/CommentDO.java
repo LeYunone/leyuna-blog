@@ -1,39 +1,31 @@
-package com.leyuna.blog.co.blog;
-
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+package com.leyuna.blog.repository.entry;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * (Comment)出参
+ * (Comment)表实体类
  *
- * @author
- * @since 2021-09-15 14:47:22
+ * @author pengli
+ * @since 2022-03-15 17:04:23
  */
 @Getter
 @Setter
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class CommentCO {
-
-
+@TableName("comment")
+public class CommentDO implements Serializable {
+    private static final long serialVersionUID = -23318074016832273L;
     private String id;
 
     /**
      * 评论内容
      */
     private String content;
-
-    /**
-     * 评论时间
-     */
-    @JsonFormat( pattern = "yyyy-MM-dd")
-    private LocalDateTime createDt;
 
     /**
      * 父评论编号
@@ -76,13 +68,18 @@ public class CommentCO {
     private String respondent;
 
     /**
-     * 子评论
+     * 管理员标识
      */
-    private List<CommentCO> subComment;
+    private String admin;
 
     /**
-     * 判断是否是站主
+     * 创建时间
      */
-    private String admin ;
-}
+    private LocalDateTime createDt;
 
+    /**
+     * 更新时间
+     */
+    private LocalDateTime updateDt;
+
+}

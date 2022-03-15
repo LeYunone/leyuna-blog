@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * (Blog)出参
+ * (BlogDO)出参
  *
  * @author pengli
  * @since 2021-08-13 15:56:59
@@ -33,7 +33,7 @@ public class BlogCO implements Serializable {
      * 发布时间
      */
     @JsonFormat( pattern = "yyyy-MM-dd")
-    private LocalDateTime createTime;
+    private LocalDateTime createDt;
 
     /**
      * 点击量
@@ -56,7 +56,7 @@ public class BlogCO implements Serializable {
     private String tag;
 
     @JsonFormat( pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateTime;
+    private LocalDateTime updateDt;
 
     private String remarks;
 }

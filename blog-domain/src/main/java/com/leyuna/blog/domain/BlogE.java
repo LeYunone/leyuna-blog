@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * (Blog) 工作台
+ * (BlogDO) 工作台
  *
  * @author pengli
  * @since 2021-12-22 16:26:59
@@ -37,7 +37,7 @@ public class BlogE implements Serializable {
     /**
      * 发布时间
      */
-    private LocalDateTime createTime;
+    private LocalDateTime createDt;
     /**
      * 点击量
      */
@@ -61,7 +61,7 @@ public class BlogE implements Serializable {
     /**
      * 更新时间
      */
-    private LocalDateTime updateTime;
+    private LocalDateTime updateDt;
     /**
      * 备注前言
      */

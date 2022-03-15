@@ -37,7 +37,7 @@ public class TypeE implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private LocalDateTime createDt;
     /**
      * 使用次数
      */
@@ -45,7 +45,7 @@ public class TypeE implements Serializable {
     /**
      * 最后使用时间
      */
-    private LocalDateTime lastUserTime;
+    private LocalDateTime updateDt;
     /**
      * 分类导航
      */

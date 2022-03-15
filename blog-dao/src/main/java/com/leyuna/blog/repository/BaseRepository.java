@@ -229,13 +229,13 @@ public abstract class BaseRepository<M extends BaseMapper<DO>, DO,CO> extends Se
         IPage<DO> ipage =null;
         switch (type){
             case 0:
-                ipage=this.baseMapper.selectPage(page, new QueryWrapper<DO>().allEq(stringObjectMap).orderByDesc("create_time"));
+                ipage=this.baseMapper.selectPage(page, new QueryWrapper<DO>().allEq(stringObjectMap).orderByDesc("create_dt"));
                 break;
             case 1:
-                ipage=this.baseMapper.selectPage(page, new QueryWrapper<DO>().allEq(stringObjectMap).orderByAsc("create_time"));
+                ipage=this.baseMapper.selectPage(page, new QueryWrapper<DO>().allEq(stringObjectMap).orderByAsc("create_dt"));
                 break;
             case 2:
-                ipage=this.baseMapper.selectPage(page, new QueryWrapper<DO>().allEq(stringObjectMap).orderByDesc("update_time"));
+                ipage=this.baseMapper.selectPage(page, new QueryWrapper<DO>().allEq(stringObjectMap).orderByDesc("update_dt"));
                 break;
             default:
                 break;

@@ -4,7 +4,6 @@ package com.leyuna.blog.repository;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.leyuna.blog.co.blog.TypeNavCO;
 import com.leyuna.blog.domain.TypeNavE;
-import com.leyuna.blog.entry.TypeNav;
 import com.leyuna.blog.gateway.TypeNavGateway;
 import com.leyuna.blog.repository.mapper.TypeNavMapper;
 import com.leyuna.blog.util.TransformationUtil;

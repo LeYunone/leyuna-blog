@@ -5,9 +5,13 @@ import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.blog.TagBean;
 import com.leyuna.blog.bean.blog.TypeBean;
 import com.leyuna.blog.bean.blog.TypeNavBean;
+import com.leyuna.blog.co.blog.TagCO;
 import com.leyuna.blog.co.blog.TypeCO;
 import com.leyuna.blog.co.blog.TypeNavCO;
-import com.leyuna.blog.command.*;
+import com.leyuna.blog.command.CacheExe;
+import com.leyuna.blog.command.TagExe;
+import com.leyuna.blog.command.TypeExe;
+import com.leyuna.blog.command.TypeNavExe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +45,7 @@ public class TagTypeService {
      * @param
      * @return
      */
-    public DataResponse getALlTags(TagBean tag){
+    public DataResponse<Page<TagCO>> getALlTags(TagBean tag){
         return tagExe.getAllTags(tag);
     }
 

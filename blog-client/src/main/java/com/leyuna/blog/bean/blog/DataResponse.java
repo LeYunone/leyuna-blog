@@ -3,6 +3,8 @@ package com.leyuna.blog.bean.blog;
 import com.leyuna.blog.constant.code.ResponseCode;
 import lombok.*;
 
+import java.io.Serializable;
+
 /**
  * @author pengli
  * @create 2021-08-10 15:05
@@ -13,7 +15,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
-public class DataResponse<T> {
+public class DataResponse<T> implements Serializable {
 
     private T data;
 

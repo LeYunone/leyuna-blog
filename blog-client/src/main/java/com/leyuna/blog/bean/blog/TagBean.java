@@ -20,9 +20,9 @@ public class TagBean extends QueryPage {
 
     private String tagName;
 
-    private LocalDateTime createTime;
+    private LocalDateTime createDt;
 
     private Integer useCount;
 
-    private LocalDateTime lastUserTime;
+    private LocalDateTime updateDt;
 }

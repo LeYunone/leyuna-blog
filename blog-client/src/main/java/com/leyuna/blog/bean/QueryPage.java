@@ -5,6 +5,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 /**
  * @author pengli
  * @create 2021-12-09 16:19
@@ -13,7 +15,7 @@ import lombok.experimental.Accessors;
 @Setter
 @ToString
 @Accessors( chain = true)
-public class QueryPage {
+public class QueryPage implements Serializable {
 
     private Integer index=1;
 

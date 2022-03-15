@@ -31,11 +31,11 @@ public class TagE implements Serializable {
 
     private String tagName;
 
-    private LocalDateTime createTime;
+    private LocalDateTime createDt;
 
     private Integer useCount;
 
-    private LocalDateTime lastUserTime;
+    private LocalDateTime updateDt;
 
     //===========自定义方法区==========
     private TagGateway gateway;

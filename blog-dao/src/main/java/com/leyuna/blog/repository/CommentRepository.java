@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.co.blog.CommentCO;
-import com.leyuna.blog.entry.Comment;
 import com.leyuna.blog.gateway.CommentGateway;
 import com.leyuna.blog.repository.mapper.CommentMapper;
 import com.leyuna.blog.util.TransformationUtil;
@@ -33,7 +32,7 @@ public class CommentRepository extends BaseRepository<CommentMapper, Comment, Co
     public Page<CommentCO> selectNewCommentByBlogId(Integer index, Integer size, String blogId){
         Page<Comment> page=new Page<>(index,size);
         IPage<Comment> page1 = this.page(page, new QueryWrapper<Comment>().lambda().
-                isNull(Comment::getFatherCommentId).eq(Comment::getBlogId, blogId).orderByDesc(Comment::getCreateTime));
+                isNull(Comment::getFatherCommentId).eq(Comment::getBlogId, blogId).orderByDesc(Comment::getcreateDt));
         return TransformationUtil.copyToPage(page1,CommentCO.class);
     }
 
@@ -47,7 +46,7 @@ public class CommentRepository extends BaseRepository<CommentMapper, Comment, Co
     public Page<CommentCO> selectNewAndGoodsCommentByBlogId(Integer index, Integer size, String blogId){
         Page<Comment> page=new Page<>(index,size);
         IPage<Comment> page1 = this.page(page, new QueryWrapper<Comment>().lambda().
-                isNull(Comment::getFatherCommentId).eq(Comment::getBlogId, blogId).orderByDesc(Comment::getGoods,Comment::getCreateTime));
+                isNull(Comment::getFatherCommentId).eq(Comment::getBlogId, blogId).orderByDesc(Comment::getGoods,Comment::getcreateDt));
         return TransformationUtil.copyToPage(page1,CommentCO.class);
     }
 
@@ -58,7 +57,7 @@ public class CommentRepository extends BaseRepository<CommentMapper, Comment, Co
      */
     public List<CommentCO> selectSubComment(String commentId){
         List<Comment> comments = this.baseMapper.selectList(new QueryWrapper<Comment>().lambda()
-                .eq(Comment::getFatherCommentId, commentId).orderByDesc(Comment::getGoods, Comment::getCreateTime));
+                .eq(Comment::getFatherCommentId, commentId).orderByDesc(Comment::getGoods, Comment::getcreateDt));
         return TransformationUtil.copyToLists(comments,CommentCO.class);
     }
 

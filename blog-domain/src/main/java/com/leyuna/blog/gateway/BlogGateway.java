@@ -6,7 +6,7 @@ import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.co.blog.BlogCO;
 
 /**
- * (Blog)dao
+ * (BlogDO)dao
  *
  * @author pengli
  * @since 2021-08-13 15:38:36

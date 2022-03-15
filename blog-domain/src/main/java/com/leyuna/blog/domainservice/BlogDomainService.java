@@ -37,8 +37,8 @@ public class BlogDomainService {
                 List<TagCO> tags = TagE.queryInstance().setTagName(name).selectByCon();
                 //如果查不到则创建这个标签
                 if (CollectionUtils.isEmpty(tags)) {
-                    TagE build = TagE.queryInstance().setTagName(name).setCreateTime(LocalDateTime.now())
-                            .setLastUserTime(LocalDateTime.now()).setUseCount(1);
+                    TagE build = TagE.queryInstance().setTagName(name).setcreateDt(LocalDateTime.now())
+                            .setupdateDt(LocalDateTime.now()).setUseCount(1);
                     addList.add(build);
                 } else {
                     //如果查到了，则说明这个标签使用次数需要添加一

@@ -2,7 +2,7 @@
   "name" : "Blog",
   "preName" : "",
   "comment" : null,
-  "templateGroupName" : "leyuna-disk",
+  "templateGroupName" : "leyuna-blog",
   "fullColumn" : [ {
     "name" : "id",
     "comment" : null,
@@ -12,20 +12,6 @@
     "ext" : { }
   }, {
     "name" : "title",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "createTime",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "clickCount",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -60,14 +46,28 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "updateTime",
+    "name" : "remarks",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "remarks",
+    "name" : "blogType",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "updateDt",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "createDt",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -77,6 +77,6 @@
   "pkColumn" : null,
   "otherColumn" : null,
   "savePackageName" : "",
-  "savePath" : "./blog-domain/src/main/java",
-  "saveModelName" : "blog-domain"
+  "savePath" : "./blog-dao/src/main/java",
+  "saveModelName" : "blog-dao"
 }

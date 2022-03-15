@@ -35,7 +35,7 @@ public class CommentE implements Serializable {
     /**
      * 评论时间
      */
-    private LocalDateTime createTime;
+    private LocalDateTime createDt;
     /**
      * 父评论编号
      */

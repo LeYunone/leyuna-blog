@@ -32,14 +32,14 @@ public class TagCO implements Comparable<TagCO>, Serializable {
      * 创建时间
      */
     @JsonFormat( pattern = "yyyy-MM-dd")
-    private LocalDateTime createTime;
+    private LocalDateTime createDt;
 
     /**
      * 使用次数
      */
     private Integer useCount;
 
-    private LocalDateTime lastUserTime;
+    private LocalDateTime updateDt;
 
     private String userStatus;
 

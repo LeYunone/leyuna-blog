@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.TagBean;
 import com.leyuna.blog.co.blog.TagCO;
-import com.leyuna.blog.entry.Tag;
 import com.leyuna.blog.gateway.TagGateway;
 import com.leyuna.blog.repository.mapper.TagMapper;
 import com.leyuna.blog.util.TransformationUtil;
@@ -55,7 +54,7 @@ public class TagRepository extends BaseRepository<TagMapper,Tag, TagCO> implemen
     public boolean updateLastUseTimeByName(String[] names) {
         boolean is=true;
         for(String name:names){
-            boolean update = this.update(new UpdateWrapper<Tag>().lambda().eq(Tag::getTagName, name).set(Tag::getLastUserTime, LocalDateTime.now()));
+            boolean update = this.update(new UpdateWrapper<Tag>().lambda().eq(Tag::getTagName, name).set(Tag::getupdateDt, LocalDateTime.now()));
             is=update;
             if(!is){
                 break;

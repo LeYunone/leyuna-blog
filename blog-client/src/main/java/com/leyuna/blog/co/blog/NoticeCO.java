@@ -27,5 +27,5 @@ public class NoticeCO implements Serializable {
     private Integer type;
 
     @JsonFormat( pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createTime;
+    private LocalDateTime createDt;
 }
