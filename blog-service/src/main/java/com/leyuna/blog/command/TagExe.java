@@ -32,7 +32,7 @@ public class TagExe {
         Page<TagCO> tagPage = TagE.queryInstance().getGateway().selectLikePage(tagBean);
         List<TagCO> records = tagPage.getRecords();
         records.stream().forEach(tag->{
-            LocalDateTime lastTime=tag.getupdateDt();
+            LocalDateTime lastTime=tag.getUpdateDt();
             //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
             if(LocalDateTime.now().isBefore(lastTime.plusMonths(1))){
                 tag.setUserStatus("hot");

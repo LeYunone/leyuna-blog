@@ -1,7 +1,6 @@
 package com.leyuna.blog.repository;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.TagBean;
@@ -13,7 +12,6 @@ import com.leyuna.blog.util.TransformationUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -38,35 +36,5 @@ public class TagRepository extends BaseRepository<TagMapper, TagDO, TagCO> imple
                 .allEq(stringObjectMap)
                 .like(StringUtils.isNotBlank(tag.getConditionName()),"tag_Name",tag.getConditionName()));
         return TransformationUtil.copyToPage(Page,TagCO.class);
-    }
-
-    @Override
-    public int getTagsCount(){
-        int count = this.count();
-        return count;
-    }
-
-    @Override
-    public int getTagsCountByLikeName(String conditionName) {
-        return this.count(new QueryWrapper<TagDO>().lambda().like(TagDO::getTagName,conditionName));
-    }
-
-    @Override
-    public boolean updateLastUseTimeByName(String[] names) {
-        boolean is=true;
-        for(String name:names){
-            boolean update = this.update(new UpdateWrapper<TagDO>().lambda().eq(TagDO::getTagName, name).set(TagDO::getUpdateDt, LocalDateTime.now()));
-            is=update;
-            if(!is){
-                break;
-            }
-        }
-        return is;
-    }
-
-    @Override
-    public boolean updateUseCountByName(String name,int userCount){
-        boolean update = this.update(new UpdateWrapper<TagDO>().lambda().eq(TagDO::getTagName, name).set(TagDO::getUseCount, userCount));
-        return update;
     }
 }

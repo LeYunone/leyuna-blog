@@ -4,14 +4,13 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.leyuna.blog.co.blog.TagCO;
 import com.leyuna.blog.co.blog.TypeCO;
+import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.domain.TagE;
 import com.leyuna.blog.domain.TypeE;
-import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.util.AssertUtil;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +36,7 @@ public class BlogDomainService {
                 List<TagCO> tags = TagE.queryInstance().setTagName(name).selectByCon();
                 //如果查不到则创建这个标签
                 if (CollectionUtils.isEmpty(tags)) {
-                    TagE build = TagE.queryInstance().setTagName(name).setcreateDt(LocalDateTime.now())
-                            .setupdateDt(LocalDateTime.now()).setUseCount(1);
+                    TagE build = TagE.queryInstance().setTagName(name).setUseCount(1);
                     addList.add(build);
                 } else {
                     //如果查到了，则说明这个标签使用次数需要添加一

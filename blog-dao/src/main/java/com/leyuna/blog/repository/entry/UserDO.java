@@ -1,13 +1,11 @@
 package com.leyuna.blog.repository.entry;
 
-import java.time.LocalDateTime;
-import java.io.Serializable;
-
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * (User)表实体类
@@ -20,6 +18,7 @@ import lombok.Setter;
 @TableName("user")
 public class UserDO implements Serializable {
     private static final long serialVersionUID = 617791215679106594L;
+    @TableId(value = "id",type = IdType.ID_WORKER_STR)
     private String id;
 
     /**
@@ -35,11 +34,13 @@ public class UserDO implements Serializable {
     /**
      * 创建时间
      */
+    @TableField(value = "create_Dt", fill = FieldFill.INSERT)
     private LocalDateTime createDt;
 
     /**
      * 更新时间
      */
+    @TableField(value = "update_Dt", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateDt;
 
 }

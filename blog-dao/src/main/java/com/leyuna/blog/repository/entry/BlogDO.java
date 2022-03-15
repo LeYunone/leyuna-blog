@@ -1,6 +1,6 @@
 package com.leyuna.blog.repository.entry;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +21,7 @@ public class BlogDO implements Serializable {
     /**
      * 博客编号
      */
+    @TableId(value = "id",type = IdType.ID_WORKER_STR)
     private String id;
 
     /**
@@ -61,11 +62,13 @@ public class BlogDO implements Serializable {
     /**
      * 更新时间
      */
+    @TableField(value = "update_Dt", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateDt;
 
     /**
      * 发布时间
      */
+    @TableField(value = "create_Dt", fill = FieldFill.INSERT)
     private LocalDateTime createDt;
 
 }

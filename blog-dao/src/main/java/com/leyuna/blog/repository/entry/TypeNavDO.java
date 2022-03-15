@@ -1,13 +1,11 @@
 package com.leyuna.blog.repository.entry;
 
-import java.time.LocalDateTime;
-import java.io.Serializable;
-
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * (TypeNav)表实体类
@@ -20,6 +18,7 @@ import lombok.Setter;
 @TableName("type_nav")
 public class TypeNavDO implements Serializable {
     private static final long serialVersionUID = -93377623947257249L;
+    @TableId(value = "id",type = IdType.ID_WORKER_STR)
     private String id;
 
     /**
@@ -30,6 +29,7 @@ public class TypeNavDO implements Serializable {
     /**
      * 更新时间
      */
+    @TableField(value = "update_Dt", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateDt;
 
     /**

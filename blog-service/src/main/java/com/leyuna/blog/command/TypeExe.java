@@ -4,10 +4,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.blog.TypeBean;
 import com.leyuna.blog.co.blog.TypeCO;
-import com.leyuna.blog.domain.TypeE;
 import com.leyuna.blog.constant.enums.SystemErrorEnum;
+import com.leyuna.blog.domain.TypeE;
 import com.leyuna.blog.util.AssertUtil;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,7 +61,7 @@ public class TypeExe {
         //如果有模糊查询条件则走模糊查询
         Page<TypeCO> typePage = TypeE.queryInstance().getGateway().selectLikePage(type);
         typePage.getRecords().stream().forEach(tag->{
-            LocalDateTime lastTime=tag.getupdateDt();
+            LocalDateTime lastTime=tag.getUpdateDt();
             //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
             if(LocalDateTime.now().isBefore(lastTime.plusMonths(1))){
                 tag.setUserStatus("hot");

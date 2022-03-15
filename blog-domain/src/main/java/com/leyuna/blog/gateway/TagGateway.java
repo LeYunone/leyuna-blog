@@ -12,12 +12,4 @@ import com.leyuna.blog.co.blog.TagCO;
 public interface TagGateway extends BaseGateway<TagCO> {
 
     Page<TagCO> selectLikePage(TagBean tag);
-
-    int getTagsCount ();
-
-    int getTagsCountByLikeName (String conditionName);
-
-    boolean updateLastUseTimeByName (String[] names);
-
-    boolean updateUseCountByName (String name, int userCount);
 }
