@@ -1,6 +1,6 @@
 .idea/libraries
 .idea/EasyCodeConfig
-
+.idea/
 
 /blog-web/target/
 /blog-start/target/
@@ -9,5 +9,3 @@
 /blog-domain/target/
 /blog-client/target/
 /cloud-server/target/
-
-/.idea/libraries/

@@ -2,6 +2,7 @@ package com.leyuna.blog.repository.mapper;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.leyuna.blog.repository.entry.TypeNavDO;
 
 /**
  * (TypeNav)Mapper映射
@@ -9,6 +10,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author pengli
  * @since 2021-08-23 13:34:40
  */
-public interface TypeNavMapper extends BaseMapper<TypeNav> {
+public interface TypeNavMapper extends BaseMapper<TypeNavDO> {
 }
 

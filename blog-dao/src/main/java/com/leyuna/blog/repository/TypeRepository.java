@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.TypeBean;
 import com.leyuna.blog.co.blog.TypeCO;
 import com.leyuna.blog.gateway.TypeGateway;
+import com.leyuna.blog.repository.entry.TypeDO;
 import com.leyuna.blog.repository.mapper.TypeMapper;
 import com.leyuna.blog.util.TransformationUtil;
 import org.apache.commons.lang.StringUtils;
@@ -21,7 +22,7 @@ import java.util.Map;
  *  user表原子对象
  */
 @Service
-public class TypeRepository extends BaseRepository<TypeMapper,Type, TypeCO> implements TypeGateway {
+public class TypeRepository extends BaseRepository<TypeMapper, TypeDO, TypeCO> implements TypeGateway {
     /**
      * 分页模糊查询
      * @param
@@ -32,7 +33,7 @@ public class TypeRepository extends BaseRepository<TypeMapper,Type, TypeCO> impl
     public Page<TypeCO> selectLikePage(TypeBean type) {
         Page page=new Page(type.getIndex(),type.getSize());
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(type);
-        IPage<Type> Page = this.page(page, new QueryWrapper<Type>()
+        IPage<TypeDO> Page = this.page(page, new QueryWrapper<TypeDO>()
                 .allEq(stringObjectMap)
                 .like(StringUtils.isNotBlank(type.getConditionName()),"type_Name",type.getConditionName()));
         return TransformationUtil.copyToPage(Page,TypeCO.class);
@@ -45,14 +46,14 @@ public class TypeRepository extends BaseRepository<TypeMapper,Type, TypeCO> impl
 
     @Override
     public boolean updateLastUseTimeById(String id) {
-        boolean update = this.update(new UpdateWrapper<Type>().lambda().eq(Type::getId, id).set(Type::getupdateDt, LocalDateTime.now()));
+        boolean update = this.update(new UpdateWrapper<TypeDO>().lambda().eq(TypeDO::getId, id).set(TypeDO::getUpdateDt, LocalDateTime.now()));
         return update;
     }
 
     @Override
     public boolean updateUseCountByName(String id,int userCount){
-        boolean update = this.update(new UpdateWrapper<Type>().lambda().eq(Type::getId,id).
-                set(Type::getUseCount, userCount));
+        boolean update = this.update(new UpdateWrapper<TypeDO>().lambda().eq(TypeDO::getId,id).
+                set(TypeDO::getUseCount, userCount));
         return update;
     }
 }

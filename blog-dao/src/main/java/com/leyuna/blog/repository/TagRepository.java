@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.TagBean;
 import com.leyuna.blog.co.blog.TagCO;
 import com.leyuna.blog.gateway.TagGateway;
+import com.leyuna.blog.repository.entry.TagDO;
 import com.leyuna.blog.repository.mapper.TagMapper;
 import com.leyuna.blog.util.TransformationUtil;
 import org.apache.commons.lang.StringUtils;
@@ -21,7 +22,7 @@ import java.util.Map;
  *  user表原子对象
  */
 @Service
-public class TagRepository extends BaseRepository<TagMapper,Tag, TagCO> implements TagGateway {
+public class TagRepository extends BaseRepository<TagMapper, TagDO, TagCO> implements TagGateway {
 
     /**
      * 分页模糊查询
@@ -33,7 +34,7 @@ public class TagRepository extends BaseRepository<TagMapper,Tag, TagCO> implemen
     public Page<TagCO> selectLikePage(TagBean tag) {
         Page page=new Page(tag.getIndex(),tag.getSize());
         Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(tag);
-        IPage<Tag> Page = this.baseMapper.selectPage(page, new QueryWrapper<Tag>()
+        IPage<TagDO> Page = this.baseMapper.selectPage(page, new QueryWrapper<TagDO>()
                 .allEq(stringObjectMap)
                 .like(StringUtils.isNotBlank(tag.getConditionName()),"tag_Name",tag.getConditionName()));
         return TransformationUtil.copyToPage(Page,TagCO.class);
@@ -47,14 +48,14 @@ public class TagRepository extends BaseRepository<TagMapper,Tag, TagCO> implemen
 
     @Override
     public int getTagsCountByLikeName(String conditionName) {
-        return this.count(new QueryWrapper<Tag>().lambda().like(Tag::getTagName,conditionName));
+        return this.count(new QueryWrapper<TagDO>().lambda().like(TagDO::getTagName,conditionName));
     }
 
     @Override
     public boolean updateLastUseTimeByName(String[] names) {
         boolean is=true;
         for(String name:names){
-            boolean update = this.update(new UpdateWrapper<Tag>().lambda().eq(Tag::getTagName, name).set(Tag::getupdateDt, LocalDateTime.now()));
+            boolean update = this.update(new UpdateWrapper<TagDO>().lambda().eq(TagDO::getTagName, name).set(TagDO::getUpdateDt, LocalDateTime.now()));
             is=update;
             if(!is){
                 break;
@@ -65,7 +66,7 @@ public class TagRepository extends BaseRepository<TagMapper,Tag, TagCO> implemen
 
     @Override
     public boolean updateUseCountByName(String name,int userCount){
-        boolean update = this.update(new UpdateWrapper<Tag>().lambda().eq(Tag::getTagName, name).set(Tag::getUseCount, userCount));
+        boolean update = this.update(new UpdateWrapper<TagDO>().lambda().eq(TagDO::getTagName, name).set(TagDO::getUseCount, userCount));
         return update;
     }
 }

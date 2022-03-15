@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.gateway.BlogGateway;
+import com.leyuna.blog.repository.entry.BlogDO;
 import com.leyuna.blog.repository.mapper.BlogMapper;
 import com.leyuna.blog.util.TransformationUtil;
 import org.apache.commons.lang.StringUtils;
@@ -31,7 +32,7 @@ public class BlogRepository extends BaseRepository<BlogMapper, BlogDO, BlogCO> i
                         .eq(StringUtils.isNotBlank(blog.getType()),BlogDO::getType,blog.getType())
                         .eq(null!=blog.getBlogType(),BlogDO::getBlogType,blog.getBlogType())
 
-                        .orderByDesc(BlogDO::getcreateDt));
+                        .orderByDesc(BlogDO::getCreateDt));
         return TransformationUtil.copyToPage(Page,BlogCO.class);
     }
 
