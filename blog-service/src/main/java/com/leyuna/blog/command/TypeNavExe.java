@@ -19,9 +19,9 @@ import java.util.Map;
 @Service
 public class TypeNavExe {
 
-    public void updateTypeNav(TypeNavBean typeNavBean){
-        boolean update = TypeNavE.of(typeNavBean).update();
-        AssertUtil.isTrue(update, SystemErrorEnum.UPDATE_TYPENAV_FAIL.getMsg());
+    public void saveTypeNav(TypeNavBean typeNavBean){
+        TypeNavCO save = TypeNavE.of(typeNavBean).save();
+        AssertUtil.isFalse(save==null, SystemErrorEnum.UPDATE_TYPENAV_FAIL.getMsg());
     }
     
     public DataResponse getTypeNav(TypeNavBean typeNavBean,boolean ifMap){

@@ -6,6 +6,7 @@ import com.leyuna.blog.constant.code.ServerCode;
 import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.service.TouristService;
 import com.leyuna.blog.service.UserService;
+import com.leyuna.blog.util.AssertUtil;
 import com.leyuna.blog.util.ServerUtil;
 import com.leyuna.blog.util.UpLoadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +35,11 @@ public class ServerControl{
     private TouristService touristDomain;
     @PostMapping("/updownimg")
     public DataResponse upDownImgToServer(MultipartFile file) {
-        userService.checkLock();
         //上传服务器
         String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
         boolean b = UpLoadUtil.imgUpLoadFromClient(file,format);
-        if(b){
-            return DataResponse.of(format+"/"+file.getOriginalFilename());
-        }else{
-            return DataResponse.buildFailure(SystemErrorEnum.UPLOCAD_IMG_FAIL.getMsg());
-        }
+        AssertUtil.isTrue(b,SystemErrorEnum.UPLOCAD_IMG_FAIL.getMsg());
+        return DataResponse.of(format+"/"+file.getOriginalFilename());
     }
     
     @RequestMapping("/clearCache")

@@ -51,8 +51,7 @@ public class TagExe {
         //将名字封装成类
         tags.stream().forEach(tag->{
             TagE tagDTO = TagE.queryInstance().
-                    setTagName(tag).setCreateTime(LocalDateTime.now()).
-                    setLastUserTime(LocalDateTime.now()).setUseCount(0);
+                    setTagName(tag).setUseCount(0);
             listTags.add(tagDTO);
         });
         boolean b = TagE.batchCreate(listTags);

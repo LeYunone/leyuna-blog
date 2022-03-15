@@ -49,8 +49,8 @@ public class Blog implements Serializable {
     /**
      * 点击量
      */
-    @TableField(value = "click_count")
-    private Integer clickCount;
+    @TableField(value = "blog_type")
+    private Integer blogType;
 
     /**
      * 评论数

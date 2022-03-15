@@ -5,16 +5,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.BlogCO;
+import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.domainservice.BlogDomainService;
-import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 /**
  * @author pengli
@@ -48,10 +45,7 @@ public class BlogExe {
             blog.setTag(stringBuilder.toString());
         }
         BlogE blogDTO = BlogE.of(blog);
-        blogDTO.setClickCount(0);
         blogDTO.setCommentCount(0);
-        blogDTO.setCreateTime(LocalDateTime.now());
-        blogDTO.setUpdateTime(LocalDateTime.now());
         BlogCO save = blogDTO.save();
         AssertUtil.isFalse(null == save , SystemErrorEnum.ADD_BLOG_FAIL.getMsg());
 
@@ -60,10 +54,17 @@ public class BlogExe {
     }
 
     /**
+     * 添加公告
+     * @param blog
+     */
+    public void addNotice(BlogBean blog){
+        BlogCO save = BlogE.of(blog).save();
+        AssertUtil.isFalse(null == save,SystemErrorEnum.ADD_BLOG_FAIL.getMsg());
+    }
+    /**
      * 支持模糊查询 分页  获得所有博客
      * @return
      */
-    @Cacheable(value = "getAllBlogByPage")
     public DataResponse getAllBlogByPage(BlogBean blogBean){
         Page<BlogCO> blogPage=BlogE.queryInstance().getGateway().queryBlog(blogBean);
         return DataResponse.of(blogPage);

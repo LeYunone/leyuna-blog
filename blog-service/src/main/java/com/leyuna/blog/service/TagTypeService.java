@@ -60,18 +60,14 @@ public class TagTypeService {
      * @param types
      * @return
      */
-    public DataResponse addTypesOrTags(List<String> tags, List<String> types, String typeNav){
-        String message=null;
-
+    public DataResponse addTagsAndTypes(List<String> tags, List<String> types, String typeNav){
         if(!CollectionUtils.isEmpty(types)){
             //添加分类
             typeExe.addTypes(types,typeNav);
-            clearCacheExe.clearTypeQueryCache();
         }
         //添加标签
         if(!CollectionUtils.isEmpty(tags)){
             tagExe.addTags(tags);
-            clearCacheExe.clearTagQueryCache();
         }
         return DataResponse.buildSuccess();
     }
@@ -83,14 +79,12 @@ public class TagTypeService {
      * @return
      */
     @Transactional
-    public DataResponse deleteTypesOrTags(List<String> tags,List<String> types){
+    public DataResponse deleteTagsAndTypes(List<String> tags,List<String> types){
         if(!CollectionUtils.isEmpty(types)){
             typeExe.deleteTypes(types);
-            clearCacheExe.clearTypeQueryCache();
         }
         if(!CollectionUtils.isEmpty(tags)){
             tagExe.deleteTags(tags);
-            clearCacheExe.clearTagQueryCache();
         }
         return DataResponse.buildSuccess();
     }
@@ -106,22 +100,10 @@ public class TagTypeService {
     public DataResponse updateTypesOrTags(List<TagBean> tags, List<TypeBean> types){
         if(!CollectionUtils.isEmpty(types)){
             typeExe.updateTypes(types);
-            clearCacheExe.clearTypeQueryCache();
         }
         if(!CollectionUtils.isEmpty(tags)){
             tagExe.updateTags(tags);
-            clearCacheExe.clearTagQueryCache();
         }
-        return DataResponse.buildSuccess();
-    }
-
-    /**
-     * 修改分类导航名
-     * @return
-     */
-    public DataResponse updateTypeNav(TypeNavBean typeNavBean){
-        typeNavExe.updateTypeNav(typeNavBean);
-        clearCacheExe.clearTypeNavQueryCache();
         return DataResponse.buildSuccess();
     }
 
@@ -142,9 +124,13 @@ public class TagTypeService {
         return typeNavExe.getTypeNav(typeNavBean,false);
     }
 
-    public DataResponse addTypeNav(TypeNavBean typeNavBean){
-        typeNavExe.updateTypeNav(typeNavBean);
-        clearCacheExe.clearTypeNavQueryCache();
+    /**
+     * 保存分类导航
+     * @param typeNavBean
+     * @return
+     */
+    public DataResponse saveTypeNav(TypeNavBean typeNavBean){
+        typeNavExe.saveTypeNav(typeNavBean);
         return DataResponse.buildSuccess();
     }
 

@@ -24,9 +24,14 @@ public class DiskFileExe {
     @Autowired
     private LeyunaDiskRpcService leyunaDiskRpcService;
 
-    public Page<FileInfoCO> selectFile(FileQueryBean queryBean){
-        DataResponse<Page<FileInfoCO>> responseBean = leyunaDiskRpcService.selectFile(queryBean);
-        return responseBean.getData();
+    public DataResponse<Page<FileInfoCO>> selectFile(FileQueryBean queryBean){
+        UserCO user=(UserCO) StpUtil.getSession().get("user");
+        queryBean.setUserId(user.getId());
+        //查所有文件 0
+        if(queryBean.getFileType()==0){
+            queryBean.setFileType(null);
+        }
+        return leyunaDiskRpcService.selectFile(queryBean);
     }
 
 

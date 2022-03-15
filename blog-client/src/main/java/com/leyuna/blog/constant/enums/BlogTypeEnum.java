@@ -26,4 +26,14 @@ public enum BlogTypeEnum {
     public String getName(){
         return this.name;
     }
+
+    public static BlogTypeEnum loadName(Integer value){
+        BlogTypeEnum[] values = values();
+        for (BlogTypeEnum enums: values){
+            if(enums.getValue().equals(value)){
+                return enums;
+            }
+        }
+        return null;
+    }
 }

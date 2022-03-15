@@ -25,7 +25,7 @@ import java.util.Map;
 public class TagTypeControl{
 
     @Autowired
-    private TagTypeService tagTypeDomain;
+    private TagTypeService tagTypeService;
 
     @Autowired
     private UserService userService;
@@ -36,7 +36,7 @@ public class TagTypeControl{
      */
     @RequestMapping("/tags")
     public DataResponse getTags(TagBean query){
-        return tagTypeDomain.getALlTags(query);
+        return tagTypeService.getALlTags(query);
     }
 
     /**
@@ -46,23 +46,7 @@ public class TagTypeControl{
      */
     @RequestMapping("/types")
     public DataResponse getTypes(TypeBean query){
-        return tagTypeDomain.getALlTypes(query);
-    }
-
-    /**
-     * 取得分类导航和分类的父子集， 提供给前台级联操作
-     * @return
-     */
-    @RequestMapping("/getTypeInNav")
-    public DataResponse getTypeInNav(){
-
-        DataResponse<Page<TypeCO>> aLlTypes = tagTypeDomain.getALlTypes(new TypeBean());
-        Page<TypeCO> data = aLlTypes.getData();
-
-        DataResponse<Map<String, TypeNavCO>> dataMap = tagTypeDomain.getTypeNavMap(new TypeNavBean());
-
-        List<CascaderTypeBean> cascaderTypeResult = getCascaderTypeResult(data.getRecords(), dataMap.getData());
-        return DataResponse.of(cascaderTypeResult);
+        return tagTypeService.getALlTypes(query);
     }
 
     private List<CascaderTypeBean> getCascaderTypeResult(List<TypeCO> types,Map<String, TypeNavCO> typeNavMap){
@@ -111,8 +95,7 @@ public class TagTypeControl{
     public DataResponse addTagsAndTypes(@RequestParam(required = false) List<String> tags,
                                         @RequestParam(required = false) List<String> types,
                                         @RequestParam(required = false)String typeNav){
-        userService.checkLock();
-        return tagTypeDomain.addTypesOrTags(tags, types,typeNav);
+        return tagTypeService.addTagsAndTypes(tags, types,typeNav);
     }
 
     /**
@@ -122,29 +105,18 @@ public class TagTypeControl{
      * @return
      */
     @GetMapping("/deleteTagsAndTypes")
-    public DataResponse deleteTagsAndTypes(@RequestParam(required = false,value = "tags") List<String> tags,
+    public DataResponse deleteTagsAndTypes(@RequestParam(required = false) List<String> tags,
                                            @RequestParam(required = false)List<String> types){
-        userService.checkLock();
-        return tagTypeDomain.deleteTypesOrTags(tags, types);
+        return tagTypeService.deleteTagsAndTypes(tags, types);
     }
 
     /**
-     * 更新标签
+     * 更新标签和分类
      * @return
      */
-    @PostMapping("/updateTag")
-    public DataResponse updateTag(List<TagBean> tag){
-        userService.checkLock();
-        return tagTypeDomain.updateTypesOrTags(tag, null);
-    }
-
-    /**
-     * 更新分类
-     * @return
-     */
-    @PostMapping("/updateType")
-    public DataResponse updateTypes(List<TypeBean> type){
-        return tagTypeDomain.updateTypesOrTags(null, type);
+    @PostMapping("/updateTagAndTypes")
+    public DataResponse updateTag(List<TagBean> tag,List<TypeBean> type){
+        return tagTypeService.updateTypesOrTags(tag, type);
     }
 
     /**
@@ -153,7 +125,7 @@ public class TagTypeControl{
      */
     @GetMapping("/getTypeNav")
     public DataResponse getTypeNav(TypeNavBean typeNavBean){
-        return tagTypeDomain.getTypeNavList(typeNavBean);
+        return tagTypeService.getTypeNavList(typeNavBean);
     }
     /**
      * 获得树形分类
@@ -162,13 +134,29 @@ public class TagTypeControl{
     @GetMapping("/treeType")
     public DataResponse getTreeType(){
 
-        DataResponse<Page<TypeCO>> aLlTypes = tagTypeDomain.getALlTypes(new TypeBean());
+        DataResponse<Page<TypeCO>> aLlTypes = tagTypeService.getALlTypes(new TypeBean());
         Page<TypeCO> data = aLlTypes.getData();
 
-        DataResponse<Map<String, TypeNavCO>> dataMap = tagTypeDomain.getTypeNavMap(new TypeNavBean());
+        DataResponse<Map<String, TypeNavCO>> dataMap = tagTypeService.getTypeNavMap(new TypeNavBean());
 
         List<TreeTypeBean> result = getTreeResult(dataMap.getData(),data.getRecords());
         return DataResponse.of(result);
+    }
+
+    /**
+     * 取得分类导航和分类的父子集， 提供给前台级联操作
+     * @return
+     */
+    @RequestMapping("/getTypeInNav")
+    public DataResponse getTypeInNav(){
+
+        DataResponse<Page<TypeCO>> aLlTypes = tagTypeService.getALlTypes(new TypeBean());
+        Page<TypeCO> data = aLlTypes.getData();
+
+        DataResponse<Map<String, TypeNavCO>> dataMap = tagTypeService.getTypeNavMap(new TypeNavBean());
+
+        List<CascaderTypeBean> cascaderTypeResult = getCascaderTypeResult(data.getRecords(), dataMap.getData());
+        return DataResponse.of(cascaderTypeResult);
     }
 
     /**
@@ -216,26 +204,13 @@ public class TagTypeControl{
         return result;
     }
 
-    @PostMapping("/addTypeNav")
+    @PostMapping("/saveTypeNav")
     public DataResponse addTypeNav(@RequestBody TypeNavBean typeNavBean){
-        userService.checkLock();
-        return tagTypeDomain.addTypeNav(typeNavBean);
-    }
-
-    /**
-     * 修改分类导航名
-     * @param typeNavName
-     * @return
-     */
-    @PostMapping("/updateTypeNav")
-    public DataResponse editTypeNav(@RequestBody TypeNavBean typeNavBean){
-        userService.checkLock();
-        return tagTypeDomain.updateTypeNav(typeNavBean);
+        return tagTypeService.saveTypeNav(typeNavBean);
     }
 
     @PostMapping("/deleteTypeNav")
     public DataResponse deleteTypeNav(String typeNavId){
-        userService.checkLock();
-        return tagTypeDomain.deleteTypeNav(typeNavId);
+        return tagTypeService.deleteTypeNav(typeNavId);
     }
 }

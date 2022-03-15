@@ -2,7 +2,8 @@ package com.leyuna.blog.control;
 
 import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.bean.blog.NoticeBean;
+import com.leyuna.blog.co.blog.BlogCO;
+import com.leyuna.blog.co.blog.LuceneCO;
 import com.leyuna.blog.service.BlogService;
 import com.leyuna.blog.service.SearchService;
 import com.leyuna.blog.service.UserService;
@@ -31,7 +32,6 @@ public class BlogControl{
      */
     @PostMapping("/addBlog")
     public DataResponse addBlog(@RequestBody BlogBean blogBean){
-//        userService.checkLock();
         return blogService.addBlog(blogBean);
     }
 
@@ -40,52 +40,27 @@ public class BlogControl{
      * @return
      */
     @GetMapping("/blogs")
-    public DataResponse getAllBlogs(BlogBean blogBean){
+    public DataResponse blogs(BlogBean blogBean){
         return blogService.getBlogsByPage(blogBean);
     }
 
     @GetMapping("/blog/{id}")
-    public DataResponse getBlogById(@PathVariable(value = "id")String blogId){
-        return blogService.openBlogById(blogId);
+    public DataResponse<BlogCO> getBlogById(@PathVariable(value = "id")String blogId){
+        return blogService.getBlogById(blogId);
     }
 
     @PostMapping("/edit")
     public DataResponse editBlog(@RequestBody BlogBean blogBean){
-        userService.checkLock();
         return blogService.updateBlog(blogBean);
     }
 
     /**
-     * 查询网站更新历史之类的
-     * @param index
-     * @param size
-     * @return
-     */
-    @RequestMapping("/history")
-    public DataResponse getWebHistory(Integer index,Integer size){
-        return blogService.getNoticePage(index, size,null,0);
-    }
-    /**
-     *  发布网站更新历史
-     * @return
-     */
-    @PostMapping("/addWebNotice")
-    public DataResponse addWebNotice(@RequestBody NoticeBean noticeBean){
-        userService.checkLock();
-        return blogService.addNotice(noticeBean);
-    }
-
-    /**
      * 站内搜索博客
-     * @param key
-     * @param index
-     * @param size
      * @return
      */
     @GetMapping("/search")
-    public DataResponse blogSearch(String key,Integer index,Integer size){
-        //查关键词
-        return searchService.getBlogFromSearch(key, index, size);
+    public DataResponse<LuceneCO> blogSearch(BlogBean blogBean){
+        return searchService.getBlogFromSearch(blogBean);
     }
 
     /**
@@ -94,38 +69,20 @@ public class BlogControl{
      */
     @PostMapping("/createDocument")
     public DataResponse createAllBlogDocument(){
-        userService.checkLock();
         return searchService.createBlogSearch();
     }
 
     /**
      * 查询站内所有公告
-     * @param index
-     * @param size
-     * @param conditionName
      * @return
      */
     @GetMapping("/notices")
-    public DataResponse getAllNotice(@RequestParam(required = false) Integer index,
-                                    @RequestParam(required = false) Integer size,
-                                    @RequestParam(required = false) String conditionName){
-        return blogService.getNoticePage(index, size, conditionName, 0);
-    }
-
-    /**
-     * 根据类型和id查询公告
-     * @param id
-     * @param type
-     * @return
-     */
-    @GetMapping("/notice/{id}/{type}")
-    public DataResponse getNoticeOne(@PathVariable(value = "id")String id,@PathVariable(value = "type")Integer type){
-        return blogService.getNoticeOne(id, type);
+    public DataResponse getAllNotice(BlogBean blog){
+        return blogService.getBlogsByPage(blog);
     }
 
     @PostMapping("/editNotice")
-    public DataResponse editNotice(@RequestBody NoticeBean noticeBean){
-        userService.checkLock();
-        return blogService.updateNotice(noticeBean);
+    public DataResponse editNotice(@RequestBody BlogBean blog){
+        return blogService.updateBlog(blog);
     }
 }

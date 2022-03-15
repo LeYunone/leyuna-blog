@@ -1,5 +1,6 @@
 package com.leyuna.blog.service;
 
+import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.LuceneCO;
 import com.leyuna.blog.command.LuceneExe;
@@ -26,13 +27,9 @@ public class SearchService {
 
     /**
      * 分页查询站内博客
-     * @param key
-     * @param index
-     * @param size
      * @return
      */
-    public DataResponse getBlogFromSearch(String key, Integer index, Integer size){
-        LuceneCO blogDir = luceneExe.getBlogDir(key, index, size);
-        return DataResponse.of(blogDir);
+    public DataResponse<LuceneCO> getBlogFromSearch(BlogBean blogBean){
+        return luceneExe.getBlogDir(blogBean.getTitle(), blogBean.getIndex(), blogBean.getSize());
     }
 }

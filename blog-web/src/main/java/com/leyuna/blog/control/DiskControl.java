@@ -1,15 +1,14 @@
 package com.leyuna.blog.control;
 
-import cn.dev33.satoken.stp.StpUtil;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.disk.FileQueryBean;
-import com.leyuna.blog.co.blog.UserCO;
-import com.leyuna.blog.co.disk.DiskCO;
 import com.leyuna.blog.co.disk.FileInfoCO;
-import com.leyuna.blog.service.file.DiskDomain;
+import com.leyuna.blog.service.DiskService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +31,7 @@ import java.util.List;
 public class DiskControl {
 
     @Autowired
-    private DiskDomain diskDomain;
+    private DiskService DiskService;
 
     /**
      * 获取当前用户的云盘信息
@@ -41,16 +40,12 @@ public class DiskControl {
     @GetMapping("/getDiskInfo")
     public DataResponse getDiskInfo(Integer fileType){
         //开始组装云盘初始信息源
-        DiskCO fileList = diskDomain.getFileList(fileType);
-        return DataResponse.of(fileList);
+        return DiskService.getFileList(fileType);
     }
 
     @GetMapping("/getDiskFileList")
     public DataResponse getDiskFileList(FileQueryBean queryBean){
-        UserCO user=(UserCO) StpUtil.getSession().get("user");
-        queryBean.setUserId(user.getId());
-        Page<FileInfoCO> fileInfoCOPage = diskDomain.selectFile(queryBean);
-        return DataResponse.of(fileInfoCOPage);
+        return DiskService.selectFile(queryBean);
     }
 
     /**
@@ -59,7 +54,16 @@ public class DiskControl {
      */
     @PostMapping("/uploadFile")
     public DataResponse uploadFile(List<MultipartFile> file, String saveTime){
-        return diskDomain.uploadFile(file,saveTime);
+        return DiskService.uploadFile(file,saveTime);
+    }
+
+    /**
+     * 请求上传文件
+     * @return
+     */
+    @RequestMapping("/requestSaveFile")
+    public DataResponse requestSaveFile(List<MultipartFile> file){
+        return DiskService.requestSaveFile(file);
     }
 
     /**
@@ -69,7 +73,7 @@ public class DiskControl {
      */
     @GetMapping(value = "/downFile")
     public void downFile(String fileId, HttpServletResponse response){
-        FileInfoCO fileInfoCO = diskDomain.downloadFile(fileId);
+        FileInfoCO fileInfoCO = DiskService.downloadFile(fileId);
         byte[] buffer = new byte[1024];
         BufferedInputStream bis = null;
         OutputStream os = null; //输出流
@@ -108,6 +112,6 @@ public class DiskControl {
      */
     @GetMapping(value = "/deleteFile")
     public DataResponse deleteFile(String fileId){
-        return diskDomain.deleteFile(fileId);
+        return DiskService.deleteFile(fileId);
     }
 }

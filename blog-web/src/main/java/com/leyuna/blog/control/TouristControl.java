@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 public class TouristControl {
 
     @Autowired
-    private TouristService touristDomain;
+    private TouristService touristService;
     @Autowired
     private CacheExe cacheExe;
 
@@ -36,7 +36,7 @@ public class TouristControl {
     public DataResponse commpent(@RequestBody CommentBean commentBean, HttpServletRequest request){
         //设置ip
         commentBean.setIp(ServerUtil.getClientIp(request));
-        return touristDomain.comment(commentBean);
+        return touristService.comment(commentBean);
     }
 
     /**
@@ -45,7 +45,7 @@ public class TouristControl {
      */
     @RequestMapping("/comment/blog")
     public DataResponse getComment(CommentBean commentBean){
-        return touristDomain.getComment(commentBean);
+        return touristService.getComment(commentBean);
     }
 
     /**
@@ -54,11 +54,11 @@ public class TouristControl {
     @RequestMapping("/requestUpImg")
     public DataResponse requestUpImg(HttpServletRequest request){
         String remoteAddr = ServerUtil.getClientIp(request);
-        return touristDomain.requestUpImg(remoteAddr);
+        return touristService.requestUpImg(remoteAddr);
     }
 
     @RequestMapping("/goods")
     public DataResponse goodsByComment(String commentId,HttpServletRequest request){
-        return touristDomain.addGoods(commentId, ServerUtil.getClientIp(request));
+        return touristService.addGoods(commentId, ServerUtil.getClientIp(request));
     }
 }

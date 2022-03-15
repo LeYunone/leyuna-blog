@@ -1,4 +1,4 @@
-package com.leyuna.blog.service.file;
+package com.leyuna.blog.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
@@ -26,7 +26,7 @@ import java.util.List;
  * @create 2021-12-24 11:03
  */
 @Service
-public class DiskDomain {
+public class DiskService {
 
     @Autowired
     private DiskFileExe fileExe;
@@ -34,11 +34,7 @@ public class DiskDomain {
     @Value("${disk.max.memory:1}")
     private Long maxMemory;
 
-    public Page<FileInfoCO> selectFile (FileQueryBean queryBean) {
-        //查所有文件 0
-        if(queryBean.getFileType()==0){
-            queryBean.setFileType(null);
-        }
+    public DataResponse selectFile (FileQueryBean queryBean) {
         return fileExe.selectFile(queryBean);
     }
 
@@ -76,7 +72,7 @@ public class DiskDomain {
         return fileExe.downloadFile(id);
     }
 
-    public DiskCO getFileList (Integer fileType) {
+    public DataResponse getFileList (Integer fileType) {
         return getUserFileInfo(fileType);
     }
 
@@ -96,8 +92,7 @@ public class DiskDomain {
         //上传文件流程
         DataResponse responseBean = fileExe.saveFile(fileBean);
 
-        DiskCO diskCO = getUserFileInfo(0);
-        return DataResponse.of(diskCO);
+        return getUserFileInfo(0);
     }
 
     /**
@@ -105,7 +100,7 @@ public class DiskDomain {
      * @param fileType
      * @return
      */
-    private DiskCO getUserFileInfo(Integer fileType){
+    private DataResponse<DiskCO> getUserFileInfo(Integer fileType){
         DiskCO diskCO = new DiskCO();
         String userId=String.valueOf(StpUtil.getLoginId());
         //用户当前文件列表
@@ -113,7 +108,7 @@ public class DiskDomain {
         if (fileType != 0) {
             build.setFileType(fileType);
         }
-        Page<FileInfoCO> fileInfoCOPage = fileExe.selectFile(build);
+        Page<FileInfoCO> fileInfoCOPage = fileExe.selectFile(build).getData();
         AssertUtil.isFalse(ObjectUtil.isNull(fileInfoCOPage), SystemErrorEnum.REQUEST_FAIL.getMsg());
         //初始化页面时，默认取前十条展示到所有文件
         List<FileInfoCO> fileInfos = fileInfoCOPage.getRecords();
@@ -126,6 +121,6 @@ public class DiskDomain {
         diskCO.setFileList(fileInfos);
         diskCO.setFileTotalSize(String.format("%.2f", total));
         diskCO.setFileCount(fileInfoCOPage.getTotal());
-        return diskCO;
+        return DataResponse.of(diskCO);
     }
 }

@@ -1,6 +1,7 @@
 package com.leyuna.blog.command;
 
 import com.leyuna.blog.bean.blog.BlogBean;
+import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.co.blog.LuceneCO;
 import com.leyuna.blog.domain.BlogE;
@@ -97,7 +98,7 @@ public class LuceneExe {
      * @param index
      * @return
      */
-    public LuceneCO getBlogDir (String key, Integer index, Integer size){
+    public DataResponse<LuceneCO> getBlogDir (String key, Integer index, Integer size){
         List<BlogCO> result = new ArrayList<>();
         LuceneCO luceneDTO = new LuceneCO();
         IndexReader indexReader=null;
@@ -141,7 +142,7 @@ public class LuceneExe {
             }
         }
         luceneDTO.setListData(result);
-        return luceneDTO;
+        return DataResponse.of(luceneDTO);
     }
 
     private ScoreDoc getLastScoreDoc (int pageIndex, int pageSize, Query query, IndexSearcher indexSearcher) throws IOException {
