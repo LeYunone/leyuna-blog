@@ -119,10 +119,9 @@ public class TagTypeControl{
      * 更新标签和分类
      * @return
      */
-    @PostMapping("/updateTagAndTypes")
-    public DataResponse updateTagAndTypes(@RequestParam(required = false)  List<TagBean> tag,
-                                          @RequestParam(required = false)  List<TypeBean> type){
-        return tagTypeService.updateTypesOrTags(tag, type);
+    @GetMapping("/updateTagAndTypes")
+    public DataResponse updateTagAndTypes(String id,String newName,String name){
+        return tagTypeService.updateTypesOrTags(id,newName,name);
     }
 
     /**

@@ -21,10 +21,10 @@ import java.util.List;
 @Service
 public class TypeExe {
 
-    public void addTypes(List<String> typeName, String typeNav){
-        List<TypeE> listTypes=new ArrayList<>();
+    public void addTypes(List<String> typeName, String typeNav) {
+        List<TypeE> listTypes = new ArrayList<>();
         //将名字封装成类
-        typeName.stream().forEach(name->{
+        typeName.stream().forEach(name -> {
             TypeE typeDTOBuilder = TypeE.queryInstance()
                     .setTypeName(name).setUseCount(0).setFatherType(typeNav);
             listTypes.add(typeDTOBuilder);
@@ -39,17 +39,14 @@ public class TypeExe {
      * @param types
      */
     @Transactional
-    public void deleteTypes (List<String> types) {
+    public void deleteTypes(List<String> types) {
         int b = TypeE.queryInstance().getGateway().batchDelete(types);
-        AssertUtil.isTrue(b==types.size(),SystemErrorEnum.DELETE_TYPE_FALE.getMsg());
+        AssertUtil.isTrue(b == types.size(), SystemErrorEnum.DELETE_TYPE_FALE.getMsg());
     }
 
-    public void updateTypes(List<TypeBean> types){
-        boolean is=true;
-        for(TypeBean typeBean:types){
-            is = TypeE.of(typeBean).update();
-        }
-        AssertUtil.isTrue(is,SystemErrorEnum.UPDATE_TYPE_FALE.getMsg());
+    public void updateTypes(TypeBean typeBean) {
+        boolean is = TypeE.of(typeBean).update();
+        AssertUtil.isTrue(is, SystemErrorEnum.UPDATE_TYPE_FALE.getMsg());
     }
 
     /**
@@ -57,15 +54,15 @@ public class TypeExe {
      *
      * @return
      */
-    public DataResponse<Page<TypeCO>> getAllTypes (TypeBean type) {
+    public DataResponse<Page<TypeCO>> getAllTypes(TypeBean type) {
         //如果有模糊查询条件则走模糊查询
         Page<TypeCO> typePage = TypeE.queryInstance().getGateway().selectLikePage(type);
-        typePage.getRecords().stream().forEach(tag->{
-            LocalDateTime lastTime=tag.getUpdateDt();
+        typePage.getRecords().stream().forEach(tag -> {
+            LocalDateTime lastTime = tag.getUpdateDt();
             //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
-            if(LocalDateTime.now().isBefore(lastTime.plusMonths(1))){
+            if (LocalDateTime.now().isBefore(lastTime.plusMonths(1))) {
                 tag.setUserStatus("hot");
-            }else{
+            } else {
                 tag.setUserStatus("cold");
             }
         });

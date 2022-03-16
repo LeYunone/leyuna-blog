@@ -96,17 +96,21 @@ public class TagTypeService {
 
     /**
      * 更新一级分类【分类】  或者二级分类【标签】
-     * @param tags
-     * @param types
      * @return
      */
     @Transactional
-    public DataResponse updateTypesOrTags(List<TagBean> tags, List<TypeBean> types){
-        if(!CollectionUtils.isEmpty(types)){
-            typeExe.updateTypes(types);
+    public DataResponse updateTypesOrTags(String id,String newName,String name){
+        if("type".equals(name)){
+            TypeBean typeBean=new TypeBean();
+            typeBean.setId(id);
+            typeBean.setTypeName(newName);
+            typeExe.updateTypes(typeBean);
         }
-        if(!CollectionUtils.isEmpty(tags)){
-            tagExe.updateTags(tags);
+        if("tag".equals(name)){
+            TagBean tagBean=new TagBean();
+            tagBean.setId(id);
+            tagBean.setTagName(newName);
+            tagExe.updateTags(tagBean);
         }
         return DataResponse.buildSuccess();
     }
