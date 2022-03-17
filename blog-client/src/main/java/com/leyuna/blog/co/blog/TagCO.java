@@ -39,6 +39,7 @@ public class TagCO implements Comparable<TagCO>, Serializable {
      */
     private Integer useCount;
 
+    @JsonFormat( pattern = "yyyy-MM-dd")
     private LocalDateTime updateDt;
 
     private String userStatus;

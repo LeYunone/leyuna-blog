@@ -46,12 +46,13 @@ public class TypeCO implements Serializable {
     /**
      * 最后使用时间
      */
+    @JsonFormat( pattern = "yyyy-MM-dd")
     private LocalDateTime updateDt;
 
     /**
      * 分类导航
      */
-    private String fatherType;
+    private String typeNav;
 
     private String userStatus;
 }

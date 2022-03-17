@@ -29,7 +29,7 @@ public class TagExe {
      */
     public DataResponse<Page<TagCO>> getAllTags(TagBean tagBean) {
         //如果有模糊查询条件则走模糊查询
-        Page<TagCO> tagPage = TagE.queryInstance().getGateway().selectLikePage(tagBean);
+        Page<TagCO> tagPage = TagE.queryInstance().getGateway().selectByCon(tagBean);
         List<TagCO> records = tagPage.getRecords();
         records.stream().forEach(tag -> {
             LocalDateTime lastTime = tag.getUpdateDt();

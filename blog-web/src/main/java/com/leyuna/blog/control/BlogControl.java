@@ -72,17 +72,4 @@ public class BlogControl{
         return searchService.createBlogSearch();
     }
 
-    /**
-     * 查询站内所有公告
-     * @return
-     */
-    @GetMapping("/notices")
-    public DataResponse getAllNotice(BlogBean blog){
-        return blogService.getBlogsByPage(blog);
-    }
-
-    @PostMapping("/editNotice")
-    public DataResponse editNotice(@RequestBody BlogBean blog){
-        return blogService.updateBlog(blog);
-    }
 }

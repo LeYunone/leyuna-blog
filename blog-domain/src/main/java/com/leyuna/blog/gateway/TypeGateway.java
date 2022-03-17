@@ -11,11 +11,5 @@ import com.leyuna.blog.co.blog.TypeCO;
  */
 public interface TypeGateway extends BaseGateway<TypeCO> {
 
-    Page<TypeCO> selectLikePage (TypeBean typeBean);
-
-    int getTagsCount ();
-
-    boolean updateLastUseTimeById (String id);
-
-    boolean updateUseCountByName (String id, int userCount);
+    Page<TypeCO> selectByCon(TypeBean type);
 }

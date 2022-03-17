@@ -23,8 +23,10 @@ import java.util.Map;
 @Service
 public class TypeNavRepository extends BaseRepository<TypeNavMapper, TypeNavDO, TypeNavCO> implements TypeNavGateway {
 
-    public List<TypeNavCO> queryType(TypeNavE typeNavE){
-        Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(typeNavE);
+    @Override
+    public List<TypeNavCO> selectByCon (TypeNavE typeNavE) {
+        TypeNavDO typeNavDO = TransformationUtil.copyToDTO(typeNavE, TypeNavDO.class);
+        Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(typeNavDO);
         List<TypeNavDO> typeNavs = this.baseMapper.selectList(new QueryWrapper<TypeNavDO>()
                 .allEq(stringObjectMap)
                 .like(StringUtils.isNotBlank(typeNavE.getTypeNavName()), "type_nav_name", typeNavE.getTypeNavName()));

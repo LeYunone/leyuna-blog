@@ -75,10 +75,6 @@ public class TypeNavE implements Serializable {
         TypeNavGateway gateway = this.getGateway();
         return gateway.update(this);
     }
-    
-    public List<TypeNavCO> selectNavType(){
-        return this.getGateway().queryType(this);
-    }
 
     public static boolean batchCreate (List<TypeNavE> list) {
         return TypeNavE.queryInstance().getGateway().batchCreate(list);

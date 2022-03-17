@@ -20,7 +20,7 @@ public class FileInfoCO {
 
     private String name;
 
-    private String createDt;
+    private LocalDateTime createDt;
 
     private LocalDateTime updateDt;
 

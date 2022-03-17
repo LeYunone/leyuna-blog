@@ -11,5 +11,5 @@ import com.leyuna.blog.co.blog.TagCO;
  */
 public interface TagGateway extends BaseGateway<TagCO> {
 
-    Page<TagCO> selectLikePage(TagBean tag);
+    Page<TagCO> selectByCon(TagBean tag);
 }

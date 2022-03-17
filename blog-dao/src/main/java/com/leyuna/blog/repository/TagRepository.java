@@ -29,9 +29,11 @@ public class TagRepository extends BaseRepository<TagMapper, TagDO, TagCO> imple
      * @return
      */
     @Override
-    public Page<TagCO> selectLikePage(TagBean tag) {
+    public Page<TagCO> selectByCon(TagBean tag) {
         Page page=new Page(tag.getIndex(),tag.getSize());
-        Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(tag);
+        TagDO tagDO = TransformationUtil.copyToDTO(tag, TagDO.class);
+
+        Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(tagDO);
         IPage<TagDO> Page = this.baseMapper.selectPage(page, new QueryWrapper<TagDO>()
                 .allEq(stringObjectMap)
                 .like(StringUtils.isNotBlank(tag.getConditionName()),"tag_Name",tag.getConditionName()));

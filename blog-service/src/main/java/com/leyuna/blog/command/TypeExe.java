@@ -26,7 +26,7 @@ public class TypeExe {
         //将名字封装成类
         typeName.stream().forEach(name -> {
             TypeE typeDTOBuilder = TypeE.queryInstance()
-                    .setTypeName(name).setUseCount(0).setFatherType(typeNav);
+                    .setTypeName(name).setUseCount(0).setTypeNav(typeNav);
             listTypes.add(typeDTOBuilder);
         });
         boolean b = TypeE.batchCreate(listTypes);
@@ -56,7 +56,7 @@ public class TypeExe {
      */
     public DataResponse<Page<TypeCO>> getAllTypes(TypeBean type) {
         //如果有模糊查询条件则走模糊查询
-        Page<TypeCO> typePage = TypeE.queryInstance().getGateway().selectLikePage(type);
+        Page<TypeCO> typePage = TypeE.queryInstance().getGateway().selectByCon(type);
         typePage.getRecords().stream().forEach(tag -> {
             LocalDateTime lastTime = tag.getUpdateDt();
             //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了

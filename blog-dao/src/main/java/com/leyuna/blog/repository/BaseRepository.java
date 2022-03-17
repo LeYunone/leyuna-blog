@@ -26,7 +26,6 @@ import java.util.Map;
 public abstract class BaseRepository<M extends BaseMapper<DO>, DO,CO> extends ServiceImpl<M, DO> implements BaseGateway<CO> {
     private Class COclass;
     private Class DOclass;
-
     public BaseRepository() {
         Class<?> c = getClass();
         Type t = c.getGenericSuperclass();

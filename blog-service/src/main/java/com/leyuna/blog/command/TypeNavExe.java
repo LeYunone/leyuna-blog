@@ -26,7 +26,7 @@ public class TypeNavExe {
     
     public DataResponse getTypeNav(TypeNavBean typeNavBean,boolean ifMap){
         List<TypeNavCO> typeNavCOS = 
-                TypeNavE.of(typeNavBean).selectNavType();
+                TypeNavE.of(typeNavBean).selectByCon();
         if(ifMap){
             Map<String,TypeNavCO> resultMap=new HashMap<>();
             typeNavCOS.stream().forEach(t->{
@@ -39,6 +39,6 @@ public class TypeNavExe {
     }
     
     public void deleteTypeNav(String id){
-        TypeNavE.queryInstance().setId(id).setDeleted(1);
+        TypeNavE.queryInstance().getGateway().delete(id);
     }
 }

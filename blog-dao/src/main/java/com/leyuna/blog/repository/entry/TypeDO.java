@@ -37,7 +37,7 @@ public class TypeDO implements Serializable {
     /**
      * 分类导航
      */
-    private String fatherType;
+    private String typeNav;
 
     /**
      * 更新时间

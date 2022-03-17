@@ -58,14 +58,14 @@ public class TagTypeControl{
         List<CascaderTypeBean> lists=new ArrayList<>();
         Map<String,CascaderTypeBean> map=new HashMap<>();
         types.stream().forEach(t->{
-            String fatherType = t.getFatherType();
+            String fatherType = t.getTypeNav();
             CascaderTypeBean cascaderTypeBean = map.get(fatherType);
             if(null==cascaderTypeBean){
                 CascaderTypeBean reslutFul=new CascaderTypeBean();
                 //拿导航名
                 TypeNavCO typeNavDTO = typeNavMap.get(fatherType);
                 reslutFul.setLabel(typeNavDTO.getTypeNavName());
-                reslutFul.setValue(t.getFatherType());
+                reslutFul.setValue(t.getTypeNav());
 
                 //创建子集合
                 List<CascaderTypeBean> chiden=new ArrayList<>();
@@ -175,7 +175,7 @@ public class TagTypeControl{
         //结果集
         Map<String,TreeTypeBean> mapTreeType=new HashMap<>();
         types.stream().forEach(t->{
-            String navId=t.getFatherType();
+            String navId=t.getTypeNav();
             TreeTypeBean thisTreeType = mapTreeType.get(navId);
             TypeNavCO typeNavDTO = typeNav.get(navId);
             //如果当前结果集里没有这个分类导航
@@ -210,7 +210,7 @@ public class TagTypeControl{
     }
 
     @PostMapping("/saveTypeNav")
-    public DataResponse addTypeNav(@RequestBody TypeNavBean typeNavBean){
+    public DataResponse saveTypeNav(@RequestBody TypeNavBean typeNavBean){
         return tagTypeService.saveTypeNav(typeNavBean);
     }
 

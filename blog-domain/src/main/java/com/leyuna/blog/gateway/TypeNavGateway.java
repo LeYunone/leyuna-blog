@@ -14,6 +14,6 @@ import java.util.List;
  */
 public interface TypeNavGateway extends BaseGateway<TypeNavCO> {
 
-    List<TypeNavCO> queryType(TypeNavE typeNavE);
+    List<TypeNavCO> selectByCon (TypeNavE typeNavE);
 }
 

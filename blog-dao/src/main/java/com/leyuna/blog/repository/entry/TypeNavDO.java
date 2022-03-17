@@ -35,6 +35,7 @@ public class TypeNavDO implements Serializable {
     /**
      * 创建时间
      */
-    private String createDt;
+    @TableField(value = "create_Dt", fill = FieldFill.INSERT)
+    private LocalDateTime createDt;
 
 }

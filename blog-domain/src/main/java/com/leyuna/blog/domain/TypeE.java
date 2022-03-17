@@ -49,7 +49,7 @@ public class TypeE implements Serializable {
     /**
      * 分类导航
      */
-    private String fatherType;
+    private String typeNav;
 
     //===========自定义方法区==========
     private TypeGateway gateway;
