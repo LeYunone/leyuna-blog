@@ -40,13 +40,14 @@ public class UpLoadUtil {
     }
 
     /**
-     * 自定义名字上传图片
+     * 客户端上传图片工具
      * @param file
      * @return
      */
-    public static void imgUpLoadFromClientCustomName(MultipartFile file,String suf,String name){
+    public static void imgUpLoadFromClient(MultipartFile file,String suf,String name,String sufPath){
         //目的服务器存储文件的位置
         String path= ServerCode.IMG_SAVE_PATH;
+        path=path+sufPath;
         File serverFile=null;
         if(StringUtils.isEmpty(suf)){
             serverFile=new File(path+"/"+name);

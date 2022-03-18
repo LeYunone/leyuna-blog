@@ -38,7 +38,7 @@ public class FileExe {
         String fileName = file.getOriginalFilename();
 
         //上传图片
-        UpLoadUtil.imgUpLoadFromClientCustomName(file, null, fileName);
+        UpLoadUtil.imgUpLoadFromClient(file, null, fileName,"avatar");
 
         //添加到数据库中
         List<TouristHeadCO> touristHeadCOS = TouristHeadE.queryInstance().setIp(remoteAddr).selectByCon();
