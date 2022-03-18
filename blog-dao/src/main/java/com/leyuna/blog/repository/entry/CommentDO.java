@@ -29,7 +29,7 @@ public class CommentDO implements Serializable {
     /**
      * 父评论编号
      */
-    private Integer fatherCommentId;
+    private String fatherCommentId;
 
     /**
      * 头像
@@ -59,7 +59,7 @@ public class CommentDO implements Serializable {
     /**
      * 博客编号
      */
-    private Integer blogId;
+    private String blogId;
 
     /**
      * 被回复人名

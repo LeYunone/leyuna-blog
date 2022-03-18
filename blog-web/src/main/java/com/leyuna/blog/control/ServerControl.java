@@ -32,7 +32,8 @@ public class ServerControl{
     @Autowired
     private CacheExe cacheExe;
     @Autowired
-    private TouristService touristDomain;
+    private TouristService touristService;
+
     @PostMapping("/updownimg")
     public DataResponse upDownImgToServer(MultipartFile file) {
         //上传服务器
@@ -59,6 +60,6 @@ public class ServerControl{
     @PostMapping("/tourist/upImg")
     public DataResponse touristDoUpImg( MultipartFile file, HttpServletRequest request){
         String remoteAddr = ServerUtil.getClientIp(request);
-        return touristDomain.touristDoUpImg(file,remoteAddr);
+        return touristService.touristDoUpImg(file,remoteAddr);
     }
 }

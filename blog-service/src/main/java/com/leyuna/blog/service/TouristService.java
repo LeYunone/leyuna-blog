@@ -69,8 +69,7 @@ public class TouristService {
     }
 
     public DataResponse requestUpImg(String remoteAddr){
-        boolean b = cacheExe.hasCacheByKey(remoteAddr+":head");
-        if(b){
+        if(cacheExe.hasCacheByKey(remoteAddr+":head")){
             //去找今天这个用户设置的头像
             String cacheByKey = cacheExe.getCacheByKey(remoteAddr + ":head");
             return DataResponse.buildFailure(cacheByKey);

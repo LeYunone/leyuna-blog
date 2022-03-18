@@ -2,6 +2,7 @@ package com.leyuna.blog.advice;
 
 import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.constant.enums.UserErrorEnum;
+import com.leyuna.blog.util.AssertUtil;
 import com.leyuna.blog.util.ServerUtil;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -26,26 +27,22 @@ public class LimitIpAdvice {
     private StringRedisTemplate stringRedisTemplate;
 
     @Pointcut("execution(public * com.leyuna.blog.control.TouristControl.commpent(..))")
-    public void before(){
+    public void before () {
     }
 
     /**
      * 限制用户ip评论
      */
     @Before("before()")
-    public void limitIpComment(){
+    public void limitIpComment () {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
-        if(request==null){
-            throw new RuntimeException(SystemErrorEnum.REQUEST_FAIL.getMsg());
-        }
+        AssertUtil.isFalse(null == request, SystemErrorEnum.REQUEST_FAIL.getMsg());
         //获取此次请求用户ip
         String remoteAddr = ServerUtil.getClientIp(request);
-        if(!stringRedisTemplate.hasKey(remoteAddr)){
-            //加入次用户ip限制，最快一分钟评论一次
-            stringRedisTemplate.opsForValue().set(remoteAddr,"1",30*1, TimeUnit.SECONDS);
-        }else{
-            throw new RuntimeException(UserErrorEnum.REQUEST_FREQUENTLY_FAIL.getMsg());
-        }
+        AssertUtil.isFalse(stringRedisTemplate.hasKey(remoteAddr), UserErrorEnum.REQUEST_FREQUENTLY_FAIL.getMsg());
+
+        //加入次用户ip限制，最快10秒评论一次
+        stringRedisTemplate.opsForValue().set(remoteAddr, "1", 10 * 1, TimeUnit.SECONDS);
     }
 }

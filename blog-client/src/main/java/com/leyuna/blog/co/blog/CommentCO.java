@@ -38,7 +38,7 @@ public class CommentCO {
     /**
      * 父评论编号
      */
-    private Integer fatherCommentId;
+    private String fatherCommentId;
 
     /**
      * 头像
@@ -68,7 +68,7 @@ public class CommentCO {
     /**
      * 博客编号
      */
-    private Integer blogId;
+    private String blogId;
 
     /**
      * 被回复人名

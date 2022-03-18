@@ -4,9 +4,6 @@ import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.TouristHeadCO;
 import com.leyuna.blog.constant.code.ServerCode;
 import com.leyuna.blog.domain.TouristHeadE;
-import com.leyuna.blog.constant.enums.SystemErrorEnum;
-import com.leyuna.blog.util.AssertUtil;
-import com.leyuna.blog.util.CollectionUtil;
 import com.leyuna.blog.util.UpLoadUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -22,20 +19,26 @@ import java.util.List;
 @Service
 public class FileExe {
 
+    /**
+     * 获取ip用户对象历史头像
+     * @param ip
+     * @return
+     */
     public DataResponse getTouristHead(String ip) {
         String head = ServerCode.SERVER_HEAD_IMG_DEFAULT;
         List<TouristHeadCO> touristHeads = TouristHeadE.queryInstance().setIp(ip).selectByCon();
-        TouristHeadCO first = CollectionUtil.getFirst(touristHeads);
-        if (null != first) {
-            head = first.getHead();
+        if(!CollectionUtils.isEmpty(touristHeads)){
+            TouristHeadCO touristHeadCO = touristHeads.get(0);
+            head=touristHeadCO.getHead();
         }
         return DataResponse.of(head);
     }
 
     public DataResponse uploadHeadImg(MultipartFile file,String value, String remoteAddr) {
         String fileName = file.getOriginalFilename();
-        boolean b = UpLoadUtil.imgUpLoadFromClientCustomName(file, null, fileName);
-        AssertUtil.isTrue(b, SystemErrorEnum.UPLOCAD_IMG_FAIL.getMsg());
+
+        //上传图片
+        UpLoadUtil.imgUpLoadFromClientCustomName(file, null, fileName);
 
         //添加到数据库中
         List<TouristHeadCO> touristHeadCOS = TouristHeadE.queryInstance().setIp(remoteAddr).selectByCon();

@@ -7,13 +7,12 @@ import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.CommentCO;
 import com.leyuna.blog.co.blog.TouristHeadCO;
 import com.leyuna.blog.constant.code.ServerCode;
+import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.domain.CommentE;
 import com.leyuna.blog.domain.TouristHeadE;
-import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.util.AssertUtil;
-import com.leyuna.blog.util.CollectionUtil;
-import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -35,20 +34,21 @@ public class CommentExe {
         if(StringUtils.isEmpty(comment.getInformation())){
             comment.setInformation("不愿透露位置的某人");
         }
-        CommentE commentDTO = TransformationUtil.copyToDTO(commentBean, CommentE.class);
         if(comment.getInformation().equals("a3201360")){
             //站主通道
             comment.setInformation("365627310@qq.com");
             comment.setCommentHead(ServerCode.SERVER_HEAD_IMG_ADMIN);
             comment.setAdmin("admin");
         }else{
+            //设置头像
             if(StringUtils.isEmpty(comment.getCommentHead())){
                 List<TouristHeadCO> touristHeadCOS = TouristHeadE.queryInstance().setIp(comment.getIp()).selectByCon();
-                TouristHeadCO first = CollectionUtil.getFirst(touristHeadCOS);
-                AssertUtil.isFalse(null == first, SystemErrorEnum.COMMENT_FAIL.getMsg());
-                String touristOldHead = first.getHead();
-                if(StringUtils.isEmpty(touristOldHead)){
-                    commentDTO.setCommentHead(ServerCode.SERVER_HEAD_IMG_DEFAULT);
+                if(CollectionUtils.isEmpty(touristHeadCOS)){
+                    //设置默认 头像
+                    comment.setCommentHead(ServerCode.SERVER_HEAD_IMG_DEFAULT);
+                }else{
+                    TouristHeadCO touristHeadCO = touristHeadCOS.get(0);
+                    comment.setCommentHead(touristHeadCO.getHead());
                 }
             }
         }
@@ -64,12 +64,12 @@ public class CommentExe {
      */
     public DataResponse queryComment(CommentBean commentBean){
         Page<CommentCO> commentPage =null;
-        Integer type=commentBean.getType();
+        Integer type=commentBean.getSortType();
         String blogId=commentBean.getBlogId();
-        if(type==0){
+        if(type==1){
             commentPage=CommentE.queryInstance().getGateway().selectNewCommentByBlogId(commentBean.getIndex(),commentBean.getSize(),blogId);
         }
-        if(type==1){
+        if(type==2){
             commentPage=CommentE.queryInstance().getGateway().selectNewAndGoodsCommentByBlogId(commentBean.getIndex(),commentBean.getSize(),blogId);
         }
         List<CommentCO> commentDTOS = commentPage.getRecords();

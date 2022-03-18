@@ -1,5 +1,7 @@
 package com.leyuna.blog.util;
 
+import com.leyuna.blog.constant.code.ServerCode;
+import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,9 +44,9 @@ public class UpLoadUtil {
      * @param file
      * @return
      */
-    public static boolean imgUpLoadFromClientCustomName(MultipartFile file,String suf,String name){
+    public static void imgUpLoadFromClientCustomName(MultipartFile file,String suf,String name){
         //目的服务器存储文件的位置
-        String path="c:/img/avatar";
+        String path= ServerCode.IMG_SAVE_PATH;
         File serverFile=null;
         if(StringUtils.isEmpty(suf)){
             serverFile=new File(path+"/"+name);
@@ -57,9 +59,8 @@ public class UpLoadUtil {
         }
         try {
             file.transferTo(serverFile);
-            return true;
         } catch (IOException e) {
-            return false;
+            AssertUtil.isFalse(true, SystemErrorEnum.UPLOCAD_IMG_FAIL.getMsg());
         }
     }
 }
