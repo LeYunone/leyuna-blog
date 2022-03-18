@@ -4,6 +4,7 @@ import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.co.blog.LuceneCO;
+import com.leyuna.blog.constant.code.ServerCode;
 import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.lucene.SpiltCharAnalyzer;
@@ -13,6 +14,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.*;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -59,7 +61,7 @@ public class LuceneExe {
             List<Document> documents = new ArrayList<>();
             //创建索引库位置
             Directory directory = FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
-            //IK 分词器
+            //自定义分词器
             Analyzer analyzer = new SpiltCharAnalyzer();
             //创建输出流 write
             IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
@@ -68,7 +70,7 @@ public class LuceneExe {
             for (BlogBean blogDTO : blogs) {
                 Document document = new Document();
                 //记录标题和id即可
-                Field id = new TextField("id", String.valueOf(blogDTO.getId()), Field.Store.YES);
+                Field id = new StringField("id", blogDTO.getId(), Field.Store.YES);
                 Field title = new TextField("title", blogDTO.getTitle(), Field.Store.YES);
                 document.add(id);
                 document.add(title);
@@ -113,7 +115,7 @@ public class LuceneExe {
             Highlighter highlighter = new Highlighter(simpleHTMLFormatter, new QueryScorer(query));
 
             //打开索引库输入流
-            Directory directory = FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
+            Directory directory = FSDirectory.open(FileSystems.getDefault().getPath(ServerCode.DIR_SAVE_PATH));
             indexReader = DirectoryReader.open(directory);
             IndexSearcher indexSearcher = new IndexSearcher(indexReader);
             //上一页的结果
@@ -131,7 +133,7 @@ public class LuceneExe {
                 result.add(BlogCO.builder().id(doc.get("id")).title(highlighter.getBestFragment(tokenStream, title)).build());
             }
         }catch (Exception e){
-
+            AssertUtil.isTrue(SystemErrorEnum.REQUEST_FAIL.getMsg());
         }finally {
             if(indexReader!=null){
                 try {
@@ -162,11 +164,11 @@ public class LuceneExe {
         IndexWriter indexWriter = null;
 
         try {
-            Directory directory = FSDirectory.open(FileSystems.getDefault().getPath("C:/dir/blogDir"));
+            Directory directory = FSDirectory.open(FileSystems.getDefault().getPath(ServerCode.DIR_SAVE_PATH));
             Analyzer analyzer = new SpiltCharAnalyzer();
             IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
             Document document = new Document();//替换的文档
-            Field id = new TextField("id", String.valueOf(blogDTO.getId()), Field.Store.YES);
+            Field id = new StringField("id", blogDTO.getId(), Field.Store.YES);
             Field title = new TextField("title", blogDTO.getTitle(), Field.Store.YES);
             indexWriter = new IndexWriter(directory, indexWriterConfig);
             document.add(title);
@@ -175,7 +177,7 @@ public class LuceneExe {
             indexWriter.updateDocument(term, document);
             indexWriter.commit();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            AssertUtil.isTrue(SystemErrorEnum.REQUEST_FAIL.getMsg());
         } finally {
             if (indexWriter != null) {
                 try {
