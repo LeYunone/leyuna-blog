@@ -3,10 +3,8 @@ package com.leyuna.blog.control;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.constant.code.ServerCode;
-import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.service.TouristService;
 import com.leyuna.blog.service.UserService;
-import com.leyuna.blog.util.AssertUtil;
 import com.leyuna.blog.util.ServerUtil;
 import com.leyuna.blog.util.UpLoadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +36,9 @@ public class ServerControl{
     public DataResponse upDownImgToServer(MultipartFile file) {
         //上传服务器
         String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        boolean b = UpLoadUtil.imgUpLoadFromClient(file,format);
-        AssertUtil.isTrue(b,SystemErrorEnum.UPLOCAD_IMG_FAIL.getMsg());
-        return DataResponse.of(format+"/"+file.getOriginalFilename());
+        String path= ServerCode.IMG_SAVE_PATH+format;
+        UpLoadUtil.uploadFile(path,file);
+        return DataResponse.buildSuccess();
     }
     
     @RequestMapping("/clearCache")

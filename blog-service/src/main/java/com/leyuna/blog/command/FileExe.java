@@ -4,10 +4,8 @@ import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.TouristHeadCO;
 import com.leyuna.blog.constant.code.ServerCode;
 import com.leyuna.blog.domain.TouristHeadE;
-import com.leyuna.blog.util.UpLoadUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,26 +30,5 @@ public class FileExe {
             head=touristHeadCO.getHead();
         }
         return DataResponse.of(head);
-    }
-
-    public DataResponse uploadHeadImg(MultipartFile file,String value, String remoteAddr) {
-        String fileName = file.getOriginalFilename();
-
-        //上传图片
-        UpLoadUtil.imgUpLoadFromClient(file, null, fileName,"avatar");
-
-        //添加到数据库中
-        List<TouristHeadCO> touristHeadCOS = TouristHeadE.queryInstance().setIp(remoteAddr).selectByCon();
-        if (CollectionUtils.isEmpty(touristHeadCOS)) {
-            //新增
-            TouristHeadE.queryInstance().setIp(remoteAddr).setHead(value).save();
-        } else {
-            //更新
-            TouristHeadCO touristHeadCO = touristHeadCOS.get(0);
-            TouristHeadE.queryInstance().setHead(value).setId(touristHeadCO.getId()).update();
-        }
-        DataResponse<String> of = DataResponse.of(value);
-        of.setMessage(remoteAddr);
-        return of;
     }
 }

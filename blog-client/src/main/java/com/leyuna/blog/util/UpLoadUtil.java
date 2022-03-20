@@ -1,6 +1,5 @@
 package com.leyuna.blog.util;
 
-import com.leyuna.blog.constant.code.ServerCode;
 import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,27 +15,18 @@ import java.io.IOException;
  */
 public class UpLoadUtil {
 
-    /**
-     * 服务器上传图片， 目录为日期文件夹
-     * @param file
-     * @param data
-     * @return
-     */
-    public static boolean imgUpLoadFromClient(MultipartFile file,String data){
-        String fileName=file.getOriginalFilename();
+    public static void uploadFile(String path,MultipartFile file){
         //目的服务器存储文件的位置
-        String path="c:/img/";
-        File serverFile=new File(path+data+"/"+fileName);
+        File serverFile=new File(path+"/"+file.getOriginalFilename());
         if(!serverFile.getParentFile().exists()){
             //创建服务器日期文件夹
             serverFile.getParentFile().mkdirs();
         }
         try {
             file.transferTo(serverFile);
-            return true;
         } catch (IOException e) {
-            return false;
-        }
+            AssertUtil.isFalse(true, SystemErrorEnum.UPLOCAD_IMG_FAIL.getMsg());
+        } 
     }
 
     /**
@@ -44,10 +34,8 @@ public class UpLoadUtil {
      * @param file
      * @return
      */
-    public static void imgUpLoadFromClient(MultipartFile file,String suf,String name,String sufPath){
+    public static void imgUpLoadFromClient(MultipartFile file,String path,String suf,String name){
         //目的服务器存储文件的位置
-        String path= ServerCode.IMG_SAVE_PATH;
-        path=path+sufPath;
         File serverFile=null;
         if(StringUtils.isEmpty(suf)){
             serverFile=new File(path+"/"+name);
