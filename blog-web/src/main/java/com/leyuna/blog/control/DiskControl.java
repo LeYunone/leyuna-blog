@@ -74,6 +74,20 @@ public class DiskControl {
     @GetMapping(value = "/downFile")
     public void downFile(String fileId, HttpServletResponse response){
         FileInfoCO fileInfoCO = DiskService.downloadFile(fileId);
+        responseFile(fileInfoCO,response);
+    }
+
+    /**
+     * 删除文件
+     * @param fileId
+     * @return
+     */
+    @GetMapping(value = "/deleteFile")
+    public DataResponse deleteFile(String fileId){
+        return DiskService.deleteFile(fileId);
+    }
+
+    private void responseFile(FileInfoCO fileInfoCO,HttpServletResponse response){
         byte[] buffer = new byte[1024];
         BufferedInputStream bis = null;
         OutputStream os = null; //输出流
@@ -82,7 +96,7 @@ public class DiskControl {
             response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileInfoCO.getName(), "UTF-8"));
             response.setContentType("application/octet-stream");
             response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
-            
+
             os = response.getOutputStream();
             bis = new BufferedInputStream(new ByteArrayInputStream(fileInfoCO.getBase64File()));
             while(bis.read(buffer) != -1){
@@ -103,15 +117,5 @@ public class DiskControl {
                 e.printStackTrace();
             }
         }
-    }
-
-    /**
-     * 删除文件
-     * @param fileId
-     * @return
-     */
-    @GetMapping(value = "/deleteFile")
-    public DataResponse deleteFile(String fileId){
-        return DiskService.deleteFile(fileId);
     }
 }
