@@ -3,9 +3,11 @@ package com.leyuna.blog.command;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.blog.TypeNavBean;
 import com.leyuna.blog.co.blog.TypeNavCO;
-import com.leyuna.blog.domain.TypeNavE;
 import com.leyuna.blog.constant.enums.SystemErrorEnum;
+import com.leyuna.blog.domain.TypeNavE;
 import com.leyuna.blog.util.AssertUtil;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -19,11 +21,13 @@ import java.util.Map;
 @Service
 public class TypeNavExe {
 
+    @CacheEvict(cacheNames = "typeNav")
     public void saveTypeNav(TypeNavBean typeNavBean){
         TypeNavCO save = TypeNavE.of(typeNavBean).save();
         AssertUtil.isFalse(save==null, SystemErrorEnum.UPDATE_TYPENAV_FAIL.getMsg());
     }
-    
+
+    @Cacheable(cacheNames = "typeNav")
     public DataResponse getTypeNav(TypeNavBean typeNavBean,boolean ifMap){
         List<TypeNavCO> typeNavCOS = 
                 TypeNavE.of(typeNavBean).selectByCon();

@@ -10,6 +10,8 @@ import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.domainservice.BlogDomainService;
 import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,7 @@ public class BlogExe {
      * @param
      * @return
      */
+    @CacheEvict(cacheNames = {"blogs","type","tag"})
     public void addBlog(BlogBean blog){
         String[] tags = blog.getTags();
         if(tags.length!=0){
@@ -65,6 +68,7 @@ public class BlogExe {
      * 支持模糊查询 分页  获得所有博客
      * @return
      */
+    @Cacheable(cacheNames = "blogs")
     public DataResponse getAllBlogByPage(BlogBean blogBean){
         Page<BlogCO> blogPage=BlogE.queryInstance().getGateway().queryBlog(blogBean);
         return DataResponse.of(blogPage);
@@ -81,6 +85,7 @@ public class BlogExe {
      * @param id 博客id
      * @return
      */
+    @Cacheable(cacheNames = "blog")
     public DataResponse<BlogCO> getBlog(String id){
         //找到博客
         BlogCO blogCO = BlogE.queryInstance().setId(id).selectById();

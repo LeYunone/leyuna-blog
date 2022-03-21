@@ -11,6 +11,8 @@ import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.domain.CommentE;
 import com.leyuna.blog.domain.TouristHeadE;
 import com.leyuna.blog.util.AssertUtil;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -28,6 +30,7 @@ public class CommentExe {
      * 添加评论
      * @return
      */
+    @CacheEvict(cacheNames = "comment")
     public DataResponse addComment(CommentBean commentBean){
         CommentE comment = CommentE.of(commentBean);
         //初始化基本信息
@@ -62,6 +65,7 @@ public class CommentExe {
      * 分页查询指定博客下的评论
      * @return
      */
+    @Cacheable(cacheNames = "comment")
     public DataResponse queryComment(CommentBean commentBean){
         Page<CommentCO> commentPage =null;
         Integer type=commentBean.getSortType();

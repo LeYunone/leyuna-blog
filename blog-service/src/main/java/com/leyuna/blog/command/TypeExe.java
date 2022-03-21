@@ -7,8 +7,9 @@ import com.leyuna.blog.co.blog.TypeCO;
 import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.domain.TypeE;
 import com.leyuna.blog.util.AssertUtil;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.List;
 @Service
 public class TypeExe {
 
+    @CacheEvict(cacheNames = "type")
     public void addTypes(List<String> typeName, String typeNav) {
         List<TypeE> listTypes = new ArrayList<>();
         //将名字封装成类
@@ -38,12 +40,13 @@ public class TypeExe {
      *
      * @param types
      */
-    @Transactional
+    @CacheEvict(cacheNames = "type")
     public void deleteTypes(List<String> types) {
         int b = TypeE.queryInstance().getGateway().batchDelete(types);
         AssertUtil.isTrue(b == types.size(), SystemErrorEnum.DELETE_TYPE_FALE.getMsg());
     }
 
+    @CacheEvict(cacheNames = "type")
     public void updateTypes(TypeBean typeBean) {
         boolean is = TypeE.of(typeBean).update();
         AssertUtil.isTrue(is, SystemErrorEnum.UPDATE_TYPE_FALE.getMsg());
@@ -54,6 +57,7 @@ public class TypeExe {
      *
      * @return
      */
+    @Cacheable(cacheNames = "type")
     public DataResponse<Page<TypeCO>> getAllTypes(TypeBean type) {
         //如果有模糊查询条件则走模糊查询
         Page<TypeCO> typePage = TypeE.queryInstance().getGateway().selectByCon(type);

@@ -7,8 +7,9 @@ import com.leyuna.blog.co.blog.TagCO;
 import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.domain.TagE;
 import com.leyuna.blog.util.AssertUtil;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class TagExe {
      *
      * @return
      */
+    @Cacheable("tag")
     public DataResponse<Page<TagCO>> getAllTags(TagBean tagBean) {
         //如果有模糊查询条件则走模糊查询
         Page<TagCO> tagPage = TagE.queryInstance().getGateway().selectByCon(tagBean);
@@ -44,6 +46,7 @@ public class TagExe {
         return DataResponse.of(tagPage);
     }
 
+    @CacheEvict(cacheNames = "tag")
     public void addTags(List<String> tags) {
         List<TagE> listTags = new ArrayList<>();
         //将名字封装成类
@@ -61,12 +64,13 @@ public class TagExe {
      *
      * @param tags
      */
-    @Transactional
+    @CacheEvict(cacheNames = "tag")
     public void deleteTags(List<String> tags) {
         int b = TagE.queryInstance().getGateway().batchDelete(tags);
         AssertUtil.isTrue(b == tags.size(), SystemErrorEnum.DELETE_TAG_FALE.getMsg());
     }
 
+    @CacheEvict(cacheNames = "tag")
     public void updateTags(TagBean tagBean) {
         boolean is = TagE.of(tagBean).update();
         AssertUtil.isTrue(is, SystemErrorEnum.UPDATE_TAG_FALE.getMsg());
