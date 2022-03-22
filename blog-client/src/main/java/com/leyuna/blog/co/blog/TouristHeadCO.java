@@ -3,6 +3,8 @@ package com.leyuna.blog.co.blog;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 /**
  * (TouristHead)出参
  *
@@ -15,7 +17,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TouristHeadCO {
+public class TouristHeadCO implements Serializable {
 
 
     private String id;

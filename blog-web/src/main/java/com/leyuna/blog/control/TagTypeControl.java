@@ -5,7 +5,6 @@ import com.leyuna.blog.bean.blog.*;
 import com.leyuna.blog.co.blog.TagCO;
 import com.leyuna.blog.co.blog.TypeCO;
 import com.leyuna.blog.co.blog.TypeNavCO;
-import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.service.TagTypeService;
 import com.leyuna.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +31,6 @@ public class TagTypeControl{
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private CacheExe cacheExe;
     /**
      * 取标签  【二级分类】
      * @param

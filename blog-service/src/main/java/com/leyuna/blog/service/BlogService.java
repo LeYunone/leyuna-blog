@@ -52,9 +52,10 @@ public class BlogService {
         switch (BlogTypeEnum.loadName(blogType)) {
             case BLOG_TYPE:
                 //添加博客
-                blogExe.addBlog(blog);
+                BlogCO blogCO = blogExe.addBlog(blog);
                 //添加改博客的索引库文档
                 List<BlogBean> list = new ArrayList<>();
+                blog.setId(blogCO.getId());
                 list.add(blog);
                 luceneExe.addBlogDir(list);
                 break;

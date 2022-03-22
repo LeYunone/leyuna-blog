@@ -37,7 +37,7 @@ public class BlogExe {
      * @return
      */
     @CacheEvict(cacheNames = {"blogs","type","tag"})
-    public void addBlog(BlogBean blog){
+    public BlogCO addBlog(BlogBean blog){
         String[] tags = blog.getTags();
         if(tags.length!=0){
             StringBuilder stringBuilder=new StringBuilder();
@@ -54,6 +54,8 @@ public class BlogExe {
 
         //后置内容
         blogDomainService.addBlogAfter(blogDTO);
+
+        return save;
     }
 
     /**
@@ -68,7 +70,7 @@ public class BlogExe {
      * 支持模糊查询 分页  获得所有博客
      * @return
      */
-    @Cacheable(cacheNames = "blogs")
+    @Cacheable(cacheNames = "blogs",key ="#blogBean.toString()+'-'+#blogBean.index+'-'+#blogBean.size")
     public DataResponse getAllBlogByPage(BlogBean blogBean){
         Page<BlogCO> blogPage=BlogE.queryInstance().getGateway().queryBlog(blogBean);
         return DataResponse.of(blogPage);

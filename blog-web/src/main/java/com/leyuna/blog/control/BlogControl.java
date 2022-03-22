@@ -71,5 +71,4 @@ public class BlogControl{
     public DataResponse createAllBlogDocument(){
         return searchService.createBlogSearch();
     }
-
 }

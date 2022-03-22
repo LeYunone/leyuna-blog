@@ -4,6 +4,7 @@ package com.leyuna.blog.co.blog;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CommentCO {
+public class CommentCO implements Serializable {
 
 
     private String id;

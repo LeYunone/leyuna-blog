@@ -28,7 +28,7 @@ public class TagExe {
      *
      * @return
      */
-    @Cacheable("tag")
+    @Cacheable(value = "tag",key = "#tagBean.toString()+'-'+tagBean.index+'-'+tagBean.size")
     public DataResponse<Page<TagCO>> getAllTags(TagBean tagBean) {
         //如果有模糊查询条件则走模糊查询
         Page<TagCO> tagPage = TagE.queryInstance().getGateway().selectByCon(tagBean);

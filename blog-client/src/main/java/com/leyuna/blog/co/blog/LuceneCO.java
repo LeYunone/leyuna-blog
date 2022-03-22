@@ -2,6 +2,7 @@ package com.leyuna.blog.co.blog;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LuceneCO {
+public class LuceneCO implements Serializable {
 
     private long totole;
 

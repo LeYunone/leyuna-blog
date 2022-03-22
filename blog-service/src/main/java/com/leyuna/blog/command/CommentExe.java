@@ -40,6 +40,7 @@ public class CommentExe {
         if(comment.getInformation().equals("a3201360")){
             //站主通道
             comment.setInformation("365627310@qq.com");
+            comment.setName("乐云一");
             comment.setCommentHead(ServerCode.SERVER_HEAD_IMG_ADMIN);
             comment.setAdmin("admin");
         }else{
@@ -65,7 +66,7 @@ public class CommentExe {
      * 分页查询指定博客下的评论
      * @return
      */
-    @Cacheable(cacheNames = "comment")
+    @Cacheable(cacheNames = "comment",key = "#commentBean.blogId+'-'+#commentBean.index+'-'+#commentBean.size")
     public DataResponse queryComment(CommentBean commentBean){
         Page<CommentCO> commentPage =null;
         Integer type=commentBean.getSortType();

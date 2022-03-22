@@ -2,7 +2,6 @@ package com.leyuna.blog.control;
 
 import com.leyuna.blog.bean.blog.CommentBean;
 import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.service.TouristService;
 import com.leyuna.blog.util.ServerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,6 @@ public class TouristControl {
 
     @Autowired
     private TouristService touristService;
-    @Autowired
-    private CacheExe cacheExe;
 
     /**
      * 用户评论

@@ -39,7 +39,6 @@ public class DiskControl {
      */
     @GetMapping("/getDiskInfo")
     public DataResponse getDiskInfo(FileQueryBean queryBean){
-        //开始组装云盘初始信息源
         return DiskService.selectFile(queryBean);
     }
 

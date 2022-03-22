@@ -3,6 +3,7 @@ package com.leyuna.blog.bean.blog;
 import com.leyuna.blog.bean.QueryPage;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
+@ToString
 public class CommentBean extends QueryPage {
 
     /**

@@ -57,7 +57,7 @@ public class TypeExe {
      *
      * @return
      */
-    @Cacheable(cacheNames = "type")
+    @Cacheable(cacheNames = "type",key = "#type.toString()+'-'+#type.index+'-'+#type.size")
     public DataResponse<Page<TypeCO>> getAllTypes(TypeBean type) {
         //如果有模糊查询条件则走模糊查询
         Page<TypeCO> typePage = TypeE.queryInstance().getGateway().selectByCon(type);

@@ -14,12 +14,12 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-@Accessors( chain = true)
+@Accessors(chain = true)
 public class QueryPage implements Serializable {
 
-    private Integer index=1;
+    Integer index = 1;
 
-    private Integer size=10;
+    Integer size = 10;
 
     private String orderCondition;
 
