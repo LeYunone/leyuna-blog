@@ -2,13 +2,11 @@ package com.leyuna.blog.control;
 
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.disk.FileQueryBean;
+import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.co.disk.FileInfoCO;
 import com.leyuna.blog.service.DiskService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -38,13 +36,8 @@ public class DiskControl {
      * @return
      */
     @GetMapping("/getDiskInfo")
-    public DataResponse getDiskInfo(Integer fileType){
+    public DataResponse getDiskInfo(FileQueryBean queryBean){
         //开始组装云盘初始信息源
-        return DiskService.getFileList(fileType);
-    }
-
-    @GetMapping("/getDiskFileList")
-    public DataResponse getDiskFileList(FileQueryBean queryBean){
         return DiskService.selectFile(queryBean);
     }
 
@@ -61,9 +54,9 @@ public class DiskControl {
      * 请求上传文件
      * @return
      */
-    @RequestMapping("/requestSaveFile")
-    public DataResponse requestSaveFile(List<MultipartFile> file){
-        return DiskService.requestSaveFile(file);
+    @PostMapping("/requestSaveFile")
+    public DataResponse requestSaveFile(@RequestBody UpFileBean fileBean){
+        return DiskService.requestSaveFile(fileBean);
     }
 
     /**
