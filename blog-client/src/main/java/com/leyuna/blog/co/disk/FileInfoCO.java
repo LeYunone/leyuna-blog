@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-
 /**
  * @author pengli
  * @create 2021-12-28 14:34
@@ -20,9 +18,9 @@ public class FileInfoCO {
 
     private String name;
 
-    private LocalDateTime createDt;
+    private String createDt;
 
-    private LocalDateTime updateDt;
+    private String updateDt;
 
     private Integer deleted;
 

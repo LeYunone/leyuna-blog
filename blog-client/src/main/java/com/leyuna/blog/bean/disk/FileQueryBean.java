@@ -19,7 +19,7 @@ public class FileQueryBean extends QueryPage {
 
     private String name;
 
-    private Integer type;
+    private Integer type=3;
 
     private String userId;
 

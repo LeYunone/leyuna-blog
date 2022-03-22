@@ -32,8 +32,8 @@ public class DiskService {
         return fileExe.selectFile(queryBean);
     }
 
-    public DataResponse requestSaveFile (UpFileBean fileBean) {
-        return fileExe.requestSaveFile(fileBean);
+    public DataResponse requestSaveFile (List<MultipartFile> file) {
+        return fileExe.requestSaveFile(file);
     }
 
     public DataResponse deleteFile (String id) {

@@ -1,6 +1,7 @@
 package com.leyuna.blog.rpc.command;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.bean.disk.UpFileBean;
@@ -8,11 +9,14 @@ import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.co.disk.FileInfoCO;
 import com.leyuna.blog.co.disk.UserFileInfoCO;
 import com.leyuna.blog.rpc.service.LeyunaDiskRpcService;
+import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -32,7 +36,7 @@ public class DiskFileExe {
         UserCO user=(UserCO) StpUtil.getSession().get("user");
         queryBean.setUserId(user.getId());
         //查所有文件 0
-        if(queryBean.getFileType()==0){
+        if(ObjectUtils.isNotEmpty(queryBean.getFileType()) && queryBean.getFileType()==0){
             queryBean.setFileType(null);
         }
         DataResponse<UserFileInfoCO> userFileInfoCODataResponse = leyunaDiskRpcService.selectFile(queryBean);
@@ -53,19 +57,21 @@ public class DiskFileExe {
         return doubleDataResponse.getData();
     }
 
-    public DataResponse<Integer> requestSaveFile(UpFileBean fileBean){
+    public DataResponse<Integer> requestSaveFile(List<MultipartFile> file){
+
+        AssertUtil.isFalse(CollectionUtils.isEmpty(file),"操作失败：文件接收为空");
         //用户编号
         String userId = (String) StpUtil.getLoginId();
 
-        MultipartFile multipartFile = fileBean.getFiles().get(0);
-        DataResponse<Integer> integerDataResponse = leyunaDiskRpcService.requestSaveFile(userId, multipartFile);
+        DataResponse<Integer> integerDataResponse = leyunaDiskRpcService.requestSaveFile(userId, file.get(0));
         resultValidate(integerDataResponse);
         //0 是服务器内部处理文件    1 是需要在服务器生成文件
         return integerDataResponse;
     }
 
     public DataResponse saveFile(UpFileBean fileBean){
-        String userId = fileBean.getUserId();
+
+        String userId = (String) StpUtil.getLoginId();
         MultipartFile multipartFile = fileBean.getFiles().get(0);
         String saveTime = fileBean.getSaveTime();
         DataResponse responseBean = leyunaDiskRpcService.saveFile(userId, multipartFile, saveTime);

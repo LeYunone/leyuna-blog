@@ -1,10 +1,9 @@
 package com.leyuna.blog.co.disk;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.List;
 
 /**
  * @author pengli
@@ -25,7 +24,7 @@ public class UserFileInfoCO {
     /**
      * 用户文件
      */
-    private List<FileInfoCO> fileinfos;
+    private Page<FileInfoCO> fileinfos;
 
 
 }

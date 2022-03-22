@@ -1,7 +1,6 @@
 package com.leyuna.blog.util;
 
 import com.leyuna.blog.constant.enums.SystemErrorEnum;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -27,29 +26,5 @@ public class UpLoadUtil {
         } catch (IOException e) {
             AssertUtil.isFalse(true, SystemErrorEnum.UPLOCAD_IMG_FAIL.getMsg());
         } 
-    }
-
-    /**
-     * 客户端上传图片工具
-     * @param file
-     * @return
-     */
-    public static void imgUpLoadFromClient(MultipartFile file,String path,String suf,String name){
-        //目的服务器存储文件的位置
-        File serverFile=null;
-        if(StringUtils.isEmpty(suf)){
-            serverFile=new File(path+"/"+name);
-        }else{
-            serverFile=new File(path+"/"+name+suf);
-        }
-        if(!serverFile.getParentFile().exists()){
-            //创建服务器日期文件夹
-            serverFile.getParentFile().mkdirs();
-        }
-        try {
-            file.transferTo(serverFile);
-        } catch (IOException e) {
-            AssertUtil.isFalse(true, SystemErrorEnum.UPLOCAD_IMG_FAIL.getMsg());
-        }
     }
 }
