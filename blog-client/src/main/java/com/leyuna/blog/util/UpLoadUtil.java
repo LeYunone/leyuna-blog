@@ -40,7 +40,11 @@ public class UpLoadUtil {
      */
     public static List<String> getFolderFileStr (String path) {
         List<String> result=new ArrayList<>();
-        File[] files = new File(path).listFiles();
+        File thisFile = new File(path);
+        if(!thisFile.exists()){
+            return result;
+        }
+        File[] files = thisFile.listFiles();
         if(files.length!=0){
             for(File file:files){
                 if(file.isFile()){
@@ -63,8 +67,5 @@ public class UpLoadUtil {
                 orderFolder(f,result);
             }
         }
-    }
-
-    public static void orderFolderOrder(File file){
     }
 }
