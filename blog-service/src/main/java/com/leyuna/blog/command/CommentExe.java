@@ -30,7 +30,7 @@ public class CommentExe {
      * 添加评论
      * @return
      */
-    @CacheEvict(cacheNames = "comment")
+    @CacheEvict(cacheNames = "comment",key = "#commentBean.blogId+'-'+#commentBean.index+'-'+#commentBean.size")
     public DataResponse addComment(CommentBean commentBean){
         CommentE comment = CommentE.of(commentBean);
         //初始化基本信息

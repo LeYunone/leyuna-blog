@@ -22,8 +22,8 @@ import java.util.List;
 @Service
 public class TypeExe {
 
-    @CacheEvict(cacheNames = "type")
-    public void addTypes(List<String> typeName, String typeNav) {
+    @CacheEvict(cacheNames = "type", allEntries = true)
+    public void addTypes (List<String> typeName, String typeNav) {
         List<TypeE> listTypes = new ArrayList<>();
         //将名字封装成类
         typeName.stream().forEach(name -> {
@@ -40,14 +40,14 @@ public class TypeExe {
      *
      * @param types
      */
-    @CacheEvict(cacheNames = "type")
-    public void deleteTypes(List<String> types) {
+    @CacheEvict(cacheNames = "type", allEntries = true)
+    public void deleteTypes (List<String> types) {
         int b = TypeE.queryInstance().getGateway().batchDelete(types);
         AssertUtil.isTrue(b == types.size(), SystemErrorEnum.DELETE_TYPE_FALE.getMsg());
     }
 
-    @CacheEvict(cacheNames = "type")
-    public void updateTypes(TypeBean typeBean) {
+    @CacheEvict(cacheNames = "type", allEntries = true)
+    public void updateTypes (TypeBean typeBean) {
         boolean is = TypeE.of(typeBean).update();
         AssertUtil.isTrue(is, SystemErrorEnum.UPDATE_TYPE_FALE.getMsg());
     }
@@ -57,8 +57,8 @@ public class TypeExe {
      *
      * @return
      */
-    @Cacheable(cacheNames = "type",key = "#type.toString()+'-'+#type.index+'-'+#type.size")
-    public DataResponse<Page<TypeCO>> getAllTypes(TypeBean type) {
+    @Cacheable(cacheNames = "type", key = "#type.toString()+'-'+#type.index+'-'+#type.size")
+    public DataResponse<Page<TypeCO>> getAllTypes (TypeBean type) {
         //如果有模糊查询条件则走模糊查询
         Page<TypeCO> typePage = TypeE.queryInstance().getGateway().selectByCon(type);
         typePage.getRecords().stream().forEach(tag -> {

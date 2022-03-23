@@ -8,6 +8,7 @@ import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.command.LuceneExe;
 import com.leyuna.blog.constant.enums.BlogTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +46,7 @@ public class BlogService {
      * @return
      */
     @Transactional
+    @CacheEvict(cacheNames = {"blogs", "type", "tag"}, allEntries = true)
     public DataResponse addBlog (BlogBean blog) {
         Integer blogType = blog.getBlogType();
 

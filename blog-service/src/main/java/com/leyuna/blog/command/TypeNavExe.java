@@ -27,7 +27,7 @@ public class TypeNavExe {
         AssertUtil.isFalse(save==null, SystemErrorEnum.UPDATE_TYPENAV_FAIL.getMsg());
     }
 
-    @Cacheable(cacheNames = "typeNav")
+    @Cacheable(cacheNames = "typeNav",key = "#typeNavBean.toString()")
     public DataResponse getTypeNav(TypeNavBean typeNavBean,boolean ifMap){
         List<TypeNavCO> typeNavCOS = 
                 TypeNavE.of(typeNavBean).selectByCon();
