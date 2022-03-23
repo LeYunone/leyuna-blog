@@ -71,4 +71,13 @@ public class BlogControl{
     public DataResponse createAllBlogDocument(){
         return searchService.createBlogSearch();
     }
+
+    /**
+     * 获得服务器里的表情包
+     * @return
+     */
+    @GetMapping("/getEmoticon")
+    public DataResponse getEmoticon(){
+        return searchService.getEmoticon();
+    }
 }
