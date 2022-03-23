@@ -38,7 +38,7 @@ public class ServerControl{
         String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String path= ServerCode.IMG_SAVE_PATH+format;
         UpLoadUtil.uploadFile(path,file);
-        return DataResponse.buildSuccess();
+        return DataResponse.of(format+"/"+file.getOriginalFilename());
     }
     
     @RequestMapping("/clearCache")
