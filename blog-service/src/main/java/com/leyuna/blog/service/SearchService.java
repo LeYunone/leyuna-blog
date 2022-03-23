@@ -4,13 +4,10 @@ import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.LuceneCO;
 import com.leyuna.blog.command.LuceneExe;
-import com.leyuna.blog.constant.code.ServerCode;
+import com.leyuna.blog.command.SearchExe;
 import com.leyuna.blog.util.UpLoadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import java.util.List;
 
 /**
  * @author pengli
@@ -23,6 +20,9 @@ public class SearchService {
 
     @Autowired
     private LuceneExe luceneExe;
+    
+    @Autowired
+    private SearchExe searchExe;
 
     public DataResponse createBlogSearch(){
         //创建所有blog的索引库
@@ -43,11 +43,6 @@ public class SearchService {
      * @return
      */
     public DataResponse getEmoticon(){
-        if(CollectionUtils.isEmpty(UpLoadUtil.emoList)){
-            String emoPath = ServerCode.EMO_SAVE_PATH;
-            List<String> folderFileStr = UpLoadUtil.getFolderFileStr(emoPath);
-            UpLoadUtil.emoList = folderFileStr;
-        }
-        return DataResponse.of(UpLoadUtil.emoList);
+        return searchExe.searchEmoImg();
     }
 }
