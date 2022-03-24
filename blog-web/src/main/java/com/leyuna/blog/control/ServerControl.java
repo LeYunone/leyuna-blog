@@ -36,7 +36,7 @@ public class ServerControl{
     public DataResponse upDownImgToServer(MultipartFile file) {
         //上传服务器
         String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        String path= ServerCode.SERVER_IMG_SAVE_PATH+format;
+        String path= ServerCode.IMG_SAVE_PATH+format;
         UpLoadUtil.uploadFile(path,file);
         return DataResponse.of(format+"/"+file.getOriginalFilename());
     }

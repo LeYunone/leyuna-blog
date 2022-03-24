@@ -25,6 +25,7 @@ public class ServerCode {
 
     public static String DIR_SAVE_PATH = "C:/dir/blogDir";
     public static String EMO_SAVE_PATH = "C:/img/emo";
+    public static String IMG_SAVE_PATH = "C:/img";
     //服务器名字
     public static String SERVER_NAME = "LeYuna";
 }

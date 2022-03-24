@@ -35,7 +35,7 @@ public class FileExe {
     }
 
     public DataResponse uploadHeadImg(MultipartFile file, String value, String remoteAddr) {
-        String path=ServerCode.SERVER_IMG_SAVE_PATH+"/avatar/";
+        String path=ServerCode.IMG_SAVE_PATH+"/avatar/";
         //上传图片
         UpLoadUtil.uploadFile(path,file);
 
