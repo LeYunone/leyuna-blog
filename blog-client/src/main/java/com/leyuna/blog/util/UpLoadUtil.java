@@ -5,8 +5,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Stack;
 
 /**
  * @author pengli
@@ -15,8 +13,6 @@ import java.util.Stack;
  * 文件上传工具类
  */
 public class UpLoadUtil {
-
-    public static List<String> emoList = new Stack<>();
 
     public static void uploadFile (String path, MultipartFile file) {
         //目的服务器存储文件的位置

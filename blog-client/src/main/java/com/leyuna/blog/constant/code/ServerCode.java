@@ -17,11 +17,14 @@ public class ServerCode {
     //服务器站主头像地址
     public static String SERVER_HEAD_IMG_ADMIN = "https://www.leyuna.xyz/image/avatar/admin.jpg";
 
-    public static String IMG_SAVE_PATH = "C:/img/";
+    //服务器图片存储地址
+    public static String SERVER_IMG_SAVE_PATH = "https://www.leyuna.xyz/image/";
+
+    //服务器表情包存储地址
+    public static String SERVER_EMO_SAVE_PATH = "https://www.leyuna.xyz/image/emo/";
 
     public static String DIR_SAVE_PATH = "C:/dir/blogDir";
-
     public static String EMO_SAVE_PATH = "C:/img/emo";
-
+    //服务器名字
     public static String SERVER_NAME = "LeYuna";
 }
