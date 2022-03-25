@@ -24,6 +24,7 @@ public class UpLoadUtil {
         try {
             file.transferTo(serverFile);
         } catch (IOException e) {
+            e.printStackTrace();
             AssertUtil.isFalse(true, SystemErrorEnum.UPLOCAD_IMG_FAIL.getMsg());
         }
     }

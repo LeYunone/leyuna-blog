@@ -23,9 +23,9 @@ public class ServerCode {
     //服务器表情包存储地址
     public static String SERVER_EMO_SAVE_PATH = "https://www.leyuna.xyz/image/emo/";
 
-    public static String DIR_SAVE_PATH = "C:/dir/blogDir";
-    public static String EMO_SAVE_PATH = "C:/img/emo";
-    public static String IMG_SAVE_PATH = "C:/img";
+    public static String DIR_SAVE_PATH = "C:/dir/blogDir/";
+    public static String EMO_SAVE_PATH = "C:/img/emo/";
+    public static String IMG_SAVE_PATH = "C:/img/";
     //服务器名字
     public static String SERVER_NAME = "LeYuna";
 }
