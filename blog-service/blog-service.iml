@@ -28,6 +28,7 @@
     <orderEntry type="module" module-name="blog-dao" />
     <orderEntry type="module" module-name="blog-domain" />
     <orderEntry type="module" module-name="blog-client" />
+    <orderEntry type="library" name="Maven: commons-net:commons-net:3.5" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.51" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet:javax.servlet-api:4.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-data-redis:2.3.2.RELEASE" level="project" />

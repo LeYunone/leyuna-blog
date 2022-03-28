@@ -32,6 +32,7 @@
           <element id="archive" name="blog-client-0.0.1-SNAPSHOT.jar">
             <element id="module-output" name="blog-client" />
           </element>
+          <element id="library" level="project" name="Maven: commons-net:commons-net:3.5" />
           <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.51" />
           <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:4.0.1" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-data-redis:2.3.2.RELEASE" />

@@ -9,7 +9,6 @@ import com.leyuna.blog.constant.enums.UserErrorEnum;
 import com.leyuna.blog.rpc.command.DiskFileExe;
 import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,9 +24,6 @@ public class DiskService {
     @Autowired
     private DiskFileExe fileExe;
 
-    @Value("${disk.max.memory:1}")
-    private Long maxMemory;
-
     public DataResponse selectFile (FileQueryBean queryBean) {
         return fileExe.selectFile(queryBean);
     }
@@ -40,11 +36,7 @@ public class DiskService {
         DataResponse responseBean = fileExe.deleteFile(id);
 
         //删除之后获得最新的总内存大小
-        Double totalSize = fileExe.selectAllFileSize();
-        //百分比
-        double total = (totalSize / maxMemory) * 100;
-        responseBean.setData(String.format("%.2f", total));
-        return responseBean;
+        return fileExe.selectAllFileSize();
     }
 
     public FileInfoCO downloadFile (String id) {

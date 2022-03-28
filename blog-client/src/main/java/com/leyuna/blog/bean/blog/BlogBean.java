@@ -3,6 +3,8 @@ package com.leyuna.blog.bean.blog;
 import com.leyuna.blog.bean.QueryPage;
 import lombok.*;
 
+import java.util.List;
+
 /**
  * @author pengli
  * @date 2021-08-10
@@ -34,9 +36,9 @@ public class BlogBean extends QueryPage {
     private String remarks;
 
     /**
-     * 博客类型  1 博客  2 公告
+     * 博客类型  1 博客  2 公告   3 个人   4 评测
      */
-    private Integer blogType;
+    private List<Integer> blogType;
 
     /**
      * 标签  逗号分隔形式

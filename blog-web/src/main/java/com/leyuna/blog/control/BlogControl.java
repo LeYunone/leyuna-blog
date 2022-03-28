@@ -7,8 +7,13 @@ import com.leyuna.blog.co.blog.LuceneCO;
 import com.leyuna.blog.service.BlogService;
 import com.leyuna.blog.service.SearchService;
 import com.leyuna.blog.service.UserService;
+import com.leyuna.blog.util.FtpUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /**
  * @author pengli
@@ -25,6 +30,8 @@ public class BlogControl{
     private UserService userService;
     @Autowired
     private SearchService searchService;
+    @Autowired
+    private FtpUploadUtil ftpUploadUtil;
     /**
      * 发布博客
      * @param blogBean
@@ -33,6 +40,12 @@ public class BlogControl{
     @PostMapping("/addBlog")
     public DataResponse addBlog(@RequestBody BlogBean blogBean){
         return blogService.addBlog(blogBean);
+    }
+
+    @GetMapping("/test")
+    public void test() throws FileNotFoundException {
+        FileInputStream fis=new FileInputStream(new File("C://img/wx.png"));
+        ftpUploadUtil.upload("C://test/",fis,"test.png");
     }
 
     /**

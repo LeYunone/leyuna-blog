@@ -49,12 +49,14 @@ public class DiskFileExe {
     }
 
 
-    public Double selectAllFileSize(){
+    public DataResponse selectAllFileSize(){
         UserCO user=(UserCO)StpUtil.getSession().get("user");
         String userId=user.getId();
         DataResponse<Double> doubleDataResponse = leyunaDiskRpcService.selectAllFileSize(userId);
         resultValidate(doubleDataResponse);
-        return doubleDataResponse.getData();
+        Double data = doubleDataResponse.getData();
+        double total = (data / maxMemory) * 100;
+        return DataResponse.of(total);
     }
 
     public DataResponse<Integer> requestSaveFile(List<MultipartFile> file){

@@ -30,7 +30,7 @@ public class BlogRepository extends BaseRepository<BlogMapper, BlogDO, BlogCO> i
                         .like(StringUtils.isNotBlank(blog.getTitle()),BlogDO::getTitle,blog.getTitle())
                         .like(StringUtils.isNotBlank(blog.getTag()),BlogDO::getTag,blog.getTag())
                         .eq(StringUtils.isNotBlank(blog.getType()),BlogDO::getType,blog.getType())
-                        .eq(null!=blog.getBlogType(),BlogDO::getBlogType,blog.getBlogType())
+                        .in(null!=blog.getBlogType(),BlogDO::getBlogType,blog.getBlogType())
                         .like(StringUtils.isNotBlank(blog.getConditionName()),BlogDO::getTitle,blog.getConditionName())
                         .orderByDesc(BlogDO::getCreateDt));
         return TransformationUtil.copyToPage(Page,BlogCO.class);
