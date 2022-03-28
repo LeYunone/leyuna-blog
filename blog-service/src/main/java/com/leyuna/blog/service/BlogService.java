@@ -48,7 +48,7 @@ public class BlogService {
     @Transactional
     @CacheEvict(cacheNames = {"blogs", "type", "tag"}, allEntries = true)
     public DataResponse addBlog (BlogBean blog) {
-        Integer blogType = blog.getBlogType().get(0);
+        Integer blogType = blog.getBlogType();
 
         BlogTypeEnum.BLOG_TYPE.getValue();
         switch (BlogTypeEnum.loadName(blogType)) {
@@ -85,7 +85,7 @@ public class BlogService {
      * @return
      */
     public DataResponse updateBlog (BlogBean blog) {
-        Integer blogType = blog.getBlogType().get(0);
+        Integer blogType = blog.getBlogType();
         switch (BlogTypeEnum.loadName(blogType)){
             case BLOG_TYPE:
                 blogExe.updateBlog(blog);

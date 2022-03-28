@@ -38,7 +38,12 @@ public class BlogBean extends QueryPage {
     /**
      * 博客类型  1 博客  2 公告   3 个人   4 评测
      */
-    private List<Integer> blogType;
+    private Integer blogType;
+
+    /**
+     * 多个博客类型  用于查询
+     */
+    private List<Integer> blogTypes;
 
     /**
      * 标签  逗号分隔形式

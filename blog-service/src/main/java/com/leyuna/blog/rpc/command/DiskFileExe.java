@@ -2,6 +2,7 @@ package com.leyuna.blog.rpc.command;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.bean.disk.UpFileBean;
@@ -39,13 +40,20 @@ public class DiskFileExe {
         if(ObjectUtils.isNotEmpty(queryBean.getFileType()) && queryBean.getFileType()==0){
             queryBean.setFileType(null);
         }
-        DataResponse<UserFileInfoCO> userFileInfoCODataResponse = leyunaDiskRpcService.selectFile(queryBean);
-        resultValidate(userFileInfoCODataResponse);
-        UserFileInfoCO data = userFileInfoCODataResponse.getData();
-        double total = (data.getFileTotal() / maxMemory) * 100;
+        DataResponse<Page<FileInfoCO>> userFileInfoCODataResponse = leyunaDiskRpcService.selectFile(queryBean);
+        DataResponse<Double> doubleDataResponse = leyunaDiskRpcService.selectAllFileSize(user.getId());
+        //校验数据
 
-        data.setFileTotalStr(String.format("%.2f",total));
-        return DataResponse.of(data);
+        resultValidate(doubleDataResponse);
+        resultValidate(userFileInfoCODataResponse);
+        
+        UserFileInfoCO userFileInfoCO=new UserFileInfoCO();
+        //设置文件列表
+        userFileInfoCO.setFileinfos(userFileInfoCODataResponse.getData());
+        //设置文件总内存
+        double total = (doubleDataResponse.getData() / maxMemory) * 100;
+        userFileInfoCO.setFileTotalStr(String.format("%.2f",total));
+        return DataResponse.of(userFileInfoCO);
     }
 
 
@@ -56,7 +64,7 @@ public class DiskFileExe {
         resultValidate(doubleDataResponse);
         Double data = doubleDataResponse.getData();
         double total = (data / maxMemory) * 100;
-        return DataResponse.of(total);
+        return DataResponse.of(String.format("%.2f",total));
     }
 
     public DataResponse<Integer> requestSaveFile(List<MultipartFile> file){
