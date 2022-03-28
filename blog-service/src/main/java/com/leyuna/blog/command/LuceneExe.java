@@ -1,5 +1,6 @@
 package com.leyuna.blog.command;
 
+import com.alibaba.nacos.api.utils.StringUtils;
 import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.BlogCO;
@@ -108,6 +109,9 @@ public class LuceneExe {
             Analyzer analyzer = new SpiltCharAnalyzer();
             //关键词
             QueryParser qp = new QueryParser("title", analyzer);
+            if(StringUtils.isBlank(key)){
+                key = "";
+            }
             Query query = qp.parse(key);
 
             //高亮关键字
