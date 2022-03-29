@@ -44,7 +44,12 @@ public class BlogExe {
         }
         BlogE blogDTO = BlogE.of(blog);
         blogDTO.setCommentCount(0);
-        BlogCO save = blogDTO.save();
+        BlogCO save = null;
+        try {
+            save = blogDTO.save();
+        }catch (Exception e){
+            AssertUtil.isTrue(SystemErrorEnum.ADD_BLOG_FAIL.getMsg()+":可能是文章中有特殊符号无法被数据库接受，比如emoJi？");
+        }
         AssertUtil.isFalse(null == save, SystemErrorEnum.ADD_BLOG_FAIL.getMsg());
 
         //后置内容
