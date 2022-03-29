@@ -141,7 +141,8 @@ public class TagTypeControl{
      */
     @GetMapping("/treeType")
     public DataResponse getTreeType(){
-
+        TypeBean typeBean = new TypeBean();
+        typeBean.setSize(50);
         DataResponse<Page<TypeCO>> aLlTypes = tagTypeService.getALlTypes(new TypeBean());
         Page<TypeCO> data = aLlTypes.getData();
 

@@ -17,9 +17,9 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class QueryPage implements Serializable {
 
-    Integer index = 1;
+    protected Integer index = 1;
 
-    Integer size = 10;
+    protected Integer size = 10;
 
     private String orderCondition;
 
