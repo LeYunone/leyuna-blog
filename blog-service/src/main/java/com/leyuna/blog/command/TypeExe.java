@@ -46,6 +46,10 @@ public class TypeExe {
         AssertUtil.isTrue(b == types.size(), SystemErrorEnum.DELETE_TYPE_FALE.getMsg());
     }
 
+    /**
+     * id更新分类信息
+     * @param typeBean
+     */
     @CacheEvict(cacheNames = "type", allEntries = true)
     public void updateTypes (TypeBean typeBean) {
         boolean is = TypeE.of(typeBean).update();

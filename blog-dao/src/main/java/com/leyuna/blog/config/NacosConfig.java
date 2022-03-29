@@ -16,6 +16,7 @@ import java.util.Set;
 /**
  * @author pengli
  * @create 2022-02-15 17:11
+ * nacos配置，在外部tomcat中获取到启用的tomcat
  */
 @Component
 public class NacosConfig implements ApplicationRunner {

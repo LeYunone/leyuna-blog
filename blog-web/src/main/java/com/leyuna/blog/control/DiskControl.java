@@ -81,24 +81,31 @@ public class DiskControl {
         return DiskService.deleteFile(fileId);
     }
 
+    /**
+     * 返回页面文件资料 TODO  待扩展，返回文件下载的进度条
+     * @param fileInfoCO
+     * @param response
+     */
     private void responseFile(FileInfoCO fileInfoCO,HttpServletResponse response){
         byte[] buffer = new byte[1024];
         BufferedInputStream bis = null;
-        OutputStream os = null; //输出流
+        //输出流
+        OutputStream os = null;
         try {
             //设置返回文件信息
             response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileInfoCO.getName(), "UTF-8"));
             response.setContentType("application/octet-stream");
             response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
-
             os = response.getOutputStream();
             bis = new BufferedInputStream(new ByteArrayInputStream(fileInfoCO.getBase64File()));
+            //写入文件
             while(bis.read(buffer) != -1){
                 os.write(buffer);
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            //关流了
             try {
                 if(bis != null) {
                     bis.close();

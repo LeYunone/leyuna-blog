@@ -21,12 +21,22 @@ import java.util.Map;
 @Service
 public class TypeNavExe {
 
+    /**
+     * 保存分类导航
+     * @param typeNavBean
+     */
     @CacheEvict(cacheNames = "typeNav")
     public void saveTypeNav(TypeNavBean typeNavBean){
         TypeNavCO save = TypeNavE.of(typeNavBean).save();
         AssertUtil.isFalse(save==null, SystemErrorEnum.UPDATE_TYPENAV_FAIL.getMsg());
     }
 
+    /**
+     * 全量获取分类导航
+     * @param typeNavBean
+     * @param ifMap
+     * @return
+     */
     @Cacheable(cacheNames = "typeNav",key = "#typeNavBean.toString()")
     public DataResponse getTypeNav(TypeNavBean typeNavBean,boolean ifMap){
         List<TypeNavCO> typeNavCOS = 
@@ -41,7 +51,11 @@ public class TypeNavExe {
             return DataResponse.of(typeNavCOS);
         }
     }
-    
+
+    /**
+     * id删除分类导航
+     * @param id
+     */
     public void deleteTypeNav(String id){
         TypeNavE.queryInstance().getGateway().delete(id);
     }

@@ -13,6 +13,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class TokenExe {
 
+    /**
+     * 登录  绑定令牌
+     * @param id
+     * @return
+     */
     public SaTokenInfo loginToken(String id) {
         StpUtil.login(id);
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();

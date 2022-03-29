@@ -50,6 +50,11 @@ public class ServerControl {
         return DataResponse.of(message);
     }
 
+    /**
+     * 清空当前服务器的所有缓存
+     * @param name
+     * @return
+     */
     @RequestMapping("/clearCache")
     public DataResponse clearCache (String name) {
         if (ServerCode.SERVER_NAME.equals(name)) {

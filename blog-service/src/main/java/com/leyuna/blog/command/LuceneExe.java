@@ -168,6 +168,7 @@ public class LuceneExe {
         IndexWriter indexWriter = null;
 
         try {
+            //拿到索引库的输入流
             Directory directory = FSDirectory.open(FileSystems.getDefault().getPath(ServerCode.DIR_SAVE_PATH));
             Analyzer analyzer = new SpiltCharAnalyzer();
             IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
@@ -177,6 +178,7 @@ public class LuceneExe {
             indexWriter = new IndexWriter(directory, indexWriterConfig);
             document.add(title);
             document.add(id);
+            //指定索引文档更新其中数据
             Term term = new Term("title", blogDTO.getTitle());
             indexWriter.updateDocument(term, document);
             indexWriter.commit();

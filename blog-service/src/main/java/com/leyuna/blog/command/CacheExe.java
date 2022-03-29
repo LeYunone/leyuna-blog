@@ -36,19 +36,39 @@ public class CacheExe {
         }
     }
 
+    /**
+     * 获得所有key
+     * @return
+     */
     public Set<String> getAllKeys () {
         Set<String> keys = stringRedisTemplate.keys("*");
         return keys;
     }
 
+    /**
+     * 判断redis是否存在该key
+     * @param key
+     * @return
+     */
     public boolean hasCacheByKey (String key) {
         return stringRedisTemplate.hasKey(key);
     }
 
+    /**
+     * 设置key - value
+     * @param key
+     * @param value
+     * @param sec
+     */
     public void setCacheKey (String key, String value, long sec) {
         stringRedisTemplate.opsForValue().set(key, value, sec * 1, TimeUnit.SECONDS);
     }
 
+    /**
+     * key获取value
+     * @param key
+     * @return
+     */
     public String getCacheByKey (String key) {
         return stringRedisTemplate.opsForValue().get(key);
     }

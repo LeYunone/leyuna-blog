@@ -52,6 +52,12 @@ public class SearchExe {
         return DataResponse.of(result);
     }
 
+    /**
+     * 迭代文件夹目录
+     * @param file
+     * @param result
+     * @param path
+     */
     private void orderEmoFolder(File file, List<String> result,String path){
         if(file.isFile()){
             result.add(path+file.getName());

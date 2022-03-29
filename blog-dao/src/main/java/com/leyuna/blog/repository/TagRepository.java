@@ -23,7 +23,7 @@ import java.util.Map;
 public class TagRepository extends BaseRepository<TagMapper, TagDO, TagCO> implements TagGateway {
 
     /**
-     * 分页模糊查询
+     * 定制查询
      * @param
      * @param
      * @return

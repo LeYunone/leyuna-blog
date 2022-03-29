@@ -24,7 +24,7 @@ import java.util.List;
 public class CommentRepository extends BaseRepository<CommentMapper, CommentDO, CommentCO> implements CommentGateway {
 
     /**
-     * 查询博客最新评论
+     * 定制查询
      * @param index
      * @param size
      * @param blogId

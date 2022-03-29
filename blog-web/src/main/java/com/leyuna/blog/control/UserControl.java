@@ -22,11 +22,20 @@ public class UserControl  {
     @Autowired
     private UserService userService;
 
+    /**
+     * 简单登录
+     * @param user
+     * @return
+     */
     @PostMapping("/login")
     public DataResponse login(@RequestBody UserBean user){
         return userService.login(user);
     }
 
+    /**
+     * 获取登录信息 token?
+     * @return
+     */
     @GetMapping("/getLoginInfo")
     public DataResponse getLoginInfo(){
         UserCO user = (UserCO) StpUtil.getSession().get("user");

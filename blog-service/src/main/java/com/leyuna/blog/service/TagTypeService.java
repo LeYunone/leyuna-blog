@@ -8,7 +8,6 @@ import com.leyuna.blog.bean.blog.TypeNavBean;
 import com.leyuna.blog.co.blog.TagCO;
 import com.leyuna.blog.co.blog.TypeCO;
 import com.leyuna.blog.co.blog.TypeNavCO;
-import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.command.TagExe;
 import com.leyuna.blog.command.TypeExe;
 import com.leyuna.blog.command.TypeNavExe;
@@ -37,9 +36,6 @@ public class TagTypeService {
     
     @Autowired
     private TypeNavExe typeNavExe;
-
-    @Autowired
-    private CacheExe clearCacheExe;
     /**
      * 查询所有的标签  分页 加上 模糊查询
      * @param
@@ -142,6 +138,11 @@ public class TagTypeService {
         return DataResponse.buildSuccess();
     }
 
+    /**
+     * 删除分类导航
+     * @param typeNavId
+     * @return
+     */
     public DataResponse deleteTypeNav(String typeNavId){
         typeNavExe.deleteTypeNav(typeNavId);
         return DataResponse.buildSuccess();

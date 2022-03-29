@@ -34,6 +34,7 @@ public class BlogExe {
      */
     public BlogCO addBlog (BlogBean blog) {
         String[] tags = blog.getTags();
+        //处理标签  组装逗号分隔的标签字符
         if (tags.length != 0) {
             StringBuilder stringBuilder = new StringBuilder();
             for (String tag : tags) {
@@ -44,6 +45,7 @@ public class BlogExe {
         }
         BlogE blogDTO = BlogE.of(blog);
         blogDTO.setCommentCount(0);
+        //添加博客
         BlogCO save = null;
         try {
             save = blogDTO.save();
@@ -52,9 +54,8 @@ public class BlogExe {
         }
         AssertUtil.isFalse(null == save, SystemErrorEnum.ADD_BLOG_FAIL.getMsg());
 
-        //后置内容
+        //后置内容处理  标签添加  分页添加  缓存刷新
         blogDomainService.addBlogAfter(blogDTO);
-
         return save;
     }
 
@@ -79,6 +80,10 @@ public class BlogExe {
         return DataResponse.of(blogPage);
     }
 
+    /**
+     * id更新博客
+     * @param blogDTO
+     */
     @CacheEvict(cacheNames = "blog",key = "#blogDTO.id")
     public void updateBlog (BlogBean blogDTO) {
         AssertUtil.isFalse(StringUtils.isBlank(blogDTO.getId()), "操作失败：id can't empty");

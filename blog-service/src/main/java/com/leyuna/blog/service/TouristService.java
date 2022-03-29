@@ -49,6 +49,12 @@ public class TouristService {
         return commentExe.queryComment(commentBean);
     }
 
+    /**
+     * 游客进行文件上传操作： 只能是头像！ 后续待扩展
+     * @param file
+     * @param remoteAddr
+     * @return
+     */
     public DataResponse touristDoUpImg(MultipartFile file, String remoteAddr) {
         if (null == file) {
             //如果文件为空，三种情况，一是使用今天换头像的缓存，二是用以前的照片，三是使用系统默认的照片
@@ -68,6 +74,11 @@ public class TouristService {
         }
     }
 
+    /**
+     * 用户请求上传文件
+     * @param remoteAddr
+     * @return
+     */
     public DataResponse requestUpImg(String remoteAddr){
         if(cacheExe.hasCacheByKey(remoteAddr+":head")){
             //去找今天这个用户设置的头像

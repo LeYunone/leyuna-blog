@@ -23,6 +23,11 @@ import java.util.Map;
 @Service
 public class TypeNavRepository extends BaseRepository<TypeNavMapper, TypeNavDO, TypeNavCO> implements TypeNavGateway {
 
+    /**
+     * 定制查询
+     * @param typeNavE
+     * @return
+     */
     @Override
     public List<TypeNavCO> selectByCon (TypeNavE typeNavE) {
         TypeNavDO typeNavDO = TransformationUtil.copyToDTO(typeNavE, TypeNavDO.class);

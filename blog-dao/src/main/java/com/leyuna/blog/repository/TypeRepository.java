@@ -22,7 +22,7 @@ import java.util.Map;
 @Service
 public class TypeRepository extends BaseRepository<TypeMapper, TypeDO, TypeCO> implements TypeGateway {
     /**
-     * 分页模糊查询
+     * 定制查询
      * @param
      * @param
      * @return

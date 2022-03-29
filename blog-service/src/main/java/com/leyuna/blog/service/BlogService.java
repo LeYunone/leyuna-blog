@@ -4,7 +4,6 @@ import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.command.BlogExe;
-import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.command.LuceneExe;
 import com.leyuna.blog.constant.enums.BlogTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +25,6 @@ public class BlogService {
 
     @Autowired
     private BlogExe blogExe;
-    @Autowired
-    private CacheExe clearCacheExe;
     @Autowired
     private LuceneExe luceneExe;
 

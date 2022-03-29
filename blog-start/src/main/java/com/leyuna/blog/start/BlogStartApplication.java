@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableCaching //开启缓存
-@EnableFeignClients(basePackages = "com.leyuna.blog.rpc.service")
+@EnableFeignClients(basePackages = "com.leyuna.blog.rpc.service") //RPC接口扫描
 @ComponentScan({"com.leyuna.blog"})
 public class BlogStartApplication extends SpringBootServletInitializer {
 

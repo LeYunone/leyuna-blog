@@ -44,6 +44,7 @@ public class BlogControl{
 
     @GetMapping("/test")
     public void test() throws FileNotFoundException {
+        //纯测试接口  当前测试：Ftp客户端文件上传
         FileInputStream fis=new FileInputStream(new File("C://img/wx.png"));
         ftpUploadUtil.upload("C://test/",fis,"test.png");
     }

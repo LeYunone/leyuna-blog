@@ -78,9 +78,21 @@ public interface LeyunaDiskRpcService {
                           @RequestPart(value = "file") MultipartFile  file,
                           @RequestParam(value = "saveTime",required = false)String saveTime);
 
+    /**
+     * id删除文件
+     * @param id
+     * @param userId
+     * @return
+     */
     @RequestMapping(value = "/file/deleteFile",method = RequestMethod.POST)
     DataResponse deleteFile(@RequestParam(value = "id") String id,@RequestParam(value = "userId") String userId);
 
+    /**
+     * id下载文件
+     * @param id
+     * @param userId
+     * @return
+     */
     @RequestMapping(value = "/file/downloadFile",method = RequestMethod.POST)
     DataResponse<FileInfoCO> downloadFile(@RequestParam(value = "id") String id,@RequestParam(value = "userId") String userId);
 }

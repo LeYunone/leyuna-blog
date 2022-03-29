@@ -54,6 +54,12 @@ public class TouristControl {
         return touristService.requestUpImg(remoteAddr);
     }
 
+    /**
+     * 评论点赞
+     * @param commentId
+     * @param request
+     * @return
+     */
     @RequestMapping("/goods")
     public DataResponse goodsByComment(String commentId,HttpServletRequest request){
         return touristService.addGoods(commentId, ServerUtil.getClientIp(request));

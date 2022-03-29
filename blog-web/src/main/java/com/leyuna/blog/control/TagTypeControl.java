@@ -51,6 +51,12 @@ public class TagTypeControl{
         return tagTypeService.getALlTypes(query);
     }
 
+    /**
+     * 二级树
+     * @param types
+     * @param typeNavMap
+     * @return
+     */
     private List<CascaderTypeBean> getCascaderTypeResult(List<TypeCO> types,Map<String, TypeNavCO> typeNavMap){
         List<CascaderTypeBean> lists=new ArrayList<>();
         Map<String,CascaderTypeBean> map=new HashMap<>();

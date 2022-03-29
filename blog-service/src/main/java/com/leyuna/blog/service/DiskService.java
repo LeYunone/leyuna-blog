@@ -35,7 +35,6 @@ public class DiskService {
     public DataResponse deleteFile (String id) {
         //删除文件
         fileExe.deleteFile(id);
-
         //删除之后获得最新的总内存大小
         return fileExe.selectAllFileSize();
     }

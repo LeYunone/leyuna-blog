@@ -22,6 +22,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class BlogRepository extends BaseRepository<BlogMapper, BlogDO, BlogCO> implements BlogGateway {
 
+    /**
+     * 定制查询
+     * @param blog
+     * @return
+     */
     @Override
     public Page<BlogCO> queryBlog(BlogBean blog) {
         Page page=new Page(blog.getIndex(),blog.getSize());
