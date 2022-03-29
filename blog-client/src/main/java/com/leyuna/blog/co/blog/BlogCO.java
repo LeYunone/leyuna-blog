@@ -35,10 +35,6 @@ public class BlogCO implements Serializable {
     @JsonFormat( pattern = "yyyy-MM-dd")
     private LocalDateTime createDt;
 
-    /**
-     * 点击量
-     */
-    private Integer clickCount;
 
     /**
      * 评论数

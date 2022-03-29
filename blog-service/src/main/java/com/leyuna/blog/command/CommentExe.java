@@ -4,16 +4,19 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.CommentBean;
 import com.leyuna.blog.bean.blog.DataResponse;
+import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.co.blog.CommentCO;
 import com.leyuna.blog.co.blog.TouristHeadCO;
 import com.leyuna.blog.constant.code.ServerCode;
 import com.leyuna.blog.constant.enums.SystemErrorEnum;
+import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.domain.CommentE;
 import com.leyuna.blog.domain.TouristHeadE;
 import com.leyuna.blog.util.AssertUtil;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -30,6 +33,7 @@ public class CommentExe {
      * 添加评论
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     @CacheEvict(cacheNames = "comment",key = "#commentBean.blogId+'-'+#commentBean.index+'-'+#commentBean.size")
     public DataResponse addComment(CommentBean commentBean){
         CommentE comment = CommentE.of(commentBean);
@@ -58,7 +62,12 @@ public class CommentExe {
         }
         comment.setGoods(0);
         CommentCO save = comment.save();
-        AssertUtil.isFalse(save==null,SystemErrorEnum.COMMENT_FAIL.getMsg());
+
+        BlogCO blogCO = BlogE.queryInstance().setId(save.getBlogId()).selectById();
+        AssertUtil.isFalse(save==null || blogCO==null,SystemErrorEnum.COMMENT_FAIL.getMsg());
+
+        //更新博客评论数目
+        BlogE.queryInstance().setId(blogCO.getId()).setCommentCount(blogCO.getCommentCount()+1).update();
         return DataResponse.of(save);
     }
 

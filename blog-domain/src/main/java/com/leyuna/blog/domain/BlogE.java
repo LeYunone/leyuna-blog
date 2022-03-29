@@ -39,10 +39,6 @@ public class BlogE implements Serializable {
      */
     private LocalDateTime createDt;
     /**
-     * 点击量
-     */
-    private Integer clickCount;
-    /**
      * 评论数
      */
     private Integer commentCount;

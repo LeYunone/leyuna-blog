@@ -29,8 +29,8 @@ public class TouristControl {
      * 用户评论
      * @return
      */
-    @PostMapping("/commpent")
-    public DataResponse commpent(@RequestBody CommentBean commentBean, HttpServletRequest request){
+    @PostMapping("/comment")
+    public DataResponse comment(@RequestBody CommentBean commentBean, HttpServletRequest request){
         //设置ip
         commentBean.setIp(ServerUtil.getClientIp(request));
         return touristService.comment(commentBean);
