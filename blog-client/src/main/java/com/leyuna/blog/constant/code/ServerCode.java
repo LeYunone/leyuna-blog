@@ -9,23 +9,23 @@ package com.leyuna.blog.constant.code;
 public class ServerCode {
 
     //服务器头像文件地址
-    public static String SERVER_HEAD_IMG_ADDR = "https://www.leyuna.xyz/image/avatar/";
+    public static String SERVER_HEAD_IMG_ADDR = "";
 
     //服务器默认头像地址
-    public static String SERVER_HEAD_IMG_DEFAULT = "https://www.leyuna.xyz/image/avatar/default.jpg";
+    public static String SERVER_HEAD_IMG_DEFAULT = "";
 
     //服务器站主头像地址
-    public static String SERVER_HEAD_IMG_ADMIN = "https://www.leyuna.xyz/image/avatar/admin.jpg";
+    public static String SERVER_HEAD_IMG_ADMIN = "";
 
     //服务器图片存储地址
-    public static String SERVER_IMG_SAVE_PATH = "https://www.leyuna.xyz/image/";
+    public static String SERVER_IMG_SAVE_PATH = "";
 
     //服务器表情包存储地址
-    public static String SERVER_EMO_SAVE_PATH = "https://www.leyuna.xyz/image/emo/";
+    public static String SERVER_EMO_SAVE_PATH = "";
 
-    public static String DIR_SAVE_PATH = "C:/dir/blogDir/";
-    public static String EMO_SAVE_PATH = "C:/img/emo/";
-    public static String IMG_SAVE_PATH = "C:/img/";
+    public static String DIR_SAVE_PATH = "";
+    public static String EMO_SAVE_PATH = "";
+    public static String IMG_SAVE_PATH = "";
     //服务器名字
-    public static String SERVER_NAME = "LeYuna";
+    public static String SERVER_NAME = "";
 }
