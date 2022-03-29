@@ -10,9 +10,9 @@
 
 在数据库中运行以下两文件
 
-[blog数据库](https://github.com/LeYunone/leyuna-disk/blob/master/blogStructure.sql)
+[blog数据库](https://github.com/LeYunone/leyuna-blog/blob/master/blogStructure.sql)
 
-[disk数据库](https://github.com/LeYunone/leyuna-disk/blob/master/diskStructure.sql)
+[disk数据库](https://github.com/LeYunone/leyuna-blog/blob/master/diskStructure.sql)
 
 在**blog-start** 模块中，找到**application.properties**、**application.yml**、**bootstrap.properties**
 
