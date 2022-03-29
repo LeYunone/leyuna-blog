@@ -157,8 +157,9 @@ public class TagTypeControl{
      */
     @RequestMapping("/getTypeInNav")
     public DataResponse getTypeInNav(){
-
-        DataResponse<Page<TypeCO>> aLlTypes = tagTypeService.getALlTypes(new TypeBean());
+        TypeBean typeBean = new TypeBean();
+        typeBean.setSize(50);
+        DataResponse<Page<TypeCO>> aLlTypes = tagTypeService.getALlTypes(typeBean);
         Page<TypeCO> data = aLlTypes.getData();
 
         DataResponse<Map<String, TypeNavCO>> dataMap = tagTypeService.getTypeNavMap(new TypeNavBean());
