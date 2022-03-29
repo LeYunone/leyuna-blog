@@ -52,10 +52,10 @@ public class LuceneExe {
      * 创建blog 索引库文档
      */
     public void addBlogDir (List<BlogBean> blogs) {
-        if(CollectionUtils.isEmpty(blogs)){
+        if (CollectionUtils.isEmpty(blogs)) {
             //默认创建所有博客索引文档
             List<BlogCO> blogCOS = BlogE.queryInstance().selectByCon();
-            blogs= TransformationUtil.copyToLists(blogCOS,BlogBean.class);
+            blogs = TransformationUtil.copyToLists(blogCOS, BlogBean.class);
         }
         IndexWriter indexWriter = null;
         try {
@@ -82,7 +82,7 @@ public class LuceneExe {
         } catch (Exception e) {
             AssertUtil.isTrue(SystemErrorEnum.CREATE_DOCUMENT_FALE.getMsg());
         } finally {
-            if(indexWriter!=null){
+            if (indexWriter != null) {
                 //关闭输出流
                 try {
                     indexWriter.close();
@@ -101,16 +101,27 @@ public class LuceneExe {
      * @param index
      * @return
      */
-    public DataResponse<LuceneCO> getBlogDir (String key, Integer index, Integer size){
+    public DataResponse<LuceneCO> getBlogDir (String key, Integer index, Integer size) {
+        String error = SystemErrorEnum.REQUEST_FAIL.getMsg();
         List<BlogCO> result = new ArrayList<>();
         LuceneCO luceneDTO = new LuceneCO();
-        IndexReader indexReader=null;
+        IndexReader indexReader = null;
         try {
             Analyzer analyzer = new SpiltCharAnalyzer();
             //关键词
             QueryParser qp = new QueryParser("title", analyzer);
-            if(StringUtils.isBlank(key)){
+            if (StringUtils.isBlank(key)) {
                 key = "";
+            }
+            if (key.contains("\\")) {
+                error = "操作失败：系统原因，搜索关键字请别带上\\";
+                throw new RuntimeException();
+            }
+            if (key.contains("/")) {
+                key = key.replaceAll("/", "");
+            }
+            if(key.equals("")){
+                return DataResponse.of(luceneDTO);
             }
             Query query = qp.parse(key);
 
@@ -136,10 +147,10 @@ public class LuceneExe {
                 TokenStream tokenStream = analyzer.tokenStream("title", new StringReader(title));
                 result.add(BlogCO.builder().id(doc.get("id")).title(highlighter.getBestFragment(tokenStream, title)).build());
             }
-        }catch (Exception e){
-            AssertUtil.isTrue(SystemErrorEnum.REQUEST_FAIL.getMsg());
-        }finally {
-            if(indexReader!=null){
+        } catch (Exception e) {
+            AssertUtil.isTrue(error);
+        } finally {
+            if (indexReader != null) {
                 try {
                     indexReader.close();
                 } catch (IOException ioException) {
