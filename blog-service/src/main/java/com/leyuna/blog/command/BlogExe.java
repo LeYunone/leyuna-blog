@@ -14,6 +14,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author pengli
  * @create 2021-08-16 13:33
@@ -49,8 +51,8 @@ public class BlogExe {
         BlogCO save = null;
         try {
             save = blogDTO.save();
-        }catch (Exception e){
-            AssertUtil.isTrue(SystemErrorEnum.ADD_BLOG_FAIL.getMsg()+":可能是文章中有特殊符号无法被数据库接受，比如emoJi？");
+        } catch (Exception e) {
+            AssertUtil.isTrue(SystemErrorEnum.ADD_BLOG_FAIL.getMsg() + ":可能是文章中有特殊符号无法被数据库接受，比如emoJi？");
         }
         AssertUtil.isFalse(null == save, SystemErrorEnum.ADD_BLOG_FAIL.getMsg());
 
@@ -82,9 +84,10 @@ public class BlogExe {
 
     /**
      * id更新博客
+     *
      * @param blogDTO
      */
-    @CacheEvict(cacheNames = "blog",key = "#blogDTO.id")
+    @CacheEvict(cacheNames = "blog", key = "#blogDTO.id")
     public void updateBlog (BlogBean blogDTO) {
         AssertUtil.isFalse(StringUtils.isBlank(blogDTO.getId()), "操作失败：id can't empty");
         boolean update = BlogE.of(blogDTO).update();
@@ -103,5 +106,15 @@ public class BlogExe {
         BlogCO blogCO = BlogE.queryInstance().setId(id).selectById();
         AssertUtil.isFalse(null == blogCO, SystemErrorEnum.SELECT_NOT_FAIL.getMsg());
         return DataResponse.of(blogCO);
+    }
+
+    /**
+     * 随机获取刷题日记
+     *
+     * @return
+     */
+    public List<BlogCO> getRandomLeetCodeLog () {
+        List<BlogCO> blogCOS = BlogE.selectRandomList();
+        return blogCOS;
     }
 }

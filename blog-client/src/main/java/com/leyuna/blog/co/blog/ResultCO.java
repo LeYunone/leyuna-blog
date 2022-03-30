@@ -18,6 +18,8 @@ import java.io.Serializable;
 @Builder
 public class ResultCO implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * 返回编码
      */

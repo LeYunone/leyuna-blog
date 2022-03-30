@@ -95,4 +95,14 @@ public class BlogService {
         }
         return DataResponse.buildSuccess();
     }
+
+    /**
+     * 获取刷题日记  -  leetcode题  随机  爬虫
+     * @return
+     */
+    public DataResponse getLeetCode(){
+        //随机获取刷题日记
+        List<BlogCO> randomLeetCodeLog = blogExe.getRandomLeetCodeLog();
+        return DataResponse.of(randomLeetCodeLog);
+    }
 }

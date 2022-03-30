@@ -111,4 +111,12 @@ public class BlogE implements Serializable {
     public static boolean batchCreate (List<BlogE> list) {
         return BlogE.queryInstance().getGateway().batchCreate(list);
     }
+
+    /**
+     * 随机查询
+     * @return
+     */
+    public static List<BlogCO> selectRandomList(){
+        return BlogE.queryInstance().getGateway().selectRandomList();
+    }
 }

@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 @Builder
 public class TagCO implements Comparable<TagCO>, Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * 标签id
      */

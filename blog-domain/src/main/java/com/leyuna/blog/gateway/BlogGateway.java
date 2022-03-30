@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.co.blog.BlogCO;
 
+import java.util.List;
+
 /**
  * (BlogDO)dao
  *
@@ -14,5 +16,7 @@ import com.leyuna.blog.co.blog.BlogCO;
 public interface BlogGateway extends BaseGateway<BlogCO> {
 
     Page<BlogCO> queryBlog (BlogBean blogBean);
+
+    List<BlogCO> selectRandomList();
 }
 

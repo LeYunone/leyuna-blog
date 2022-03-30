@@ -6,7 +6,6 @@ import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.co.blog.LuceneCO;
 import com.leyuna.blog.service.BlogService;
 import com.leyuna.blog.service.SearchService;
-import com.leyuna.blog.service.UserService;
 import com.leyuna.blog.util.FtpUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +25,6 @@ public class BlogControl{
 
     @Autowired
     private BlogService blogService;
-    @Autowired
-    private UserService userService;
     @Autowired
     private SearchService searchService;
     @Autowired
@@ -93,5 +90,14 @@ public class BlogControl{
     @GetMapping("/getEmoticon")
     public DataResponse getEmoticon(){
         return searchService.getEmoticon();
+    }
+
+    /**
+     * 服务leetcode展示面板，随机取出 题目 - 刷题日记
+     * @return
+     */
+    @GetMapping("/getLeetCode")
+    public DataResponse getLeetCode(){
+        return blogService.getLeetCode();
     }
 }

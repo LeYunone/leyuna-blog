@@ -13,6 +13,8 @@ import com.leyuna.blog.util.TransformationUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * (BlogDO)原子服务
  *
@@ -41,5 +43,9 @@ public class BlogRepository extends BaseRepository<BlogMapper, BlogDO, BlogCO> i
         return TransformationUtil.copyToPage(Page,BlogCO.class);
     }
 
+    @Override
+    public List<BlogCO> selectRandomList () {
+        return this.baseMapper.selectRandomList();
+    }
 }
 

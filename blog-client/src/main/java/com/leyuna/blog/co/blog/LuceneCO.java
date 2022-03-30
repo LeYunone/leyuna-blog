@@ -19,6 +19,8 @@ import java.util.List;
 @Builder
 public class LuceneCO implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private long totole;
 
     private List listData;
