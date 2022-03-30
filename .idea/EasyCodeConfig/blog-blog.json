@@ -73,6 +73,13 @@
     "shortType" : null,
     "custom" : false,
     "ext" : { }
+  }, {
+    "name" : "blogCover",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
   } ],
   "pkColumn" : null,
   "otherColumn" : null,

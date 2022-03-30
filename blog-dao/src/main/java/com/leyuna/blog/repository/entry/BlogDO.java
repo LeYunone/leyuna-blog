@@ -8,16 +8,16 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * (BlogDO)表实体类
+ * (Blog)表实体类
  *
  * @author pengli
- * @since 2022-03-15 17:04:22
+ * @since 2022-03-30 16:29:20
  */
 @Getter
 @Setter
 @TableName("blog")
 public class BlogDO implements Serializable {
-    private static final long serialVersionUID = 566700766741701593L;
+    private static final long serialVersionUID = 721175138460218067L;
     /**
      * 博客编号
      */
@@ -55,7 +55,7 @@ public class BlogDO implements Serializable {
     private String remarks;
 
     /**
-     * 博客类型
+     * 博客类型 1博客 2 公告 3个人 4 番剧 5 文章
      */
     private Integer blogType;
 
@@ -66,9 +66,14 @@ public class BlogDO implements Serializable {
     private LocalDateTime updateDt;
 
     /**
-     * 发布时间
+     * 创建时间
      */
     @TableField(value = "create_Dt", fill = FieldFill.INSERT)
     private LocalDateTime createDt;
+
+    /**
+     * 博客封面
+     */
+    private String blogCover;
 
 }

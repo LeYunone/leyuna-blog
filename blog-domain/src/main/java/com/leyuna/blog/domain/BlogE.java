@@ -51,6 +51,10 @@ public class BlogE implements Serializable {
      */
     private String type;
     /**
+     * 封面
+     */
+    private String blogCover;
+    /**
      * 标签
      */
     private String tag;

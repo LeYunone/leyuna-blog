@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @author pengli
  * @date 2022-03-10
- * 博客领域业务-复杂 
+ * 博客领域业务-多指令
  */
 @Service
 public class BlogDomainService {

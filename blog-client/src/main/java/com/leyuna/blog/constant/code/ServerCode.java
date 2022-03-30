@@ -20,6 +20,8 @@ public class ServerCode {
     //服务器图片存储地址
     public static String SERVER_IMG_SAVE_PATH = "";
 
+    public static String SERVER_COVER_SAVE_PATH = "";
+
     //服务器表情包存储地址
     public static String SERVER_EMO_SAVE_PATH = "";
 

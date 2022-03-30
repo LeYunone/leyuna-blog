@@ -50,5 +50,10 @@ public class BlogBean extends QueryPage {
      */
     private String tag;
 
+    /**
+     * 封面
+     */
+    private String blogCover;
+
     private String id;
 }

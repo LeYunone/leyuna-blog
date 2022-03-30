@@ -6,6 +6,8 @@ import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.command.BlogExe;
 import com.leyuna.blog.command.LuceneExe;
 import com.leyuna.blog.constant.enums.BlogTypeEnum;
+import com.leyuna.blog.constant.enums.SystemErrorEnum;
+import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -48,10 +50,11 @@ public class BlogService {
         Integer blogType = blog.getBlogType();
 
         BlogTypeEnum.BLOG_TYPE.getValue();
+        BlogCO blogCO = null;
         switch (BlogTypeEnum.loadName(blogType)) {
             case BLOG_TYPE:
                 //添加博客
-                BlogCO blogCO = blogExe.addBlog(blog);
+                blogCO = blogExe.addBlog(blog);
                 //添加改博客的索引库文档
                 List<BlogBean> list = new ArrayList<>();
                 blog.setId(blogCO.getId());
@@ -59,10 +62,14 @@ public class BlogService {
                 luceneExe.addBlogDir(list);
                 break;
             case NOTICE_TYPE:
-                blogExe.addNotice(blog);
+                blogCO = blogExe.addNotice(blog);
+                break;
+            case ANIME_TYPE:
+                blogCO = blogExe.addAnime(blog);
                 break;
             default:
         }
+        AssertUtil.isFalse(null == blogCO, SystemErrorEnum.ADD_BLOG_FAIL.getMsg());
         return DataResponse.buildSuccess();
     }
 

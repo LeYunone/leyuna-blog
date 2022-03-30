@@ -39,24 +39,29 @@ public class ConstantLoad {
     @Value("${SERVER_NAME:LeYuna}")
     private String SERVER_NAME;
 
-    public void loading(){
+    @Value("${SERVER_COVER_SAVE_PATH:https://www.leyuna.xyz/image/cover}")
+    private String SERVER_COVER_SAVE_PATH;
+
+    public void loading () {
+        //封面地址
+        ServerCode.SERVER_COVER_SAVE_PATH = this.SERVER_COVER_SAVE_PATH;
         //头像存储域名
-        ServerCode.SERVER_HEAD_IMG_ADDR=this.SERVER_HEAD_IMG_ADDR;
+        ServerCode.SERVER_HEAD_IMG_ADDR = this.SERVER_HEAD_IMG_ADDR;
         //默认头像
-        ServerCode.SERVER_HEAD_IMG_DEFAULT=this.SERVER_HEAD_IMG_DEFAULT;
+        ServerCode.SERVER_HEAD_IMG_DEFAULT = this.SERVER_HEAD_IMG_DEFAULT;
         //站长头像
-        ServerCode.SERVER_HEAD_IMG_ADMIN=this.SERVER_HEAD_IMG_ADMIN;
+        ServerCode.SERVER_HEAD_IMG_ADMIN = this.SERVER_HEAD_IMG_ADMIN;
         //图片存储域名
-        ServerCode.SERVER_IMG_SAVE_PATH=this.SERVER_IMG_SAVE_PATH;
+        ServerCode.SERVER_IMG_SAVE_PATH = this.SERVER_IMG_SAVE_PATH;
         //表情包存储域名
-        ServerCode.SERVER_EMO_SAVE_PATH=this.SERVER_EMO_SAVE_PATH;
+        ServerCode.SERVER_EMO_SAVE_PATH = this.SERVER_EMO_SAVE_PATH;
         //搜索库存储路径
-        ServerCode.DIR_SAVE_PATH=this.DIR_SAVE_PATH;
+        ServerCode.DIR_SAVE_PATH = this.DIR_SAVE_PATH;
         //表情包存储路径
-        ServerCode.EMO_SAVE_PATH=this.EMO_SAVE_PATH;
+        ServerCode.EMO_SAVE_PATH = this.EMO_SAVE_PATH;
         //图片存储路径
-        ServerCode.IMG_SAVE_PATH=this.IMG_SAVE_PATH;
+        ServerCode.IMG_SAVE_PATH = this.IMG_SAVE_PATH;
         //服务器名
-        ServerCode.SERVER_NAME=this.SERVER_NAME;
+        ServerCode.SERVER_NAME = this.SERVER_NAME;
     }
 }

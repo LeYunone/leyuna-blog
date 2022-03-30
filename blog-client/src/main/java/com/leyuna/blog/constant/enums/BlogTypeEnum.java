@@ -8,7 +8,11 @@ package com.leyuna.blog.constant.enums;
 public enum BlogTypeEnum {
     
     BLOG_TYPE(1,"博客"),
-    NOTICE_TYPE(2,"公告");
+    NOTICE_TYPE(2,"公告"),
+    MY_TYPE(3,"个人"),
+    ANIME_TYPE(4,"番剧"),
+    ARTICLE_TYPE(5,"文章");
+
     
     private Integer value;
     

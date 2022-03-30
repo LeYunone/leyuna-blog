@@ -31,6 +31,11 @@ public class BlogCO implements Serializable {
     private String title;
 
     /**
+     * 封面
+     */
+    private String blogCover;
+
+    /**
      * 发布时间
      */
     @JsonFormat( pattern = "yyyy-MM-dd")

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.BlogBean;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.BlogCO;
+import com.leyuna.blog.constant.code.ServerCode;
 import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.domainservice.BlogDomainService;
@@ -54,7 +55,6 @@ public class BlogExe {
         } catch (Exception e) {
             AssertUtil.isTrue(SystemErrorEnum.ADD_BLOG_FAIL.getMsg() + ":可能是文章中有特殊符号无法被数据库接受，比如emoJi？");
         }
-        AssertUtil.isFalse(null == save, SystemErrorEnum.ADD_BLOG_FAIL.getMsg());
 
         //后置内容处理  标签添加  分页添加  缓存刷新
         blogDomainService.addBlogAfter(blogDTO);
@@ -62,13 +62,25 @@ public class BlogExe {
     }
 
     /**
+     * 添加番剧评测
+     *
+     * @param blog
+     */
+    public BlogCO addAnime (BlogBean blog) {
+        String blogCover = blog.getBlogCover();
+        //组装封面地址
+        blogCover = ServerCode.SERVER_COVER_SAVE_PATH + blogCover;
+        blog.setBlogCover(blogCover);
+        return BlogE.of(blog).save();
+    }
+
+    /**
      * 添加公告
      *
      * @param blog
      */
-    public void addNotice (BlogBean blog) {
-        BlogCO save = BlogE.of(blog).save();
-        AssertUtil.isFalse(null == save, SystemErrorEnum.ADD_BLOG_FAIL.getMsg());
+    public BlogCO addNotice (BlogBean blog) {
+        return BlogE.of(blog).save();
     }
 
     /**
