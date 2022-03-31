@@ -51,6 +51,8 @@
           <element id="library" level="project" name="Maven: io.github.openfeign.form:feign-form:3.8.0" />
           <element id="library" level="project" name="Maven: commons-fileupload:commons-fileupload:1.4" />
           <element id="library" level="project" name="Maven: io.github.openfeign:feign-core:10.10.1" />
+          <element id="library" level="project" name="Maven: org.mybatis.spring.boot:mybatis-spring-boot-autoconfigure:2.2.0" />
+          <element id="library" level="project" name="Maven: org.mybatis:mybatis:3.5.7" />
           <element id="library" level="project" name="Maven: cn.dev33:sa-token-spring-boot-starter:1.25.0" />
           <element id="library" level="project" name="Maven: cn.dev33:sa-token-servlet:1.25.0" />
           <element id="library" level="project" name="Maven: cn.dev33:sa-token-core:1.25.0" />
@@ -58,7 +60,6 @@
           <element id="library" level="project" name="Maven: com.baomidou:mybatis-plus-extension:3.1.0" />
           <element id="library" level="project" name="Maven: com.baomidou:mybatis-plus-core:3.1.0" />
           <element id="library" level="project" name="Maven: com.baomidou:mybatis-plus-annotation:3.1.0" />
-          <element id="library" level="project" name="Maven: org.mybatis:mybatis:3.5.0" />
           <element id="library" level="project" name="Maven: com.github.jsqlparser:jsqlparser:1.4" />
           <element id="library" level="project" name="Maven: org.mybatis:mybatis-spring:2.0.0" />
           <element id="library" level="project" name="Maven: com.baomidou:mybatis-plus-boot-starter:3.1.0" />
