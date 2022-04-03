@@ -18,7 +18,7 @@ public class FtpUploadUtil {
     @Value(("114.132.218.2"))
     private String hostName;
     //    @Value("${server.upload.port:21}")
-    @Value("7777")
+    @Value("21")
     private int port;
     @Value("${server.username:Administrator}")
     private String username;
@@ -37,13 +37,17 @@ public class FtpUploadUtil {
                            InputStream inputStream, String saveName) {
         boolean flag = false;
         FTPClient ftpClient = new FTPClient();
+        ftpClient.enterLocalPassiveMode();
         //1 测试连接
-        if (connect(ftpClient)) {
+        boolean connect = connect(ftpClient);
+        if (connect) {
             try {
                 //2 检查工作目录是否存在
-                if (ftpClient.changeWorkingDirectory(workingPath)) {
+                boolean hasTarget = ftpClient.changeWorkingDirectory("test");
+                if (hasTarget) {
                     // 3 检查是否上传成功
-                    if (storeFile(ftpClient, saveName, inputStream)) {
+                    boolean isUpload = storeFile(ftpClient, saveName, inputStream);
+                    if (isUpload) {
                         flag = true;
                         disconnect(ftpClient);
                     }
@@ -78,7 +82,7 @@ public class FtpUploadUtil {
      * @param ftpClient
      * @return 返回真则能连接
      */
-    public boolean connect (FTPClient ftpClient) {
+        public boolean connect (FTPClient ftpClient) {
 
         boolean flag = false;
         try {
