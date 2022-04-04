@@ -2,6 +2,7 @@ package com.leyuna.blog.bean.blog;
 
 import com.leyuna.blog.bean.QueryPage;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -56,4 +57,11 @@ public class BlogBean extends QueryPage {
     private String blogCover;
 
     private String id;
+    
+    private String blogLink;
+
+    /**
+     * 封面文件
+     */
+    private MultipartFile cover;
 }

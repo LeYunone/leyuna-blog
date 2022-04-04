@@ -35,7 +35,7 @@ public class BlogControl{
      * @return
      */
     @PostMapping("/addBlog")
-    public DataResponse addBlog(@RequestBody BlogBean blogBean){
+    public DataResponse addBlog( BlogBean blogBean){
         return blogService.addBlog(blogBean);
     }
 

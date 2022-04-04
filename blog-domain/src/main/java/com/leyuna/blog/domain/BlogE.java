@@ -67,8 +67,16 @@ public class BlogE implements Serializable {
      */
     private String remarks;
 
+    /**
+     * 博客类型
+     */
     private Integer blogType;
 
+    /**
+     * 第三方链接
+     */
+    private String blogLink; 
+   
     //===========自定义方法区==========
     private BlogGateway gateway;
 
