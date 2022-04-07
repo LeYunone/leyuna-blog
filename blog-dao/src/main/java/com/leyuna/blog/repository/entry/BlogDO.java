@@ -75,5 +75,7 @@ public class BlogDO implements Serializable {
      * 博客封面
      */
     private String blogCover;
+    
+    private String blogLink;
 
 }

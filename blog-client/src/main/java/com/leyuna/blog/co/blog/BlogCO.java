@@ -61,5 +61,7 @@ public class BlogCO implements Serializable {
     private LocalDateTime updateDt;
 
     private String remarks;
+    
+    private String blogLink;
 }
 

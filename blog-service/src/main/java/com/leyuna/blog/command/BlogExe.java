@@ -10,6 +10,7 @@ import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.domain.BlogE;
 import com.leyuna.blog.domainservice.BlogDomainService;
 import com.leyuna.blog.util.AssertUtil;
+import com.leyuna.blog.util.UpLoadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -67,7 +68,11 @@ public class BlogExe {
      * @param blog
      */
     public BlogCO addAnime (BlogBean blog) {
-        String blogCover = blog.getBlogCover();
+        if(null!=blog.getCover()){
+            //上传封面至服务器
+            UpLoadUtil.uploadFile(ServerCode.COVER_SAVE_PATH,blog.getCover());
+        }
+        String blogCover = blog.getCover().getOriginalFilename();
         //组装封面地址
         blogCover = ServerCode.SERVER_COVER_SAVE_PATH + blogCover;
         blog.setBlogCover(blogCover);

@@ -28,6 +28,7 @@ public class ServerCode {
     public static String DIR_SAVE_PATH = "";
     public static String EMO_SAVE_PATH = "";
     public static String IMG_SAVE_PATH = "";
+    public static String COVER_SAVE_PATH = "";
     //服务器名字
     public static String SERVER_NAME = "";
 }

@@ -41,6 +41,9 @@ public class ConstantLoad {
 
     @Value("${SERVER_COVER_SAVE_PATH:https://www.leyuna.xyz/image/cover}")
     private String SERVER_COVER_SAVE_PATH;
+    
+    @Value("${COVER_SAVE_PATH:c:/cover/}")
+    private String COVER_SAVE_PATH;
 
     public void loading () {
         //封面地址
@@ -61,6 +64,8 @@ public class ConstantLoad {
         ServerCode.EMO_SAVE_PATH = this.EMO_SAVE_PATH;
         //图片存储路径
         ServerCode.IMG_SAVE_PATH = this.IMG_SAVE_PATH;
+        //封面存储路径
+        ServerCode.COVER_SAVE_PATH = this.COVER_SAVE_PATH;
         //服务器名
         ServerCode.SERVER_NAME = this.SERVER_NAME;
     }
