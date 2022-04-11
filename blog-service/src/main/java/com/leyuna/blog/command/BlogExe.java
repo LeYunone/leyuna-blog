@@ -39,7 +39,7 @@ public class BlogExe {
     public BlogCO addBlog (BlogBean blog) {
         String[] tags = blog.getTags();
         //处理标签  组装逗号分隔的标签字符
-        if (tags.length != 0) {
+        if (tags!=null && tags.length != 0) {
             StringBuilder stringBuilder = new StringBuilder();
             for (String tag : tags) {
                 stringBuilder.append(tag + ",");
@@ -54,7 +54,8 @@ public class BlogExe {
         try {
             save = blogDTO.save();
         } catch (Exception e) {
-            AssertUtil.isTrue(SystemErrorEnum.ADD_BLOG_FAIL.getMsg() + ":可能是文章中有特殊符号无法被数据库接受，比如emoJi？");
+            e.printStackTrace();
+                AssertUtil.isTrue(SystemErrorEnum.ADD_BLOG_FAIL.getMsg() + ":可能是文章中有特殊符号无法被数据库接受，比如emoJi？");
         }
 
         //后置内容处理  标签添加  分页添加  缓存刷新

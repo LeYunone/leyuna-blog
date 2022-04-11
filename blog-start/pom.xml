@@ -32,11 +32,13 @@
     <dependencies>
         <dependency>
             <groupId>com.leyuna</groupId>
-            <artifactId>blog-web</artifactId>
+            <artifactId>waylocation-spring-boot-start</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>com.leyuna</groupId>
+            <artifactId>blog-web</artifactId>
         </dependency>
         <!--eureka微服务-->
 <!--        <dependency>-->
@@ -48,10 +50,6 @@
 <!--            <artifactId>spring-cloud-starter-config</artifactId>-->
 <!--        </dependency>-->
         <!--nacos微服务-->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
