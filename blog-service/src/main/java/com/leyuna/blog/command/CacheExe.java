@@ -29,6 +29,15 @@ public class CacheExe {
     /**
      * 清空当前所有缓存
      */
+    public void clearAllCache (String key) {
+        Set<String> allKeys = getAllKeys();
+        for(String redis:allKeys){
+            if(redis.contains(key)){
+                stringRedisTemplate.delete(redis);
+            }
+        }
+    }
+
     public void clearAllCache () {
         Set<String> allKeys = getAllKeys();
         if (ObjectUtils.isNotEmpty(allKeys)) {

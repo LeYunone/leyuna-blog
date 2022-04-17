@@ -58,7 +58,7 @@ public class ServerControl {
     @RequestMapping("/clearCache")
     public DataResponse clearCache (String name) {
         if (ServerCode.SERVER_NAME.equals(name)) {
-            cacheExe.clearAllCache();
+            cacheExe.clearAllCache("blog");
             return DataResponse.buildSuccess();
         }
         return DataResponse.buildFailure("暗号错啦，错啦！！！");

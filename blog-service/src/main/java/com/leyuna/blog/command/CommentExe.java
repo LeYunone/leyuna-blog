@@ -34,7 +34,7 @@ public class CommentExe {
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(cacheNames = "comment",key = "#commentBean.blogId+'-'+#commentBean.index+'-'+#commentBean.size")
+    @CacheEvict(cacheNames = "blog:comment",key = "#commentBean.blogId+'-'+#commentBean.index+'-'+#commentBean.size")
     public DataResponse addComment(CommentBean commentBean){
         CommentE comment = CommentE.of(commentBean);
         //初始化基本信息
@@ -75,7 +75,7 @@ public class CommentExe {
      * 分页查询指定博客下的评论
      * @return
      */
-    @Cacheable(cacheNames = "comment",key = "#commentBean.blogId+'-'+#commentBean.index+'-'+#commentBean.size")
+    @Cacheable(cacheNames = "blog:comment",key = "#commentBean.blogId+'-'+#commentBean.index+'-'+#commentBean.size")
     public DataResponse queryComment(CommentBean commentBean){
         Page<CommentCO> commentPage =null;
         Integer type=commentBean.getSortType();
