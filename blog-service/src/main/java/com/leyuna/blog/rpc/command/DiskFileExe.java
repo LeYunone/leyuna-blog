@@ -7,6 +7,7 @@ import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.bean.disk.UpFileBean;
 import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.co.disk.FileInfoCO;
+import com.leyuna.blog.co.disk.FileValidatorCO;
 import com.leyuna.blog.co.disk.UserFileInfoCO;
 import com.leyuna.blog.rpc.service.LeyunaDiskRpcService;
 import com.leyuna.blog.util.AssertUtil;
@@ -57,13 +58,13 @@ public class DiskFileExe {
         return doubleDataResponse.getData();
     }
 
-    public DataResponse<Integer> requestSaveFile(List<MultipartFile> file){
+    public DataResponse<FileValidatorCO> requestSaveFile(List<MultipartFile> file){
 
         AssertUtil.isFalse(CollectionUtils.isEmpty(file),"操作失败：文件接收为空");
         //用户编号
         String userId = (String) StpUtil.getLoginId();
 
-        DataResponse<Integer> integerDataResponse = leyunaDiskRpcService.requestSaveFile(userId, file.get(0));
+        DataResponse<FileValidatorCO> integerDataResponse = leyunaDiskRpcService.requestSaveFile(userId, file.get(0));
         resultValidate(integerDataResponse);
         //0 是服务器内部处理文件    1 是需要在服务器生成文件
         return integerDataResponse;

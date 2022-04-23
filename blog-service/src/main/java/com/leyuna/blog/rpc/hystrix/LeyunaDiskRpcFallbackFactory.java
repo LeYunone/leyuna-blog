@@ -3,6 +3,7 @@ package com.leyuna.blog.rpc.hystrix;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.co.disk.FileInfoCO;
+import com.leyuna.blog.co.disk.FileValidatorCO;
 import com.leyuna.blog.constant.code.ResponseCode;
 import com.leyuna.blog.rpc.service.LeyunaDiskRpcService;
 import com.netflix.hystrix.exception.HystrixTimeoutException;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 @Log4j2
 public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskRpcService> {
+
     @Override
     public LeyunaDiskRpcService create (Throwable throwable) {
         return new LeyunaDiskRpcService() {
@@ -32,7 +34,7 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
             }
 
             @Override
-            public DataResponse<Integer> requestSaveFile (String userId, MultipartFile files) {
+            public DataResponse<FileValidatorCO> requestSaveFile (String userId, MultipartFile files) {
                 return response(throwable);
             }
 

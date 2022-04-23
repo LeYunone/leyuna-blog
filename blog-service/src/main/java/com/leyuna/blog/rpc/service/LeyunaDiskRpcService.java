@@ -3,6 +3,7 @@ package com.leyuna.blog.rpc.service;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.co.disk.FileInfoCO;
+import com.leyuna.blog.co.disk.FileValidatorCO;
 import com.leyuna.blog.co.disk.UserFileInfoCO;
 import com.leyuna.blog.rpc.hystrix.LeyunaDiskRpcFallbackFactory;
 import feign.codec.Encoder;
@@ -63,8 +64,8 @@ public interface LeyunaDiskRpcService {
      * @return
      */
     @RequestMapping(value = "/file/requestSaveFile",method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    DataResponse<Integer> requestSaveFile(@RequestParam(value = "userId",required = false)String userId,
-                                                      @RequestPart(value = "file") MultipartFile  file);
+    DataResponse<FileValidatorCO> requestSaveFile(@RequestParam(value = "userId",required = false)String userId,
+                                                  @RequestPart(value = "file") MultipartFile  file);
 
     /**
      * 上传文件

@@ -33,7 +33,7 @@
             <groupId>xyz.leyuna</groupId>
             <artifactId>waylocation-spring-boot-start</artifactId>
             <version>0.0.3</version>
-            <scope>test</scope>
+<!--            <scope>test</scope>-->
         </dependency>
         <dependency>
             <groupId>com.leyuna</groupId>
@@ -58,6 +58,6 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
-        
+
     </dependencies>
 </project>
