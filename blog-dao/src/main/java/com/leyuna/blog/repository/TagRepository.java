@@ -1,5 +1,6 @@
 package com.leyuna.blog.repository;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -11,8 +12,6 @@ import com.leyuna.blog.repository.mapper.TagMapper;
 import com.leyuna.blog.util.TransformationUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 /**
  * @author pengli
@@ -31,12 +30,9 @@ public class TagRepository extends BaseRepository<TagMapper, TagDO, TagCO> imple
     @Override
     public Page<TagCO> selectByCon(TagBean tag) {
         Page page=new Page(tag.getIndex(),tag.getSize());
-        TagDO tagDO = TransformationUtil.copyToDTO(tag, TagDO.class);
-
-        Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(tagDO);
-        IPage<TagDO> Page = this.baseMapper.selectPage(page, new QueryWrapper<TagDO>()
-                .allEq(stringObjectMap)
-                .like(StringUtils.isNotBlank(tag.getConditionName()),"tag_Name",tag.getConditionName()));
+        LambdaQueryWrapper<TagDO> like = new QueryWrapper<TagDO>().lambda()
+                .like(StringUtils.isNotBlank(tag.getTagName()), TagDO::getTagName, tag.getTagName());
+        IPage<TagDO> Page = this.baseMapper.selectPage(page,like);
         return TransformationUtil.copyToPage(Page,TagCO.class);
     }
 }

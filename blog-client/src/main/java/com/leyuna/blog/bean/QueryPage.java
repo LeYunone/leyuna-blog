@@ -22,6 +22,4 @@ public class QueryPage implements Serializable {
     protected Integer size = 10;
 
     private String orderCondition;
-
-    private String conditionName;
 }

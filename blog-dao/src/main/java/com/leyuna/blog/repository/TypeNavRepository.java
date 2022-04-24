@@ -1,6 +1,7 @@
 package com.leyuna.blog.repository;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.leyuna.blog.co.blog.TypeNavCO;
 import com.leyuna.blog.domain.TypeNavE;
@@ -12,7 +13,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * (TypeNav)原子服务
@@ -30,11 +30,9 @@ public class TypeNavRepository extends BaseRepository<TypeNavMapper, TypeNavDO, 
      */
     @Override
     public List<TypeNavCO> selectByCon (TypeNavE typeNavE) {
-        TypeNavDO typeNavDO = TransformationUtil.copyToDTO(typeNavE, TypeNavDO.class);
-        Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(typeNavDO);
-        List<TypeNavDO> typeNavs = this.baseMapper.selectList(new QueryWrapper<TypeNavDO>()
-                .allEq(stringObjectMap)
-                .like(StringUtils.isNotBlank(typeNavE.getTypeNavName()), "type_nav_name", typeNavE.getTypeNavName()));
+        LambdaQueryWrapper<TypeNavDO> like = new QueryWrapper<TypeNavDO>().lambda()
+                .like(StringUtils.isNotBlank(typeNavE.getTypeNavName()), TypeNavDO::getTypeNavName, typeNavE.getTypeNavName());
+        List<TypeNavDO> typeNavs = this.baseMapper.selectList(like);
         return TransformationUtil.copyToLists(typeNavs,TypeNavCO.class);
     }
 }

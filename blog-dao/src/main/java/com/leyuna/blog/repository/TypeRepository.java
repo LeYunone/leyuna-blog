@@ -1,5 +1,6 @@
 package com.leyuna.blog.repository;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -11,8 +12,6 @@ import com.leyuna.blog.repository.mapper.TypeMapper;
 import com.leyuna.blog.util.TransformationUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 /**
  * @author pengli
@@ -30,11 +29,9 @@ public class TypeRepository extends BaseRepository<TypeMapper, TypeDO, TypeCO> i
     @Override
     public Page<TypeCO> selectByCon(TypeBean type) {
         Page page=new Page(type.getIndex(),type.getSize());
-        TypeDO typeDO = TransformationUtil.copyToDTO(type, TypeDO.class);
-        Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(typeDO);
-        IPage<TypeDO> Page = this.page(page, new QueryWrapper<TypeDO>()
-                .allEq(stringObjectMap)
-                .like(StringUtils.isNotBlank(type.getConditionName()),"type_Name",type.getConditionName()));
+        LambdaQueryWrapper<TypeDO> like = new QueryWrapper<TypeDO>().lambda()
+                .like(StringUtils.isNotBlank(type.getTypeName()), TypeDO::getTypeName, type.getTypeName());
+        IPage<TypeDO> Page = this.page(page,like);
         return TransformationUtil.copyToPage(Page,TypeCO.class);
     }
 }
