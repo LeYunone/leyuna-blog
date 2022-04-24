@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @create 2021-12-23 16:36
  * 乐云一云盘 微服务
  */
-@FeignClient(value = "LEYUNA-DISK",fallbackFactory = LeyunaDiskRpcFallbackFactory.class,configuration = LeyunaDiskRpcService.MultipartSupportConfig.class )
+@FeignClient(value = "LEYUNA-DISK",path = "/disk",fallbackFactory = LeyunaDiskRpcFallbackFactory.class,configuration = LeyunaDiskRpcService.MultipartSupportConfig.class )
 public interface LeyunaDiskRpcService {
 
     @Configuration
