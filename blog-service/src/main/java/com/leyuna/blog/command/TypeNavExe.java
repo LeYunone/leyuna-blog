@@ -25,7 +25,7 @@ public class TypeNavExe {
      * 保存分类导航
      * @param typeNavBean
      */
-    @CacheEvict(cacheNames = "typeNav")
+    @CacheEvict(cacheNames = "blog:typeNav")
     public void saveTypeNav(TypeNavBean typeNavBean){
         TypeNavCO save = TypeNavE.of(typeNavBean).save();
         AssertUtil.isFalse(save==null, SystemErrorEnum.UPDATE_TYPENAV_FAIL.getMsg());
@@ -37,7 +37,7 @@ public class TypeNavExe {
      * @param ifMap
      * @return
      */
-    @Cacheable(cacheNames = "typeNav",key = "#typeNavBean.toString()")
+    @Cacheable(cacheNames = "blog:typeNav",key = "#typeNavBean.toString()")
     public DataResponse getTypeNav(TypeNavBean typeNavBean,boolean ifMap){
         List<TypeNavCO> typeNavCOS = 
                 TypeNavE.of(typeNavBean).selectByCon();

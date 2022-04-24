@@ -94,7 +94,7 @@ public class BlogExe {
      *
      * @return
      */
-    @Cacheable(cacheNames = "blogs", key = "#blogBean.toString()+'-'+#blogBean.index+'-'+#blogBean.size")
+    @Cacheable(cacheNames = "blog:blogs", key = "#blogBean.toString()+'-'+#blogBean.index+'-'+#blogBean.size")
     public DataResponse getAllBlogByPage (BlogBean blogBean) {
         Page<BlogCO> blogPage = BlogE.queryInstance().getGateway().queryBlog(blogBean);
         return DataResponse.of(blogPage);
@@ -105,7 +105,7 @@ public class BlogExe {
      *
      * @param blogDTO
      */
-    @CacheEvict(cacheNames = "blog", key = "#blogDTO.id")
+    @CacheEvict(cacheNames = "blog:blog", key = "#blogDTO.id")
     public void updateBlog (BlogBean blogDTO) {
         AssertUtil.isFalse(StringUtils.isBlank(blogDTO.getId()), "操作失败：id can't empty");
         boolean update = BlogE.of(blogDTO).update();
@@ -118,7 +118,7 @@ public class BlogExe {
      * @param id 博客id
      * @return
      */
-    @Cacheable(cacheNames = "blog")
+    @Cacheable(cacheNames = "blog:blog")
     public DataResponse<BlogCO> getBlog (String id) {
         //找到博客
         BlogCO blogCO = BlogE.queryInstance().setId(id).selectById();

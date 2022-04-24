@@ -36,7 +36,7 @@ public class DiskService {
         //删除文件
         fileExe.deleteFile(id);
         //删除之后获得最新的总内存大小
-        return fileExe.selectAllFileSize();
+        return DataResponse.of(fileExe.selectAllFileSize());
     }
 
     public FileInfoCO downloadFile (String id) {

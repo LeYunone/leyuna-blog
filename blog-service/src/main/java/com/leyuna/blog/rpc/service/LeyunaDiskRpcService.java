@@ -1,9 +1,10 @@
 package com.leyuna.blog.rpc.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.bean.disk.FileQueryBean;
 import com.leyuna.blog.co.disk.FileInfoCO;
+import com.leyuna.blog.co.disk.FileValidatorCO;
+import com.leyuna.blog.co.disk.UserFileInfoCO;
 import com.leyuna.blog.rpc.hystrix.LeyunaDiskRpcFallbackFactory;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
@@ -45,7 +46,7 @@ public interface LeyunaDiskRpcService {
      * @return
      */
     @RequestMapping(value = "/file/selectFile",method = RequestMethod.POST)
-    DataResponse<Page<FileInfoCO>> selectFile(FileQueryBean queryBean);
+    DataResponse<UserFileInfoCO> selectFile(FileQueryBean queryBean);
 
     /**
      * 获得指定用户的当前文件内存
@@ -63,8 +64,8 @@ public interface LeyunaDiskRpcService {
      * @return
      */
     @RequestMapping(value = "/file/requestSaveFile",method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    DataResponse<Integer> requestSaveFile(@RequestParam(value = "userId",required = false)String userId,
-                                                      @RequestPart(value = "file") MultipartFile  file);
+    DataResponse<FileValidatorCO> requestSaveFile(@RequestParam(value = "userId",required = false)String userId,
+                                                  @RequestPart(value = "file") MultipartFile  file);
 
     /**
      * 上传文件
@@ -78,21 +79,9 @@ public interface LeyunaDiskRpcService {
                           @RequestPart(value = "file") MultipartFile  file,
                           @RequestParam(value = "saveTime",required = false)String saveTime);
 
-    /**
-     * id删除文件
-     * @param id
-     * @param userId
-     * @return
-     */
     @RequestMapping(value = "/file/deleteFile",method = RequestMethod.POST)
     DataResponse deleteFile(@RequestParam(value = "id") String id,@RequestParam(value = "userId") String userId);
 
-    /**
-     * id下载文件
-     * @param id
-     * @param userId
-     * @return
-     */
     @RequestMapping(value = "/file/downloadFile",method = RequestMethod.POST)
     DataResponse<FileInfoCO> downloadFile(@RequestParam(value = "id") String id,@RequestParam(value = "userId") String userId);
 }

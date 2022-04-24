@@ -23,7 +23,6 @@ public class EndOfProject implements DisposableBean {
     @Override
     public void destroy () {
         //清空缓存
-        log.info("清空缓存");
-        cacheExe.clearAllCache();
+        cacheExe.clearAllCache("blog");
     }
 }

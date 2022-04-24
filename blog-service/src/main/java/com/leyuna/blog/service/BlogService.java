@@ -45,7 +45,7 @@ public class BlogService {
      * @return
      */
     @Transactional
-    @CacheEvict(cacheNames = {"blogs", "type", "tag"}, allEntries = true)
+    @CacheEvict(cacheNames = {"blog:blogs", "blog:type", "blog:tag"}, allEntries = true)
     public DataResponse addBlog (BlogBean blog) {
         Integer blogType = blog.getBlogType();
 

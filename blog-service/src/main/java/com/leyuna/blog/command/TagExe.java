@@ -28,7 +28,7 @@ public class TagExe {
      *
      * @return
      */
-    @Cacheable(value = "tag", key = "#tagBean.toString()+'-'+#tagBean.index+'-'+#tagBean.size")
+    @Cacheable(value = "blog:tag", key = "#tagBean.toString()+'-'+#tagBean.index+'-'+#tagBean.size")
     public DataResponse<Page<TagCO>> getAllTags (TagBean tagBean) {
         //如果有模糊查询条件则走模糊查询
         Page<TagCO> tagPage = TagE.queryInstance().getGateway().selectByCon(tagBean);
@@ -46,7 +46,7 @@ public class TagExe {
         return DataResponse.of(tagPage);
     }
 
-    @CacheEvict(cacheNames = "tag", allEntries = true)
+    @CacheEvict(cacheNames = "blog:tag", allEntries = true)
     public void addTags (List<String> tags) {
         List<TagE> listTags = new ArrayList<>();
         //将名字封装成类
@@ -64,13 +64,13 @@ public class TagExe {
      *
      * @param tags
      */
-    @CacheEvict(cacheNames = "tag", allEntries = true)
+    @CacheEvict(cacheNames = "blog:tag", allEntries = true)
     public void deleteTags (List<String> tags) {
         int b = TagE.queryInstance().getGateway().batchDelete(tags);
         AssertUtil.isTrue(b == tags.size(), SystemErrorEnum.DELETE_TAG_FALE.getMsg());
     }
 
-    @CacheEvict(cacheNames = "tag", allEntries = true)
+    @CacheEvict(cacheNames = "blog:tag", allEntries = true)
     public void updateTags (TagBean tagBean) {
         boolean is = TagE.of(tagBean).update();
         AssertUtil.isTrue(is, SystemErrorEnum.UPDATE_TAG_FALE.getMsg());
