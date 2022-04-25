@@ -15,8 +15,14 @@ import lombok.ToString;
 @ToString
 public class FileValidatorCO {
 
-    private String fileKey;
+    /**
+     * 文件唯一标识 MD5
+     */
+    private String identifier;
 
+    /**
+     * 返回编码
+     */
     private Integer responseType;
 
 }

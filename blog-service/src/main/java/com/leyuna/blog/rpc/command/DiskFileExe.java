@@ -14,10 +14,8 @@ import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -58,13 +56,13 @@ public class DiskFileExe {
         return doubleDataResponse.getData();
     }
 
-    public DataResponse<FileValidatorCO> requestSaveFile(List<MultipartFile> file){
+    public DataResponse<FileValidatorCO> requestSaveFile(MultipartFile file){
 
-        AssertUtil.isFalse(CollectionUtils.isEmpty(file),"操作失败：文件接收为空");
+        AssertUtil.isFalse(ObjectUtils.isEmpty(file),"操作失败：文件接收为空");
         //用户编号
         String userId = (String) StpUtil.getLoginId();
 
-        DataResponse<FileValidatorCO> integerDataResponse = leyunaDiskRpcService.requestSaveFile(userId, file.get(0));
+        DataResponse<FileValidatorCO> integerDataResponse = leyunaDiskRpcService.requestSaveFile(userId, file);
         resultValidate(integerDataResponse);
         //0 是服务器内部处理文件    1 是需要在服务器生成文件
         return integerDataResponse;

@@ -56,7 +56,7 @@ public class DiskControl {
      * @return
      */
     @PostMapping("/requestSaveFile")
-    public DataResponse requestSaveFile(List<MultipartFile> file){
+    public DataResponse requestSaveFile(MultipartFile file){
         return DiskService.requestSaveFile(file);
     }
 
