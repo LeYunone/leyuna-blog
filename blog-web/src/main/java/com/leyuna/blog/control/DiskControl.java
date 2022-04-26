@@ -17,7 +17,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.util.List;
 
 /**
  * @author pengli
@@ -40,15 +39,6 @@ public class DiskControl {
     @GetMapping("/getDiskInfo")
     public DataResponse getDiskInfo(FileQueryBean queryBean){
         return DiskService.selectFile(queryBean);
-    }
-
-    /**
-     * 上传文件
-     * @return
-     */
-    @PostMapping("/uploadFile")
-    public DataResponse uploadFile(List<MultipartFile> file, String saveTime){
-        return DiskService.uploadFile(file,saveTime);
     }
 
     /**

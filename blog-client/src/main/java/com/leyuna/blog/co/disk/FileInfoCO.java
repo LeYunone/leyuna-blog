@@ -24,11 +24,19 @@ public class FileInfoCO {
 
     private Integer deleted;
 
-    private Double fileSize;
+    /**
+     * 文件大小 单位为B
+     */
+    private Long fileSize;
+
+    /**
+     * 通过单位转化 翻译出来的文件大小  1KB = 1024B
+     */
+    private String fileSizeText;
 
     private String userId;
 
-    private String fileTypeName;
+    private String fileTypeText;
 
     /**
      * 文件类型：1图片、2音视、3文档、4其他文件
@@ -36,6 +44,6 @@ public class FileInfoCO {
     private Integer fileType;
 
     private String saveDt;
-    
+
     private byte[] base64File;
 }

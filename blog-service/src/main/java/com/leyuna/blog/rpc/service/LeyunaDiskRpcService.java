@@ -53,8 +53,8 @@ public interface LeyunaDiskRpcService {
      * @param userId
      * @return
      */
-    @RequestMapping(value = "/file/selectAllFileSize",method = RequestMethod.GET)
-    DataResponse<Double> selectAllFileSize( @RequestParam("userId") String userId);
+    @RequestMapping(value = "/file/selectUserFileSize",method = RequestMethod.GET)
+    DataResponse<Long> selectUserFileSize( @RequestParam("userId") String userId);
 
 
     /**
@@ -67,17 +67,6 @@ public interface LeyunaDiskRpcService {
     DataResponse<FileValidatorCO> requestSaveFile(@RequestParam(value = "userId",required = false)String userId,
                                                   @RequestPart(value = "file") MultipartFile  file);
 
-    /**
-     * 上传文件
-     * @param userId
-     * @param file
-     * @param saveTime
-     * @return
-     */
-    @RequestMapping(value = "/file/saveFile",method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    DataResponse saveFile(@RequestParam(value = "userId",required = false)String userId,
-                          @RequestPart(value = "file") MultipartFile  file,
-                          @RequestParam(value = "saveTime",required = false)String saveTime);
 
     @RequestMapping(value = "/file/deleteFile",method = RequestMethod.POST)
     DataResponse deleteFile(@RequestParam(value = "id") String id,@RequestParam(value = "userId") String userId);

@@ -29,17 +29,12 @@ public class LeyunaDiskRpcFallbackFactory implements FallbackFactory<LeyunaDiskR
             }
 
             @Override
-            public DataResponse<Double> selectAllFileSize (String userId) {
+            public DataResponse<Long> selectUserFileSize(String userId) {
                 return response(throwable);
             }
 
             @Override
             public DataResponse<FileValidatorCO> requestSaveFile (String userId, MultipartFile files) {
-                return response(throwable);
-            }
-
-            @Override
-            public DataResponse saveFile (String userId, MultipartFile files, String saveTime) {
                 return response(throwable);
             }
 
