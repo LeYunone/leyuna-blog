@@ -1,7 +1,7 @@
 package com.leyuna.blog.domain;
 
 import com.leyuna.blog.co.blog.TouristHeadCO;
-import com.leyuna.blog.gateway.TouristHeadGateway;
+import com.leyuna.blog.gateway.TouristHeadDao;
 import com.leyuna.blog.util.SpringContextUtil;
 import com.leyuna.blog.util.TransformationUtil;
 import lombok.EqualsAndHashCode;
@@ -37,11 +37,11 @@ public class TouristHeadE implements Serializable {
     private String head;
 
     //===========自定义方法区==========
-    private TouristHeadGateway gateway;
+    private TouristHeadDao gateway;
 
-    public TouristHeadGateway getGateway () {
+    public TouristHeadDao getGateway () {
         if (Objects.isNull(this.gateway)) {
-            this.gateway = SpringContextUtil.getBean(TouristHeadGateway.class);
+            this.gateway = SpringContextUtil.getBean(TouristHeadDao.class);
         }
         return this.gateway;
     }
@@ -55,12 +55,12 @@ public class TouristHeadE implements Serializable {
     }
 
     public List<TouristHeadCO> selectByCon () {
-        TouristHeadGateway gateway = this.getGateway();
+        TouristHeadDao gateway = this.getGateway();
         return gateway.selectByCon(this);
     }
 
     public TouristHeadCO save () {
-        TouristHeadGateway gateway = this.getGateway();
+        TouristHeadDao gateway = this.getGateway();
         return gateway.insertOrUpdate(this);
     }
 
@@ -75,7 +75,7 @@ public class TouristHeadE implements Serializable {
      * 更新
      */
     public boolean update () {
-        TouristHeadGateway gateway = this.getGateway();
+        TouristHeadDao gateway = this.getGateway();
         return gateway.update(this);
     }
 

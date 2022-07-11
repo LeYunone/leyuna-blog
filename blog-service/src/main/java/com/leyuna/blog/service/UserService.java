@@ -3,7 +3,7 @@ package com.leyuna.blog.service;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.bean.blog.UserBean;
+import com.leyuna.blog.model.dto.UserDTO;
 import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.command.TokenExe;
 import com.leyuna.blog.command.UserExe;
@@ -31,8 +31,8 @@ public class UserService {
      * 用户在领域内登录操作
      * @return
      */
-    public DataResponse login(UserBean userBean){
-        UserCO user = userExe.selectUserByCon(userBean);
+    public DataResponse login(UserDTO userDTO){
+        UserCO user = userExe.selectUserByCon(userDTO);
         if(user!=null){
             //绑定令牌
             SaTokenInfo saTokenInfo = tokenExe.loginToken(user.getId());

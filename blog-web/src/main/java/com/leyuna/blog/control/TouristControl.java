@@ -1,6 +1,6 @@
 package com.leyuna.blog.control;
 
-import com.leyuna.blog.bean.blog.CommentBean;
+import com.leyuna.blog.model.dto.CommentDTO;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.service.TouristService;
 import com.leyuna.blog.util.ServerUtil;
@@ -30,10 +30,10 @@ public class TouristControl {
      * @return
      */
     @PostMapping("/comment")
-    public DataResponse comment(@RequestBody CommentBean commentBean, HttpServletRequest request){
+    public DataResponse comment(@RequestBody CommentDTO commentDTO, HttpServletRequest request){
         //设置ip
-        commentBean.setIp(ServerUtil.getClientIp(request));
-        return touristService.comment(commentBean);
+        commentDTO.setIp(ServerUtil.getClientIp(request));
+        return touristService.comment(commentDTO);
     }
 
     /**
@@ -41,8 +41,8 @@ public class TouristControl {
      * @return
      */
     @RequestMapping("/comment/blog")
-    public DataResponse getComment(CommentBean commentBean){
-        return touristService.getComment(commentBean);
+    public DataResponse getComment(CommentDTO commentDTO){
+        return touristService.getComment(commentDTO);
     }
 
     /**

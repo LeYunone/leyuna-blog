@@ -1,7 +1,7 @@
 package com.leyuna.blog.domain;
 
 import com.leyuna.blog.co.blog.TagCO;
-import com.leyuna.blog.gateway.TagGateway;
+import com.leyuna.blog.gateway.TagDao;
 import com.leyuna.blog.util.SpringContextUtil;
 import com.leyuna.blog.util.TransformationUtil;
 import lombok.EqualsAndHashCode;
@@ -38,11 +38,11 @@ public class TagE implements Serializable {
     private LocalDateTime updateDt;
 
     //===========自定义方法区==========
-    private TagGateway gateway;
+    private TagDao gateway;
 
-    public TagGateway getGateway () {
+    public TagDao getGateway () {
         if (Objects.isNull(this.gateway)) {
-            this.gateway = SpringContextUtil.getBean(TagGateway.class);
+            this.gateway = SpringContextUtil.getBean(TagDao.class);
         }
         return this.gateway;
     }
@@ -56,12 +56,12 @@ public class TagE implements Serializable {
     }
 
     public List<TagCO> selectByCon () {
-        TagGateway gateway = this.getGateway();
+        TagDao gateway = this.getGateway();
         return gateway.selectByCon(this);
     }
 
     public TagCO save () {
-        TagGateway gateway = this.getGateway();
+        TagDao gateway = this.getGateway();
         return gateway.insertOrUpdate(this);
     }
 
@@ -76,7 +76,7 @@ public class TagE implements Serializable {
      * 更新
      */
     public boolean update () {
-        TagGateway gateway = this.getGateway();
+        TagDao gateway = this.getGateway();
         return gateway.update(this);
     }
 

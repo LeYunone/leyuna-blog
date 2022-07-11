@@ -1,7 +1,7 @@
 package com.leyuna.blog.domain;
 
 import com.leyuna.blog.co.blog.UserCO;
-import com.leyuna.blog.gateway.UserGateway;
+import com.leyuna.blog.gateway.UserDao;
 import com.leyuna.blog.util.SpringContextUtil;
 import com.leyuna.blog.util.TransformationUtil;
 import lombok.EqualsAndHashCode;
@@ -33,11 +33,11 @@ public class UserE implements Serializable {
     private String passWord;
 
     //===========自定义方法区==========
-    private UserGateway gateway;
+    private UserDao gateway;
 
-    public UserGateway getGateway () {
+    public UserDao getGateway () {
         if (Objects.isNull(this.gateway)) {
-            this.gateway = SpringContextUtil.getBean(UserGateway.class);
+            this.gateway = SpringContextUtil.getBean(UserDao.class);
         }
         return this.gateway;
     }
@@ -51,12 +51,12 @@ public class UserE implements Serializable {
     }
 
     public List<UserCO> selectByCon () {
-        UserGateway gateway = this.getGateway();
+        UserDao gateway = this.getGateway();
         return gateway.selectByCon(this);
     }
 
     public UserCO save () {
-        UserGateway gateway = this.getGateway();
+        UserDao gateway = this.getGateway();
         return gateway.insertOrUpdate(this);
     }
 
@@ -71,7 +71,7 @@ public class UserE implements Serializable {
      * 更新
      */
     public boolean update () {
-        UserGateway gateway = this.getGateway();
+        UserDao gateway = this.getGateway();
         return gateway.update(this);
     }
 

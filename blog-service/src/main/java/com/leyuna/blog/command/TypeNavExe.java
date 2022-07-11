@@ -1,7 +1,7 @@
 package com.leyuna.blog.command;
 
 import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.bean.blog.TypeNavBean;
+import com.leyuna.blog.model.dto.TypeNavDTO;
 import com.leyuna.blog.co.blog.TypeNavCO;
 import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.domain.TypeNavE;
@@ -23,24 +23,24 @@ public class TypeNavExe {
 
     /**
      * 保存分类导航
-     * @param typeNavBean
+     * @param typeNavDTO
      */
     @CacheEvict(cacheNames = "blog:typeNav")
-    public void saveTypeNav(TypeNavBean typeNavBean){
-        TypeNavCO save = TypeNavE.of(typeNavBean).save();
+    public void saveTypeNav(TypeNavDTO typeNavDTO){
+        TypeNavCO save = TypeNavE.of(typeNavDTO).save();
         AssertUtil.isFalse(save==null, SystemErrorEnum.UPDATE_TYPENAV_FAIL.getMsg());
     }
 
     /**
      * 全量获取分类导航
-     * @param typeNavBean
+     * @param typeNavDTO
      * @param ifMap
      * @return
      */
-    @Cacheable(cacheNames = "blog:typeNav",key = "#typeNavBean.toString()")
-    public DataResponse getTypeNav(TypeNavBean typeNavBean,boolean ifMap){
-        List<TypeNavCO> typeNavCOS = 
-                TypeNavE.of(typeNavBean).selectByCon();
+    @Cacheable(cacheNames = "blog:typeNav",key = "#typeNavDTO.toString()")
+    public DataResponse getTypeNav(TypeNavDTO typeNavDTO, boolean ifMap){
+        List<TypeNavCO> typeNavCOS =
+                TypeNavE.of(typeNavDTO).selectByCon();
         if(ifMap){
             Map<String,TypeNavCO> resultMap=new HashMap<>();
             typeNavCOS.stream().forEach(t->{

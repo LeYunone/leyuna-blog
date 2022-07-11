@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.bean.blog.TypeBean;
+import com.leyuna.blog.model.dto.TypeDTO;
 import com.leyuna.blog.co.blog.TypeCO;
-import com.leyuna.blog.gateway.TypeGateway;
+import com.leyuna.blog.gateway.TypeDao;
 import com.leyuna.blog.repository.entry.TypeDO;
 import com.leyuna.blog.repository.mapper.TypeMapper;
 import com.leyuna.blog.util.TransformationUtil;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  *  user表原子对象
  */
 @Service
-public class TypeRepository extends BaseRepository<TypeMapper, TypeDO, TypeCO> implements TypeGateway {
+public class TypeRepository extends BaseRepository<TypeMapper, TypeDO, TypeCO> implements TypeDao {
     /**
      * 定制查询
      * @param
@@ -27,7 +27,7 @@ public class TypeRepository extends BaseRepository<TypeMapper, TypeDO, TypeCO> i
      * @return
      */
     @Override
-    public Page<TypeCO> selectByCon(TypeBean type) {
+    public Page<TypeCO> selectByCon(TypeDTO type) {
         Page page=new Page(type.getIndex(),type.getSize());
         LambdaQueryWrapper<TypeDO> like = new QueryWrapper<TypeDO>().lambda()
                 .like(StringUtils.isNotBlank(type.getTypeName()), TypeDO::getTypeName, type.getTypeName());

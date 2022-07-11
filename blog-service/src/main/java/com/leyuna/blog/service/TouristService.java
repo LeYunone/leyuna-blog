@@ -1,6 +1,6 @@
 package com.leyuna.blog.service;
 
-import com.leyuna.blog.bean.blog.CommentBean;
+import com.leyuna.blog.model.dto.CommentDTO;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.command.CacheExe;
 import com.leyuna.blog.command.CommentExe;
@@ -35,7 +35,7 @@ public class TouristService {
      *
      * @return
      */
-    public DataResponse comment(CommentBean commentDTO) {
+    public DataResponse comment(CommentDTO commentDTO) {
         //添加评论
         return commentExe.addComment(commentDTO);
     }
@@ -45,8 +45,8 @@ public class TouristService {
      *
      * @return
      */
-    public DataResponse getComment(CommentBean commentBean) {
-        return commentExe.queryComment(commentBean);
+    public DataResponse getComment(CommentDTO commentDTO) {
+        return commentExe.queryComment(commentDTO);
     }
 
     /**
@@ -87,7 +87,7 @@ public class TouristService {
         }
         return DataResponse.buildSuccess();
     }
-    
+
     /**
      * 点赞
      *

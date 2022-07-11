@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leyuna.blog.constant.enums.SystemErrorEnum;
-import com.leyuna.blog.gateway.BaseGateway;
+import com.leyuna.blog.gateway.BaseDao;
 import com.leyuna.blog.util.AssertUtil;
 import com.leyuna.blog.util.ObjectUtil;
 import com.leyuna.blog.util.TransformationUtil;
@@ -23,7 +23,7 @@ import java.util.Map;
  * @author pengli
  * @since 2021-10-18
  */
-public abstract class BaseRepository<M extends BaseMapper<DO>, DO,CO> extends ServiceImpl<M, DO> implements BaseGateway<CO> {
+public abstract class BaseRepository<M extends BaseMapper<DO>, DO,CO> extends ServiceImpl<M, DO> implements BaseDao<CO> {
     private Class COclass;
     private Class DOclass;
     public BaseRepository() {

@@ -1,7 +1,7 @@
 package com.leyuna.blog.domain;
 
 import com.leyuna.blog.co.blog.TypeCO;
-import com.leyuna.blog.gateway.TypeGateway;
+import com.leyuna.blog.gateway.TypeDao;
 import com.leyuna.blog.util.SpringContextUtil;
 import com.leyuna.blog.util.TransformationUtil;
 import lombok.EqualsAndHashCode;
@@ -52,11 +52,11 @@ public class TypeE implements Serializable {
     private String typeNav;
 
     //===========自定义方法区==========
-    private TypeGateway gateway;
+    private TypeDao gateway;
 
-    public TypeGateway getGateway () {
+    public TypeDao getGateway () {
         if (Objects.isNull(this.gateway)) {
-            this.gateway = SpringContextUtil.getBean(TypeGateway.class);
+            this.gateway = SpringContextUtil.getBean(TypeDao.class);
         }
         return this.gateway;
     }
@@ -70,12 +70,12 @@ public class TypeE implements Serializable {
     }
 
     public List<TypeCO> selectByCon () {
-        TypeGateway gateway = this.getGateway();
+        TypeDao gateway = this.getGateway();
         return gateway.selectByCon(this);
     }
 
     public TypeCO save () {
-        TypeGateway gateway = this.getGateway();
+        TypeDao gateway = this.getGateway();
         return gateway.insertOrUpdate(this);
     }
 
@@ -90,7 +90,7 @@ public class TypeE implements Serializable {
      * 更新
      */
     public boolean update () {
-        TypeGateway gateway = this.getGateway();
+        TypeDao gateway = this.getGateway();
         return gateway.update(this);
     }
 

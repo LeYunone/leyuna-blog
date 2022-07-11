@@ -1,6 +1,6 @@
 package com.leyuna.blog.service;
 
-import com.leyuna.blog.bean.blog.BlogBean;
+import com.leyuna.blog.model.dto.BlogDTO;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.command.BlogExe;
@@ -35,8 +35,8 @@ public class BlogService {
      *
      * @return
      */
-    public DataResponse getBlogsByPage (BlogBean blogBean) {
-        return blogExe.getAllBlogByPage(blogBean);
+    public DataResponse getBlogsByPage (BlogDTO blogDTO) {
+        return blogExe.getAllBlogByPage(blogDTO);
     }
 
     /**
@@ -46,7 +46,7 @@ public class BlogService {
      */
     @Transactional
     @CacheEvict(cacheNames = {"blog:blogs", "blog:type", "blog:tag"}, allEntries = true)
-    public DataResponse addBlog (BlogBean blog) {
+    public DataResponse addBlog (BlogDTO blog) {
         Integer blogType = blog.getBlogType();
 
         BlogTypeEnum.BLOG_TYPE.getValue();
@@ -56,7 +56,7 @@ public class BlogService {
                 //添加博客
                 blogCO = blogExe.addBlog(blog);
                 //添加改博客的索引库文档
-                List<BlogBean> list = new ArrayList<>();
+                List<BlogDTO> list = new ArrayList<>();
                 blog.setId(blogCO.getId());
                 list.add(blog);
                 luceneExe.addBlogDir(list);
@@ -88,7 +88,7 @@ public class BlogService {
      *
      * @return
      */
-    public DataResponse updateBlog (BlogBean blog) {
+    public DataResponse updateBlog (BlogDTO blog) {
         Integer blogType = blog.getBlogType();
         switch (BlogTypeEnum.loadName(blogType)){
             case BLOG_TYPE:

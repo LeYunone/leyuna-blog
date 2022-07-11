@@ -1,7 +1,7 @@
 package com.leyuna.blog.domain;
 
 import com.leyuna.blog.co.blog.BlogCO;
-import com.leyuna.blog.gateway.BlogGateway;
+import com.leyuna.blog.gateway.BlogDao;
 import com.leyuna.blog.util.SpringContextUtil;
 import com.leyuna.blog.util.TransformationUtil;
 import lombok.EqualsAndHashCode;
@@ -75,14 +75,14 @@ public class BlogE implements Serializable {
     /**
      * 第三方链接
      */
-    private String blogLink; 
-   
-    //===========自定义方法区==========
-    private BlogGateway gateway;
+    private String blogLink;
 
-    public BlogGateway getGateway () {
+    //===========自定义方法区==========
+    private BlogDao gateway;
+
+    public BlogDao getGateway () {
         if (Objects.isNull(this.gateway)) {
-            this.gateway = SpringContextUtil.getBean(BlogGateway.class);
+            this.gateway = SpringContextUtil.getBean(BlogDao.class);
         }
         return this.gateway;
     }
@@ -96,12 +96,12 @@ public class BlogE implements Serializable {
     }
 
     public List<BlogCO> selectByCon () {
-        BlogGateway gateway = this.getGateway();
+        BlogDao gateway = this.getGateway();
         return gateway.selectByCon(this);
     }
 
     public BlogCO save () {
-        BlogGateway gateway = this.getGateway();
+        BlogDao gateway = this.getGateway();
         return gateway.insertOrUpdate(this);
     }
 
@@ -116,7 +116,7 @@ public class BlogE implements Serializable {
      * 更新
      */
     public boolean update () {
-        BlogGateway gateway = this.getGateway();
+        BlogDao gateway = this.getGateway();
         return gateway.update(this);
     }
 

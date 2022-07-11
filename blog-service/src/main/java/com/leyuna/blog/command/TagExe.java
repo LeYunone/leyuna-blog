@@ -2,7 +2,7 @@ package com.leyuna.blog.command;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.bean.blog.TagBean;
+import com.leyuna.blog.model.dto.TagDTO;
 import com.leyuna.blog.co.blog.TagCO;
 import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.domain.TagE;
@@ -28,10 +28,10 @@ public class TagExe {
      *
      * @return
      */
-    @Cacheable(value = "blog:tag", key = "#tagBean.toString()+'-'+#tagBean.index+'-'+#tagBean.size")
-    public DataResponse<Page<TagCO>> getAllTags (TagBean tagBean) {
+    @Cacheable(value = "blog:tag", key = "#tagDTO.toString()+'-'+#tagDTO.index+'-'+#tagDTO.size")
+    public DataResponse<Page<TagCO>> getAllTags (TagDTO tagDTO) {
         //如果有模糊查询条件则走模糊查询
-        Page<TagCO> tagPage = TagE.queryInstance().getGateway().selectByCon(tagBean);
+        Page<TagCO> tagPage = TagE.queryInstance().getGateway().selectByCon(tagDTO);
         List<TagCO> records = tagPage.getRecords();
         records.stream().forEach(tag -> {
             LocalDateTime lastTime = tag.getUpdateDt();
@@ -71,8 +71,8 @@ public class TagExe {
     }
 
     @CacheEvict(cacheNames = "blog:tag", allEntries = true)
-    public void updateTags (TagBean tagBean) {
-        boolean is = TagE.of(tagBean).update();
+    public void updateTags (TagDTO tagDTO) {
+        boolean is = TagE.of(tagDTO).update();
         AssertUtil.isTrue(is, SystemErrorEnum.UPDATE_TAG_FALE.getMsg());
     }
 }

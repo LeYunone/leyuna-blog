@@ -1,7 +1,7 @@
 package com.leyuna.blog.domain;
 
 import com.leyuna.blog.co.blog.CommentCO;
-import com.leyuna.blog.gateway.CommentGateway;
+import com.leyuna.blog.gateway.CommentDao;
 import com.leyuna.blog.util.SpringContextUtil;
 import com.leyuna.blog.util.TransformationUtil;
 import lombok.EqualsAndHashCode;
@@ -72,11 +72,11 @@ public class CommentE implements Serializable {
     private String admin;
 
     //===========自定义方法区==========
-    private CommentGateway gateway;
+    private CommentDao gateway;
 
-    public CommentGateway getGateway () {
+    public CommentDao getGateway () {
         if (Objects.isNull(this.gateway)) {
-            this.gateway = SpringContextUtil.getBean(CommentGateway.class);
+            this.gateway = SpringContextUtil.getBean(CommentDao.class);
         }
         return this.gateway;
     }
@@ -90,12 +90,12 @@ public class CommentE implements Serializable {
     }
 
     public List<CommentCO> selectByCon () {
-        CommentGateway gateway = this.getGateway();
+        CommentDao gateway = this.getGateway();
         return gateway.selectByCon(this);
     }
 
     public CommentCO save () {
-        CommentGateway gateway = this.getGateway();
+        CommentDao gateway = this.getGateway();
         return gateway.insertOrUpdate(this);
     }
 
@@ -110,7 +110,7 @@ public class CommentE implements Serializable {
      * 更新
      */
     public boolean update () {
-        CommentGateway gateway = this.getGateway();
+        CommentDao gateway = this.getGateway();
         return gateway.update(this);
     }
 

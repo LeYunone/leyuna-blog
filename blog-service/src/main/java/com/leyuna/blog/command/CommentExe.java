@@ -2,7 +2,7 @@ package com.leyuna.blog.command;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.bean.blog.CommentBean;
+import com.leyuna.blog.model.dto.CommentDTO;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.co.blog.CommentCO;
@@ -34,9 +34,9 @@ public class CommentExe {
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(cacheNames = "blog:comment",key = "#commentBean.blogId+'-'+#commentBean.index+'-'+#commentBean.size")
-    public DataResponse addComment(CommentBean commentBean){
-        CommentE comment = CommentE.of(commentBean);
+    @CacheEvict(cacheNames = "blog:comment",key = "#commentDTO.blogId+'-'+#commentDTO.index+'-'+#commentDTO.size")
+    public DataResponse addComment(CommentDTO commentDTO){
+        CommentE comment = CommentE.of(commentDTO);
         //初始化基本信息
         if(StringUtils.isEmpty(comment.getInformation())){
             comment.setInformation("不愿透露位置的某人");
@@ -75,16 +75,16 @@ public class CommentExe {
      * 分页查询指定博客下的评论
      * @return
      */
-    @Cacheable(cacheNames = "blog:comment",key = "#commentBean.blogId+'-'+#commentBean.index+'-'+#commentBean.size")
-    public DataResponse queryComment(CommentBean commentBean){
+    @Cacheable(cacheNames = "blog:comment",key = "#commentDTO.blogId+'-'+#commentDTO.index+'-'+#commentDTO.size")
+    public DataResponse queryComment(CommentDTO commentDTO){
         Page<CommentCO> commentPage =null;
-        Integer type=commentBean.getSortType();
-        String blogId=commentBean.getBlogId();
+        Integer type= commentDTO.getSortType();
+        String blogId= commentDTO.getBlogId();
         if(type==1){
-            commentPage=CommentE.queryInstance().getGateway().selectNewCommentByBlogId(commentBean.getIndex(),commentBean.getSize(),blogId);
+            commentPage=CommentE.queryInstance().getGateway().selectNewCommentByBlogId(commentDTO.getIndex(), commentDTO.getSize(),blogId);
         }
         if(type==2){
-            commentPage=CommentE.queryInstance().getGateway().selectNewAndGoodsCommentByBlogId(commentBean.getIndex(),commentBean.getSize(),blogId);
+            commentPage=CommentE.queryInstance().getGateway().selectNewAndGoodsCommentByBlogId(commentDTO.getIndex(), commentDTO.getSize(),blogId);
         }
         List<CommentCO> commentDTOS = commentPage.getRecords();
         commentDTOS.forEach(c->{

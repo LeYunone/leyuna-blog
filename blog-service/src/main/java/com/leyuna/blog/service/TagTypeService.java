@@ -2,9 +2,9 @@ package com.leyuna.blog.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.bean.blog.TagBean;
-import com.leyuna.blog.bean.blog.TypeBean;
-import com.leyuna.blog.bean.blog.TypeNavBean;
+import com.leyuna.blog.model.dto.TagDTO;
+import com.leyuna.blog.model.dto.TypeDTO;
+import com.leyuna.blog.model.dto.TypeNavDTO;
 import com.leyuna.blog.co.blog.TagCO;
 import com.leyuna.blog.co.blog.TypeCO;
 import com.leyuna.blog.co.blog.TypeNavCO;
@@ -33,7 +33,7 @@ public class TagTypeService {
 
     @Autowired
     private TypeExe typeExe;
-    
+
     @Autowired
     private TypeNavExe typeNavExe;
     /**
@@ -41,7 +41,7 @@ public class TagTypeService {
      * @param
      * @return
      */
-    public DataResponse<Page<TagCO>> getALlTags(TagBean tag){
+    public DataResponse<Page<TagCO>> getALlTags(TagDTO tag){
         return tagExe.getAllTags(tag);
     }
 
@@ -50,7 +50,7 @@ public class TagTypeService {
      * @param
      * @return
      */
-    public DataResponse<Page<TypeCO>> getALlTypes(TypeBean type){
+    public DataResponse<Page<TypeCO>> getALlTypes(TypeDTO type){
         return typeExe.getAllTypes(type);
     }
 
@@ -97,16 +97,16 @@ public class TagTypeService {
     @Transactional
     public DataResponse updateTypesOrTags(String id,String newName,String name){
         if("type".equals(name)){
-            TypeBean typeBean=new TypeBean();
-            typeBean.setId(id);
-            typeBean.setTypeName(newName);
-            typeExe.updateTypes(typeBean);
+            TypeDTO typeDTO =new TypeDTO();
+            typeDTO.setId(id);
+            typeDTO.setTypeName(newName);
+            typeExe.updateTypes(typeDTO);
         }
         if("tag".equals(name)){
-            TagBean tagBean=new TagBean();
-            tagBean.setId(id);
-            tagBean.setTagName(newName);
-            tagExe.updateTags(tagBean);
+            TagDTO tagDTO =new TagDTO();
+            tagDTO.setId(id);
+            tagDTO.setTagName(newName);
+            tagExe.updateTags(tagDTO);
         }
         return DataResponse.buildSuccess();
     }
@@ -115,8 +115,8 @@ public class TagTypeService {
      * 得到所有分类导航
      * @return
      */
-    public DataResponse<Map<String, TypeNavCO>> getTypeNavMap(TypeNavBean typeNavBean){
-        return typeNavExe.getTypeNav(typeNavBean,true);
+    public DataResponse<Map<String, TypeNavCO>> getTypeNavMap(TypeNavDTO typeNavDTO){
+        return typeNavExe.getTypeNav(typeNavDTO,true);
     }
 
 
@@ -124,17 +124,17 @@ public class TagTypeService {
      * 得到所有分类导航
      * @return
      */
-    public DataResponse getTypeNavList(TypeNavBean typeNavBean){
-        return typeNavExe.getTypeNav(typeNavBean,false);
+    public DataResponse getTypeNavList(TypeNavDTO typeNavDTO){
+        return typeNavExe.getTypeNav(typeNavDTO,false);
     }
 
     /**
      * 保存分类导航
-     * @param typeNavBean
+     * @param typeNavDTO
      * @return
      */
-    public DataResponse saveTypeNav(TypeNavBean typeNavBean){
-        typeNavExe.saveTypeNav(typeNavBean);
+    public DataResponse saveTypeNav(TypeNavDTO typeNavDTO){
+        typeNavExe.saveTypeNav(typeNavDTO);
         return DataResponse.buildSuccess();
     }
 

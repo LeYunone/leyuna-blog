@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.leyuna.blog.co.blog.TypeNavCO;
 import com.leyuna.blog.domain.TypeNavE;
-import com.leyuna.blog.gateway.TypeNavGateway;
+import com.leyuna.blog.gateway.TypeNavDao;
 import com.leyuna.blog.repository.entry.TypeNavDO;
 import com.leyuna.blog.repository.mapper.TypeNavMapper;
 import com.leyuna.blog.util.TransformationUtil;
@@ -21,7 +21,7 @@ import java.util.List;
  * @since 2021-08-23 13:34:40
  */
 @Service
-public class TypeNavRepository extends BaseRepository<TypeNavMapper, TypeNavDO, TypeNavCO> implements TypeNavGateway {
+public class TypeNavRepository extends BaseRepository<TypeNavMapper, TypeNavDO, TypeNavCO> implements TypeNavDao {
 
     /**
      * 定制查询

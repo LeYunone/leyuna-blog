@@ -2,7 +2,7 @@ package com.leyuna.blog.command;
 
 import com.alibaba.nacos.api.utils.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.bean.blog.BlogBean;
+import com.leyuna.blog.model.dto.BlogDTO;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.constant.code.ServerCode;
@@ -36,7 +36,7 @@ public class BlogExe {
      * @param
      * @return
      */
-    public BlogCO addBlog (BlogBean blog) {
+    public BlogCO addBlog (BlogDTO blog) {
         String[] tags = blog.getTags();
         //处理标签  组装逗号分隔的标签字符
         if (tags!=null && tags.length != 0) {
@@ -68,7 +68,7 @@ public class BlogExe {
      *
      * @param blog
      */
-    public BlogCO addAnime (BlogBean blog) {
+    public BlogCO addAnime (BlogDTO blog) {
         if(null!=blog.getCover()){
             //上传封面至服务器
             UpLoadUtil.uploadFile(ServerCode.COVER_SAVE_PATH,blog.getCover());
@@ -85,7 +85,7 @@ public class BlogExe {
      *
      * @param blog
      */
-    public BlogCO addNotice (BlogBean blog) {
+    public BlogCO addNotice (BlogDTO blog) {
         return BlogE.of(blog).save();
     }
 
@@ -94,9 +94,9 @@ public class BlogExe {
      *
      * @return
      */
-    @Cacheable(cacheNames = "blog:blogs", key = "#blogBean.toString()+'-'+#blogBean.index+'-'+#blogBean.size")
-    public DataResponse getAllBlogByPage (BlogBean blogBean) {
-        Page<BlogCO> blogPage = BlogE.queryInstance().getGateway().queryBlog(blogBean);
+    @Cacheable(cacheNames = "blog:blogs", key = "#blogDTO.toString()+'-'+#blogDTO.index+'-'+#blogDTO.size")
+    public DataResponse getAllBlogByPage (BlogDTO blogDTO) {
+        Page<BlogCO> blogPage = BlogE.queryInstance().getGateway().queryBlog(blogDTO);
         return DataResponse.of(blogPage);
     }
 
@@ -106,7 +106,7 @@ public class BlogExe {
      * @param blogDTO
      */
     @CacheEvict(cacheNames = "blog:blog", key = "#blogDTO.id")
-    public void updateBlog (BlogBean blogDTO) {
+    public void updateBlog (BlogDTO blogDTO) {
         AssertUtil.isFalse(StringUtils.isBlank(blogDTO.getId()), "操作失败：id can't empty");
         boolean update = BlogE.of(blogDTO).update();
         AssertUtil.isTrue(update, SystemErrorEnum.UPDATE_BLOG_FAIL.getMsg());

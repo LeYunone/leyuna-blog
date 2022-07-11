@@ -2,7 +2,7 @@ package com.leyuna.blog.command;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.bean.blog.TypeBean;
+import com.leyuna.blog.model.dto.TypeDTO;
 import com.leyuna.blog.co.blog.TypeCO;
 import com.leyuna.blog.constant.enums.SystemErrorEnum;
 import com.leyuna.blog.domain.TypeE;
@@ -48,11 +48,11 @@ public class TypeExe {
 
     /**
      * id更新分类信息
-     * @param typeBean
+     * @param typeDTO
      */
     @CacheEvict(cacheNames = "blog:type", allEntries = true)
-    public void updateTypes (TypeBean typeBean) {
-        boolean is = TypeE.of(typeBean).update();
+    public void updateTypes (TypeDTO typeDTO) {
+        boolean is = TypeE.of(typeDTO).update();
         AssertUtil.isTrue(is, SystemErrorEnum.UPDATE_TYPE_FALE.getMsg());
     }
 
@@ -62,7 +62,7 @@ public class TypeExe {
      * @return
      */
     @Cacheable(cacheNames = "blog:type", key = "#type.toString()+'-'+#type.index+'-'+#type.size")
-    public DataResponse<Page<TypeCO>> getAllTypes (TypeBean type) {
+    public DataResponse<Page<TypeCO>> getAllTypes (TypeDTO type) {
         //如果有模糊查询条件则走模糊查询
         Page<TypeCO> typePage = TypeE.queryInstance().getGateway().selectByCon(type);
         typePage.getRecords().stream().forEach(tag -> {

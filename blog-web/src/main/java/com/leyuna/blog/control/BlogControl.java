@@ -1,6 +1,6 @@
 package com.leyuna.blog.control;
 
-import com.leyuna.blog.bean.blog.BlogBean;
+import com.leyuna.blog.model.dto.BlogDTO;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.co.blog.LuceneCO;
@@ -31,12 +31,12 @@ public class BlogControl{
     private FtpUploadUtil ftpUploadUtil;
     /**
      * 发布博客
-     * @param blogBean
+     * @param blogDTO
      * @return
      */
     @PostMapping("/addBlog")
-    public DataResponse addBlog( BlogBean blogBean){
-        return blogService.addBlog(blogBean);
+    public DataResponse addBlog( BlogDTO blogDTO){
+        return blogService.addBlog(blogDTO);
     }
 
     @GetMapping("/test")
@@ -51,8 +51,8 @@ public class BlogControl{
      * @return
      */
     @GetMapping("/blogs")
-    public DataResponse blogs(BlogBean blogBean){
-        return blogService.getBlogsByPage(blogBean);
+    public DataResponse blogs(BlogDTO blogDTO){
+        return blogService.getBlogsByPage(blogDTO);
     }
 
     @GetMapping("/blog/{id}")
@@ -61,8 +61,8 @@ public class BlogControl{
     }
 
     @PostMapping("/edit")
-    public DataResponse editBlog(@RequestBody BlogBean blogBean){
-        return blogService.updateBlog(blogBean);
+    public DataResponse editBlog(@RequestBody BlogDTO blogDTO){
+        return blogService.updateBlog(blogDTO);
     }
 
     /**
@@ -70,8 +70,8 @@ public class BlogControl{
      * @return
      */
     @GetMapping("/search")
-    public DataResponse<LuceneCO> blogSearch(BlogBean blogBean){
-        return searchService.getBlogFromSearch(blogBean);
+    public DataResponse<LuceneCO> blogSearch(BlogDTO blogDTO){
+        return searchService.getBlogFromSearch(blogDTO);
     }
 
     /**

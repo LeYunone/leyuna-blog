@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>com.leyuna</groupId>
-            <artifactId>blog-service</artifactId>
+            <artifactId>blog-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -2,7 +2,7 @@ package com.leyuna.blog.control;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.bean.blog.UserBean;
+import com.leyuna.blog.model.dto.UserDTO;
 import com.leyuna.blog.co.blog.UserCO;
 import com.leyuna.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class UserControl  {
      * @return
      */
     @PostMapping("/login")
-    public DataResponse login(@RequestBody UserBean user){
+    public DataResponse login(@RequestBody UserDTO user){
         return userService.login(user);
     }
 

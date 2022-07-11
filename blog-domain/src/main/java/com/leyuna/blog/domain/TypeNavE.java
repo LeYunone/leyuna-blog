@@ -1,7 +1,7 @@
 package com.leyuna.blog.domain;
 
 import com.leyuna.blog.co.blog.TypeNavCO;
-import com.leyuna.blog.gateway.TypeNavGateway;
+import com.leyuna.blog.gateway.TypeNavDao;
 import com.leyuna.blog.util.SpringContextUtil;
 import com.leyuna.blog.util.TransformationUtil;
 import lombok.EqualsAndHashCode;
@@ -31,14 +31,14 @@ public class TypeNavE implements Serializable {
      * 导航名
      */
     private String typeNavName;
-    
+
     private Integer deleted;
     //===========自定义方法区==========
-    private TypeNavGateway gateway;
+    private TypeNavDao gateway;
 
-    public TypeNavGateway getGateway () {
+    public TypeNavDao getGateway () {
         if (Objects.isNull(this.gateway)) {
-            this.gateway = SpringContextUtil.getBean(TypeNavGateway.class);
+            this.gateway = SpringContextUtil.getBean(TypeNavDao.class);
         }
         return this.gateway;
     }
@@ -52,12 +52,12 @@ public class TypeNavE implements Serializable {
     }
 
     public List<TypeNavCO> selectByCon () {
-        TypeNavGateway gateway = this.getGateway();
+        TypeNavDao gateway = this.getGateway();
         return gateway.selectByCon(this);
     }
 
     public TypeNavCO save () {
-        TypeNavGateway gateway = this.getGateway();
+        TypeNavDao gateway = this.getGateway();
         return gateway.insertOrUpdate(this);
     }
 
@@ -72,7 +72,7 @@ public class TypeNavE implements Serializable {
      * 更新
      */
     public boolean update () {
-        TypeNavGateway gateway = this.getGateway();
+        TypeNavDao gateway = this.getGateway();
         return gateway.update(this);
     }
 

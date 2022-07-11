@@ -5,6 +5,7 @@ import com.leyuna.blog.bean.blog.*;
 import com.leyuna.blog.co.blog.TagCO;
 import com.leyuna.blog.co.blog.TypeCO;
 import com.leyuna.blog.co.blog.TypeNavCO;
+import com.leyuna.blog.model.dto.*;
 import com.leyuna.blog.service.TagTypeService;
 import com.leyuna.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class TagTypeControl{
      * @return
      */
     @RequestMapping("/tags")
-    public DataResponse<Page<TagCO>> getTags(TagBean query){
+    public DataResponse<Page<TagCO>> getTags(TagDTO query){
         return tagTypeService.getALlTags(query);
     }
 
@@ -47,7 +48,7 @@ public class TagTypeControl{
      * @return
      */
     @RequestMapping("/types")
-    public DataResponse getTypes(TypeBean query){
+    public DataResponse getTypes(TypeDTO query){
         return tagTypeService.getALlTypes(query);
     }
 
@@ -57,22 +58,22 @@ public class TagTypeControl{
      * @param typeNavMap
      * @return
      */
-    private List<CascaderTypeBean> getCascaderTypeResult(List<TypeCO> types,Map<String, TypeNavCO> typeNavMap){
-        List<CascaderTypeBean> lists=new ArrayList<>();
-        Map<String,CascaderTypeBean> map=new HashMap<>();
+    private List<CascaderTypeDTO> getCascaderTypeResult(List<TypeCO> types, Map<String, TypeNavCO> typeNavMap){
+        List<CascaderTypeDTO> lists=new ArrayList<>();
+        Map<String, CascaderTypeDTO> map=new HashMap<>();
         types.stream().forEach(t->{
             String fatherType = t.getTypeNav();
-            CascaderTypeBean cascaderTypeBean = map.get(fatherType);
-            if(null==cascaderTypeBean){
-                CascaderTypeBean reslutFul=new CascaderTypeBean();
+            CascaderTypeDTO cascaderTypeDTO = map.get(fatherType);
+            if(null== cascaderTypeDTO){
+                CascaderTypeDTO reslutFul=new CascaderTypeDTO();
                 //拿导航名
                 TypeNavCO typeNavDTO = typeNavMap.get(fatherType);
                 reslutFul.setLabel(typeNavDTO.getTypeNavName());
                 reslutFul.setValue(t.getTypeNav());
 
                 //创建子集合
-                List<CascaderTypeBean> chiden=new ArrayList<>();
-                CascaderTypeBean chidenBean=new CascaderTypeBean();
+                List<CascaderTypeDTO> chiden=new ArrayList<>();
+                CascaderTypeDTO chidenBean=new CascaderTypeDTO();
                 chidenBean.setValue(t.getId());
                 chidenBean.setLabel(t.getTypeName());
                 chiden.add(chidenBean);
@@ -81,10 +82,10 @@ public class TagTypeControl{
                 reslutFul.setChildren(chiden);
                 map.put(fatherType,reslutFul);
             }else{
-                CascaderTypeBean chiden=new CascaderTypeBean();
+                CascaderTypeDTO chiden=new CascaderTypeDTO();
                 chiden.setValue(t.getId());
                 chiden.setLabel(t.getTypeName());
-                cascaderTypeBean.getChildren().add(chiden);
+                cascaderTypeDTO.getChildren().add(chiden);
             }
         });
         map.forEach((key,value) ->{
@@ -132,8 +133,8 @@ public class TagTypeControl{
      * @return
      */
     @GetMapping("/getTypeNav")
-    public DataResponse getTypeNav(TypeNavBean typeNavBean){
-        return tagTypeService.getTypeNavList(typeNavBean);
+    public DataResponse getTypeNav(TypeNavDTO typeNavDTO){
+        return tagTypeService.getTypeNavList(typeNavDTO);
     }
     /**
      * 获得树形分类
@@ -141,14 +142,14 @@ public class TagTypeControl{
      */
     @GetMapping("/treeType")
     public DataResponse getTreeType(){
-        TypeBean typeBean = new TypeBean();
-        typeBean.setSize(50);
-        DataResponse<Page<TypeCO>> aLlTypes = tagTypeService.getALlTypes(typeBean);
+        TypeDTO typeDTO = new TypeDTO();
+        typeDTO.setSize(50);
+        DataResponse<Page<TypeCO>> aLlTypes = tagTypeService.getALlTypes(typeDTO);
         Page<TypeCO> data = aLlTypes.getData();
 
-        DataResponse<Map<String, TypeNavCO>> dataMap = tagTypeService.getTypeNavMap(new TypeNavBean());
+        DataResponse<Map<String, TypeNavCO>> dataMap = tagTypeService.getTypeNavMap(new TypeNavDTO());
 
-        List<TreeTypeBean> result = getTreeResult(dataMap.getData(),data.getRecords());
+        List<TreeTypeDTO> result = getTreeResult(dataMap.getData(),data.getRecords());
         return DataResponse.of(result);
     }
 
@@ -158,14 +159,14 @@ public class TagTypeControl{
      */
     @RequestMapping("/getTypeInNav")
     public DataResponse getTypeInNav(){
-        TypeBean typeBean = new TypeBean();
-        typeBean.setSize(50);
-        DataResponse<Page<TypeCO>> aLlTypes = tagTypeService.getALlTypes(typeBean);
+        TypeDTO typeDTO = new TypeDTO();
+        typeDTO.setSize(50);
+        DataResponse<Page<TypeCO>> aLlTypes = tagTypeService.getALlTypes(typeDTO);
         Page<TypeCO> data = aLlTypes.getData();
 
-        DataResponse<Map<String, TypeNavCO>> dataMap = tagTypeService.getTypeNavMap(new TypeNavBean());
+        DataResponse<Map<String, TypeNavCO>> dataMap = tagTypeService.getTypeNavMap(new TypeNavDTO());
 
-        List<CascaderTypeBean> cascaderTypeResult = getCascaderTypeResult(data.getRecords(), dataMap.getData());
+        List<CascaderTypeDTO> cascaderTypeResult = getCascaderTypeResult(data.getRecords(), dataMap.getData());
         return DataResponse.of(cascaderTypeResult);
     }
 
@@ -174,34 +175,34 @@ public class TagTypeControl{
      * 拼装树形结构数据
      * @return
      */
-    private List<TreeTypeBean> getTreeResult(Map<String,TypeNavCO> typeNav,List<TypeCO> types){
-        List<TreeTypeBean> result=new ArrayList<>();
+    private List<TreeTypeDTO> getTreeResult(Map<String,TypeNavCO> typeNav, List<TypeCO> types){
+        List<TreeTypeDTO> result=new ArrayList<>();
 
         //结果集
-        Map<String,TreeTypeBean> mapTreeType=new HashMap<>();
+        Map<String, TreeTypeDTO> mapTreeType=new HashMap<>();
         types.stream().forEach(t->{
             String navId=t.getTypeNav();
-            TreeTypeBean thisTreeType = mapTreeType.get(navId);
+            TreeTypeDTO thisTreeType = mapTreeType.get(navId);
             TypeNavCO typeNavDTO = typeNav.get(navId);
             //如果当前结果集里没有这个分类导航
             if(null==thisTreeType){
-                TreeTypeBean treeTypeBean=new TreeTypeBean();
+                TreeTypeDTO treeTypeDTO =new TreeTypeDTO();
 
                 //创建子集合
-                List<TreeTypeBean> childrenTree=new ArrayList<>();
+                List<TreeTypeDTO> childrenTree=new ArrayList<>();
                 //拼接子集合信息
-                TreeTypeBean type=new TreeTypeBean();
+                TreeTypeDTO type=new TreeTypeDTO();
                 type.setId(t.getId());
                 type.setLabel(t.getTypeName());
                 childrenTree.add(type);
 
-                treeTypeBean.setId(typeNavDTO.getId());
-                treeTypeBean.setLabel(typeNavDTO.getTypeNavName());
-                treeTypeBean.setChildren(childrenTree);
+                treeTypeDTO.setId(typeNavDTO.getId());
+                treeTypeDTO.setLabel(typeNavDTO.getTypeNavName());
+                treeTypeDTO.setChildren(childrenTree);
                 //将这次父导航塞入结果集中
-                mapTreeType.put(navId,treeTypeBean);
+                mapTreeType.put(navId, treeTypeDTO);
             }else{
-                TreeTypeBean type=new TreeTypeBean();
+                TreeTypeDTO type=new TreeTypeDTO();
                 type.setId(t.getId());
                 type.setLabel(t.getTypeName());
                 thisTreeType.getChildren().add(type);
@@ -215,8 +216,8 @@ public class TagTypeControl{
     }
 
     @PostMapping("/saveTypeNav")
-    public DataResponse saveTypeNav(@RequestBody TypeNavBean typeNavBean){
-        return tagTypeService.saveTypeNav(typeNavBean);
+    public DataResponse saveTypeNav(@RequestBody TypeNavDTO typeNavDTO){
+        return tagTypeService.saveTypeNav(typeNavDTO);
     }
 
     @PostMapping("/deleteTypeNav")

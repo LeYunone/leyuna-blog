@@ -4,9 +4,9 @@ package com.leyuna.blog.repository;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.bean.blog.BlogBean;
+import com.leyuna.blog.model.dto.BlogDTO;
 import com.leyuna.blog.co.blog.BlogCO;
-import com.leyuna.blog.gateway.BlogGateway;
+import com.leyuna.blog.gateway.BlogDao;
 import com.leyuna.blog.repository.entry.BlogDO;
 import com.leyuna.blog.repository.mapper.BlogMapper;
 import com.leyuna.blog.util.TransformationUtil;
@@ -22,7 +22,7 @@ import java.util.List;
  * @since 2021-08-13 15:38:37
  */
 @Service
-public class BlogRepository extends BaseRepository<BlogMapper, BlogDO, BlogCO> implements BlogGateway {
+public class BlogRepository extends BaseRepository<BlogMapper, BlogDO, BlogCO> implements BlogDao {
 
     /**
      * 定制查询
@@ -30,7 +30,7 @@ public class BlogRepository extends BaseRepository<BlogMapper, BlogDO, BlogCO> i
      * @return
      */
     @Override
-    public Page<BlogCO> queryBlog(BlogBean blog) {
+    public Page<BlogCO> queryBlog(BlogDTO blog) {
         Page page=new Page(blog.getIndex(),blog.getSize());
         IPage<BlogDO> Page = this.baseMapper.selectPage(page,
                 new QueryWrapper<BlogDO>().lambda()

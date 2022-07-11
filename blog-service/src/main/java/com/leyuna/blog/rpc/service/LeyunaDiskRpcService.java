@@ -45,7 +45,7 @@ public interface LeyunaDiskRpcService {
      * @param queryBean
      * @return
      */
-    @RequestMapping(value = "/file/selectFile",method = RequestMethod.POST)
+    @RequestMapping(value = "/file/selectFile",method = RequestMethod.GET)
     DataResponse<UserFileInfoCO> selectFile(FileQueryBean queryBean);
 
     /**

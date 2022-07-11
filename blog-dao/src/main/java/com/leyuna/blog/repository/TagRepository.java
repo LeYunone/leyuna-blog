@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.bean.blog.TagBean;
+import com.leyuna.blog.model.dto.TagDTO;
 import com.leyuna.blog.co.blog.TagCO;
-import com.leyuna.blog.gateway.TagGateway;
+import com.leyuna.blog.gateway.TagDao;
 import com.leyuna.blog.repository.entry.TagDO;
 import com.leyuna.blog.repository.mapper.TagMapper;
 import com.leyuna.blog.util.TransformationUtil;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  *  user表原子对象
  */
 @Service
-public class TagRepository extends BaseRepository<TagMapper, TagDO, TagCO> implements TagGateway {
+public class TagRepository extends BaseRepository<TagMapper, TagDO, TagCO> implements TagDao {
 
     /**
      * 定制查询
@@ -28,7 +28,7 @@ public class TagRepository extends BaseRepository<TagMapper, TagDO, TagCO> imple
      * @return
      */
     @Override
-    public Page<TagCO> selectByCon(TagBean tag) {
+    public Page<TagCO> selectByCon(TagDTO tag) {
         Page page=new Page(tag.getIndex(),tag.getSize());
         LambdaQueryWrapper<TagDO> like = new QueryWrapper<TagDO>().lambda()
                 .like(StringUtils.isNotBlank(tag.getTagName()), TagDO::getTagName, tag.getTagName());

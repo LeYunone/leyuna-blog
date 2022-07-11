@@ -1,7 +1,7 @@
 package com.leyuna.blog.command;
 
 import com.alibaba.nacos.api.utils.StringUtils;
-import com.leyuna.blog.bean.blog.BlogBean;
+import com.leyuna.blog.model.dto.BlogDTO;
 import com.leyuna.blog.bean.blog.DataResponse;
 import com.leyuna.blog.co.blog.BlogCO;
 import com.leyuna.blog.co.blog.LuceneCO;
@@ -51,11 +51,11 @@ public class LuceneExe {
     /**
      * 创建blog 索引库文档
      */
-    public void addBlogDir (List<BlogBean> blogs) {
+    public void addBlogDir (List<BlogDTO> blogs) {
         if (CollectionUtils.isEmpty(blogs)) {
             //默认创建所有博客索引文档
             List<BlogCO> blogCOS = BlogE.queryInstance().selectByCon();
-            blogs = TransformationUtil.copyToLists(blogCOS, BlogBean.class);
+            blogs = TransformationUtil.copyToLists(blogCOS, BlogDTO.class);
         }
         IndexWriter indexWriter = null;
         try {
@@ -68,7 +68,7 @@ public class LuceneExe {
             IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
             indexWriter = new IndexWriter(directory, indexWriterConfig);
 
-            for (BlogBean blogDTO : blogs) {
+            for (BlogDTO blogDTO : blogs) {
                 Document document = new Document();
                 //记录标题和id即可
                 Field id = new StringField("id", blogDTO.getId(), Field.Store.YES);
@@ -175,7 +175,7 @@ public class LuceneExe {
      *
      * @throws IOException
      */
-    public void updateBlogDocument (BlogBean blogDTO) {
+    public void updateBlogDocument (BlogDTO blogDTO) {
         IndexWriter indexWriter = null;
 
         try {

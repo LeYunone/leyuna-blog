@@ -7,17 +7,19 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="blog-start" />
-        <module name="blog-domain" />
-        <module name="blog-client" />
+        <module name="blog-core" />
         <module name="blog-dao" />
         <module name="blog-web" />
+        <module name="blog-client" />
+        <module name="blog-domain" />
+        <module name="blog-start" />
         <module name="blog-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8">
       <module name="blog" target="1.8" />
       <module name="blog-client" target="1.8" />
+      <module name="blog-core" target="1.8" />
       <module name="blog-dao" target="1.8" />
       <module name="blog-domain" target="1.8" />
       <module name="blog-service" target="1.8" />
