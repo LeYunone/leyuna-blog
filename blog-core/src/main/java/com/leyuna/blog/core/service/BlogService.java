@@ -8,6 +8,7 @@ import com.leyuna.blog.core.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,31 +42,9 @@ public class BlogService {
      */
     @Transactional
     @CacheEvict(cacheNames = {"blog:blogs", "blog:type", "blog:tag"}, allEntries = true)
-    public DataResponse addBlog (BlogDTO blog) {
+    public void addBlog (BlogDTO blog) {
         Integer blogType = blog.getBlogType();
-
-        BlogTypeEnum.BLOG_TYPE.getValue();
-        BlogCO blogCO = null;
-        switch (BlogTypeEnum.loadName(blogType)) {
-            case BLOG_TYPE:
-                //添加博客
-                blogCO = blogExe.addBlog(blog);
-                //添加改博客的索引库文档
-                List<BlogDTO> list = new ArrayList<>();
-                blog.setId(blogCO.getId());
-                list.add(blog);
-                luceneExe.addBlogDir(list);
-                break;
-            case NOTICE_TYPE:
-                blogCO = blogExe.addNotice(blog);
-                break;
-            case ANIME_TYPE:
-                blogCO = blogExe.addAnime(blog);
-                break;
-            default:
-        }
-        AssertUtil.isFalse(null == blogCO, SystemErrorEnum.ADD_BLOG_FAIL.getMsg());
-        return DataResponse.buildSuccess();
+        blogDao.insertOrUpdate(blog);
     }
 
     /**
@@ -74,9 +53,9 @@ public class BlogService {
      * @param id
      * @return
      */
-    public DataResponse<BlogCO> getBlogById (String id) {
-        blogDao.selectById(id);
-        return
+    public BlogCO getBlogById (String id) {
+        BlogCO blogCO = blogDao.selectById(id, BlogCO.class);
+        return blogCO;
     }
 
     /**
@@ -84,28 +63,18 @@ public class BlogService {
      *
      * @return
      */
-    public DataResponse updateBlog (BlogDTO blog) {
+    public void updateBlog (BlogDTO blog) {
         Integer blogType = blog.getBlogType();
-        switch (BlogTypeEnum.loadName(blogType)){
-            case BLOG_TYPE:
-                blogExe.updateBlog(blog);
-                //更新索引库中的Key
-                luceneExe.updateBlogDocument(blog);
-                break;
-            case NOTICE_TYPE:
-                blogExe.updateBlog(blog);
-                break;
-        }
-        return DataResponse.buildSuccess();
+        blogDao.insertOrUpdate(blogType);
     }
 
     /**
      * 获取刷题日记  -  leetcode题  随机  爬虫
      * @return
      */
-    public DataResponse getLeetCode(){
+    public List<BlogCO> getLeetCode(){
         //随机获取刷题日记
-        List<BlogCO> randomLeetCodeLog = blogExe.getRandomLeetCodeLog();
-        return DataResponse.of(randomLeetCodeLog);
+        List<BlogCO> randomLeetCodeLog = blogDao.selectRandomList();
+        return randomLeetCodeLog;
     }
 }

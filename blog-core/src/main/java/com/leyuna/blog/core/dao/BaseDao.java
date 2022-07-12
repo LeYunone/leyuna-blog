@@ -1,6 +1,5 @@
 package com.leyuna.blog.core.dao;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -70,7 +69,7 @@ public interface BaseDao<DO> {
 
     <R> List<R> selectByCon(Object o, Class<R> clazz, LambdaQueryWrapper<DO> queryWrapper);
 
-    <R> R selectById(Serializable id, Class<R> clazz) throws IllegalAccessException, InstantiationException;
+    <R> R selectById(Serializable id, Class<R> clazz);
 
     DO selectById(Serializable id);
 

@@ -1,9 +1,8 @@
 package com.leyuna.blog.control;
 
-import com.leyuna.blog.model.dto.CommentDTO;
-import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.service.TouristService;
-import com.leyuna.blog.util.ServerUtil;
+import com.leyuna.blog.core.model.constant.DataResponse;
+import com.leyuna.blog.core.model.dto.CommentDTO;
+import com.leyuna.blog.core.service.TouristService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

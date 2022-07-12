@@ -4,14 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.co.blog.TypeCO;
 import com.leyuna.blog.core.dao.TypeDao;
-import com.leyuna.blog.gateway.TypeGateway;
-import com.leyuna.blog.model.dto.TypeDTO;
-import com.leyuna.blog.repository.entry.TypeDO;
-import com.leyuna.blog.repository.mapper.TypeMapper;
-import com.leyuna.blog.util.TransformationUtil;
-import org.apache.commons.lang.StringUtils;
+import com.leyuna.blog.core.dao.repository.entry.TypeDO;
+import com.leyuna.blog.core.dao.repository.mapper.TypeMapper;
+import com.leyuna.blog.core.model.co.TypeCO;
+import com.leyuna.blog.core.model.dto.TypeDTO;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,7 +17,7 @@ import org.springframework.stereotype.Service;
  *  user表原子对象
  */
 @Service
-public class TypeRepository extends BaseRepository<TypeMapper, TypeDO, TypeCO> implements TypeDao {
+public class TypeRepository extends BaseRepository<TypeMapper, TypeDO> implements TypeDao {
     /**
      * 定制查询
      * @param

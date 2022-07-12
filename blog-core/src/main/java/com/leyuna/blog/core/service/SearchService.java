@@ -1,12 +1,17 @@
 package com.leyuna.blog.core.service;
 
-import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.co.blog.LuceneCO;
-import com.leyuna.blog.command.LuceneExe;
-import com.leyuna.blog.command.SearchExe;
-import com.leyuna.blog.model.dto.BlogDTO;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.leyuna.blog.core.model.co.LuceneCO;
+import com.leyuna.blog.core.model.constant.DataResponse;
+import com.leyuna.blog.core.model.dto.BlogDTO;
+import com.leyuna.blog.core.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * @author pengli
@@ -18,14 +23,14 @@ import org.springframework.stereotype.Service;
 public class SearchService {
 
     @Autowired
-    private LuceneExe luceneExe;
+    private LuceneService luceneService;
 
     @Autowired
     private SearchExe searchExe;
 
     public DataResponse createBlogSearch(){
         //创建所有blog的索引库
-        luceneExe.addBlogDir(null);
+        luceneService.addBlogDir(null);
         return DataResponse.buildSuccess();
     }
 
@@ -34,14 +39,56 @@ public class SearchService {
      * @return
      */
     public DataResponse<LuceneCO> getBlogFromSearch(BlogDTO blogDTO){
-        return luceneExe.getBlogDir(blogDTO.getTitle(), blogDTO.getIndex(), blogDTO.getSize());
+        return luceneService.getBlogDir(blogDTO.getTitle(), blogDTO.getIndex(), blogDTO.getSize());
     }
+
+    public static List<String> emoList = new Stack<>();
 
     /**
      * 搜索站内表情包
      * @return
      */
     public DataResponse getEmoticon(){
-        return searchExe.searchEmoImg();
+        //利用最低限度缓存
+        if(CollectionUtils.isNotEmpty(SearchService.emoList)){
+            return DataResponse.of(emoList);
+        }
+        List<String> result=new ArrayList<>();
+        String path = ServerCode.SERVER_EMO_SAVE_PATH;
+        File thisFile = new File(ServerCode.EMO_SAVE_PATH);
+        AssertUtil.isFalse(!thisFile.exists(),"操作失败：服务器内没有emo文件");
+
+        File[] files = thisFile.listFiles();
+        if(files.length!=0){
+            for(File file:files){
+                if(file.isFile()){
+                    result.add(path+file.getName());
+                }
+                if(file.isDirectory()){
+                    orderEmoFolder(file,result,path);
+                }
+            }
+        }
+        //存储
+        SearchService.emoList=result;
+        return DataResponse.of(result);
+    }
+
+
+    /**
+     * 迭代文件夹目录
+     * @param file
+     * @param result
+     * @param path
+     */
+    private void orderEmoFolder(File file, List<String> result,String path){
+        if(file.isFile()){
+            result.add(path+file.getName());
+        }else{
+            File[] files = file.listFiles();
+            for(File f:files){
+                orderEmoFolder(f,result,path);
+            }
+        }
     }
 }

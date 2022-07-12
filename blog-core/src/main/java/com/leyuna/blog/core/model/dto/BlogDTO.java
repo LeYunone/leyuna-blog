@@ -1,8 +1,7 @@
 package com.leyuna.blog.core.model.dto;
 
-import com.leyuna.blog.bean.QueryPage;
+import com.leyuna.blog.core.model.query.QueryPage;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

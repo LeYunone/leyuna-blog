@@ -56,6 +56,17 @@
     <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:3.4.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:5.2.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:5.2.8.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: cn.hutool:hutool-all:5.8.0.M3" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.70" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.lucene:lucene-core:7.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.lucene:lucene-queryparser:7.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.lucene:lucene-queries:7.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.lucene:lucene-sandbox:7.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.lucene:lucene-analyzers-common:7.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.lucene:lucene-highlighter:7.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.lucene:lucene-join:7.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.lucene:lucene-memory:7.6.0" level="project" />
+    <orderEntry type="library" name="Maven: com.janeluo:ikanalyzer:2012_u6" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.3.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-json:2.3.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.11.1" level="project" />

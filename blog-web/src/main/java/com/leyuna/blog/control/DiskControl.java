@@ -1,9 +1,6 @@
 package com.leyuna.blog.control;
 
-import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.bean.disk.FileQueryBean;
-import com.leyuna.blog.co.disk.FileInfoCO;
-import com.leyuna.blog.service.DiskService;
+import com.leyuna.blog.core.model.constant.DataResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +27,7 @@ import java.net.URLEncoder;
 public class DiskControl {
 
     @Autowired
-    private DiskService DiskService;
+    private com.leyuna.blog.core.service.DiskService DiskService;
 
     /**
      * 获取当前用户的云盘信息

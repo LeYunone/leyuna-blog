@@ -1,18 +1,18 @@
 package com.leyuna.blog.control;
 
-import com.leyuna.blog.model.dto.BlogDTO;
-import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.co.blog.BlogCO;
-import com.leyuna.blog.co.blog.LuceneCO;
-import com.leyuna.blog.service.BlogService;
-import com.leyuna.blog.service.SearchService;
-import com.leyuna.blog.util.FtpUploadUtil;
+import com.leyuna.blog.core.model.co.BlogCO;
+import com.leyuna.blog.core.model.co.LuceneCO;
+import com.leyuna.blog.core.model.constant.DataResponse;
+import com.leyuna.blog.core.model.dto.BlogDTO;
+import com.leyuna.blog.core.service.BlogService;
+import com.leyuna.blog.core.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 /**
  * @author pengli
@@ -35,8 +35,9 @@ public class BlogControl{
      * @return
      */
     @PostMapping("/addBlog")
-    public DataResponse addBlog( BlogDTO blogDTO){
-        return blogService.addBlog(blogDTO);
+    public DataResponse addBlog(BlogDTO blogDTO){
+        blogService.addBlog(blogDTO);
+        return DataResponse.buildSuccess();
     }
 
     @GetMapping("/test")
@@ -57,12 +58,14 @@ public class BlogControl{
 
     @GetMapping("/blog/{id}")
     public DataResponse<BlogCO> getBlogById(@PathVariable(value = "id")String blogId){
-        return blogService.getBlogById(blogId);
+        BlogCO blogById = blogService.getBlogById(blogId);
+        return DataResponse.of(blogById);
     }
 
     @PostMapping("/edit")
     public DataResponse editBlog(@RequestBody BlogDTO blogDTO){
-        return blogService.updateBlog(blogDTO);
+        blogService.updateBlog(blogDTO);
+        return DataResponse.buildSuccess();
     }
 
     /**
@@ -98,6 +101,7 @@ public class BlogControl{
      */
     @GetMapping("/getLeetCode")
     public DataResponse getLeetCode(){
-        return blogService.getLeetCode();
+        List<BlogCO> leetCode = blogService.getLeetCode();
+        return DataResponse.of(leetCode);
     }
 }

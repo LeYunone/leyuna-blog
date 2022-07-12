@@ -1,8 +1,7 @@
 package com.leyuna.blog.core.dao.repository.mapper;
 
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.leyuna.blog.repository.entry.CommentDO;
+import com.leyuna.blog.core.dao.repository.entry.CommentDO;
 
 /**
  * (Comment)Mapper映射
