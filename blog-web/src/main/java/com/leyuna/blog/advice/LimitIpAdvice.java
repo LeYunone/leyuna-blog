@@ -1,9 +1,9 @@
 package com.leyuna.blog.advice;
 
-import com.leyuna.blog.constant.enums.SystemErrorEnum;
-import com.leyuna.blog.constant.enums.UserErrorEnum;
-import com.leyuna.blog.util.AssertUtil;
-import com.leyuna.blog.util.ServerUtil;
+import com.leyuna.blog.core.constant.enums.SystemErrorEnum;
+import com.leyuna.blog.core.constant.enums.UserErrorEnum;
+import com.leyuna.blog.core.util.AssertUtil;
+import com.leyuna.blog.core.util.ServerUtil;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -26,7 +26,7 @@ public class LimitIpAdvice {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    @Pointcut("execution(public * com.leyuna.blog.control.TouristControl.commpent(..))")
+    @Pointcut("execution(public * com.leyuna.blog.control.TouristControl.comment(..))")
     public void before () {
     }
 

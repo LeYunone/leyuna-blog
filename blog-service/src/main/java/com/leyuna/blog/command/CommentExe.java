@@ -77,24 +77,7 @@ public class CommentExe {
      */
     @Cacheable(cacheNames = "blog:comment",key = "#commentDTO.blogId+'-'+#commentDTO.index+'-'+#commentDTO.size")
     public DataResponse queryComment(CommentDTO commentDTO){
-        Page<CommentCO> commentPage =null;
-        Integer type= commentDTO.getSortType();
-        String blogId= commentDTO.getBlogId();
-        if(type==1){
-            commentPage=CommentE.queryInstance().getGateway().selectNewCommentByBlogId(commentDTO.getIndex(), commentDTO.getSize(),blogId);
-        }
-        if(type==2){
-            commentPage=CommentE.queryInstance().getGateway().selectNewAndGoodsCommentByBlogId(commentDTO.getIndex(), commentDTO.getSize(),blogId);
-        }
-        List<CommentCO> commentDTOS = commentPage.getRecords();
-        commentDTOS.forEach(c->{
-            //父类编号
-            String fId=c.getId();
-            //查询该评论的回复
-            List<CommentCO> subComment = CommentE.queryInstance().getGateway().selectSubComment(fId);
-            c.setSubComment(subComment);
-        });
-        return DataResponse.of(commentPage);
+        return DataResponse.;
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.leyuna.blog.core.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.core.dao.BlogDao;
 import com.leyuna.blog.core.model.co.BlogCO;
 import com.leyuna.blog.core.model.constant.DataResponse;
@@ -31,8 +32,9 @@ public class BlogService {
      *
      * @return
      */
-    public DataResponse getBlogsByPage (BlogDTO blogDTO) {
-        return blogExe.getAllBlogByPage(blogDTO);
+    public Page<BlogCO> getBlogsByPage (BlogDTO blogDTO) {
+        Page<BlogCO> blogCOPage = blogDao.queryBlog(blogDTO);
+        return blogCOPage;
     }
 
     /**
@@ -43,7 +45,6 @@ public class BlogService {
     @Transactional
     @CacheEvict(cacheNames = {"blog:blogs", "blog:type", "blog:tag"}, allEntries = true)
     public void addBlog (BlogDTO blog) {
-        Integer blogType = blog.getBlogType();
         blogDao.insertOrUpdate(blog);
     }
 

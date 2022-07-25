@@ -1,14 +1,17 @@
 package com.leyuna.blog.core.service;
 
 import cn.hutool.core.util.StrUtil;
+import com.leyuna.blog.core.constant.code.ServerCode;
+import com.leyuna.blog.core.constant.enums.SystemErrorEnum;
+import com.leyuna.blog.core.dao.BlogDao;
 import com.leyuna.blog.core.model.co.BlogCO;
 import com.leyuna.blog.core.model.co.LuceneCO;
 import com.leyuna.blog.core.model.constant.DataResponse;
 import com.leyuna.blog.core.model.dto.BlogDTO;
 import com.leyuna.blog.core.util.AssertUtil;
 import com.leyuna.blog.core.util.SpiltCharAnalyzer;
-import jdk.nashorn.internal.parser.TokenStream;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
@@ -19,14 +22,15 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.swing.text.Highlighter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.FileSystems;
@@ -41,6 +45,8 @@ import java.util.List;
 @Service
 public class LuceneService {
 
+    @Autowired
+    private BlogDao blogDao;
 
     /**
      * 创建blog 索引库文档
@@ -48,8 +54,7 @@ public class LuceneService {
     public void addBlogDir (List<BlogDTO> blogs) {
         if (CollectionUtils.isEmpty(blogs)) {
             //默认创建所有博客索引文档
-            List<BlogCO> blogCOS = BlogE.queryInstance().selectByCon();
-            blogs = TransformationUtil.copyToLists(blogCOS, BlogDTO.class);
+            blogs = blogDao.selectByCon(null, BlogDTO.class);
         }
         IndexWriter indexWriter = null;
         try {

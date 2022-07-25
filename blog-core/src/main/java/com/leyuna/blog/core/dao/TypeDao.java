@@ -12,5 +12,5 @@ import com.leyuna.blog.core.model.dto.TypeDTO;
  */
 public interface TypeDao extends BaseDao<TypeDO> {
 
-    Page<TypeCO> selectByCon(TypeDTO type);
+    Page<TypeCO> queryType(TypeDTO type);
 }

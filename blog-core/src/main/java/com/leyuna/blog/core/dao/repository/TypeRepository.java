@@ -1,5 +1,6 @@
 package com.leyuna.blog.core.dao.repository;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -9,6 +10,7 @@ import com.leyuna.blog.core.dao.repository.entry.TypeDO;
 import com.leyuna.blog.core.dao.repository.mapper.TypeMapper;
 import com.leyuna.blog.core.model.co.TypeCO;
 import com.leyuna.blog.core.model.dto.TypeDTO;
+import com.leyuna.blog.core.util.TransformationUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,17 +20,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TypeRepository extends BaseRepository<TypeMapper, TypeDO> implements TypeDao {
-    /**
-     * 定制查询
-     * @param
-     * @param
-     * @return
-     */
+
     @Override
-    public Page<TypeCO> selectByCon(TypeDTO type) {
+    public Page<TypeCO> queryType(TypeDTO type) {
         Page page=new Page(type.getIndex(),type.getSize());
         LambdaQueryWrapper<TypeDO> like = new QueryWrapper<TypeDO>().lambda()
-                .like(StringUtils.isNotBlank(type.getTypeName()), TypeDO::getTypeName, type.getTypeName());
+                .like(StrUtil.isNotBlank(type.getTypeName()), TypeDO::getTypeName, type.getTypeName());
         IPage<TypeDO> Page = this.page(page,like);
         return TransformationUtil.copyToPage(Page,TypeCO.class);
     }

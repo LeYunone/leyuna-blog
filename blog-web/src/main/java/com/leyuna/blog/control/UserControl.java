@@ -1,5 +1,7 @@
 package com.leyuna.blog.control;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import com.leyuna.blog.core.model.co.UserCO;
 import com.leyuna.blog.core.model.constant.DataResponse;
 import com.leyuna.blog.core.model.dto.UserDTO;
@@ -28,7 +30,8 @@ public class UserControl  {
      */
     @PostMapping("/login")
     public DataResponse login(@RequestBody UserDTO user){
-        return userService.login(user);
+        SaTokenInfo login = userService.login(user);
+        return DataResponse.of(login);
     }
 
     /**

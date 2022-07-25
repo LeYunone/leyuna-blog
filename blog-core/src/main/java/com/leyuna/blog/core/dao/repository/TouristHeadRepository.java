@@ -2,11 +2,9 @@ package com.leyuna.blog.core.dao.repository;
 
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.leyuna.blog.co.blog.TouristHeadCO;
 import com.leyuna.blog.core.dao.TouristHeadDao;
-import com.leyuna.blog.gateway.TouristHeadGateway;
-import com.leyuna.blog.repository.entry.TouristHeadDO;
-import com.leyuna.blog.repository.mapper.TouristHeadMapper;
+import com.leyuna.blog.core.dao.repository.entry.TouristHeadDO;
+import com.leyuna.blog.core.dao.repository.mapper.TouristHeadMapper;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,7 +14,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-09-17 11:15:03
  */
 @Service
-public class TouristHeadRepository extends BaseRepository<TouristHeadMapper, TouristHeadDO, TouristHeadCO>
+public class TouristHeadRepository extends BaseRepository<TouristHeadMapper, TouristHeadDO>
         implements TouristHeadDao {
     @Override
     public boolean updateHead(String ip, String head) {

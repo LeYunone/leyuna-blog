@@ -1,17 +1,28 @@
 package com.leyuna.blog.core.service;
 
-import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.command.CacheExe;
-import com.leyuna.blog.command.CommentExe;
-import com.leyuna.blog.command.FileExe;
-import com.leyuna.blog.constant.code.ServerCode;
-import com.leyuna.blog.constant.enums.SystemErrorEnum;
-import com.leyuna.blog.constant.enums.UserErrorEnum;
-import com.leyuna.blog.model.dto.CommentDTO;
-import com.leyuna.blog.util.AssertUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.leyuna.blog.core.constant.code.ServerCode;
+import com.leyuna.blog.core.constant.enums.SystemErrorEnum;
+import com.leyuna.blog.core.constant.enums.UserErrorEnum;
+import com.leyuna.blog.core.dao.BlogDao;
+import com.leyuna.blog.core.dao.CommentDao;
+import com.leyuna.blog.core.dao.TouristHeadDao;
+import com.leyuna.blog.core.dao.repository.entry.BlogDO;
+import com.leyuna.blog.core.dao.repository.entry.TouristHeadDO;
+import com.leyuna.blog.core.model.co.BlogCO;
+import com.leyuna.blog.core.model.co.CommentCO;
+import com.leyuna.blog.core.model.co.TouristHeadCO;
+import com.leyuna.blog.core.model.constant.DataResponse;
+import com.leyuna.blog.core.model.dto.CommentDTO;
+import com.leyuna.blog.core.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author pengli
@@ -24,11 +35,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class TouristService {
 
     @Autowired
-    private CommentExe commentExe;
+    private TouristHeadDao touristHeadDao;
     @Autowired
-    private CacheExe cacheExe;
+    private CommentDao commentDao;
     @Autowired
-    private FileExe fileExe;
+    private BlogDao blogDao;
 
     /**
      * 评论== 添加
@@ -36,8 +47,34 @@ public class TouristService {
      * @return
      */
     public DataResponse comment(CommentDTO commentDTO) {
-        //添加评论
-        return commentExe.addComment(commentDTO);
+
+        BlogDO blogDO = blogDao.selectById(commentDTO.getBlogId());
+        AssertUtil.isFalse(ObjectUtil.isNull(blogDO),"操作失败：文章信息不同步");
+
+        //初始化基本信息
+        if (StrUtil.isBlank(commentDTO.getInformation())) {
+            commentDTO.setInformation("不愿透露位置的某人");
+        }
+        if ("a3201360".equals(commentDTO.getInformation())) {
+            commentDTO.setInformation("365627310@qq.com");
+            commentDTO.setName("乐云一");
+            commentDTO.setCommentHead(ServerCode.SERVER_HEAD_IMG_ADMIN);
+            commentDTO.setAdmin("admin");
+        } else {
+            //自定义用户
+            TouristHeadDO touristHeadDO = touristHeadDao.selectById(commentDTO.getIp());
+            if (ObjectUtil.isNull(touristHeadDO)) {
+                commentDTO.setCommentHead(ServerCode.SERVER_HEAD_IMG_DEFAULT);
+            } else {
+                commentDTO.setCommentHead(touristHeadDO.getHead());
+            }
+        }
+        commentDTO.setGoods(0);
+        commentDao.insertOrUpdate(commentDTO);
+        blogDO.setCommentCount(blogDO.getCommentCount()+1);
+        blogDao.insertOrUpdate(blogDO);
+        
+        return DataResponse.of(commentDTO);
     }
 
     /**
@@ -45,12 +82,13 @@ public class TouristService {
      *
      * @return
      */
-    public DataResponse getComment(CommentDTO commentDTO) {
-        return commentExe.queryComment(commentDTO);
+    public void getComment(CommentDTO commentDTO) {
+        
     }
 
     /**
      * 游客进行文件上传操作： 只能是头像！ 后续待扩展
+     *
      * @param file
      * @param remoteAddr
      * @return
@@ -76,11 +114,12 @@ public class TouristService {
 
     /**
      * 用户请求上传文件
+     *
      * @param remoteAddr
      * @return
      */
-    public DataResponse requestUpImg(String remoteAddr){
-        if(cacheExe.hasCacheByKey(remoteAddr+":head")){
+    public DataResponse requestUpImg(String remoteAddr) {
+        if (cacheExe.hasCacheByKey(remoteAddr + ":head")) {
             //去找今天这个用户设置的头像
             String cacheByKey = cacheExe.getCacheByKey(remoteAddr + ":head");
             return DataResponse.buildFailure(cacheByKey);

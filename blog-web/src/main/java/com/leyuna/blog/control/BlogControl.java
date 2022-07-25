@@ -1,5 +1,6 @@
 package com.leyuna.blog.control;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.core.model.co.BlogCO;
 import com.leyuna.blog.core.model.co.LuceneCO;
 import com.leyuna.blog.core.model.constant.DataResponse;
@@ -27,8 +28,6 @@ public class BlogControl{
     private BlogService blogService;
     @Autowired
     private SearchService searchService;
-    @Autowired
-    private FtpUploadUtil ftpUploadUtil;
     /**
      * 发布博客
      * @param blogDTO
@@ -40,20 +39,14 @@ public class BlogControl{
         return DataResponse.buildSuccess();
     }
 
-    @GetMapping("/test")
-    public void test() throws FileNotFoundException {
-        //纯测试接口  当前测试：Ftp客户端文件上传
-        FileInputStream fis=new FileInputStream(new File("C://img/wx.png"));
-        ftpUploadUtil.upload("C:/test/",fis,"test.png");
-    }
-
     /**
      * 十条十条取当前所有的博客  每触发一次前端分页自动翻一页
      * @return
      */
     @GetMapping("/blogs")
     public DataResponse blogs(BlogDTO blogDTO){
-        return blogService.getBlogsByPage(blogDTO);
+        Page<BlogCO> blogsByPage = blogService.getBlogsByPage(blogDTO);
+        return DataResponse.of(blogsByPage);
     }
 
     @GetMapping("/blog/{id}")
@@ -83,7 +76,8 @@ public class BlogControl{
      */
     @PostMapping("/createDocument")
     public DataResponse createAllBlogDocument(){
-        return searchService.createBlogSearch();
+        searchService.createBlogSearch();
+        return DataResponse.buildSuccess();
     }
 
     /**

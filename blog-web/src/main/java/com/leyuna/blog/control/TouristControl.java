@@ -3,6 +3,7 @@ package com.leyuna.blog.control;
 import com.leyuna.blog.core.model.constant.DataResponse;
 import com.leyuna.blog.core.model.dto.CommentDTO;
 import com.leyuna.blog.core.service.TouristService;
+import com.leyuna.blog.core.util.ServerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +42,8 @@ public class TouristControl {
      */
     @RequestMapping("/comment/blog")
     public DataResponse getComment(CommentDTO commentDTO){
-        return touristService.getComment(commentDTO);
+        touristService.getComment(commentDTO);
+        return null;
     }
 
     /**

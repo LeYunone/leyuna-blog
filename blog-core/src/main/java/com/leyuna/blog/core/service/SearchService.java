@@ -1,6 +1,7 @@
 package com.leyuna.blog.core.service;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.leyuna.blog.core.constant.code.ServerCode;
 import com.leyuna.blog.core.model.co.LuceneCO;
 import com.leyuna.blog.core.model.constant.DataResponse;
 import com.leyuna.blog.core.model.dto.BlogDTO;
@@ -25,13 +26,11 @@ public class SearchService {
     @Autowired
     private LuceneService luceneService;
 
-    @Autowired
-    private SearchExe searchExe;
-
-    public DataResponse createBlogSearch(){
-        //创建所有blog的索引库
+    /**
+     * 创建所有blog的索引库
+     */
+    public void createBlogSearch(){
         luceneService.addBlogDir(null);
-        return DataResponse.buildSuccess();
     }
 
     /**

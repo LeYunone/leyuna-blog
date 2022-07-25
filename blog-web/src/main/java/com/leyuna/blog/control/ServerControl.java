@@ -1,7 +1,11 @@
 package com.leyuna.blog.control;
 
+import com.leyuna.blog.core.constant.code.ServerCode;
+import com.leyuna.blog.core.constant.enums.UploadImgTypeEnum;
 import com.leyuna.blog.core.model.constant.DataResponse;
 import com.leyuna.blog.core.service.TouristService;
+import com.leyuna.blog.core.util.ServerUtil;
+import com.leyuna.blog.core.util.UpLoadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +24,6 @@ import java.time.format.DateTimeFormatter;
 @RestController
 @RequestMapping("/server")
 public class ServerControl {
-    @Autowired
-    private CacheExe cacheExe;
     @Autowired
     private TouristService touristService;
 
@@ -53,7 +55,7 @@ public class ServerControl {
     @RequestMapping("/clearCache")
     public DataResponse clearCache (String name) {
         if (ServerCode.SERVER_NAME.equals(name)) {
-            cacheExe.clearAllCache("blog");
+//            cacheExe.clearAllCache("blog");
             return DataResponse.buildSuccess();
         }
         return DataResponse.buildFailure("暗号错啦，错啦！！！");

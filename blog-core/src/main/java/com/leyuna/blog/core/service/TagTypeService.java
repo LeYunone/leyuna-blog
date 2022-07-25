@@ -1,23 +1,23 @@
 package com.leyuna.blog.core.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.bean.blog.DataResponse;
-import com.leyuna.blog.co.blog.TagCO;
-import com.leyuna.blog.co.blog.TypeCO;
-import com.leyuna.blog.co.blog.TypeNavCO;
-import com.leyuna.blog.command.TagExe;
-import com.leyuna.blog.command.TypeExe;
-import com.leyuna.blog.command.TypeNavExe;
-import com.leyuna.blog.model.dto.TagDTO;
-import com.leyuna.blog.model.dto.TypeDTO;
-import com.leyuna.blog.model.dto.TypeNavDTO;
+import com.leyuna.blog.core.dao.TagDao;
+import com.leyuna.blog.core.dao.TypeDao;
+import com.leyuna.blog.core.model.co.TagCO;
+import com.leyuna.blog.core.model.co.TypeCO;
+import com.leyuna.blog.core.model.co.TypeNavCO;
+import com.leyuna.blog.core.model.constant.DataResponse;
+import com.leyuna.blog.core.model.dto.TagDTO;
+import com.leyuna.blog.core.model.dto.TypeDTO;
+import com.leyuna.blog.core.model.dto.TypeNavDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author pengli
@@ -26,23 +26,32 @@ import java.util.Map;
  */
 @Service
 public class TagTypeService {
-
-
+    
     @Autowired
-    private TagExe tagExe;
-
+    private TagDao tagDao;
     @Autowired
-    private TypeExe typeExe;
-
-    @Autowired
-    private TypeNavExe typeNavExe;
+    private TypeDao typeDao;
+    
     /**
      * 查询所有的标签  分页 加上 模糊查询
      * @param
      * @return
      */
-    public DataResponse<Page<TagCO>> getALlTags(TagDTO tag){
-        return tagExe.getAllTags(tag);
+    public Page<TagCO> getALlTags(TagDTO tag){
+        //如果有模糊查询条件则走模糊查询
+        Page<TagCO> tagPage = tagDao.queryTag(tag);
+        List<TagCO> records = tagPage.getRecords();
+        records.stream().forEach(t -> {
+            LocalDateTime lastTime = t.getUpdateDt();
+            //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
+            if (LocalDateTime.now().isBefore(lastTime.plusMonths(1))) {
+                t.setUserStatus("hot");
+            } else {
+                t.setUserStatus("cold");
+            }
+        });
+        Collections.sort(records);
+        return tagPage;
     }
 
     /**
@@ -51,7 +60,19 @@ public class TagTypeService {
      * @return
      */
     public DataResponse<Page<TypeCO>> getALlTypes(TypeDTO type){
-        return typeExe.getAllTypes(type);
+        //如果有模糊查询条件则走模糊查询
+        Page<TypeCO> typePage = typeDao.queryType(type);
+        typePage.getRecords().stream().forEach(t -> {
+            LocalDateTime lastTime = t.getUpdateDt();
+            //如果最后使用的时间加了一个月还在现在的时间前面，那么就说明这个标签很久没用了
+            if (LocalDateTime.now().isBefore(lastTime.plusMonths(1))) {
+                t.setUserStatus("hot");
+            } else {
+                t.setUserStatus("cold");
+            }
+        });
+
+        return DataResponse.of(typePage);
     }
 
     /**
@@ -61,14 +82,14 @@ public class TagTypeService {
      * @return
      */
     public DataResponse addTagsAndTypes(List<String> tags, List<String> types, String typeNav){
-        if(!CollectionUtils.isEmpty(types)){
-            //添加分类
-            typeExe.addTypes(types,typeNav);
-        }
-        //添加标签
-        if(!CollectionUtils.isEmpty(tags)){
-            tagExe.addTags(tags);
-        }
+//        if(!CollectionUtils.isEmpty(types)){
+//            //添加分类
+//            typeExe.addTypes(types,typeNav);
+//        }
+//        //添加标签
+//        if(!CollectionUtils.isEmpty(tags)){
+//            tagExe.addTags(tags);
+//        }
         return DataResponse.buildSuccess();
     }
 
@@ -80,12 +101,12 @@ public class TagTypeService {
      */
     @Transactional
     public DataResponse deleteTagsAndTypes(List<String> tags,List<String> types){
-        if(!CollectionUtils.isEmpty(types)){
-            typeExe.deleteTypes(types);
-        }
-        if(!CollectionUtils.isEmpty(tags)){
-            tagExe.deleteTags(tags);
-        }
+//        if(!CollectionUtils.isEmpty(types)){
+//            typeExe.deleteTypes(types);
+//        }
+//        if(!CollectionUtils.isEmpty(tags)){
+//            tagExe.deleteTags(tags);
+//        }
         return DataResponse.buildSuccess();
     }
 
@@ -96,18 +117,18 @@ public class TagTypeService {
      */
     @Transactional
     public DataResponse updateTypesOrTags(String id,String newName,String name){
-        if("type".equals(name)){
-            TypeDTO typeDTO =new TypeDTO();
-            typeDTO.setId(id);
-            typeDTO.setTypeName(newName);
-            typeExe.updateTypes(typeDTO);
-        }
-        if("tag".equals(name)){
-            TagDTO tagDTO =new TagDTO();
-            tagDTO.setId(id);
-            tagDTO.setTagName(newName);
-            tagExe.updateTags(tagDTO);
-        }
+//        if("type".equals(name)){
+//            TypeDTO typeDTO =new TypeDTO();
+//            typeDTO.setId(id);
+//            typeDTO.setTypeName(newName);
+//            typeExe.updateTypes(typeDTO);
+//        }
+//        if("tag".equals(name)){
+//            TagDTO tagDTO =new TagDTO();
+//            tagDTO.setId(id);
+//            tagDTO.setTagName(newName);
+//            tagExe.updateTags(tagDTO);
+//        }
         return DataResponse.buildSuccess();
     }
 
