@@ -1,6 +1,6 @@
 package com.leyuna.blog.model.dto;
 
-import com.leyuna.blog.bean.QueryPage;
+import com.leyuna.blog.model.query.QueryPage;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

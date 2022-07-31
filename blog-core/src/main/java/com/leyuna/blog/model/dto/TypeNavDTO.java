@@ -1,4 +1,4 @@
-package com.leyuna.blog.core.model.dto;
+package com.leyuna.blog.model.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

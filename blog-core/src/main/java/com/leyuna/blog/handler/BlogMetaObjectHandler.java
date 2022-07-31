@@ -1,4 +1,4 @@
-package com.leyuna.blog.core.handler;
+package com.leyuna.blog.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;

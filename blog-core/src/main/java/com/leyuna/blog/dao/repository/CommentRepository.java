@@ -1,15 +1,13 @@
 package com.leyuna.blog.dao.repository;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.co.blog.CommentCO;
 import com.leyuna.blog.dao.CommentDao;
-import com.leyuna.blog.gateway.CommentGateway;
-import com.leyuna.blog.repository.entry.CommentDO;
-import com.leyuna.blog.repository.mapper.CommentMapper;
+import com.leyuna.blog.dao.repository.entry.CommentDO;
+import com.leyuna.blog.dao.repository.mapper.CommentMapper;
+import com.leyuna.blog.model.co.CommentCO;
 import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,7 @@ import java.util.List;
  * @since 2021-09-14 19:29:57
  */
 @Service
-public class CommentRepository extends BaseRepository<CommentMapper, CommentDO, CommentCO> implements CommentDao {
+public class CommentRepository extends BaseRepository<CommentMapper, CommentDO> implements CommentDao {
 
     /**
      * 定制查询

@@ -1,4 +1,4 @@
-package com.leyuna.blog.core.util;
+package com.leyuna.blog.util;
 
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;

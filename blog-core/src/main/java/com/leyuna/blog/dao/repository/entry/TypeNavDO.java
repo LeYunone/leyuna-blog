@@ -1,5 +1,6 @@
 package com.leyuna.blog.dao.repository.entry;
 
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 

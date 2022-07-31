@@ -1,16 +1,16 @@
-package com.leyuna.blog.core.dao.repository;
+package com.leyuna.blog.dao.repository;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.core.dao.TypeDao;
-import com.leyuna.blog.core.dao.repository.entry.TypeDO;
-import com.leyuna.blog.core.dao.repository.mapper.TypeMapper;
-import com.leyuna.blog.core.model.co.TypeCO;
-import com.leyuna.blog.core.model.dto.TypeDTO;
-import com.leyuna.blog.core.util.TransformationUtil;
+import com.leyuna.blog.dao.TypeDao;
+import com.leyuna.blog.dao.repository.entry.TypeDO;
+import com.leyuna.blog.dao.repository.mapper.TypeMapper;
+import com.leyuna.blog.model.co.TypeCO;
+import com.leyuna.blog.model.dto.TypeDTO;
+import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.stereotype.Service;
 
 /**

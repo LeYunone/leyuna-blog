@@ -1,6 +1,6 @@
-//package com.leyuna.blog.core.service;
+//package com.leyuna.blog.service;
 //
-//import com.leyuna.blog.core.model.constant.DataResponse;
+//import com.leyuna.blog.model.constant.DataResponse;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Service;
 //import org.springframework.web.multipart.MultipartFile;

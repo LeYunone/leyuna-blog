@@ -1,4 +1,4 @@
-package com.leyuna.blog.core.model.query;
+package com.leyuna.blog.model.query;
 
 import lombok.Getter;
 import lombok.Setter;

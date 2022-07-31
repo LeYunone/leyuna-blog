@@ -1,7 +1,7 @@
-package com.leyuna.blog.core.dao;
+package com.leyuna.blog.dao;
 
 
-import com.leyuna.blog.core.dao.repository.entry.TouristHeadDO;
+import com.leyuna.blog.dao.repository.entry.TouristHeadDO;
 
 /**
  * (TouristHead)dao

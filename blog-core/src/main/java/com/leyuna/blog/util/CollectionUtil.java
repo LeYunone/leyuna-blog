@@ -1,4 +1,4 @@
-package com.leyuna.blog.core.util;
+package com.leyuna.blog.util;
 
 import java.util.Iterator;
 import java.util.List;

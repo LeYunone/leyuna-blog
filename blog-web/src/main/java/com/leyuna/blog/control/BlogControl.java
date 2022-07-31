@@ -1,12 +1,10 @@
 package com.leyuna.blog.control;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.model.co.BlogCO;
 import com.leyuna.blog.model.co.LuceneCO;
 import com.leyuna.blog.model.constant.DataResponse;
 import com.leyuna.blog.model.dto.BlogDTO;
 import com.leyuna.blog.service.BlogService;
-import com.leyuna.blog.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +22,7 @@ public class BlogControl{
     @Autowired
     private BlogService blogService;
     @Autowired
-    private SearchService searchService;
+    private com.leyuna.blog.service.SearchService searchService;
     /**
      * 发布博客
      * @param blogDTO
@@ -42,13 +40,13 @@ public class BlogControl{
      */
     @GetMapping("/blogs")
     public DataResponse blogs(BlogDTO blogDTO){
-        Page<BlogCO> blogsByPage = blogService.getBlogsByPage(blogDTO);
+        Page<com.leyuna.blog.model.co.BlogCO> blogsByPage = blogService.getBlogsByPage(blogDTO);
         return DataResponse.of(blogsByPage);
     }
 
     @GetMapping("/blog/{id}")
-    public DataResponse<BlogCO> getBlogById(@PathVariable(value = "id")String blogId){
-        BlogCO blogById = blogService.getBlogById(blogId);
+    public DataResponse<com.leyuna.blog.model.co.BlogCO> getBlogById(@PathVariable(value = "id")String blogId){
+        com.leyuna.blog.model.co.BlogCO blogById = blogService.getBlogById(blogId);
         return DataResponse.of(blogById);
     }
 
@@ -92,7 +90,7 @@ public class BlogControl{
      */
     @GetMapping("/getLeetCode")
     public DataResponse getLeetCode(){
-        List<BlogCO> leetCode = blogService.getLeetCode();
+        List<com.leyuna.blog.model.co.BlogCO> leetCode = blogService.getLeetCode();
         return DataResponse.of(leetCode);
     }
 }

@@ -1,4 +1,4 @@
-package com.leyuna.blog.constant.code;
+package com.leyuna.blog.constant.enums;
 
 /**
  * @author pengli

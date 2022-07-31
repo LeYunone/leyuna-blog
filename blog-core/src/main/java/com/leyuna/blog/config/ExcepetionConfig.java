@@ -1,6 +1,6 @@
 package com.leyuna.blog.config;
 
-import com.leyuna.blog.bean.blog.DataResponse;
+import com.leyuna.blog.model.constant.DataResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;

@@ -1,4 +1,4 @@
-package com.leyuna.blog.core.dao.repository.entry;
+package com.leyuna.blog.dao.repository.entry;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Getter;

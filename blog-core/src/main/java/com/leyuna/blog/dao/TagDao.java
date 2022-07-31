@@ -1,10 +1,10 @@
-package com.leyuna.blog.core.dao;
+package com.leyuna.blog.dao;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.core.dao.repository.entry.TagDO;
-import com.leyuna.blog.core.model.co.TagCO;
-import com.leyuna.blog.core.model.dto.TagDTO;
+import com.leyuna.blog.dao.repository.entry.TagDO;
+import com.leyuna.blog.model.co.TagCO;
+import com.leyuna.blog.model.dto.TagDTO;
 
 /**
  * @author pengli

@@ -1,7 +1,7 @@
-package com.leyuna.blog.core.service;
+package com.leyuna.blog.service;
 
-import com.leyuna.blog.core.dao.MenuDao;
-import com.leyuna.blog.core.model.co.MenuCO;
+import com.leyuna.blog.dao.MenuDao;
+import com.leyuna.blog.model.co.MenuCO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

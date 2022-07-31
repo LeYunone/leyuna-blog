@@ -1,6 +1,6 @@
 package com.leyuna.blog.util;
 
-import com.leyuna.blog.constant.enums.SystemErrorEnum;
+import com.leyuna.blog.constant.code.SystemErrorEnum;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;

@@ -2,7 +2,7 @@ package com.leyuna.blog.service;
 
 import cn.hutool.core.util.StrUtil;
 import com.leyuna.blog.constant.code.ServerCode;
-import com.leyuna.blog.constant.enums.SystemErrorEnum;
+import com.leyuna.blog.constant.code.SystemErrorEnum;
 import com.leyuna.blog.dao.BlogDao;
 import com.leyuna.blog.model.co.BlogCO;
 import com.leyuna.blog.model.co.LuceneCO;

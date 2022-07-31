@@ -1,9 +1,9 @@
-package com.leyuna.blog.core.dao.repository.mapper;
+package com.leyuna.blog.dao.repository.mapper;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.leyuna.blog.core.dao.repository.entry.BlogDO;
-import com.leyuna.blog.core.model.co.BlogCO;
+import com.leyuna.blog.dao.repository.entry.BlogDO;
+import com.leyuna.blog.model.co.BlogCO;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;

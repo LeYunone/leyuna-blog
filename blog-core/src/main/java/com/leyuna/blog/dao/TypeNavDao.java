@@ -1,10 +1,7 @@
-package com.leyuna.blog.core.dao;
+package com.leyuna.blog.dao;
 
 
-import com.leyuna.blog.co.blog.TypeNavCO;
-import com.leyuna.blog.domain.TypeNavE;
-
-import java.util.List;
+import com.leyuna.blog.dao.repository.entry.TypeNavDO;
 
 /**
  * (TypeNav)dao
@@ -12,8 +9,7 @@ import java.util.List;
  * @author pengli
  * @since 2021-08-23 13:34:40
  */
-public interface TypeNavDao extends BaseDao<TypeNavCO> {
+public interface TypeNavDao extends BaseDao<TypeNavDO> {
 
-    List<TypeNavCO> selectByCon (TypeNavE typeNavE);
 }
 

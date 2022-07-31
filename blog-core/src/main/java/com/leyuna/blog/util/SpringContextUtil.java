@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package com.leyuna.blog.core.util;
+package com.leyuna.blog.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

@@ -1,4 +1,4 @@
-package com.leyuna.blog.core.handler;//package com.leyuna.blog.handler;
+package com.leyuna.blog.handler;//package com.leyuna.blog.handler;
 //
 //import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 //import com.baomidou.mybatisplus.extension.handlers.AbstractSqlParserHandler;

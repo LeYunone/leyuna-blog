@@ -1,6 +1,6 @@
-package com.leyuna.blog.core.dao;
+package com.leyuna.blog.dao;
 
-import com.leyuna.blog.core.dao.repository.entry.MenuDO;
+import com.leyuna.blog.dao.repository.entry.MenuDO;
 
 /**
  * @author LeYuna

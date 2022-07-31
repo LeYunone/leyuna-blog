@@ -1,4 +1,4 @@
-package com.leyuna.blog.core.model.co;
+package com.leyuna.blog.model.co;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;

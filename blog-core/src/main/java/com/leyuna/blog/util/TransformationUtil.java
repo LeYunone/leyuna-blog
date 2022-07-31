@@ -1,4 +1,4 @@
-package com.leyuna.blog.core.util;
+package com.leyuna.blog.util;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;

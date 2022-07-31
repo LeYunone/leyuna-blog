@@ -3,6 +3,7 @@ package com.leyuna.blog.model.co;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author LeYuna
@@ -32,4 +33,9 @@ public class MenuCO implements Serializable {
      * 菜单路径
      */
     private String menuUrl;
+
+    /**
+     * 子菜单
+     */
+    private List<MenuCO> childrenMenu;
 }

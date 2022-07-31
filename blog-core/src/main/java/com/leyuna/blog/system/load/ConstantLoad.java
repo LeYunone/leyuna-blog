@@ -1,4 +1,4 @@
-package com.leyuna.blog.core.system.load;
+package com.leyuna.blog.system.load;
 
 import com.leyuna.blog.constant.code.ServerCode;
 import org.springframework.beans.factory.annotation.Value;
