@@ -17,39 +17,11 @@
     <properties>
         <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
-    <build>
-        <!-- 为jar包取名 -->
-        <finalName>blog-demo</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.3.0.RELEASE</version>
-            </plugin>
-        </plugins>
-    </build>
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>xyz.leyuna</groupId>-->
-<!--            <artifactId>waylocation-spring-boot-start</artifactId>-->
-<!--            <version>0.0.3-SNAPSHOT</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>com.leyuna</groupId>
             <artifactId>blog-web</artifactId>
         </dependency>
-        <!--eureka微服务-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-config</artifactId>-->
-<!--        </dependency>-->
-        <!--nacos微服务-->
-
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
@@ -58,6 +30,5 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
-
     </dependencies>
 </project>

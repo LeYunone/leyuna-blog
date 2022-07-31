@@ -1,6 +1,6 @@
 //package com.leyuna.blog.control;
 //
-//import com.leyuna.blog.core.model.constant.DataResponse;
+//import com.leyuna.blog.model.constant.DataResponse;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +27,7 @@
 //public class DiskControl {
 //
 //    @Autowired
-//    private com.leyuna.blog.core.service.DiskService DiskService;
+//    private com.leyuna.blog.service.DiskService DiskService;
 //
 //    /**
 //     * 获取当前用户的云盘信息

@@ -1,18 +1,15 @@
 package com.leyuna.blog.control;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.leyuna.blog.core.model.co.BlogCO;
-import com.leyuna.blog.core.model.co.LuceneCO;
-import com.leyuna.blog.core.model.constant.DataResponse;
-import com.leyuna.blog.core.model.dto.BlogDTO;
-import com.leyuna.blog.core.service.BlogService;
-import com.leyuna.blog.core.service.SearchService;
+import com.leyuna.blog.model.co.BlogCO;
+import com.leyuna.blog.model.co.LuceneCO;
+import com.leyuna.blog.model.constant.DataResponse;
+import com.leyuna.blog.model.dto.BlogDTO;
+import com.leyuna.blog.service.BlogService;
+import com.leyuna.blog.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
@@ -20,7 +17,7 @@ import java.util.List;
  * @create 2021-08-10 15:04
     博客控制器- 控制博客行为 网站公告行为 以及各种公示行为
  */
-@RestController()
+@RestController
 @RequestMapping("/blog")
 public class BlogControl{
 
