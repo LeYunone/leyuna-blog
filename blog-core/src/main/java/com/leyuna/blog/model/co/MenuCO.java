@@ -17,12 +17,12 @@ public class MenuCO implements Serializable {
     /**
      * 菜单id
      */
-    private Integer menuId;
+    private String menuId;
 
     /**
      * 上层id
      */
-    private Integer menuParentId;
+    private String menuParentId;
 
     /**
      * 菜单名

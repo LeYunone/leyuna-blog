@@ -1,9 +1,12 @@
 package com.leyuna.blog.control;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyuna.blog.model.co.BlogCO;
 import com.leyuna.blog.model.co.LuceneCO;
 import com.leyuna.blog.model.constant.DataResponse;
 import com.leyuna.blog.model.dto.BlogDTO;
+import com.leyuna.blog.model.query.BlogQuery;
 import com.leyuna.blog.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -92,5 +95,11 @@ public class BlogControl{
     public DataResponse getLeetCode(){
         List<com.leyuna.blog.model.co.BlogCO> leetCode = blogService.getLeetCode();
         return DataResponse.of(leetCode);
+    }
+
+    @GetMapping("/getTopMenuBlogs")
+    public DataResponse getTopMenuBlogs(BlogQuery blogQuery){
+        IPage<BlogCO> topMenuBlogs = blogService.getTopMenuBlogs(blogQuery);
+        return DataResponse.of(topMenuBlogs);
     }
 }

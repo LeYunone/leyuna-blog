@@ -1,6 +1,7 @@
 package com.leyuna.blog.dao;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -44,7 +45,9 @@ public interface BaseDao<DO> {
      * 万能eq分页查询
      * @return
      */
-    Page<DO> selectByConPage(Object o, Page page);
+    IPage<DO> selectByConPage(Object o, Page page);
+
+    IPage<DO> selectByConPage(Object o, Integer index, Integer size);
 
     /**
      * 万能eq分页查询 根据condition和isDesc排序查询

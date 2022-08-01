@@ -3,9 +3,11 @@ package com.leyuna.blog.dao.repository;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -69,9 +71,19 @@ public class BaseRepository<M extends BaseMapper<DO>, DO> extends ServiceImpl<M,
     }
 
     @Override
-    public Page<DO> selectByConPage(Object o, Page page) {
-        return null;
+    public IPage<DO> selectByConPage(Object o, Page page) {
+        DO jDO = (DO) JSONUtil.toBean(JSONUtil.toJsonStr(o), do_Class);
+        LambdaQueryWrapper<DO> queryWrapper = new QueryWrapper<DO>().lambda();
+        queryWrapper.setEntity(jDO);
+        return this.baseMapper.selectPage(page,queryWrapper);
     }
+
+    @Override
+    public IPage<DO> selectByConPage(Object o, Integer index, Integer size){
+        Page page = new Page(index,size);
+        return this.selectByConPage(o,page);
+    }
+
 
     @Override
     public <R> Page<DO> selectByConOrderPage(Object con, Page page, SFunction<DO, R> function, boolean isDesc) {
@@ -85,17 +97,17 @@ public class BaseRepository<M extends BaseMapper<DO>, DO> extends ServiceImpl<M,
 
     @Override
     public List<DO> selectByCon(LambdaQueryWrapper<DO> queryWrapper) {
-        return this.selectByCon(null,queryWrapper);
+        return this.selectByCon(null, queryWrapper);
     }
 
     @Override
     public List<DO> selectByCon(Object o, LambdaQueryWrapper<DO> queryWrapper) {
-        return this.selectByCon(o,do_Class,queryWrapper);
+        return this.selectByCon(o, do_Class, queryWrapper);
     }
 
     @Override
     public <R> List<R> selectByCon(Object o, Class<R> clazz) {
-        return this.selectByCon(o,clazz,null);
+        return this.selectByCon(o, clazz, null);
     }
 
     @Override
@@ -103,20 +115,20 @@ public class BaseRepository<M extends BaseMapper<DO>, DO> extends ServiceImpl<M,
         DO d = castToDO(o);
         deletedToFalse(d);
         List<DO> dos = this.getConQueryResult(d, queryWrapper);
-        return BeanUtil.copyToList(dos,clazz);
+        return BeanUtil.copyToList(dos, clazz);
     }
 
     @Override
     public <R> R selectById(Serializable id, Class<R> clazz) {
         DO aDo = this.baseMapper.selectById(id);
 
-        R r =  JSONUtil.toBean(JSONUtil.toJsonStr(aDo), clazz);
-        return  r;
+        R r = JSONUtil.toBean(JSONUtil.toJsonStr(aDo), clazz);
+        return r;
     }
 
     @Override
     public DO selectById(Serializable id) {
-        return (DO)this.selectById(id,do_Class);
+        return (DO) this.selectById(id, do_Class);
     }
 
     @Override
@@ -131,7 +143,7 @@ public class BaseRepository<M extends BaseMapper<DO>, DO> extends ServiceImpl<M,
 
     @Override
     public DO selectOne(Object o) {
-        return (DO)this.selectOne(o,do_Class);
+        return (DO) this.selectOne(o, do_Class);
     }
 
     private DO castToDO(Object o) {
@@ -147,8 +159,9 @@ public class BaseRepository<M extends BaseMapper<DO>, DO> extends ServiceImpl<M,
     }
 
 
-     /**
+    /**
      * 查询规则：条件对象 与 自定义Lambda条件 AND 拼接
+     *
      * @param o
      * @param queryWrapper
      * @return
@@ -157,7 +170,7 @@ public class BaseRepository<M extends BaseMapper<DO>, DO> extends ServiceImpl<M,
         if (null == queryWrapper) {
             queryWrapper = new LambdaQueryWrapper<>();
         }
-        if(null!=o){
+        if (null != o) {
             DO jDO = (DO) JSONUtil.toBean(JSONUtil.toJsonStr(o), do_Class);
             queryWrapper.setEntity(jDO);
         }
@@ -171,7 +184,7 @@ public class BaseRepository<M extends BaseMapper<DO>, DO> extends ServiceImpl<M,
      * @param con
      */
     private void deletedToFalse(Object con) {
-        if(null==con) return;
+        if (null == con) return;
         Class<?> aClass = con.getClass();
         try {
             Field deletedField = aClass.getDeclaredField("isDeleted");

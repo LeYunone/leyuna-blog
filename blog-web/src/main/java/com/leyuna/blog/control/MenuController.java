@@ -45,7 +45,7 @@ public class MenuController {
      * @return
      */
     private List<MenuCO> processMenuList(List<MenuCO> menuList) {
-        Map<Integer, MenuCO> map = new HashMap();
+        Map<String, MenuCO> map = new HashMap();
         Stack<MenuCO> stack = new Stack<>();
         menuList.stream().forEach(menu -> {
             MenuCO menuCO = map.get(menu.getMenuParentId());
@@ -58,7 +58,7 @@ public class MenuController {
                 }
                 childrenMenu.add(menu);
             } else {
-                if (0 != menu.getMenuParentId()) {
+                if (0 != Integer.valueOf(menu.getMenuParentId())) {
                     stack.add(menu);
                 }
             }
@@ -82,7 +82,7 @@ public class MenuController {
         //只留下顶级菜单结果集
         ArrayList<MenuCO> menuCOS = CollectionUtil.newArrayList(map.values());
         List<MenuCO> result = menuCOS.stream().filter(menuCO -> {
-            return 0 == menuCO.getMenuParentId().compareTo(0);
+            return "0".equals(menuCO.getMenuParentId());
         }).collect(Collectors.toList());
         return result;
     }

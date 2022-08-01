@@ -20,12 +20,12 @@ public class MenuDO {
      * 菜单id
      */
     @TableId(value = "menu_id",type = IdType.AUTO)
-    private Integer menuId;
+    private String menuId;
 
     /**
      * 上层id
      */
-    private Integer menuParentId;
+    private String menuParentId;
 
     /**
      * 菜单名

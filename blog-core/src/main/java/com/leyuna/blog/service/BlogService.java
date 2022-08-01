@@ -1,12 +1,16 @@
 package com.leyuna.blog.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.dao.BlogDao;
 import com.leyuna.blog.dao.MenuDao;
-import com.leyuna.blog.dao.repository.entry.MenuDO;
+import com.leyuna.blog.dao.repository.entry.BlogDO;
 import com.leyuna.blog.model.co.BlogCO;
 import com.leyuna.blog.model.dto.BlogDTO;
+import com.leyuna.blog.model.query.BlogQuery;
 import com.leyuna.blog.util.AssertUtil;
+import com.leyuna.blog.util.ObjectUtil;
+import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -52,12 +56,12 @@ public class BlogService {
         boolean addBlog = blogDao.insertOrUpdate(blog);
 
         //创建该文章的菜单索引
-        MenuDO menuDO = new MenuDO();
-        menuDO.setMenuName(blog.getTitle());
-        Integer blogType = blog.getBlogType();
-        menuDO.setMenuParentId(blogType);
-        boolean addMenu = menuDao.insertOrUpdate(menuDO);
-        AssertUtil.isTrue(addBlog || addMenu);
+//        MenuDO menuDO = new MenuDO();
+//        menuDO.setMenuName(blog.getTitle());
+//        Integer blogType = blog.getBlogType();
+//        menuDO.setMenuParentId(blogType);
+//        boolean addMenu = menuDao.insertOrUpdate(menuDO);
+//        AssertUtil.isTrue(addBlog || addMenu);
 
     }
 
@@ -91,5 +95,13 @@ public class BlogService {
         //随机获取刷题日记
         List<BlogCO> randomLeetCodeLog = blogDao.selectRandomList();
         return randomLeetCodeLog;
+    }
+
+    public IPage<BlogCO> getTopMenuBlogs(BlogQuery query){
+        Integer menuTopId = query.getMenuTopId();
+        AssertUtil.isFalse(ObjectUtil.isNull(menuTopId),"menuTopId is not empty");
+        IPage<BlogDO> blogDOIPage = blogDao.selectByConPage(query, query.getIndex(), query.getSize());
+        Page<BlogCO> blogCOPage = TransformationUtil.copyToPage(blogDOIPage, BlogCO.class);
+        return blogCOPage;
     }
 }
