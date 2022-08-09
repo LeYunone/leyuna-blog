@@ -32,8 +32,8 @@ logging:
   level:
     com.chz.mapper: debug
 ### mp日志
-#mybatis-plus:
-#  configuration:Dom4j
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
 
 

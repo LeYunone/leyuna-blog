@@ -100,7 +100,7 @@ public class BlogService {
     public IPage<BlogCO> getTopMenuBlogs(BlogQuery query){
         Integer menuTopId = query.getMenuTopId();
         AssertUtil.isFalse(ObjectUtil.isNull(menuTopId),"menuTopId is not empty");
-        IPage<BlogDO> blogDOIPage = blogDao.selectByConPage(query, query.getIndex(), query.getSize());
+        IPage<BlogDO> blogDOIPage = blogDao.selectByMenuTopOrderTime(query);
         Page<BlogCO> blogCOPage = TransformationUtil.copyToPage(blogDOIPage, BlogCO.class);
         return blogCOPage;
     }

@@ -78,4 +78,6 @@ public class BlogDO implements Serializable {
 
     private String blogLink;
 
+    private String menuTopId;
+
 }

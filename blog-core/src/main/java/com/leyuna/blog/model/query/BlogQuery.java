@@ -14,4 +14,6 @@ public class BlogQuery extends QueryPage{
      * 顶级菜单id
      */
     private Integer menuTopId;
+
+    private String createDt;
 }

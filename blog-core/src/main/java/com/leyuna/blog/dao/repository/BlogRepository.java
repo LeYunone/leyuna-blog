@@ -1,6 +1,7 @@
 package com.leyuna.blog.dao.repository;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -9,6 +10,7 @@ import com.leyuna.blog.dao.repository.entry.BlogDO;
 import com.leyuna.blog.dao.repository.mapper.BlogMapper;
 import com.leyuna.blog.model.co.BlogCO;
 import com.leyuna.blog.model.dto.BlogDTO;
+import com.leyuna.blog.model.query.BlogQuery;
 import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -48,6 +50,22 @@ public class BlogRepository extends BaseRepository<BlogMapper, BlogDO> implement
     @Override
     public List<BlogCO> selectRandomList () {
         return this.baseMapper.selectRandomList();
+    }
+
+    /**
+     * 查询顶级菜单下的博客
+     * @param menuTopId
+     * @param startTime
+     * @return
+     */
+    @Override
+    public IPage<BlogDO> selectByMenuTopOrderTime(BlogQuery blogQuery) {
+        LambdaQueryWrapper<BlogDO> lambda = new QueryWrapper<BlogDO>().lambda();
+        lambda.eq(BlogDO::getMenuTopId,blogQuery.getMenuTopId());
+        lambda.gt(StrUtil.isNotBlank(blogQuery.getCreateDt()),BlogDO::getCreateDt,blogQuery.getCreateDt());
+        lambda.orderByDesc(BlogDO::getCreateDt);
+        Page page = new Page(blogQuery.getIndex(),blogQuery.getSize());
+        return this.baseMapper.selectPage(page,lambda);
     }
 }
 
