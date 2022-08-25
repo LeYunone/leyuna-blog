@@ -2,6 +2,8 @@ package com.leyuna.blog.model.query;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * @author LeYuna
  * @email 365627310@qq.com
@@ -16,4 +18,6 @@ public class BlogQuery extends QueryPage{
     private Integer menuTopId;
 
     private String createDt;
+
+    private LocalDateTime createDate;
 }

@@ -1,6 +1,7 @@
 package com.leyuna.blog.dao;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.dao.repository.entry.CommentDO;
 import com.leyuna.blog.model.co.CommentCO;
@@ -16,7 +17,7 @@ import java.util.List;
  */
 public interface CommentDao extends BaseDao<CommentDO> {
 
-    Page<CommentCO> selectNewCommentByBlogId (Integer index, Integer size, String blogId);
+    IPage<CommentDO> selectNewCommentByBlogId (Integer index, Integer size, String blogId);
 
     Page<CommentCO> selectNewAndGoodsCommentByBlogId (Integer index, Integer size, String blogId);
 

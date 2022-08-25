@@ -1,5 +1,8 @@
 package com.leyuna.blog.service;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyuna.blog.dao.BlogDao;
@@ -16,6 +19,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -100,6 +104,11 @@ public class BlogService {
     public IPage<BlogCO> getTopMenuBlogs(BlogQuery query){
         Integer menuTopId = query.getMenuTopId();
         AssertUtil.isFalse(ObjectUtil.isNull(menuTopId),"menuTopId is not empty");
+        //20XX转换为日期
+        if(StrUtil.isNotBlank(query.getCreateDt())){
+            LocalDateTime parse = LocalDateTimeUtil.parse(query.getCreateDt() + "-01-01", DatePattern.NORM_DATE_PATTERN);
+            query.setCreateDate(parse);
+        }
         IPage<BlogDO> blogDOIPage = blogDao.selectByMenuTopOrderTime(query);
         Page<BlogCO> blogCOPage = TransformationUtil.copyToPage(blogDOIPage, BlogCO.class);
         return blogCOPage;

@@ -30,11 +30,6 @@ public class BlogDO implements Serializable {
     private String title;
 
     /**
-     * 评论数
-     */
-    private Integer commentCount;
-
-    /**
      * 内容
      */
     private String blogContent;

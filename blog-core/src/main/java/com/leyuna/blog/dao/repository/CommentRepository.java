@@ -29,11 +29,11 @@ public class CommentRepository extends BaseRepository<CommentMapper, CommentDO> 
      * @param blogId
      * @return
      */
-    public Page<CommentCO> selectNewCommentByBlogId(Integer index, Integer size, String blogId){
+    public IPage<CommentDO> selectNewCommentByBlogId(Integer index, Integer size, String blogId){
         Page<CommentDO> page=new Page<>(index,size);
         IPage<CommentDO> page1 = this.page(page, new QueryWrapper<CommentDO>().lambda().
                 isNull(CommentDO::getFatherCommentId).eq(CommentDO::getBlogId, blogId).orderByDesc(CommentDO::getCreateDt));
-        return TransformationUtil.copyToPage(page1,CommentCO.class);
+        return page1;
     }
 
     /**
