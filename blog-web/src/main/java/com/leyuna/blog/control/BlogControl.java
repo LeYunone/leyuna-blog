@@ -43,7 +43,7 @@ public class BlogControl{
      * @return
      */
     @GetMapping("/blogs")
-    public DataResponse blogs(BlogDTO blogDTO){
+    public DataResponse<Page<BlogCO>> blogs(BlogDTO blogDTO){
         Page<BlogCO> blogsByPage = blogService.getBlogsByPage(blogDTO);
         return DataResponse.of(blogsByPage);
     }

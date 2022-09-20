@@ -57,10 +57,10 @@ public class BlogCO implements Serializable {
     //存储的是用逗号分隔的标签名
     private String tag;
 
-    @JsonFormat( pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat( pattern = "yyyy-MM-dd")
     private LocalDateTime updateDt;
 
-    private String remarks;
+    private String foreword;
 
     private String blogLink;
 }

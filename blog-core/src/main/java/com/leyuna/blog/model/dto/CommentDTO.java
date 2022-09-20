@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author pengli
@@ -73,14 +73,6 @@ public class CommentDTO extends QueryPage {
      */
     private String admin;
 
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createDt;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateDt;
+    private List fileId;
 
 }

@@ -47,7 +47,7 @@ public class BlogDO implements Serializable {
     /**
      * 备注前言
      */
-    private String remarks;
+    private String foreword;
 
     /**
      * 博客类型 1博客 2 公告 3个人 4 番剧 5 文章

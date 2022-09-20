@@ -17,11 +17,13 @@ import com.leyuna.blog.model.dto.CommentDTO;
 import com.leyuna.blog.model.query.CommentQuery;
 import com.leyuna.blog.model.query.FileQuery;
 import com.leyuna.blog.util.AssertUtil;
+import com.leyuna.blog.util.ServerUtil;
 import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -41,8 +43,14 @@ public class CommentService {
     @Autowired
     private FileDao fileDao;
 
+    @Autowired
+    private HttpServletRequest request;
+
     @Transactional(rollbackFor = Exception.class)
     public CommentDTO comment(CommentDTO commentDTO) {
+
+        //设置ip
+        commentDTO.setIp(ServerUtil.getClientIp(request));
 
         BlogDO blogDO = blogDao.selectById(commentDTO.getBlogId());
         AssertUtil.isFalse(ObjectUtil.isNull(blogDO), "操作失败：文章信息不同步");

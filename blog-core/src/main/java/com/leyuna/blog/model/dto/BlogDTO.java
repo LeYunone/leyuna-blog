@@ -34,7 +34,7 @@ public class BlogDTO extends QueryPage {
 
     private String title;
 
-    private String remarks;
+    private String foreword;
 
     /**
      * 博客类型  1 博客  2 公告   3 个人   4 评测
