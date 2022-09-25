@@ -38,9 +38,9 @@ public class MenuDO {
     private String menuUrl;
 
     /**
-     * 菜单权限
+     * 菜单地位
      */
-    private String menuPermison;
+    private Integer menuPosition;
 
     @TableField(value = "create_Dt", fill = FieldFill.INSERT)
     private LocalDateTime createDt;

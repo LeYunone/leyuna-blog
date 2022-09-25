@@ -1,7 +1,11 @@
 package com.leyuna.blog.model.dto;
 
+import com.leyuna.blog.constant.enums.UploadFileTypeEnum;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author pengli
@@ -21,4 +25,10 @@ public class FileDTO {
      * 文件大小
      */
     private Integer size;
+
+    private MultipartFile file;
+
+    private List<MultipartFile> files;
+
+    private UploadFileTypeEnum type;
 }

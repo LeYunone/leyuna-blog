@@ -1,8 +1,6 @@
-package com.leyuna.blog.model.co;
+package com.leyuna.blog.model.bo;
 
 import lombok.Data;
-
-import java.util.List;
 
 /**
  * @author LeYuna
@@ -10,16 +8,17 @@ import java.util.List;
  * @date 2022-09-26
  */
 @Data
-public class MenuCO {
+public class MenuBO {
+
     /**
      * 菜单id
      */
-    private String menuId;
+    private Integer menuId;
 
     /**
      * 上层id
      */
-    private String menuParentId;
+    private Integer menuParentId;
 
     /**
      * 菜单名
@@ -32,7 +31,7 @@ public class MenuCO {
     private String menuUrl;
 
     /**
-     * 子菜单
+     * 菜单地位
      */
-    private List<MenuTreeCO> childrenMenu;
+    private Integer menuPosition;
 }

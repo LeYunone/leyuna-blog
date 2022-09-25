@@ -2,15 +2,18 @@ package com.leyuna.blog.model.co;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author LeYuna
  * @email 365627310@qq.com
- * @date 2022-09-26
+ * @date 2022-07-31
+ * 菜单chucan
  */
 @Data
-public class MenuCO {
+public class MenuTreeCO implements Serializable {
+
     /**
      * 菜单id
      */
@@ -32,7 +35,15 @@ public class MenuCO {
     private String menuUrl;
 
     /**
-     * 子菜单
+     * WEB 树形插件用
      */
-    private List<MenuTreeCO> childrenMenu;
+    private String id;
+    /**
+     * WEB 树形插件用
+     */
+    private String label;
+    /**
+     * WEB 树形插件用
+     */
+    private List<MenuTreeCO> children;
 }

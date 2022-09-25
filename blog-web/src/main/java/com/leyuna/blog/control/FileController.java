@@ -1,6 +1,7 @@
 package com.leyuna.blog.control;
 
 import com.leyuna.blog.model.constant.DataResponse;
+import com.leyuna.blog.model.constant.FileResponse;
 import com.leyuna.blog.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,9 +29,16 @@ public class FileController {
      * @param files
      * @return
      */
-    @PostMapping("/fileUpload")
-    public DataResponse<List<String>> uploadFile(List<MultipartFile> files, String type) {
-        List<String> fileIds = fileService.uploadFile(files,type);
-        return DataResponse.of(fileIds);
+    @PostMapping("/uploads")
+    public DataResponse<FileResponse> uploadFile(List<MultipartFile> files, String type) {
+        FileResponse fileResponse = fileService.uploadFiles(files, type);
+        return DataResponse.of(fileResponse);
     }
+
+    @PostMapping("/upload")
+    public DataResponse<FileResponse> uploadFile(MultipartFile file, String type) {
+        FileResponse fileResponse = fileService.uploadFile(file, type);
+        return DataResponse.of(fileResponse);
+    }
+
 }
