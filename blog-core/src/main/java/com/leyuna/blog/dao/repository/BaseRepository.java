@@ -147,6 +147,8 @@ public class BaseRepository<M extends BaseMapper<DO>, DO> extends ServiceImpl<M,
     }
 
     private DO castToDO(Object o) {
+        if(null == o) return null;
+        if(o.getClass().isAssignableFrom(do_Class)) return (DO)o;
         DO d = null;
         try {
             d = (DO) do_Class.newInstance();

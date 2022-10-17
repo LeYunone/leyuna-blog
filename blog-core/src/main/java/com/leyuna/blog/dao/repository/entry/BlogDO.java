@@ -35,11 +35,6 @@ public class BlogDO implements Serializable {
     private String blogContent;
 
     /**
-     * 分类
-     */
-    private String type;
-
-    /**
      * 标签
      */
     private String tag;
@@ -71,8 +66,6 @@ public class BlogDO implements Serializable {
      */
     private String blogCover;
 
-    private String blogLink;
-
-    private String menuTopId;
+    private String menuId;
 
 }

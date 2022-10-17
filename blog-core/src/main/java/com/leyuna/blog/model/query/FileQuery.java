@@ -11,4 +11,8 @@ import lombok.Data;
 public class FileQuery {
 
     private String fileIdentif;
+
+    private String md5Code;
+
+    private Integer fileType;
 }

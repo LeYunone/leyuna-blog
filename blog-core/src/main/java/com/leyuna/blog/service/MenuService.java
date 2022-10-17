@@ -5,9 +5,12 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.leyuna.blog.constant.enums.MenuPositionEnum;
 import com.leyuna.blog.dao.MenuDao;
+import com.leyuna.blog.dao.repository.entry.MenuDO;
 import com.leyuna.blog.model.co.MenuCO;
 import com.leyuna.blog.model.co.MenuTreeCO;
+import com.leyuna.blog.model.dto.MenuDTO;
 import com.leyuna.blog.model.query.MenuQuery;
+import com.leyuna.blog.util.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +51,21 @@ public class MenuService {
         return this.processMenuList(menus);
     }
 
+    public Integer saveMenu(MenuDTO menuDTO) {
+        MenuDO menuDO = new MenuDO();
+        BeanUtil.copyProperties(menuDTO, menuDO);
+        menuDao.insertOrUpdate(menuDO);
+        return menuDO.getMenuId();
+    }
+
+    public void deleteMenu(MenuQuery query) {
+        Integer menuId = query.getMenuId();
+        MenuQuery menuQuery = MenuQuery.builder().menuParentId(menuId).build();
+        List<MenuDO> menuDOS = menuDao.selectByCon(menuQuery);
+        AssertUtil.isFalse(CollectionUtil.isNotEmpty(menuDOS),"子节点未删除完");
+        menuDao.deleteById(menuId);
+    }
+
     /**
      * 加工菜单集合 得到父子级菜单列表
      *
@@ -59,8 +77,9 @@ public class MenuService {
         Stack<MenuTreeCO> stack = new Stack<>();
         menuList.stream().forEach(menu -> {
             MenuTreeCO menuTreeCO = new MenuTreeCO();
-            BeanUtil.copyProperties(menu,menuTreeCO);
+            BeanUtil.copyProperties(menu, menuTreeCO);
             menuTreeCO.setId(menu.getMenuId());
+            menuTreeCO.setValue(menu.getMenuId());
             menuTreeCO.setLabel(menu.getMenuName());
 
             MenuTreeCO menuCO = map.get(menu.getMenuParentId());

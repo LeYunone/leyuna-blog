@@ -32,9 +32,9 @@ public class BlogControl{
      * @param blogDTO
      * @return
      */
-    @PostMapping("/addBlog")
-    public DataResponse addBlog(BlogDTO blogDTO){
-        blogService.addBlog(blogDTO);
+    @PostMapping("/saveBlog")
+    public DataResponse saveBlog(@RequestBody BlogDTO blogDTO){
+        blogService.saveBlog(blogDTO);
         return DataResponse.buildSuccess();
     }
 
@@ -77,15 +77,6 @@ public class BlogControl{
     public DataResponse createAllBlogDocument(){
         searchService.createBlogSearch();
         return DataResponse.buildSuccess();
-    }
-
-    /**
-     * 获得服务器里的表情包
-     * @return
-     */
-    @GetMapping("/getEmoticon")
-    public DataResponse getEmoticon(){
-        return searchService.getEmoticon();
     }
 
     /**

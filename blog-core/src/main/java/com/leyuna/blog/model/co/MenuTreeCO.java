@@ -45,5 +45,9 @@ public class MenuTreeCO implements Serializable {
     /**
      * WEB 树形插件用
      */
+    private String value;
+    /**
+     * WEB 树形插件用
+     */
     private List<MenuTreeCO> children;
 }

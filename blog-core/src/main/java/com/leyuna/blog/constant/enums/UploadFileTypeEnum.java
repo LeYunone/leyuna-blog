@@ -7,12 +7,12 @@ package com.leyuna.blog.constant.enums;
  */
 public enum UploadFileTypeEnum {
 
-    COMMON_IMG("1", "普通文件", "commonFile"),
+    COMMON_IMG(1, "普通文件", "commonFile"),
 
-    EMO_IMG("2", "表情包", "emoFile");
+    EMO_IMG(2, "表情包", "emoFile");
 
 
-    private String value;
+    private Integer code;
 
     private String name;
 
@@ -21,22 +21,22 @@ public enum UploadFileTypeEnum {
      */
     private String fileService;
 
-    UploadFileTypeEnum(String value, String name, String fileService) {
-        this.value = value;
+    UploadFileTypeEnum(Integer code, String name, String fileService) {
+        this.code = code;
         this.name = name;
         this.fileService = fileService;
     }
 
-    public String getValue() {
-        return this.value;
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
     }
 
     public String getName() {
         return this.name;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 
     public void setName(String name) {
@@ -51,10 +51,10 @@ public enum UploadFileTypeEnum {
         this.fileService = fileService;
     }
 
-    public static UploadFileTypeEnum getEnum(String type) {
+    public static UploadFileTypeEnum getEnum(Integer type) {
         UploadFileTypeEnum[] values = UploadFileTypeEnum.values();
         for (UploadFileTypeEnum uploadFileTypeEnum : values) {
-            if(uploadFileTypeEnum.getValue().equals(type)){
+            if(uploadFileTypeEnum.getCode().equals(type)){
                 return uploadFileTypeEnum;
             }
         }

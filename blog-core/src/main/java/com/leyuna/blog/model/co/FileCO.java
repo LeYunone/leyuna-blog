@@ -10,5 +10,11 @@ import lombok.Data;
 @Data
 public class FileCO {
 
-    private String fileId;
+    private String id;
+
+    private String fileMd5;
+
+    private String fileUrl;
+
+    private Integer fileType;
 }

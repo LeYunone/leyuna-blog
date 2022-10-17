@@ -17,4 +17,10 @@ import lombok.NoArgsConstructor;
 public class MenuQuery {
 
     private Integer menuPosition;
+
+    private Integer menuId;
+
+    private Integer menuParentId;
+
+    private String menuUrl;
 }

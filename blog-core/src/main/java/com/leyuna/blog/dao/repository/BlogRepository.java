@@ -13,7 +13,6 @@ import com.leyuna.blog.model.co.BlogCO;
 import com.leyuna.blog.model.dto.BlogDTO;
 import com.leyuna.blog.model.query.BlogQuery;
 import com.leyuna.blog.util.TransformationUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,14 +26,6 @@ import java.util.List;
 @Repository
 public class BlogRepository extends BaseRepository<BlogMapper, BlogDO> implements BlogDao {
 
-    @Autowired
-    private BlogMapper blogMapper;
-
-    /**
-     * 定制查询
-     * @param blog
-     * @return
-     */
     @Override
     public Page<BlogCO> queryBlog(BlogDTO blog) {
         Page page=new Page(blog.getIndex(),blog.getSize());
@@ -42,7 +33,6 @@ public class BlogRepository extends BaseRepository<BlogMapper, BlogDO> implement
                 new QueryWrapper<BlogDO>().lambda()
                         .like(StrUtil.isNotBlank(blog.getTitle()),BlogDO::getTitle,blog.getTitle())
                         .like(StrUtil.isNotBlank(blog.getTag()),BlogDO::getTag,blog.getTag())
-                        .eq(StrUtil.isNotBlank(blog.getType()),BlogDO::getType,blog.getType())
                         .in(null!=blog.getBlogType(),BlogDO::getBlogType,blog.getBlogType())
                         .orderByDesc(BlogDO::getCreateDt));
         return TransformationUtil.copyToPage(Page, BlogCO.class);
@@ -62,7 +52,7 @@ public class BlogRepository extends BaseRepository<BlogMapper, BlogDO> implement
     @Override
     public IPage<BlogDO> selectByMenuTopOrderTime(BlogQuery blogQuery) {
         LambdaQueryWrapper<BlogDO> lambda = new QueryWrapper<BlogDO>().lambda();
-        lambda.eq(BlogDO::getMenuTopId,blogQuery.getMenuTopId());
+        lambda.in(BlogDO::getMenuId,blogQuery.getMenuTopIds());
         lambda.gt(ObjectUtil.isNotNull(blogQuery.getCreateDate()),BlogDO::getCreateDt,blogQuery.getCreateDate());
         lambda.orderByDesc(BlogDO::getCreateDt);
         Page page = new Page(blogQuery.getIndex(),blogQuery.getSize());

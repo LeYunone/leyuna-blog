@@ -19,5 +19,6 @@ public class FileResponse {
 
     private String url;
 
+    private String md5Code;
 
 }

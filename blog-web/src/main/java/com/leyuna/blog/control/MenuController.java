@@ -2,11 +2,11 @@ package com.leyuna.blog.control;
 
 import com.leyuna.blog.model.co.MenuTreeCO;
 import com.leyuna.blog.model.constant.DataResponse;
+import com.leyuna.blog.model.dto.MenuDTO;
+import com.leyuna.blog.model.query.MenuQuery;
 import com.leyuna.blog.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,9 +35,21 @@ public class MenuController {
     }
 
     @GetMapping("/getMenuTree")
-    public DataResponse<List<MenuTreeCO>> getTreeMenu(){
+    public DataResponse<List<MenuTreeCO>> getTreeMenu() {
         List<MenuTreeCO> treeMenuList = menuService.getTreeMenuList();
         return DataResponse.of(treeMenuList);
+    }
+
+    @PostMapping("/save")
+    public DataResponse<Integer> saveMenu(@RequestBody MenuDTO menuDTO) {
+        Integer integer = menuService.saveMenu(menuDTO);
+        return DataResponse.of(integer);
+    }
+
+    @PostMapping("/delete")
+    public DataResponse deleteMenu(MenuQuery query){
+        menuService.deleteMenu(query);
+        return DataResponse.buildSuccess();
     }
 
 }

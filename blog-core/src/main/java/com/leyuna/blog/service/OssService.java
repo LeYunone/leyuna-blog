@@ -23,16 +23,16 @@ import java.util.List;
 @Service
 public class OssService {
 
-    @Value("${endpoint:}")
-    private String endpoint = "https://oss-cn-hangzhou.aliyuncs.com";
-    @Value("${accessKeyId:}")
-    private String accessKeyId = "LTAI5tShL2DWt7PoFbLWBR5i";
-    @Value("${accessKeySecret:}")
-    private String accessKeySecret = "nxm4XgX9rUsJNwCfWAqlErLMitg0WC";
-    @Value("${bucketName:}")
-    private String bucketName = "leyuna-blog-img";
-    @Value("${bucketUrl:}")
-    private String bucketUrl = "leyuna-blog-img.oss-cn-hangzhou.aliyuncs.com";
+    @Value("${oss.endpoint:}")
+    private String endpoint;
+    @Value("${oss.accessKeyId:}")
+    private String accessKeyId;
+    @Value("${oss.accessKeySecret:}")
+    private String accessKeySecret;
+    @Value("${oss.bucketName:}")
+    private String bucketName;
+    @Value("${oss.bucketUrl:}")
+    private String bucketUrl;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 

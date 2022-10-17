@@ -1,26 +1,34 @@
 package com.leyuna.blog.service;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyuna.blog.constant.enums.MenuPositionEnum;
+import com.leyuna.blog.constant.enums.MenuUrlEnum;
 import com.leyuna.blog.dao.BlogDao;
 import com.leyuna.blog.dao.MenuDao;
 import com.leyuna.blog.dao.repository.entry.BlogDO;
+import com.leyuna.blog.dao.repository.entry.MenuDO;
 import com.leyuna.blog.model.co.BlogCO;
 import com.leyuna.blog.model.dto.BlogDTO;
 import com.leyuna.blog.model.query.BlogQuery;
+import com.leyuna.blog.model.query.MenuQuery;
 import com.leyuna.blog.util.AssertUtil;
 import com.leyuna.blog.util.TransformationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * @author pengli
@@ -54,11 +62,32 @@ public class BlogService {
      * @return
      */
     @Transactional
-    @CacheEvict(cacheNames = {"blog:blogs", "blog:type", "blog:tag"}, allEntries = true)
-    public void addBlog(BlogDTO blog) {
+//    @CacheEvict(cacheNames = {"blog:blogs", "blog:type", "blog:tag"}, allEntries = true)
+    public void saveBlog(BlogDTO blog) {
         //发布文章主题内容
-        boolean addBlog = blogDao.insertOrUpdate(blog);
-
+        BlogDO blogDO = new BlogDO();
+        BeanUtil.copyProperties(blog,blogDO);
+        boolean addBlog = blogDao.insertOrUpdate(blogDO);
+        AssertUtil.isTrue(addBlog);
+        String blogId = blog.getId();
+        MenuDO menuDO = new MenuDO();
+        if(StringUtils.isEmpty(blogId)){
+            //新增
+            menuDO.setMenuName(blog.getTitle());
+            menuDO.setMenuPosition(MenuPositionEnum.ARTICLE_MENU.getCode());
+            menuDO.setMenuUrl(MenuUrlEnum.ARTICLE_URL.getUrl(blogDO.getId()));
+            menuDO.setMenuParentId(blog.getMenuId());
+        }else{
+            //更新
+            MenuQuery menuQuery = new MenuQuery();
+            menuQuery.setMenuPosition(MenuPositionEnum.ARTICLE_MENU.getCode());
+            menuQuery.setMenuUrl(MenuUrlEnum.ARTICLE_URL.getUrl(blogDO.getId()));
+            menuDO = menuDao.selectOne(menuQuery);
+            AssertUtil.isFalse(ObjectUtil.isNull(menuDO),"操作失败：原菜单不存在");
+            menuDO.setMenuParentId(blog.getMenuId());
+        }
+        boolean newMenu = menuDao.insertOrUpdate(menuDO);
+        AssertUtil.isTrue(newMenu);
         //创建该文章的菜单索引
 //        MenuDO menuDO = new MenuDO();
 //        menuDO.setMenuName(blog.getTitle());
@@ -101,14 +130,32 @@ public class BlogService {
         return randomLeetCodeLog;
     }
 
-    public IPage<BlogCO> getTopMenuBlogs(BlogQuery query){
-        Integer menuTopId = query.getMenuTopId();
-        AssertUtil.isFalse(ObjectUtil.isNull(menuTopId),"menuTopId is not empty");
+    public IPage<BlogCO> getTopMenuBlogs(BlogQuery query) {
+        Integer menuId = query.getMenuId();
+        AssertUtil.isFalse(ObjectUtil.isNull(menuId), "menuId is not empty");
         //20XX转换为日期
-        if(StrUtil.isNotBlank(query.getCreateDt())){
+        if (StrUtil.isNotBlank(query.getCreateDt())) {
             LocalDateTime parse = LocalDateTimeUtil.parse(query.getCreateDt() + "-01-01", DatePattern.NORM_DATE_PATTERN);
             query.setCreateDate(parse);
         }
+        //获得menuId下所有博客的上级菜单
+        MenuDO currentMenu = menuDao.selectById(menuId);
+        Stack<MenuDO> stack = new Stack<>();
+        stack.add(currentMenu);
+        MenuQuery menuQuery = new MenuQuery();
+        List<Integer> menuTopIds = new ArrayList<>();
+        while (!stack.isEmpty()) {
+            MenuDO pop = stack.pop();
+            Integer currentMenuId = pop.getMenuId();
+            menuQuery.setMenuParentId(currentMenuId);
+            List<MenuDO> menuDOS = menuDao.selectByCon(menuQuery);
+            if (CollectionUtil.isEmpty(menuDOS)) {
+                menuTopIds.add(pop.getMenuParentId());
+            }else{
+                stack.addAll(menuDOS);
+            }
+        }
+        query.setMenuTopIds(menuTopIds);
         IPage<BlogDO> blogDOIPage = blogDao.selectByMenuTopOrderTime(query);
         Page<BlogCO> blogCOPage = TransformationUtil.copyToPage(blogDOIPage, BlogCO.class);
         return blogCOPage;

@@ -63,5 +63,7 @@ public class BlogCO implements Serializable {
     private String foreword;
 
     private String blogLink;
+
+    private Integer menuId;
 }
 

@@ -24,10 +24,6 @@ public class BlogDTO extends QueryPage {
      */
     private String blogContent;
     /**
-     * 类型 S
-     */
-    private String type;
-    /**
      * 标签 S 数组形式
      */
     private String [] tags;
@@ -45,6 +41,8 @@ public class BlogDTO extends QueryPage {
      * 多个博客类型  用于查询
      */
     private List<Integer> blogTypes;
+
+    private Integer menuId;
 
     /**
      * 标签  逗号分隔形式

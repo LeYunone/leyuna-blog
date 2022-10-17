@@ -3,6 +3,7 @@ package com.leyuna.blog.model.query;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author LeYuna
@@ -15,9 +16,11 @@ public class BlogQuery extends QueryPage{
     /**
      * 顶级菜单id
      */
-    private Integer menuTopId;
+    private Integer menuId;
 
     private String createDt;
 
     private LocalDateTime createDate;
+
+    private List<Integer> menuTopIds;
 }

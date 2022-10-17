@@ -19,9 +19,20 @@ public class FileDO {
     @TableId(value = "id",type = IdType.AUTO)
     private String id;
 
-    private String fileIdentif;
+    /**
+     * 文件标识（MD5）
+     */
+    private String fileMd5;
 
     private String fileOss;
 
+    /**
+     * 文件类型
+     */
+    private Integer fileType;
+
+    /**
+     * 文件路径
+     */
     private String fileUrl;
 }

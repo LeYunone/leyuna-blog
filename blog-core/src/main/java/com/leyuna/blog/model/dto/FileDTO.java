@@ -31,4 +31,6 @@ public class FileDTO {
     private List<MultipartFile> files;
 
     private UploadFileTypeEnum type;
+
+    private String md5Code;
 }
