@@ -12,7 +12,7 @@ public class FileQuery {
 
     private String fileIdentif;
 
-    private String md5Code;
+    private String fileMd5;
 
     private Integer fileType;
 }

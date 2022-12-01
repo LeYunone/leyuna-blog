@@ -54,8 +54,8 @@ public class TouristControl {
     /**
      * 用户请求上传头像图片
      */
-    @RequestMapping("/requestUpImg")
-    public DataResponse requestUpImg(HttpServletRequest request){
+    @RequestMapping("/requestUpHeadImg")
+    public DataResponse requestUpHeadImg(HttpServletRequest request){
         String remoteAddr = ServerUtil.getClientIp(request);
         return imageService.requestUpImg(remoteAddr);
     }

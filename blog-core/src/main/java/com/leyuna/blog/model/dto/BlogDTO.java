@@ -62,4 +62,8 @@ public class BlogDTO extends QueryPage {
      * 封面文件
      */
     private MultipartFile cover;
+    /**
+     * 自定义字段（1、刷题日记为难度）
+     */
+    private String customField;
 }

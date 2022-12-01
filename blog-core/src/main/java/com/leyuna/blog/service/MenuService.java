@@ -92,7 +92,7 @@ public class MenuService {
                 }
                 childrenMenu.add(menuTreeCO);
             } else {
-                if (0 != Integer.valueOf(menu.getMenuParentId())) {
+                if (ObjectUtil.isNotNull(menu.getMenuParentId()) && 0 != Integer.parseInt(menu.getMenuParentId())) {
                     stack.add(menuTreeCO);
                 }
             }
@@ -103,20 +103,21 @@ public class MenuService {
         while (!stack.isEmpty()) {
             MenuTreeCO pop = stack.pop();
             MenuTreeCO menuCO = map.get(pop.getMenuParentId());
-
-            //如果有父级菜单
-            List<MenuTreeCO> childrenMenu = menuCO.getChildren();
-            if (CollectionUtil.isEmpty(childrenMenu)) {
-                childrenMenu = new ArrayList<>();
-                menuCO.setChildren(childrenMenu);
+            if(ObjectUtil.isNotNull(menuCO)){
+                //如果有父级菜单
+                List<MenuTreeCO> childrenMenu = menuCO.getChildren();
+                if (CollectionUtil.isEmpty(childrenMenu)) {
+                    childrenMenu = new ArrayList<>();
+                    menuCO.setChildren(childrenMenu);
+                }
+                childrenMenu.add(pop);
             }
-            childrenMenu.add(pop);
         }
 
         //只留下顶级菜单结果集
         ArrayList<MenuTreeCO> menuCOS = CollectionUtil.newArrayList(map.values());
         List<MenuTreeCO> result = menuCOS.stream().filter(menuCO ->
-                "0".equals(menuCO.getMenuParentId())
+                ObjectUtil.isNull(menuCO.getMenuParentId())
         ).collect(Collectors.toList());
         return result;
     }

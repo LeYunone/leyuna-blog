@@ -84,14 +84,19 @@ public class BlogControl{
      * @return
      */
     @GetMapping("/getLeetCode")
-    public DataResponse getLeetCode(){
-        List<com.leyuna.blog.model.co.BlogCO> leetCode = blogService.getLeetCode();
+    public DataResponse<List<BlogCO>> getLeetCode(){
+        List<BlogCO> leetCode = blogService.getLeetCode();
         return DataResponse.of(leetCode);
     }
 
     @GetMapping("/getTopMenuBlogs")
-    public DataResponse getTopMenuBlogs(BlogQuery blogQuery){
+    public DataResponse<IPage<BlogCO>> getTopMenuBlogs(BlogQuery blogQuery){
         IPage<BlogCO> topMenuBlogs = blogService.getTopMenuBlogs(blogQuery);
         return DataResponse.of(topMenuBlogs);
+    }
+
+    @GetMapping("/test")
+    public void exportLeetCode(){
+        blogService.exportNormalNotes();
     }
 }

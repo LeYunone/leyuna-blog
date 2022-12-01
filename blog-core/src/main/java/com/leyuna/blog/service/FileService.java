@@ -44,7 +44,7 @@ public class FileService {
         }
         fileDTO.setMd5Code(md5);
         FileQuery fileQuery = new FileQuery();
-        fileQuery.setMd5Code(md5);
+        fileQuery.setFileMd5(md5);
         FileDO file = fileDao.selectOne(fileQuery);
         if (ObjectUtil.isNotNull(file)) {
             return FileResponse.builder().url(file.getFileUrl()).md5Code(file.getFileMd5()).build();

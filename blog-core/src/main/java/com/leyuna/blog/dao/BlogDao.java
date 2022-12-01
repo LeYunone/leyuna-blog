@@ -24,5 +24,9 @@ public interface BlogDao extends BaseDao<BlogDO> {
     List<BlogCO> selectRandomList();
 
     IPage<BlogDO> selectByMenuTopOrderTime(BlogQuery blogQuery);
+
+    List<BlogDO> selectLeetCode();
+
+    List<BlogDO> selectNormalNotes();
 }
 

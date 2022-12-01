@@ -68,4 +68,9 @@ public class BlogDO implements Serializable {
 
     private String menuId;
 
+    /**
+     * 自定义字段（1、刷题日记为难度）
+     */
+    private String customField;
+
 }

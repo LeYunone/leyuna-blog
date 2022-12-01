@@ -20,7 +20,7 @@ public class DataResponse<T> implements Serializable {
 
     private boolean status;
 
-    private String message;
+    private Object message;
 
     private String code;
 
@@ -58,6 +58,12 @@ public class DataResponse<T> implements Serializable {
     }
 
     public static DataResponse buildFailure(String message) {
+        DataResponse response = of(false, ResponseCode.ERROR, (Object)null);
+        response.setMessage(message);
+        return response;
+    }
+
+    public static DataResponse buildFailure(Object message) {
         DataResponse response = of(false, ResponseCode.ERROR, (Object)null);
         response.setMessage(message);
         return response;

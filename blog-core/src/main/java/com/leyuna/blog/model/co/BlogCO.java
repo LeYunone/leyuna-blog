@@ -65,5 +65,7 @@ public class BlogCO implements Serializable {
     private String blogLink;
 
     private Integer menuId;
+
+    private String customField;
 }
 

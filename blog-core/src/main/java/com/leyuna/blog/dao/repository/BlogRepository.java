@@ -45,8 +45,6 @@ public class BlogRepository extends BaseRepository<BlogMapper, BlogDO> implement
 
     /**
      * 查询顶级菜单下的博客
-     * @param menuTopId
-     * @param startTime
      * @return
      */
     @Override
@@ -57,6 +55,21 @@ public class BlogRepository extends BaseRepository<BlogMapper, BlogDO> implement
         lambda.orderByDesc(BlogDO::getCreateDt);
         Page page = new Page(blogQuery.getIndex(),blogQuery.getSize());
         return this.baseMapper.selectPage(page,lambda);
+    }
+
+    @Override
+    public List<BlogDO> selectLeetCode() {
+        LambdaQueryWrapper<BlogDO> lambda = new QueryWrapper<BlogDO>().lambda();
+        lambda.like(BlogDO::getTitle,"LeetCode");
+        lambda.orderByAsc(BlogDO::getTitle);
+        return this.baseMapper.selectList(lambda);
+    }
+
+    @Override
+    public List<BlogDO> selectNormalNotes() {
+        LambdaQueryWrapper<BlogDO> lambda = new QueryWrapper<BlogDO>().lambda();
+        lambda.eq(BlogDO::getMenuId,5);
+        return this.baseMapper.selectList(lambda);
     }
 }
 

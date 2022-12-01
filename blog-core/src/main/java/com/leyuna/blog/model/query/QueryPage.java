@@ -21,5 +21,10 @@ public class QueryPage implements Serializable {
 
     protected Integer size = 10;
 
+    /**
+     * 是否开启分页
+     */
+    protected boolean isPage;
+
     private String orderCondition;
 }

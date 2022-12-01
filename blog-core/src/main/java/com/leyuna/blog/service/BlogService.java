@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.io.file.FileWriter;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -26,9 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * @author pengli
@@ -148,9 +147,10 @@ public class BlogService {
             MenuDO pop = stack.pop();
             Integer currentMenuId = pop.getMenuId();
             menuQuery.setMenuParentId(currentMenuId);
+            menuQuery.setMenuPosition(MenuPositionEnum.NAV_MENU.getCode());
             List<MenuDO> menuDOS = menuDao.selectByCon(menuQuery);
             if (CollectionUtil.isEmpty(menuDOS)) {
-                menuTopIds.add(pop.getMenuParentId());
+                menuTopIds.add(pop.getMenuId());
             }else{
                 stack.addAll(menuDOS);
             }
@@ -159,5 +159,66 @@ public class BlogService {
         IPage<BlogDO> blogDOIPage = blogDao.selectByMenuTopOrderTime(query);
         Page<BlogCO> blogCOPage = TransformationUtil.copyToPage(blogDOIPage, BlogCO.class);
         return blogCOPage;
+    }
+
+    public void exportLeetCode(){
+        List<BlogDO> blogDOS = blogDao.selectLeetCode();
+        Map<Integer,String> linkedHashMap = new HashMap<>();
+
+        for(BlogDO blogDO : blogDOS){
+            String title = blogDO.getTitle();
+            String temp = "=#---\n" +
+                    "title: "+blogDO.getTitle()+"\n" +
+                    "category: 刷题日记\n" +
+                    "tag:\n" +
+                    "  - LeetCode\n" +
+                    "head:\n" +
+                    "  - - meta\n" +
+                    "    - name: keywords\n" +
+                    "      content: JVM,JDK,JRE,字节码详解,Java 基本数据类型,装箱和拆箱\n" +
+                    "  - - meta\n" +
+                    "    - name: description\n" +
+                    "      content: 全网质量最高的Java基础常见知识点和面试题总结，希望对你有帮助！\n" +
+                    "=#---\n";
+            String blogContent = blogDO.getBlogContent();
+            title = title.substring(0,title.lastIndexOf("."));
+            System.out.println("\""+title+"\",");
+            FileWriter writer = new FileWriter("D:/桌面文件/文章/刷题日记/"+title+".md");
+            writer.write(temp+blogContent);
+
+            String tempTitle = title.substring(title.lastIndexOf("-")+1);
+            linkedHashMap.put(Integer.valueOf(tempTitle),title);
+        }
+        Set<Integer> strings = linkedHashMap.keySet();
+        ArrayList<Integer> integers = CollectionUtil.newArrayList(strings);
+        Integer[] integers1 = integers.toArray(new Integer[]{});
+        Arrays.sort(integers1);
+        for(Integer  key : integers1){
+            System.out.println(linkedHashMap.get(key));
+        }
+    }
+
+    public void exportNormalNotes(){
+        List<BlogDO> blogDOS = blogDao.selectNormalNotes();
+        for(BlogDO blogDO : blogDOS){
+            String title = blogDO.getTitle();
+            String temp = "=#---\n" +
+                    "title: "+blogDO.getTitle()+"\n" +
+                    "category: 刷题日记\n" +
+                    "tag:\n" +
+                    "  - LeetCode\n" +
+                    "head:\n" +
+                    "  - - meta\n" +
+                    "    - name: keywords\n" +
+                    "      content: JVM,JDK,JRE,字节码详解,Java 基本数据类型,装箱和拆箱\n" +
+                    "  - - meta\n" +
+                    "    - name: description\n" +
+                    "      content: 全网质量最高的Java基础常见知识点和面试题总结，希望对你有帮助！\n" +
+                    "=#---\n";
+            String blogContent = blogDO.getBlogContent();
+            FileWriter writer = new FileWriter("D:/桌面文件/文章/正经笔记/"+title+".md");
+            writer.write(temp+blogContent);
+        }
+
     }
 }

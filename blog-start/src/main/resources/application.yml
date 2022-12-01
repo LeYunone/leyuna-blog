@@ -2,7 +2,6 @@
 server:
   servlet:
     context-path: '/leyuna'
-
 ### mp日志
 mybatis-plus:
   configuration:
